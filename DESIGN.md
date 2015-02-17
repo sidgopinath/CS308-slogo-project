@@ -3,6 +3,7 @@
 
 ##    Overview
 ![Diagram](http://i.imgur.com/fPicHLX.jpg)
+
 Our SLogo implementation is centered around a model-view-controller design. We create a Main class, which handles instantiation of the Stage, the View, and the Controller, and the Model. SLogoController is the controller that handles user input, SLogoModel is the model that translates user input into instructions on how to update the view, and SLogoView is the view to update the display. SLogoController will have access to the instance of SLogoModel, SLogoModel has an instance of SLogoView, and SLogoView has an instance of SLogoController. Therefore, the flow of the program is always user --> controller --> model --> view.  This helps encapsulate each part of the design, and creates the basic framework upon which our SLogo interpreter is built.
 
 Specifically, the view is created first and will take in information from the user as text inputs in the textbox and as selections in the history, variable, or customization option panels. This information will be transferred to the controller and the view will not have direct access to the Model. The view also has an constructor that takes in a Stage object. Main will then call view.init(), which will create a new Scene with all the UI elements included and set the scene to the stage.
@@ -33,6 +34,21 @@ This design ensures extensibility. When a new interactive UI element is added, o
 This section serves as a map of your design for other programmers to gain a general understanding of how and why the program was divided up, and how the individual parts work together to provide the desired functionality. As such, it should describe specific components you intend to create, their purpose with regards to the program's functionality, and how they collaborate with each other, focusing specifically on each class's behavior, not its state. It should also include a picture of how the components are related (these pictures can be hand drawn and scanned in, created with a standard drawing program, or screen shots from a UML design program). This section should be approximately 700-1000 words long and discuss specific classes, methods, and data structures, but not individual lines of code.
 
 ## User Interface
+In the scene, the user will be able to see the display containing the turtle in the main pane. Below it will be a textbox where the user can interactively enter a number of Logo commands. By clicking run, the IDE will run, parse and compile the code, and change the display by moving the turtle and drawing lines. After clicking run, the text in the box will automatically be erased and provide a blank slate for the user to enter in new commands. Additionally, any changed or inputted variables will appear on the right side bar with current values. A history of the strings written and run will remain in the History box also within the right side pane. 
+
+The right side pane will function as a menu for the user, giving the user access to visualization customization and also to details on current variables and previous commands (history). In customization, the user will be able to select an image file for the turtle (which will be resized to fit a size preset by the IDE), select and change the pen color (via a choice box), and select and change the background color (via a choice box).
+
+The turtle will be defaulted to a green triangle in the center (0,0) of the display. As it moves, lines will be drawn connecting it to its new and final values/points. 
+
+An example of the user interface can be seen below 
+![UI](http://i.imgur.com/YJuOLaO.jpg)
+
+The user interface will also alert the user to general errors during compilation. Each error will appear as a popup box.
+
+* If the user presses "run" without specifying commands, the user will receive an error "Please specify a command"
+* If the user enters in a command that the parser does not recognize, the user will receive an error "Command not found: ______" with the specific erroneous command
+* If the user enters in a command whose syntax the parser does not recognize, the user will receive an error of "Invalid syntax"
+* If there is a math error (ie. user tries to divide by 0), the user will receive a "Math Exception" error
 
 ## Design Details
 When Main instantiates the components, it follows this specific order: SLogoView, SLogoModel(SLogoView), SLogoController(SLogoModel). Then Main calls the setController method in SLogoView to bind the lamda functions in SLogoController to UI elements. 
@@ -69,4 +85,4 @@ In the initial design of Slogo, we considered several different possibilities of
 3. As a solution to the above problem, we decided to place the Turtle into the back-end. In essence, the user would type a command, and the View would pass in the string to the Model via the controller. The Model would update the turtle object and store a list of Instruction objects containing start and end coordinates (so that a line could be drawn in the View), a boolean detailing whether the pen is up or down based on the current command, whether or not the turtle is showing, and any other information such as variables that the View may need to display. Doing so this way limited the amount of information the View received (it would only receive what was necessary) and limit its access to the Turtle or other Model components.
 
 ##    Team Responsibilities
-
+Callie will be in charge of the view (user interface). Mengchao will be in charge of the controller.

@@ -2,9 +2,11 @@
 ##    Introduction
 
 ##    Overview
+![Diagram](http://i.imgur.com/fPicHLX.jpg)
+
 Our SLogo implementation is centered around a model-view-controller design. We create a Main class, which handles instantiation of the Stage, the View, and the Controller, and the Model. SLogoController is the controller that handles user input, SLogoModel is the model that translates user input into instructions on how to update the view, and SLogoView is the view to update the display. SLogoController will have access to the instance of SLogoModel, SLogoModel has an instance of SLogoView, and SLogoView has an instance of SLogoController. Therefore, the flow of the program is always user --> controller --> model --> view.  This helps encapsulate each part of the design, and creates the basic framework upon which our SLogo interpreter is built.
 
-Specifically, the view is created first. The view has an constructor that takes in a Stage object. Main will then call view.init(), which will create a new Scene with all the UI elements included and set the scene to the stage.
+Specifically, the view is created first and will take in information from the user as text inputs in the textbox and as selections in the history, variable, or customization option panels. This information will be transferred to the controller and the view will not have direct access to the Model. The view also has an constructor that takes in a Stage object. Main will then call view.init(), which will create a new Scene with all the UI elements included and set the scene to the stage.
 
 From here, the model is instantiated and passed the view as an argument.  The model holds all data about the scene that is currently being displayed - the instance(s) of the Turtle object that describe the turtle, the functions and variables the user has defined, and the parser that is used to process commands.  This parser is implemented as an abstraction hierarchy, with each "type" of instruction having its own class - for example, forward and backward can be grouped as one instruction type, since backward is really just a reverse forward command.  All communication between the controller and the model happens through the parser method, which takes in a string and instantiates the correct instruction type.  All math operations/boolean values are evaluated by a pre-parser, which transforms these operands into primitive values (true, false, integers).  This string, with complex expressions removed, is then passed to the parser and used to instantiate the correct command object.  All instructions contain a .execute method, which runs the instruction and returns either a) an Instruction object containing the new turtle state, b) adds an entry to the map representing variables, or c) adds an entry to the map representing functions.  This design is easily extendable - any new instruction can simply subclass command and return a new type, or can add a new field to the instruction class.  A list of all instruction objects executed returned in this series of instructions is then passed to the view, which uses the data it contains to draw the lines.  This implementation is flexible, as it allows more than one instructio to be executed at a time by the user, as well as multiple turtles to be updated at once, since the instruction class specifies the turtle that will be updated through the id field.  
 
@@ -31,6 +33,21 @@ This design ensures extensibility. When a new interactive UI element is added, o
 	* Drawer: translate Instruction to a PolyLine object. Returns false if the Instruction is to turn the turtle (distance == 0).
 
 ## User Interface
+In the scene, the user will be able to see the display containing the turtle in the main pane. Below it will be a textbox where the user can interactively enter a number of Logo commands. By clicking run, the IDE will run, parse and compile the code, and change the display by moving the turtle and drawing lines. After clicking run, the text in the box will automatically be erased and provide a blank slate for the user to enter in new commands. Additionally, any changed or inputted variables will appear on the right side bar with current values. A history of the strings written and run will remain in the History box also within the right side pane. 
+
+The right side pane will function as a menu for the user, giving the user access to visualization customization and also to details on current variables and previous commands (history). In customization, the user will be able to select an image file for the turtle (which will be resized to fit a size preset by the IDE), select and change the pen color (via a choice box), and select and change the background color (via a choice box).
+
+The turtle will be defaulted to a green triangle in the center (0,0) of the display. As it moves, lines will be drawn connecting it to its new and final values/points. 
+
+An example of the user interface can be seen below 
+![UI](http://i.imgur.com/YJuOLaO.jpg)
+
+The user interface will also alert the user to general errors during compilation. Each error will appear as a popup box.
+
+* If the user presses "run" without specifying commands, the user will receive an error "Please specify a command"
+* If the user enters in a command that the parser does not recognize, the user will receive an error "Command not found: ______" with the specific erroneous command
+* If the user enters in a command whose syntax the parser does not recognize, the user will receive an error of "Invalid syntax"
+* If there is a math error (ie. user tries to divide by 0), the user will receive a "Math Exception" error
 
 ## Design Details
 When Main instantiates the components, it follows this specific order: SLogoView, SLogoModel(SLogoView), SLogoController(SLogoModel). Then Main calls the setController method in SLogoView to bind the lambda functions in SLogoController to UI elements. 
@@ -63,7 +80,7 @@ In the initial design of Slogo, we considered several different possibilities of
 
 2. We decided that it would be best to leave the turtle object in full control by either the front-end or back-end and simply pass information into another portion. We initially designed our project so that the turtles would remain in the front end; however, this was not an ideal decision because the Turtle would have access to data/information that the back-end utilized/updated. The front-end and back end would be too dependent and linked upon each other. 
 
-3. As a solution to the above problem, we decided to place the Turtle into the back-end. In essence, the user would type a command, and the View would pass in the string to the Model via the controller. The Model would update the turtle object and store a list of Instruction objects containing start and end coordinates (so that a line could be drawn in the View), a boolean detailing whether the pen is up or down based on the current command, and any other information such as variables that the View may need to display. Doing so this way limited the amount of information the View received (it would only receive what was necessary) and limit its access to the Turtle or other Model components.
+3. As a solution to the above problem, we decided to place the Turtle into the back-end. In essence, the user would type a command, and the View would pass in the string to the Model via the controller. The Model would update the turtle object and store a list of Instruction objects containing start and end coordinates (so that a line could be drawn in the View), a boolean detailing whether the pen is up or down based on the current command, whether or not the turtle is showing, and any other information such as variables that the View may need to display. Doing so this way limited the amount of information the View received (it would only receive what was necessary) and limit its access to the Turtle or other Model components.
 
 4. We still need to develop a better method for implementing commands in the backend.  Ideally, there will be no need for if-else structures to determine a command and call the appropriate command subclass.  Even if these structures are necessary, we can better develop the command abstraction hierarchy so that it is easier to extend.  Since commands seem to either impact the turtle or the model, this may be a logical distinction for how we divide our classes. 
 
@@ -73,3 +90,5 @@ In the initial design of Slogo, we considered several different possibilities of
 Greg - Work primarily on backend, implementing parser for instructions and Turtle object. Secondary - help Callie with GUI
 
 Sid - 
+
+Callie will be in charge of the view (user interface). Mengchao will be in charge of the controller.

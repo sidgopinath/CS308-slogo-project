@@ -2,13 +2,14 @@
 ##    Introduction
 
 ##    Overview
+Our design follows the MVC design patter. Other than Main, the program will have SLogoController as the controller to handle user input, SLogoModel as the model that translates user input into instructions on how to update the view, and SLogoView as the view to update the display. SLogoController will have access to the instance of SLogoModel, SLogoModel has an instance of SLogoView, and SLogoView has an instance of SLogoController. Therefore, the flow of the program is always user --> controller --> model --> view. The only exception is the clear view button, which directly calls the clear() method in view. All other user interactions follow the normal MVC pattern.
 ### Components: 
 * Main:
 	* instantiates front-/backend and controller
 * SLogoController:
 	* monitors user input
 	* passes user commands to SLogoModel
-*	SLogoModel:
+* SLogoModel:
 	* Backend.
 * SLogoView:
 	* Frontend.
@@ -17,6 +18,7 @@
 	* Polar: contains a pair of polar coordinates.
 	* Turtle:
 	* Drawer: translate Instruction to a PolyLine object. Returns false if the Instruction is to turn the turtle (distance == 0).
+This section serves as a map of your design for other programmers to gain a general understanding of how and why the program was divided up, and how the individual parts work together to provide the desired functionality. As such, it should describe specific components you intend to create, their purpose with regards to the program's functionality, and how they collaborate with each other, focusing specifically on each class's behavior, not its state. It should also include a picture of how the components are related (these pictures can be hand drawn and scanned in, created with a standard drawing program, or screen shots from a UML design program). This section should be approximately 700-1000 words long and discuss specific classes, methods, and data structures, but not individual lines of code.
 ##    User Interface
 
 ##   Design Details

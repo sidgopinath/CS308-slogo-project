@@ -2,6 +2,13 @@
 ##    Introduction
 
 ##    Overview
+
+Our SLogo implementation is centered around a model-view-controller design.  We create a Main class, which handles instantiation of the Stage, the View, and the Controller.  The program is divided so that all communication is one way - the Model talks to the View, the user calls methods in the Controller by clicking buttons in the view, and the controller processes the input it receives by calling the model.  This helps encapsulate each part of the design, and creates the basic framework upon which our SLogo interpreter is built.
+
+Specifically, the view is created first ##### FILL IN DETAILS HERE
+
+From here, the model is instantiated and passed the view as an argument.  The model holds all data about the scene that is currently being displayed - the instance(s) of the Turtle object that describe the turtle, the functions and variables the user has defined, and the parser that is used to process commands.  This parser is implemented as an abstraction hierarchy, with each "type" of instruction having its own class - for example, forward and backward can be grouped as one instruction type, since backward is really just a reverse forward command.  All communication between the controller and the model happens through the parser method, which takes in a string and instantiates the correct instruction type.  All instructions contain a .execute method, which runs the instruction and returns either a) an Instruction object containing the new turtle state, b) adds an entry to the map representing variables, or c) adds an entry to the map representing functions.  
+
 ### Components: 
 * Main:
 	* instantiates front-/backend and controller
@@ -34,11 +41,7 @@ Besides update(), SLogoView has the following public methods:
 	
 *The user types 'fd 50' in the command window, and sees the turtle move in the display window leaving a trail.*    
 
-<<<<<<< HEAD
-After the user finishes typing the command in the command window, they click a button/press enter in the window.  This button's onClick() method is called, which is a lambda expression that calls the Controller Object's .parse(String s) with the string typed into the box by the user as the argument s.  The controller then calls the model's .parse(String s) method, which uses a regular expression to split the string into a command format.  From here, a specific Command object will be instantiated depending on which command is called - commands that do not need to update the turtle/turtle's position will be treated differently than commands which update the model, i.e. creating variables.  In this case, a Forward object will be instantiated, whose .execute() method will be called to update the turtle's position.  The .execute method returns a TurtleInfo object, which contains the specific turtle's unique id, old x-coordinate, old y-coordinate, old heading, new x-coordinate, new y-coordinate, new heading, and whether the pen was down.  This TurtleInfo object is returned to model.parse(), which adds the TurtleInfo object to a list of TurtleInfo objects.  The model.parse() method calls view.update(list<TurtleInfo>) with the newly created list.  
-=======
 After the users finish typing the command in the command window, they click a button/press enter in the window.  This button's onClick() method is called, which is a lambda expression that calls the Controller Object's .parse(String s) with the string typed into the box by the user as the argument s.  The controller then calls the model's .parse(String s) method, which uses a regular expression to split the string into a command format.  From here, a specific Command object will be instantiated depending on which command is called - commands that do not need to update the turtle/turtle's position will be treated differently than commands which update the model, i.e. creating variables.  In this case, a Forward object will be instantiated, whose .execute() method will be called to update the turtle's position.  The .execute method returns a Instruction object, which contains the specific turtle's unique id, a Polar object, and a boolean to specify whether the pen was down.  This Instruction object is returned to model.parse(), which adds the Instruction object to a list of Instruction objects.  The model.parse() method calls view.update(list<Instruction>) with the newly created list.  
->>>>>>> a745bc6bb49f2b4aa47c2ff170104d7f6ac9646a
 
 ##    Design Considerations
 

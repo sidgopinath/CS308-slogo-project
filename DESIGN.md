@@ -23,12 +23,19 @@
 When Main instantiates the components, it follows this specific order: SLogoView, SLogoModel(SLogoView), SLogoController(SLogoModel). Then Main calls the setController method in SLogoView to bind the lamda functions in SLogoController to UI elements. 
 When the user types in some commands and clicks run, SLogoController will send the commands as a single String to SLogoModel. SLogoModel then interprets the commands, and translate them into a List of Instruction objects. The Instruction class contains the information that SLogoView needs to update the display, for example, an integer to specify the ID of the turtle to be updated, a set of polar coordinates to specify the movement of the turtle, a boolean variable to specify pen-up or pen-down. 
 The polar coordinates will be stored in instances of the Polar class, which has two variables: distance and angle. Angle varies from 0 to 360, corresponding to the angle from the vector to north (always CCW). If distance is 0, then the turtle turns around its own axis to the angle specified by Angle; otherwise, the turtle moves without turning. For example, (60,90) means move the turtle 60 pixels east. (0,180) means to turn the turtle so that it faces south.
-SLogoModel then calls SLogoView.update(List<Instruction> instructions), which loops through the List of Instructions, and move the specified turtle accordingly. 
+SLogoModel then calls SLogoView.update(List<Instruction> instructions), which loops through the List of Instructions, and move the specified turtle accordingly.
+	
+### SLogoView:
 Besides update(), SLogoView has the following public methods:
-* init(): initialize the view and create all UI elements.
+* init(): initialize the view and create all UI elements. Each element will have a unique ID. All interactive elements will be stoerd in a Map<Integer, Node> called interactives.
 * clear(): re-initialize the view. All current drawings will be cleared, and one turtle will start at the origin.
 * setController(Controller controller): bind the controller to UI elements.
 * addTurtle(int ID): create a new turtle using a user specified image.
+
+### SLogoModel:
+
+### SLogoController:
+The SLogoController has all the methods that handle user input. These methods are named according to the following scheme: handleUI[id]. For example, the handleUI1 is called when the UI element 1 is clicked.
     
 ##   API Example Code
 

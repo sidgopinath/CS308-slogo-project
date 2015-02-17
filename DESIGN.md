@@ -21,7 +21,9 @@ This design ensures extensibility. When a new interactive UI element is added, o
 * SLogoModel:
 	* Backend.
 * SLogoView:
-	* Frontend.
+	* Initialize UI.
+	* Receive a list of instructions from SLogoModel to update the display.
+	* Reset the display when requested.
 * Some utility classes:
 	* Instruction: contains instructions to update the turtles. It is always instantiated by SLogoModel, and passed to SLogoView.
 	* Polar: contains a pair of polar coordinates.

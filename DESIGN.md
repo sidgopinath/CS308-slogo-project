@@ -19,13 +19,13 @@ This design ensures extensibility. When a new interactive UI element is added, o
 	* monitors user input
 	* passes user commands to SLogoModel
 * SLogoModel:
-	* Backend.
+	* TODO
 * SLogoView:
 	* Frontend.
 * Some utility classes:
 	* Instruction: contains instructions to update the turtles. It is always instantiated by SLogoModel, and passed to SLogoView.
 	* Polar: contains a pair of polar coordinates.
-	* Turtle:
+	* Turtle: TODO
 	* Drawer: translate Instruction to a PolyLine object. Returns false if the Instruction is to turn the turtle (distance == 0).
 This section serves as a map of your design for other programmers to gain a general understanding of how and why the program was divided up, and how the individual parts work together to provide the desired functionality. As such, it should describe specific components you intend to create, their purpose with regards to the program's functionality, and how they collaborate with each other, focusing specifically on each class's behavior, not its state. It should also include a picture of how the components are related (these pictures can be hand drawn and scanned in, created with a standard drawing program, or screen shots from a UML design program). This section should be approximately 700-1000 words long and discuss specific classes, methods, and data structures, but not individual lines of code.
 ##    User Interface
@@ -44,6 +44,7 @@ Besides update(), SLogoView has the following public methods:
 * addTurtle(int ID): create a new turtle using a user specified image.
 
 ### SLogoModel:
+The SLogo model contains all data needed to parse and run SLogo commands.  The instances of the turtle objects are contained here, as well as the code parser and all state information about the view (if the pen is down, etc.)  At a lower level, this class contains methods to parse the individual instructions, as well as an abstract class Command that all other commands inherit from.  To extend a command, one simply adds a new class that inherits from command and implements its .execute method to tell the parser what need to be updated.  In the .parse method, the command's string needs to be added, and a call to view.update() made if the command impacts the view.  Further, this design inherently supports multiple turtles.  When a turtle is added, the method .addNewTurtle() is called by the controller.  This then calls a method in the view which notifies the view of a new turtle, and prompts it to ask for an image file for the turtle.  No extension beyond new commands and support for multiple turtles is currently available - however, support could be added by adding methods to be called by the controller that do specific tasks.  Having the model contain all state information and only communicating changes to the Turtle to the view minimizes data passed between classes, and helps greatly with encapsulation.
 
 ### SLogoController:
 The SLogoController has all the methods that handle user input. These methods are named according to the following scheme: handleUI[id]. For example, the handleUI1 is called when the UI element 1 is clicked.

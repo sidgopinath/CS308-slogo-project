@@ -98,4 +98,5 @@ Sid - Back-end work. Helps in implementation of Turtle object and instructions. 
 Callie - The view and all user interface design
 
 Mengchao - Controller and interaction between view and controller
-
+###	Team Ideas for SLogo
+Greg - we could use lambda expressions pretty extensively in the backend to handle the case of recursive commands and in the testmatches method of the regex checker given to us.

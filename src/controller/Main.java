@@ -10,7 +10,6 @@ public class Main extends Application {
 	@Override
 	public void start(Stage s) throws Exception {
 		myController = new SLogoController(s);
-
 	}
 	
 	public static void main(String[] args) {

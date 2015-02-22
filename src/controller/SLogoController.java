@@ -14,7 +14,9 @@ public class SLogoController {
 
 	public SLogoController(Stage s) {
 		myParser = new Parser();
+		
 		myView = new SLogoView(s);
+		//MainView?
 	}
 
 }

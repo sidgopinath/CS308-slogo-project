@@ -1,6 +1,7 @@
 package view;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -85,7 +87,7 @@ public class SLogoView {
 	//sidebarPane class with parameters that specify column constraints / location
 	private VBox makeRightSidebar(){
 		VBox sidePane = new VBox();
-		sidePane.setPadding(new Insets(10));
+		sidePane.setPadding(new Insets(15));
 		sidePane.setSpacing(12);
 
 	    Hyperlink infoPage = new Hyperlink ("Get help");
@@ -133,11 +135,49 @@ public class SLogoView {
 	    hbox3.getChildren().addAll(selectBackgroundColor, backgroundChoice);
 	    sidePane.getChildren().add(hbox3);
 	    
+	    
+	    
+	    
 	    // variables pane
 	    
-	  
+	    Text variables = new Text("Variables");
+	    variables.setFont(new Font(15));
+	    variables.setUnderline(true);
+	    sidePane.getChildren().add(variables);
+	    
+	    ListView<String> list = new ListView<String>();
+	    ObservableList<String> items =FXCollections.observableArrayList (
+	    	    "String1", "String2");
+	    list.setItems(items);
+	    list.setMaxWidth(Double.MAX_VALUE);
+	    list.setPrefHeight(200);
+	    
+	    sidePane.getChildren().add(list);
+	    
+	    
+	    //example of how to set new elements
+	    items.add("hi");
+	    list.setItems(items);
+	    
+	    
+	  //getObservableList
+	    //addto observablelist
 	    
 	    // history pane
+
+	    Text history = new Text("History");
+	    history.setFont(new Font(15));
+	    history.setUnderline(true);
+	    sidePane.getChildren().add(history);
+	    
+	    ListView<String> historyList = new ListView<String>();
+	    ObservableList<String> historyItems =FXCollections.observableArrayList (
+	    	    "String1", "String2");
+	    historyList.setItems(historyItems);
+	    historyList.setMaxWidth(Double.MAX_VALUE);
+	    historyList.setPrefHeight(200);
+	    
+	    sidePane.getChildren().add(historyList);
 
 
 	    
@@ -147,22 +187,22 @@ public class SLogoView {
 	//bottom row
 	private HBox makeEditor(){
 		HBox bottomRow = new HBox();
-		bottomRow.setPadding(new Insets(10));
-		bottomRow.setSpacing(12);
+		bottomRow.setPadding(new Insets(15));
+		bottomRow.setSpacing(15);
 		
 		// text area
 	    TextArea textEditor = new TextArea();   
-	    textEditor.setPrefSize(700, 120); //this should be dynamically alterable?
+	    textEditor.setMaxHeight(Double.MAX_VALUE);
+	    textEditor.setPrefSize(750, 120); //this should be dynamically alterable?
 	    bottomRow.getChildren().add(textEditor);
 	    
 	    // run button
 	    Button runButton = new Button("Run");
-	    runButton.setPrefSize(100, 120);
-	 //   runButton.setScaleShape(true); why don't these work?
-	   // runButton.setCenterShape();
+	  //  runButton.setPrefSize(100, 120);
+	    runButton.setMaxWidth(Double.MAX_VALUE);
+	    runButton.setMaxHeight(Double.MAX_VALUE);
 	    //runButton.setPadding(new Insets(0,0,0,3));
 	    bottomRow.getChildren().add(runButton);
-
 		
 		return bottomRow;
 	}

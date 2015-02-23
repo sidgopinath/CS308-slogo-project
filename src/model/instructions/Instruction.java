@@ -1,5 +1,11 @@
 package model.instructions;
 
-public class Instruction {
+public abstract class Instruction {
 
+	public Instruction(){
+		
+	}
+	
+	public abstract void execute();
+	
 }

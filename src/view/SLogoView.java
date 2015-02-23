@@ -7,9 +7,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
+
 import resources.Strings;
 import controller.Command;
 import javafx.scene.Group;
+
+import model.turtle.Turtle;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -46,6 +50,7 @@ public class SLogoView {
     private Rectangle myWorkspace;
     private Map<String,Node> variables;
     private Drawer drawer = new Drawer();
+    AnchorPane anchorPane = new AnchorPane();
     
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
 	public static final int GRID_WIDTH = 800;
@@ -93,6 +98,10 @@ public class SLogoView {
         col2.setPercentWidth(30);
         
         AnchorPane anchorPane = new AnchorPane();
+       // Group display = new Group(new Rectangle(0, 0, GRID_SIZE, GRID_SIZE));
+       // display.setAlignment(Pos.CENTER);
+     //   myRoot.add(display,0,1);
+        
         anchorPane.setPadding(new Insets(15));
         
 //        anchorPane.setStyle("-fx-background-color: black;");
@@ -107,7 +116,9 @@ public class SLogoView {
         AnchorPane.setLeftAnchor(myWorkspace, 0.0);
         
    
+
         TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
+
         
         //why does the turtle end up so far down?
     
@@ -247,17 +258,22 @@ public class SLogoView {
 	}
 	
 	
-	public void updateGrid(ArrayList<Instruction> instructions){
+	public void updateWorkspace(ArrayList<Instruction> instructions){
 		//update the grid
 		//updateGrid(command.getLines());
 		//VariablesView.updateVars(command.getVariables());
 		//variables view will have configuredisplay(), update(), and event handlers
 		//updateHistory(command.getStrings());
-	    drawer.draw(turtles, instructions);
+	    anchorPane.getChildren().addAll(drawer.draw(turtles, instructions));
 	}
 	
 	public void changeStrokeColor(Color c){
 	    drawer.changeColor(c);
+	}
+	
+	public Turtle getTurtleInfo(int index){
+	    ImageView temp=turtles.get(index);
+	    return new Turtle(temp.getX(),temp.getY(),temp.getRotate());
 	}
 	
    public void updateVariables(Map<String, Double> variableUpdates){

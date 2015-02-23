@@ -25,6 +25,9 @@ public class Drawer {
                double turtleY=turtle.getY();
                double turtleNewX=turtleX+Math.sin(polar.angle)*polar.distance;
                double turtleNewY=turtleY+Math.sin(polar.angle)*polar.distance;
+               if(polar.distance==0){
+                   turtle.setRotate(polar.angle);
+               }
                if(!instruction.penUp){
                    Polyline polyline = new Polyline();
                    polyline.setStroke(color);
@@ -33,7 +36,6 @@ public class Drawer {
                }
                turtle.setX(turtleNewX);
                turtle.setY(turtleNewY);
-               turtle.setRotate(polar.angle);
            }
            return lines;
        }

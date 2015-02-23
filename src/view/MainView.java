@@ -20,13 +20,13 @@ public class MainView {
     private ResourceBundle myResources;
     private Group myDefaultGrid;
     
-    public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
+    public static final String DEFAULT_RESOURCE_DISPLAY_PACKAGE = "resources.display/";
 	public static final int GRID_SIZE = 100;
     
 	public MainView(Stage s) {
 		myRoot = new GridPane();
 		myStage = s;
-		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
+		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_DISPLAY_PACKAGE + "english");
 		myDefaultGrid = new Group(new Rectangle(0, 0, GRID_SIZE, GRID_SIZE));
 		
 		configureUI();

@@ -1,6 +1,5 @@
 package view;
 
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -8,6 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
+import resources.Strings;
 import controller.Command;
 import javafx.scene.Group;
 import javafx.collections.FXCollections;
@@ -20,6 +20,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
@@ -42,6 +43,7 @@ public class SLogoView {
 	private Scene myScene;
 	private GridPane myRoot;
     private ResourceBundle myResources;
+    private Rectangle myWorkspace;
     private Map<String,Node> variables;
     private Drawer drawer = new Drawer();
     
@@ -51,7 +53,6 @@ public class SLogoView {
 	//adjusts anchorpane coordinates to set 0,0 as the center of the gridsets center point at the
 	public static final double X_ADJUSTMENT = GRID_WIDTH / 2;  
 	public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2;  
-
 
 	public SLogoView(Stage s) {
 		myStage = s;
@@ -64,16 +65,12 @@ public class SLogoView {
 		configureUI();
 		setupScene();
         System.out.println(myRoot.getColumnConstraints());
-
-
 	}
 	
 	private void configureUI() {
 	//	myRoot.setAlignment(Pos.CENTER);
 		//myRoot.add(makeSimulationButtons(), 1, 2);   // new root from a class? or just a new mehtod?
 		//use a new class for things like the text box since pressing update will have to update naw and then the view will have to be updated as well
-	//	myRoot.setHgap(10);
-	//	myRoot.setVgap(10);
 		
 		Text title = new Text("SLogo");
 	    title.setFont(new Font(30));
@@ -95,34 +92,29 @@ public class SLogoView {
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(30);
         
-       // Group display = new Group(new Rectangle(0, 0, GRID_SIZE, GRID_SIZE));
-       // display.setAlignment(Pos.CENTER);
-     //   myRoot.add(display,0,1);
-        
         AnchorPane anchorPane = new AnchorPane();
         anchorPane.setPadding(new Insets(15));
         
+//        anchorPane.setStyle("-fx-background-color: black;");
+        //problem with the above line is that it will set the anchorpane black all the way to the end fo the stage
+        
         //is there a way to dynamically set grid size
-        Rectangle workspace = new Rectangle(GRID_WIDTH,GRID_HEIGHT);
-        workspace.setFill(Color.WHITE);
+        myWorkspace = new Rectangle(GRID_WIDTH,GRID_HEIGHT);
+        myWorkspace.setFill(Color.WHITE);
         
         System.out.println(myRoot.getColumnConstraints());
-        AnchorPane.setTopAnchor(workspace, 0.0);
-        AnchorPane.setLeftAnchor(workspace, 0.0);
-        // Button will float on right edge
+        AnchorPane.setTopAnchor(myWorkspace, 0.0);
+        AnchorPane.setLeftAnchor(myWorkspace, 0.0);
         
    
-        //we need a map for turtles and id's
-        ImageView turtle = new ImageView("resources/images/defaultTurtle.png");
-        turtle.setFitWidth(20);
-        turtle.setFitHeight(20);
+        TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
         
         //why does the turtle end up so far down?
-        System.out.println(X_ADJUSTMENT);
-        System.out.println(Y_ADJUSTMENT);
+    
+        //allow turtle to be initialized to this and then set this way somehow
         AnchorPane.setTopAnchor(turtle, Y_ADJUSTMENT);
         AnchorPane.setLeftAnchor(turtle,X_ADJUSTMENT);
-        anchorPane.getChildren().addAll(workspace, turtle);
+        anchorPane.getChildren().addAll(myWorkspace, turtle);
         myRoot.add(anchorPane, 0, 1);
         
         //getchildren.clear()
@@ -137,7 +129,7 @@ public class SLogoView {
 	//sidebarPane class with parameters that specify column constraints / location
 	private VBox makeRightSidebar(){
 		VBox sidePane = new VBox();
-		sidePane.setPadding(new Insets(15));
+		sidePane.setPadding(new Insets(0,15,0,15));
 		sidePane.setSpacing(12);
 
 	    Hyperlink infoPage = new Hyperlink ("Get help");
@@ -153,8 +145,7 @@ public class SLogoView {
 	    sidePane.getChildren().add(title);
  
 	    
-	    // select turtle image
-	    
+	    // select turtle image    
 	    HBox hbox = new HBox(10);  
 	    Text selectTurtle = new Text("Select Turtle");    
 	    Button buttonCurrent = new Button("Upload");
@@ -162,21 +153,21 @@ public class SLogoView {
 	    buttonCurrent.setPadding(new Insets(0,0,0,3));
 
 	    hbox.getChildren().addAll(selectTurtle, buttonCurrent);
-	    sidePane.getChildren().add(hbox);
-	    
-	   
+	    sidePane.getChildren().add(hbox); 
 	    
 	    // select pen color	
 	    HBox hbox2 = new HBox(10);  
-	    Text selectPenColor = new Text("Select Pen Color");   
+	    Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);   
 	    ColorPicker penColorChoice = new ColorPicker(Color.BLACK);
 	    hbox2.getChildren().addAll(selectPenColor, penColorChoice);
 	    sidePane.getChildren().add(hbox2);
 
 	    // select background color
 	    HBox hbox3 = new HBox(10);  
-	    Text selectBackgroundColor = new Text("Select Background Color");   
+	    Text selectBackgroundColor = new Text(Strings.SELECT_BACKGROUND_COLOR);   
 	    ColorPicker backgroundChoice = new ColorPicker(Color.WHITE);
+        backgroundChoice.setOnAction(e -> changeBackgroundColor(backgroundChoice.getValue()));
+
 	    
 	    // User can pick color for the stroke
         ColorPicker strokeColorChoice = new ColorPicker(Color.BLACK);
@@ -187,7 +178,7 @@ public class SLogoView {
 	    sidePane.getChildren().add(hbox3);
 	    
 	    // variables pane
-	    Text variables = new Text("Variables");
+	    Text variables = new Text(myResources.getString(Strings.VARIABLES_HEADER)); //is this necessary to use a .properties file AND a strings class?
 	    variables.setFont(new Font(15));
 	    variables.setUnderline(true);
 	    sidePane.getChildren().add(variables);
@@ -207,8 +198,7 @@ public class SLogoView {
 	    list.setItems(items);
 	    
 	    // history pane
-
-	    Text history = new Text("History");
+	    Text history = new Text(myResources.getString(Strings.HISTORY_HEADER));
 	    history.setFont(new Font(15));
 	    history.setUnderline(true);
 	    sidePane.getChildren().add(history);
@@ -221,8 +211,6 @@ public class SLogoView {
 	    historyList.setPrefHeight(225);
 	    
 	    sidePane.getChildren().add(historyList);
-
-
 	    
 	    return sidePane;
 	}
@@ -296,6 +284,10 @@ public class SLogoView {
 		myStage.show();
 	}
 	
+	private void changeBackgroundColor(Color color){
+		myWorkspace.setFill(color);
+	}
+	
 	//UPON BUTTON CLICK:
 	
 	//  File newFile = displayFileChooser();
@@ -304,6 +296,15 @@ public class SLogoView {
             public void handle(Event t) {
                 text.setFill(colorPicker.getValue());               
             }
-        });*/
+        });
+        
+        
+        button.setOnAction(new EventHandler<ActionEvent>() {
+
+    @Override
+    public void handle(ActionEvent event) {
+        String text = textField.getText();                              
+    }
+});*/
 
 }

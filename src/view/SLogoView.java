@@ -3,11 +3,13 @@ package view;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 
 import java.io.File;
 import java.util.ResourceBundle;
 
 import controller.Command;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
@@ -36,7 +38,7 @@ public class SLogoView {
     private ResourceBundle myResources;
     
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
-	public static final int GRID_SIZE = 100;
+	public static final int GRID_SIZE = 00;
 
 	public SLogoView(Stage s) {
 		myStage = s;
@@ -77,6 +79,13 @@ public class SLogoView {
         col1.setPercentWidth(70);
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(30);
+        
+        Group display = new Group(new Rectangle(0, 0, GRID_SIZE, GRID_SIZE));
+       // display.setAlignment(Pos.CENTER);
+        myRoot.add(display,0,1);
+        
+        //getchildren.clear()
+        
 		myRoot.getColumnConstraints().add(col1);
 		myRoot.getColumnConstraints().add(col2);
 		myRoot.add(makeRightSidebar(),1,1,1,2); //col, row, colspan, rowspan
@@ -134,9 +143,6 @@ public class SLogoView {
 	    ColorPicker backgroundChoice = new ColorPicker(Color.BLACK);
 	    hbox3.getChildren().addAll(selectBackgroundColor, backgroundChoice);
 	    sidePane.getChildren().add(hbox3);
-	    
-	    
-	    
 	    
 	    // variables pane
 	    

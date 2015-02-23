@@ -22,7 +22,7 @@ public class MainView {
 	public static final int GRID_SIZE = 100;
 
     
-	public SLogoView(Stage s) {
+	public MainView(Stage s) {
 		myRoot = new GridPane();
 		myStage = s;
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");

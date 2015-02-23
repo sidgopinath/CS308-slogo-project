@@ -1,39 +1,44 @@
 package view;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.ResourceBundle;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-
-import java.io.File;
-import java.util.ResourceBundle;
-
-import controller.Command;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.instructions.Instruction;
 
 public class SLogoView {
-	
+	private Map<Integer, ImageView> turtles;
 	private Stage myStage;
 	private Scene myScene;
 	private GridPane myRoot;
     private ResourceBundle myResources;
+    private Map<String,Node> variables;
+    private Drawer drawer = new Drawer();
     
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
 	public static final int GRID_SIZE = 100;
@@ -132,6 +137,12 @@ public class SLogoView {
 	 //   ChoiceBox backgroundChoice = new ChoiceBox(FXCollections.observableArrayList("Black", "Red", "Orange", "Yellow", "Green", "Blue", "Purple"));
 //	    backgroundChoice.getSelectionModel().select(0);
 	    ColorPicker backgroundChoice = new ColorPicker(Color.BLACK);
+	    
+	    // User can pick color for the stroke
+        ColorPicker strokeColorChoice = new ColorPicker(Color.BLACK);
+        strokeColorChoice.setOnAction(t -> drawer.changeColor(strokeColorChoice.getValue()));
+        // put the strokeColorChoice somewhere in the GUI
+        
 	    hbox3.getChildren().addAll(selectBackgroundColor, backgroundChoice);
 	    sidePane.getChildren().add(hbox3);
 	    
@@ -216,13 +227,34 @@ public class SLogoView {
 	}
 	
 	
-	private void update(Command command){
+	public void updateGrid(ArrayList<Instruction> instructions){
 		//update the grid
 		//updateGrid(command.getLines());
 		//VariablesView.updateVars(command.getVariables());
 		//variables view will have configuredisplay(), update(), and event handlers
 		//updateHistory(command.getStrings());
+	    drawer.draw(turtles, instructions);
 	}
+	
+	public void changeStrokeColor(Color c){
+	    drawer.changeColor(c);
+	}
+	
+   public void updateVariables(Map<String, Double> variableUpdates){
+       Iterator<Entry<String, Double>> it = variableUpdates.entrySet().iterator();
+       while(it.hasNext()){
+           Entry<String, Double> variable = it.next();
+           String name = variable.getKey();
+           double value = variable.getValue();
+           if(variables.get(name)==null){
+               // create the UI element to hold this variable
+               // then add this element to variables (variables.put(name,UI node));
+               // then add this element to the grid
+           }else{
+               // variables.get(name).setText(value);
+           }
+       }
+    }
 	
 	private void setupScene() {
 		myScene = new Scene(myRoot, 1200, 700);

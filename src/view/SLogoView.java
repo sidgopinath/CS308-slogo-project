@@ -1,5 +1,6 @@
 package view;
 
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -7,6 +8,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
+import controller.Command;
+import javafx.scene.Group;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -18,12 +21,14 @@ import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -41,7 +46,12 @@ public class SLogoView {
     private Drawer drawer = new Drawer();
     
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
-	public static final int GRID_SIZE = 100;
+	public static final int GRID_WIDTH = 800;
+	public static final int GRID_HEIGHT = 550;
+	//adjusts anchorpane coordinates to set 0,0 as the center of the gridsets center point at the
+	public static final double X_ADJUSTMENT = GRID_WIDTH / 2;  
+	public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2;  
+
 
 	public SLogoView(Stage s) {
 		myStage = s;
@@ -53,6 +63,8 @@ public class SLogoView {
 		
 		configureUI();
 		setupScene();
+        System.out.println(myRoot.getColumnConstraints());
+
 
 	}
 	
@@ -63,15 +75,15 @@ public class SLogoView {
 	//	myRoot.setHgap(10);
 	//	myRoot.setVgap(10);
 		
-		Text title = new Text("Slogo");
+		Text title = new Text("SLogo");
 	    title.setFont(new Font(30));
 	    title.setTextAlignment(TextAlignment.CENTER); //why does this not work
 		myRoot.add(title,0,0,2,1);
 		
 		RowConstraints row1 = new RowConstraints();
-        row1.setPercentHeight(10);
+        row1.setPercentHeight(5);
         RowConstraints row2 = new RowConstraints();
-        row2.setPercentHeight(70);
+        row2.setPercentHeight(75);
         RowConstraints row3 = new RowConstraints();
         row3.setPercentHeight(20);
 		myRoot.getRowConstraints().add(row1);
@@ -82,6 +94,39 @@ public class SLogoView {
         col1.setPercentWidth(70);
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(30);
+        
+       // Group display = new Group(new Rectangle(0, 0, GRID_SIZE, GRID_SIZE));
+       // display.setAlignment(Pos.CENTER);
+     //   myRoot.add(display,0,1);
+        
+        AnchorPane anchorPane = new AnchorPane();
+        anchorPane.setPadding(new Insets(15));
+        
+        //is there a way to dynamically set grid size
+        Rectangle workspace = new Rectangle(GRID_WIDTH,GRID_HEIGHT);
+        workspace.setFill(Color.WHITE);
+        
+        System.out.println(myRoot.getColumnConstraints());
+        AnchorPane.setTopAnchor(workspace, 0.0);
+        AnchorPane.setLeftAnchor(workspace, 0.0);
+        // Button will float on right edge
+        
+   
+        //we need a map for turtles and id's
+        ImageView turtle = new ImageView("resources/images/defaultTurtle.png");
+        turtle.setFitWidth(20);
+        turtle.setFitHeight(20);
+        
+        //why does the turtle end up so far down?
+        System.out.println(X_ADJUSTMENT);
+        System.out.println(Y_ADJUSTMENT);
+        AnchorPane.setTopAnchor(turtle, Y_ADJUSTMENT);
+        AnchorPane.setLeftAnchor(turtle,X_ADJUSTMENT);
+        anchorPane.getChildren().addAll(workspace, turtle);
+        myRoot.add(anchorPane, 0, 1);
+        
+        //getchildren.clear()
+        
 		myRoot.getColumnConstraints().add(col1);
 		myRoot.getColumnConstraints().add(col2);
 		myRoot.add(makeRightSidebar(),1,1,1,2); //col, row, colspan, rowspan
@@ -106,10 +151,7 @@ public class SLogoView {
 	    title.setFont(new Font(15));
 	    title.setUnderline(true);
 	    sidePane.getChildren().add(title);
-
-	    //title.setFont(Font.font("Arial", FontWeight.BOLD, 14));
-	    
-
+ 
 	    
 	    // select turtle image
 	    
@@ -134,9 +176,7 @@ public class SLogoView {
 	    // select background color
 	    HBox hbox3 = new HBox(10);  
 	    Text selectBackgroundColor = new Text("Select Background Color");   
-	 //   ChoiceBox backgroundChoice = new ChoiceBox(FXCollections.observableArrayList("Black", "Red", "Orange", "Yellow", "Green", "Blue", "Purple"));
-//	    backgroundChoice.getSelectionModel().select(0);
-	    ColorPicker backgroundChoice = new ColorPicker(Color.BLACK);
+	    ColorPicker backgroundChoice = new ColorPicker(Color.WHITE);
 	    
 	    // User can pick color for the stroke
         ColorPicker strokeColorChoice = new ColorPicker(Color.BLACK);
@@ -146,11 +186,7 @@ public class SLogoView {
 	    hbox3.getChildren().addAll(selectBackgroundColor, backgroundChoice);
 	    sidePane.getChildren().add(hbox3);
 	    
-	    
-	    
-	    
 	    // variables pane
-	    
 	    Text variables = new Text("Variables");
 	    variables.setFont(new Font(15));
 	    variables.setUnderline(true);
@@ -161,18 +197,14 @@ public class SLogoView {
 	    	    "String1", "String2");
 	    list.setItems(items);
 	    list.setMaxWidth(Double.MAX_VALUE);
-	    list.setPrefHeight(200);
+	    list.setPrefHeight(225);
 	    
 	    sidePane.getChildren().add(list);
 	    
 	    
-	    //example of how to set new elements
-	    items.add("hi");
+	    //example of how to set new elements to the observablelist
+	    items.add("Added String");
 	    list.setItems(items);
-	    
-	    
-	  //getObservableList
-	    //addto observablelist
 	    
 	    // history pane
 
@@ -183,10 +215,10 @@ public class SLogoView {
 	    
 	    ListView<String> historyList = new ListView<String>();
 	    ObservableList<String> historyItems =FXCollections.observableArrayList (
-	    	    "String1", "String2");
+	    	    "String1", "String2", "String3", "String 4","String1", "String2", "String3", "String 4", "String1", "String2", "String3", "String 4");
 	    historyList.setItems(historyItems);
 	    historyList.setMaxWidth(Double.MAX_VALUE);
-	    historyList.setPrefHeight(200);
+	    historyList.setPrefHeight(225);
 	    
 	    sidePane.getChildren().add(historyList);
 
@@ -257,7 +289,7 @@ public class SLogoView {
     }
 	
 	private void setupScene() {
-		myScene = new Scene(myRoot, 1200, 700);
+		myScene = new Scene(myRoot, 1200, 750);
 		myStage.setTitle(myResources.getString("Title"));
 		myStage.setScene(myScene);
 		//what happens if you set multiple scenes?

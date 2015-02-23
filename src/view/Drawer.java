@@ -23,19 +23,23 @@ public class Drawer {
                Polar polar = instruction.polar;
                double turtleX=turtle.getX();
                double turtleY=turtle.getY();
-               double turtleNewX=turtleX+Math.sin(polar.angle)*polar.distance;
-               double turtleNewY=turtleY+Math.sin(polar.angle)*polar.distance;
-               if(polar.distance==0){
-                   turtle.setRotate(polar.angle);
+               if(instruction.jump){
+                   
                }
-               if(!instruction.penUp){
-                   Polyline polyline = new Polyline();
-                   polyline.setStroke(color);
-                   polyline.getPoints().addAll(new Double[]{turtleX, turtleY,turtleNewX, turtleNewY});
-                   lines.add(polyline);
+               if(polar.distance!=0){
+                   double turtleNewX=turtleX+Math.sin(polar.angle)*polar.distance;
+                   double turtleNewY=turtleY+Math.cos(polar.angle)*polar.distance;
+                   turtle.setX(turtleNewX);
+                   turtle.setY(turtleNewY);
+                   if(!instruction.penUp){
+                       Polyline polyline = new Polyline();
+                       polyline.setStroke(color);
+                       polyline.getPoints().addAll(new Double[]{turtleX, turtleY,turtleNewX, turtleNewY});
+                       lines.add(polyline);
+                   }
+               }else{
+                   turtle.setRotate(turtle.getRotate()+polar.angle);
                }
-               turtle.setX(turtleNewX);
-               turtle.setY(turtleNewY);
            }
            return lines;
        }

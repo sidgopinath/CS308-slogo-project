@@ -7,9 +7,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
-
-import controller.Command;
-import javafx.scene.Group;
+import model.turtle.Turtle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -44,6 +42,7 @@ public class SLogoView {
     private ResourceBundle myResources;
     private Map<String,Node> variables;
     private Drawer drawer = new Drawer();
+    AnchorPane anchorPane = new AnchorPane();
     
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
 	public static final int GRID_WIDTH = 800;
@@ -99,7 +98,6 @@ public class SLogoView {
        // display.setAlignment(Pos.CENTER);
      //   myRoot.add(display,0,1);
         
-        AnchorPane anchorPane = new AnchorPane();
         anchorPane.setPadding(new Insets(15));
         
         //is there a way to dynamically set grid size
@@ -116,6 +114,7 @@ public class SLogoView {
         ImageView turtle = new ImageView("resources/images/defaultTurtle.png");
         turtle.setFitWidth(20);
         turtle.setFitHeight(20);
+        turtles.put(0, turtle);
         
         //why does the turtle end up so far down?
         System.out.println(X_ADJUSTMENT);
@@ -259,17 +258,22 @@ public class SLogoView {
 	}
 	
 	
-	public void updateGrid(ArrayList<Instruction> instructions){
+	public void updateWorkspace(ArrayList<Instruction> instructions){
 		//update the grid
 		//updateGrid(command.getLines());
 		//VariablesView.updateVars(command.getVariables());
 		//variables view will have configuredisplay(), update(), and event handlers
 		//updateHistory(command.getStrings());
-	    drawer.draw(turtles, instructions);
+	    anchorPane.getChildren().addAll(drawer.draw(turtles, instructions));
 	}
 	
 	public void changeStrokeColor(Color c){
 	    drawer.changeColor(c);
+	}
+	
+	public Turtle getTurtleInfo(int index){
+	    ImageView temp=turtles.get(index);
+	    return new Turtle(temp.getX(),temp.getY(),temp.getRotate());
 	}
 	
    public void updateVariables(Map<String, Double> variableUpdates){

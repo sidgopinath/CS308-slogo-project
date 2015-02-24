@@ -24,8 +24,7 @@ public class ListInstruction extends Instruction {
 
 	@Override
 	public int getNumberOfArguments() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1;
 	}
 
 }

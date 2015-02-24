@@ -99,6 +99,8 @@ public class Parser {
 		case "LISTSTART":
 			// need to count brackets
 			break;
+		case "LISTEND":
+			// handle nested lists
 		case "GROUPSTART":
 			break;
 		default:

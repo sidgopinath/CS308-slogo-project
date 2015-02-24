@@ -11,19 +11,19 @@ public class BooleanInstruction extends Instruction {
 	@Override
 	public double execute() {
 		switch(myInput[1].toUpperCase()){
-		case "Less?":
+		case "LESS?":
 			return boolToDouble(Double.parseDouble(myInput[1])<Double.parseDouble(myInput[2]));
-		case "Greater?":
+		case "GREATER?":
 			return boolToDouble(Double.parseDouble(myInput[1])>Double.parseDouble(myInput[2]));
-		case "Equal?":
+		case "EQUAL?":
 			return boolToDouble(Double.parseDouble(myInput[1])==Double.parseDouble(myInput[2]));
-		case "NotEqual?":
+		case "NOTEQUAL?":
 			return boolToDouble(Double.parseDouble(myInput[1])!=Double.parseDouble(myInput[2]));
-		case "And":
+		case "AND":
 			return boolToDouble(Double.parseDouble(myInput[1])==0&&Double.parseDouble(myInput[2])==0);
-		case "Or":
+		case "OR":
 			return boolToDouble(Double.parseDouble(myInput[1])!=0||Double.parseDouble(myInput[2])!=0);
-		case "Not":
+		case "NOT":
 			return boolToDouble(Double.parseDouble(myInput[1])==0);
 		default:
 			// need Error

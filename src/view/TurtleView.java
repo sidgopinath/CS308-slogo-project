@@ -28,10 +28,8 @@ public class TurtleView extends ImageView{
 	}
 	
 	private int[] convertPolartoCartesian(){
-		
+		return null;
 	}
-
-	
 	
 	
 }

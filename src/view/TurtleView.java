@@ -16,18 +16,13 @@ public class TurtleView extends ImageView{
 
 	public TurtleView(Image img){
 		super (img);
-        setFitWidth(20);
-        setFitHeight(20);
+        setFitWidth(100);
+        setFitHeight(100);
 	}
 	
 	public void move(){
 		//convertPolartoCartesian();
 	}
-	
-	public int[] convertPolartoCartesian(){
-		
-	}
-
 	
 	
 }

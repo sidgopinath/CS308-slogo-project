@@ -62,7 +62,6 @@ public class Parser {
 	}
 
 	// TODO: get rid of this
-	
 	public List<Instruction> parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		String command = "[ fd + 200 40 fd fd 50 ] rt 90 BACK 40";
 		furthestDepth = 0;

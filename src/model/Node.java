@@ -4,9 +4,11 @@ import model.instructions.Instruction;
 
 /// TODO: make this abstract and create a commandnode and datanode
 public class Node{
+		
 		private Node myLeft;
 		private Node myRight;
 		private String myValue;
+		
 		public Node(String me){
 			myValue = me;
 		}

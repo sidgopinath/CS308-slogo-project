@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -24,11 +25,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -44,18 +45,18 @@ import resources.Strings;
 import controller.SLogoController;
 
 public class SLogoView {
-	private Map<Integer, TurtleView> turtles = new HashMap<Integer,TurtleView>();
+	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer,TurtleView>();
 	private Stage myStage;
 	private Scene myScene;
 	private GridPane myRoot;
     private ResourceBundle myResources;
-    private Rectangle myWorkspace;
+    private Rectangle myBackground;
     private Map<String,Node> variables;
     private Drawer drawer = new Drawer();
-    private AnchorPane anchorPane = new AnchorPane();
-    private List<TurtleView> myTurtles = new ArrayList<TurtleView>();
+    private StackPane myWorkspace;
+    private SLogoController myController = new SLogoController();
     private Group lines = new Group();
-    
+    private int count=1;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
 	public static final int GRID_WIDTH = 800;
 	public static final int GRID_HEIGHT = 550;
@@ -102,38 +103,41 @@ public class SLogoView {
         col1.setPercentWidth(70);
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(30);
+        
+        myWorkspace = new StackPane();
+        
+
        // Group display = new Group(new Rectangle(0, 0, GRID_SIZE, GRID_SIZE));
        // display.setAlignment(Pos.CENTER);
      //   myRoot.add(display,0,1);
         
-        anchorPane.setPadding(new Insets(15));
+        myWorkspace.setPadding(new Insets(15));
         
-//        anchorPane.setStyle("-fx-background-color: black;");
         //problem with the above line is that it will set the anchorpane black all the way to the end fo the stage
         
         //is there a way to dynamically set grid size
-        myWorkspace = new Rectangle(GRID_WIDTH,GRID_HEIGHT);
-        myWorkspace.setFill(Color.WHITE);
+        myBackground = new Rectangle(GRID_WIDTH,GRID_HEIGHT);
+        myBackground.setFill(Color.WHITE);
         
         System.out.println(myRoot.getColumnConstraints());
-        AnchorPane.setTopAnchor(myWorkspace, 0.0);
-        AnchorPane.setLeftAnchor(myWorkspace, 0.0);
         
    
 
         TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
-        turtles.put(0,turtle);
         
         //why does the turtle end up so far down?
     
         //allow turtle to be initialized to this and then set this way somehow
-        AnchorPane.setTopAnchor(turtle, Y_ADJUSTMENT);
-        AnchorPane.setLeftAnchor(turtle,X_ADJUSTMENT);        
-        ArrayList<Instruction> instructions = new ArrayList<Instruction>();
-        instructions.add(new Instruction(0,new Polar(0,10),false,false));
-        anchorPane.getChildren().addAll(myWorkspace, turtle,lines);
-        lines.getChildren().add(drawer.draw(turtles, instructions).get(0));
-        myRoot.add(anchorPane, 0, 1);
+
+        myWorkspace.setAlignment(Pos.CENTER);
+        lines.getChildren().add(turtle);
+        myWorkspace.getChildren().addAll(myBackground,lines);
+        myTurtles.put(0,turtle);
+        //add lines to a group
+        
+        
+        myRoot.add(myWorkspace, 0, 1);
+        
         
         //getchildren.clear()
         
@@ -229,7 +233,6 @@ public class SLogoView {
 	    historyList.setItems(historyItems);
 	    historyList.setMaxWidth(Double.MAX_VALUE);
 	    historyList.setPrefHeight(225);
-	    
 	    sidePane.getChildren().add(historyList);
 	    
 	    return sidePane;
@@ -273,7 +276,7 @@ public class SLogoView {
 		//VariablesView.updateVars(command.getVariables());
 		//variables view will have configuredisplay(), update(), and event handlers
 		//updateHistory(command.getStrings());
-	    anchorPane.getChildren().addAll(drawer.draw(turtles, instructions));
+	    myWorkspace.getChildren().addAll(drawer.draw(myTurtles, instructions));
 	}
 	
 	public void changeStrokeColor(Color c){
@@ -281,7 +284,7 @@ public class SLogoView {
 	}
 	
 	public Turtle getTurtleInfo(int index){
-	    ImageView temp=turtles.get(index);
+	    ImageView temp=myTurtles.get(index);
 	    return new Turtle(temp.getX(),temp.getY(),temp.getRotate());
 	}
 	
@@ -305,18 +308,23 @@ public class SLogoView {
 		myScene = new Scene(myRoot, 1200, 750);
 		myStage.setTitle(myResources.getString("Title"));
 		myStage.setScene(myScene);
-		//what happens if you set multiple scenes?
 		myScene.setOnKeyPressed(e -> handleKeyInput(e));
+		//what happens if you set multiple scenes?
 		myStage.show();
 	}
 	
 	private void handleKeyInput (KeyEvent e) {
-        KeyCode keyCode = e.getCode();
-
+	    KeyCode keyCode = e.getCode();
+	    if(keyCode == KeyCode.W){
+            ArrayList<Instruction> instructions = new ArrayList<Instruction>();
+            instructions.add(new Instruction(0,new Polar(0,10*count),false,false));
+            lines.getChildren().addAll(drawer.draw(myTurtles, instructions));
+	    }
+        count++;
     }
 
     private void changeBackgroundColor(Color color){
-		myWorkspace.setFill(color);
+		myBackground.setFill(color);
 	}
 	
 	private void uploadTurtleFile(TurtleView turtle){

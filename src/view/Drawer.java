@@ -28,6 +28,7 @@ public class Drawer {
                double turtleNewY=turtleY+Math.cos(polar.angle)*polar.distance;
                turtle.setX(turtleNewX);
                turtle.setY(turtleNewY);
+               System.out.println(turtle.getY());
                if(!instruction.penUp){
                    Polyline polyline = new Polyline();
                    polyline.setStroke(color);

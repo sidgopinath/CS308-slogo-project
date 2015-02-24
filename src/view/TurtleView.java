@@ -15,8 +15,8 @@ public class TurtleView extends ImageView{
 
 	public TurtleView(Image img){
 		super(img);
-        setFitWidth(30);
-        setFitHeight(30);
+        setFitWidth(300);
+        setFitHeight(300);
         myXLocation = 0;
         myYLocation = 0;
 	}

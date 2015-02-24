@@ -10,5 +10,4 @@ public class Turtle {
         this.y=y;
         this.heading=rotate;
     }
-
 }

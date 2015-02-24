@@ -2,33 +2,27 @@
 
 package view;
 
-
+import controller.Converter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class TurtleView extends ImageView{
 	
 	private int myHeading;
-	private int myXLocation;
-	private int myYLocation;
-	private int myID;
+//	private int myID;
 
 	public TurtleView(Image img){
 		super(img);
-        setFitWidth(300);
-        setFitHeight(300);
-        myXLocation = 0;
-        myYLocation = 0;
+        setFitWidth(30);
+        setFitHeight(30);
+        myHeading = 0;
 	}
 	
-	public void move(){
-		//convertPolartoCartesian();
-		
+	public void move(double degrees, double r){
+		Converter converter = new Converter();
+		double[] coords = converter.convertPolartoCartesian(degrees, r);
+		setX(coords[0]);
+		setY(coords[1]);
 	}
-	
-	private int[] convertPolartoCartesian(){
-		return null;
-	}
-	
 	
 }

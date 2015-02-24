@@ -19,7 +19,7 @@ public class Parser {
 		patterns.addAll(makePatterns("resources/languages/English"));
 	    patterns.addAll(makePatterns("resources/languages/Syntax"));
 	}
-	// TODO: get rid of this
+	// TODO: get rid of the if statement somehow
 	int furthestDepth;
 	public void parse() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		String command = "fd fd fd fd 50 rt 90 BACK :distance Left :angle";

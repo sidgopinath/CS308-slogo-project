@@ -2,13 +2,10 @@ package controller;
 
 import java.util.ResourceBundle;
 
-import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import model.Parser;
 
 /**
@@ -46,20 +43,8 @@ public class SLogoController {
 		myStage = stage;
 		initializeSLogoModel();
 		initializeSLogoView();
-		//displaySLogoScreen(height, width);
-		//myScene = new Scene(myGroup, width, height, Color.WHITE);
 		myLanguageResourceBundle = ResourceBundle.getBundle("resources/languages/English");
 	}
-
-	/**
-	 * Method to display the SLogoView (screen)
-	 * Takes in height and width from Main and actually dispalys screen
-	 * @param height
-	 * @param width
-	 *
-	private void displaySLogoScreen(int height, int width) {
-		
-	}*/
 	
 	/**
 	 * Method to initialize view
@@ -99,14 +84,6 @@ public class SLogoController {
 		
 	}
 	
-	/**
-	 * The method that is called every frame
-	 * Likely will call parseInput and then passInputToView
-	 * Main loop of program contained here
-	 */
-	private void update(){
-		
-	}
 
 	/**
 	 * Returns Scene for Main
@@ -115,39 +92,5 @@ public class SLogoController {
 	 */
 	public Scene getScene() {
 		return myScene;
-	}
-
-	/**
-	 * May not be necessary, but worth having
-	 * Can be used to change frameRate aka speed-up/slow down simulation
-	 * @param frameRate
-	 */
-	public void setFrameRate(int frameRate) {
-		myFrameRate = frameRate;
-		
-	}
-
-	/**
-	 * Initializes timeline and keeps timeline moving
-	 * In controller so timeline can be adjusted on the fly
-	 * @param animationTimeline
-	 * @param frameRate
-	 */
-	public void manageTimeline(Timeline animationTimeline, int frameRate) {
-		myTimeline = animationTimeline;
-		KeyFrame frame = getKeyFrame(frameRate);
-		myTimeline.setCycleCount(Timeline.INDEFINITE);
-		myTimeline.getKeyFrames().add(frame);
-		myTimeline.play();	
-		
-	}
-
-	/**
-	 * Gets frame rate to set up timeline
-	 * @param frameRate
-	 * @return
-	 */
-	private KeyFrame getKeyFrame(int frameRate) {
-		return new KeyFrame(Duration.millis(1000 /frameRate), e -> update());
 	}
 }

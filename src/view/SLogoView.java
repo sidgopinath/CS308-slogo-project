@@ -3,17 +3,14 @@ package view;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
-
+import controller.SLogoController;
 import resources.Strings;
-import controller.Command;
-import javafx.scene.Group;
-
 import model.turtle.Turtle;
-
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -50,7 +47,9 @@ public class SLogoView {
     private Rectangle myWorkspace;
     private Map<String,Node> variables;
     private Drawer drawer = new Drawer();
-    AnchorPane anchorPane = new AnchorPane();
+    private AnchorPane anchorPane = new AnchorPane();
+    private SLogoController myController = new SLogoController();
+    private List<TurtleView> myTurtles = new ArrayList<TurtleView>();
     
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
 	public static final int GRID_WIDTH = 800;
@@ -60,6 +59,8 @@ public class SLogoView {
 	public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2;  
 
 	public SLogoView(Stage s) {
+		 
+		
 		myStage = s;
 		
 		//potentially make this into an individual class
@@ -126,6 +127,10 @@ public class SLogoView {
         AnchorPane.setTopAnchor(turtle, Y_ADJUSTMENT);
         AnchorPane.setLeftAnchor(turtle,X_ADJUSTMENT);
         anchorPane.getChildren().addAll(myWorkspace, turtle);
+        myTurtles.add(turtle);
+        //add lines to a group
+        
+        
         myRoot.add(anchorPane, 0, 1);
         
         //getchildren.clear()
@@ -159,11 +164,13 @@ public class SLogoView {
 	    // select turtle image    
 	    HBox hbox = new HBox(10);  
 	    Text selectTurtle = new Text("Select Turtle");    
-	    Button buttonCurrent = new Button("Upload");
-	    buttonCurrent.setPrefSize(100, 20);
-	    buttonCurrent.setPadding(new Insets(0,0,0,3));
+	    Button uploadImg = new Button("Upload");
+	    uploadImg.setPrefSize(100, 20);
+	    uploadImg.setPadding(new Insets(0,0,0,3));
+	    uploadImg.setOnAction(e -> uploadTurtleFile(myTurtles.get(0)));
 
-	    hbox.getChildren().addAll(selectTurtle, buttonCurrent);
+
+	    hbox.getChildren().addAll(selectTurtle, uploadImg);
 	    sidePane.getChildren().add(hbox); 
 	    
 	    // select pen color	
@@ -302,6 +309,16 @@ public class SLogoView {
 	
 	private void changeBackgroundColor(Color color){
 		myWorkspace.setFill(color);
+	}
+	
+	private void uploadTurtleFile(TurtleView turtle){
+		File file = displayFileChooser();
+		changeTurtleImage(turtle, new Image(file.toURI().toString()));
+	}
+	
+	private void changeTurtleImage(TurtleView turtle, Image img){
+		System.out.println(img.toString());
+		turtle.setImage(img);
 	}
 	
 	//UPON BUTTON CLICK:

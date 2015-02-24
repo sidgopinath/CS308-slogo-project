@@ -10,12 +10,10 @@ import view.SLogoView;
 public class SLogoController {
 
 	private Parser myParser;
-	private SLogoView myView;
 
-	public SLogoController(Stage s) {
+	public SLogoController() {
 		myParser = new Parser();
 		
-		myView = new SLogoView(s);
 		//MainView?
 	}
 

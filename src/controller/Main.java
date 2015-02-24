@@ -1,15 +1,16 @@
 package controller;
 
+import view.SLogoView;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	SLogoController myController;
+	SLogoView myView;
 	
 	@Override
 	public void start(Stage s) throws Exception {
-		myController = new SLogoController(s);
+		myView = new SLogoView(s);
 	}
 	
 	public static void main(String[] args) {

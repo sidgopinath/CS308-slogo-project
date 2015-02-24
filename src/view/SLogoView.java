@@ -23,6 +23,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -208,20 +209,36 @@ public class SLogoView {
 	    variables.setUnderline(true);
 	    sidePane.getChildren().add(variables); 
 	    
+
 	    
+	    ObservableList<Variable> variablesList =FXCollections.observableArrayList (
+	    	new Variable("var1", 1),
+	    	new Variable("var2", 2)	
+	    );
+	    variablesList.add(new Variable("Added var2.5", 5));
+
 	    
-	    ObservableList<String> variablesList =FXCollections.observableArrayList (
-	    	    "String1", "String2");
-	    TableView variablesTable = new TableView();
-	    
+	    TableView<Variable> variablesTable = new TableView<Variable>();
 	    variablesTable.setEditable(true);
 	    
-        TableColumn variablesCol = new TableColumn("Variables");
-        System.out.println("pref: " + sidePane.getMaxWidth());
-        variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
-        TableColumn valuesCol = new TableColumn("Values");
+	    //why can't I add columns to this table??
+	    //http://code.makery.ch/java/javafx-8-tutorial-part2/
+	    //http://docs.oracle.com/javafx/2/ui_controls/table-view.htm
+	    
+        TableColumn<Variable, String> variablesCol = new TableColumn<Variable, String>("Variables");
+        //System.out.println("pref: " + sidePane.getMaxWidth());
+        //variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
+        TableColumn<Variable, Integer> valuesCol = new TableColumn<Variable, Integer>("Values");
         
-        variablesTable.getColumns().setAll(variablesCol, valuesCol);
+        variablesCol.setCellValueFactory(new PropertyValueFactory<Variable,String>("myName"));
+        valuesCol.setCellValueFactory(new PropertyValueFactory<Variable,Integer>("myValue"));
+        
+       // variablesCol.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
+       // valuesCol.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
+        
+        //variablesTable.getColumns().setAll(variablesCol, valuesCol);
+        variablesTable.setItems(variablesList);
+        
         variablesTable.setMaxWidth(Double.MAX_VALUE);
         variablesTable.setPrefHeight(150);
         
@@ -229,10 +246,9 @@ public class SLogoView {
 	    
 	    /*When you call Cell.commitEdit(Object) an event is fired to the TableView, which you can observe by adding an EventHandler via TableColumn.setOnEditCommit(javafx.event.EventHandler). Similarly, you can also observe edit events for edit start and edit cancel.*/
 	    //how to remove the extra column?
-	  
 	    
 	    //example of how to set new elements to the observablelist
-	    variablesList.add("Added String");
+	    variablesList.add(new Variable("Added var3", 3));
 	    variablesTable.setItems(variablesList);
 	    
 	    //user-defined commands
@@ -262,9 +278,7 @@ public class SLogoView {
 	    historyList.setMaxWidth(Double.MAX_VALUE);
 	    historyList.setPrefHeight(150);
 	    sidePane.getChildren().add(historyList);
-	    
-	 
-	    
+ 
 	    return sidePane;
 	}
 	

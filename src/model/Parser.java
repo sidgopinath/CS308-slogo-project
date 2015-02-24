@@ -23,6 +23,7 @@ public class Parser {
 		patterns.addAll(makePatterns("resources/languages/English"));
 	    patterns.addAll(makePatterns("resources/languages/Syntax"));
 	}
+
 	private static void setUp(){
 		addAllPatterns();
 		makeCommandMap();
@@ -113,6 +114,7 @@ public class Parser {
 			// this is either a known command or invalid input.  instantiate the command, if reflection cannot find the file then must be invalid
 			Instruction myInt = null;
 			try{
+
 				
 				String[] parameters=new String[]{match};
 				System.out.println(commandMap.get(match));

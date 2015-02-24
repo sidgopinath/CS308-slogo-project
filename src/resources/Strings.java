@@ -3,6 +3,7 @@ package resources;
 public class Strings {
 
 	public static final String DEFAULT_TURTLE_IMG = "resources/images/defaultTurtle.png";
+	public static final String USER_DEFINED_COMMANDS_HEADER = "UserDefinedCommandsHeader";
 	
 	//DISPLAY. Should we use a properties file for this?
 	public static final String SELECT_BACKGROUND_COLOR = "Select Background Color";

@@ -15,7 +15,6 @@ public class Drawer {
     private Color color = Color.BLACK;
 
    public List<Polyline> draw(Map<Integer, TurtleView> turtles, ArrayList<TurtleCommand> instrucions){
-	   System.out.println("hi");
        ArrayList<Polyline> lines= new ArrayList<Polyline>();
        Iterator<TurtleCommand> it = instrucions.iterator();
        while(it.hasNext()){
@@ -45,7 +44,10 @@ public class Drawer {
    }
 
     public void changeColor(Color c) {
+        System.out.println("color" + color.toString());
+
         color=c;
         System.out.println(color.toString());
+
     }
 }

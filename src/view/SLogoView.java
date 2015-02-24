@@ -9,9 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
-import controller.SLogoController;
-import resources.Strings;
-import model.turtle.Turtle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -44,6 +41,7 @@ import model.Polar;
 import model.instructions.Instruction;
 import model.turtle.Turtle;
 import resources.Strings;
+import controller.SLogoController;
 
 public class SLogoView {
 	private Map<Integer, TurtleView> turtles = new HashMap<Integer,TurtleView>();
@@ -55,7 +53,6 @@ public class SLogoView {
     private Map<String,Node> variables;
     private Drawer drawer = new Drawer();
     private AnchorPane anchorPane = new AnchorPane();
-    private SLogoController myController = new SLogoController();
     private List<TurtleView> myTurtles = new ArrayList<TurtleView>();
     private Group lines = new Group();
     
@@ -63,8 +60,8 @@ public class SLogoView {
 	public static final int GRID_WIDTH = 800;
 	public static final int GRID_HEIGHT = 550;
 	//adjusts anchorpane coordinates to set 0,0 as the center of the gridsets center point at the
-	public static final double X_ADJUSTMENT = GRID_WIDTH / 2 - 50;  
-	public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2 - 50;  
+	public static final double X_ADJUSTMENT = GRID_WIDTH / 2;  
+	public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2;  
 
 	public SLogoView(Stage s) {
 		 

@@ -17,9 +17,6 @@ public abstract class Instruction {
     
     public abstract void execute();
 
-	public int getNumberOfArguments() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	public abstract int getNumberOfArguments();
 }
 

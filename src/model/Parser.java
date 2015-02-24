@@ -12,7 +12,6 @@ import java.util.ResourceBundle;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
-
 import model.instructions.Instruction;
 
 public class Parser {
@@ -20,8 +19,7 @@ public class Parser {
 	// is created
 	private static List<Entry<String, Pattern>> patterns;
 	private static Map<String,String> commandMap;
-	private static final String[] keyList = new String[]{"Forward","Sum"};
-	private static final String[] valueList = new String[]{"Forward","MathInstruction"};
+	private static final String[] commandTypes = new String[]{"BooleanInstruction","MathInstruction","MovementInstruction"};
 	private static void addAllPatterns(){
 		patterns = new ArrayList<>();
 		patterns.addAll(makePatterns("resources/languages/English"));
@@ -33,10 +31,19 @@ public class Parser {
 		runOnce = false;
 	}
 	
-	private static void makeCommandMap() {
-		commandMap = new HashMap();
-		for(int i=0; i<keyList.length; i++){
-			commandMap.put(keyList[i], valueList[i]);
+	private static void makeCommandMap(){
+		commandMap = new HashMap<String, String>();
+		for(String s:commandTypes){
+			Class<?> c = null;
+			try {
+				c = Class.forName("model.instructions."+s+"$implementers");
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			for(Object d:c.getEnumConstants()){
+				System.out.println(d+" " +s);
+				commandMap.put(d.toString(), s);
+			}
 		}
 	}
 
@@ -46,19 +53,16 @@ public class Parser {
 	public static List<Node> parse(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		if(runOnce)
 			setUp();
-		String command = "fd + 50 40 fd fd 50 rt 90 BACK :distance Left :angle";
-		furthestDepth = -1;
+		String command = "fd + 200 40 fd fd 50 rt 90 BACK 40";
+		furthestDepth = 0;
 		String[] splitCommands = command.split(" ");
 		List<Node> outList = new ArrayList<Node>();
-		for(int i = 0; i<splitCommands.length;i++){
-			if(furthestDepth>=i){
-				i = furthestDepth+1;
-			}
-			System.out.println("new tree at " + i+" "+ furthestDepth);
-			outList.add(makeTree(splitCommands, i));
-			
+		while(furthestDepth<splitCommands.length){
+			outList.add(makeTree(splitCommands));
+			//furthestDepth++;
 		}
 		for(Node root:outList){
+			System.out.println("new tree");
 			inOrderTraversal(root);
 		}
 		return outList;
@@ -71,26 +75,27 @@ public class Parser {
 		}
 		System.out.println(root.getValue());
 		if(root.getRight()!=null){
-				inOrderTraversal(root.getLeft());
+				inOrderTraversal(root.getRight());
 		}
 		
 	}
-	private static Node makeTree(String[] command, int start) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	private static Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		// base case
-		furthestDepth = start;
+		System.out.println(furthestDepth);
 		int myVars = 0;
 		int neededVars = -1;
 		Node myNode = null;
 		// go through and determine what type of node we are adding
-		String match = testMatches(command[start]);
-		switch (match.toUpperCase()){
+		String match = testMatches(command[furthestDepth]).toUpperCase();
+		switch (match){
 		case "COMMENT":
-			return makeTree(command,start+1);
+			furthestDepth++;
+			return makeTree(command);
 		case "VARIABLE":
 		case "CONSTANT":
 			// make node with string
-			myVars++;
-			return new Node(command[start]);
+			furthestDepth++;
+			return new Node(command[furthestDepth-1]);
 		case "COMMAND":
 			// make node with command, if found
 			// check map
@@ -107,27 +112,39 @@ public class Parser {
 			// this is either a known command or invalid input.  instantiate the command, if reflection cannot find the file then must be invalid
 			Instruction myInt = null;
 			try{
-				System.out.println(Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class));
-				String[] parameters=new String[]{"hello"};
+				
+				String[] parameters=new String[]{match};
+				System.out.println(commandMap.get(match));
 				myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
+				furthestDepth++;
 				neededVars = myInt.getNumberOfArguments();
 				myNode = new Node(match);
 			}
+//			furthestDepth++;
+//			String[] parameters=new String[]{match};
+//			System.out.println(commandMap.get(match));
+//			myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
+//			neededVars = myInt.getNumberOfArguments();
+//			myNode = new Node(match);
 			catch(ClassNotFoundException e){
 				// Throw input error
-				System.out.println("No such class, yet!");
+				System.out.println("No such class/function, yet!");
 			}
 		}
 		if(myVars>=neededVars){
 			return myNode;
 		}
-		System.out.println("making left tree now");
-		myNode.addChildLeft(makeTree(command,start+1));
+		System.out.println("making left tree now for "+myNode);
+		myNode.addChildLeft(makeTree(command));
 		myVars++;
-		if(myVars>=neededVars)
+		if(myVars>=neededVars){
+			System.out.println("im done");
 			return myNode;
-		System.out.println("making right tree now");
-		myNode.addChildRight(makeTree(command,start+1));
+		}
+		System.out.println("making right tree now for "+myNode);
+		System.out.println(command[furthestDepth]);
+		myNode.addChildRight(makeTree(command));
+		System.out.println("myright is now" + myNode.getRight()+" "+myNode.getRight().getValue());
 		myVars++;
 		return myNode;
 	}

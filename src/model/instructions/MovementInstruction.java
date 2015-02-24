@@ -3,6 +3,26 @@ package model.instructions;
 
 public class MovementInstruction extends Instruction {
 	String[] myInput;
+	public enum implementers {
+		FORWARD(1),
+		BACKWARD(1),
+		LEFT(1),
+		RIGHT(1),
+		SETHEADING(1),
+		TOWARDS(2),
+		SETXY(2),
+		PENDOWN(0),
+		PENUP(0),
+		SHOWTURTLE(0),
+		HIDETURTLE(0),
+		NATURALLOG(1),
+		CLEARSCREEN(2),
+		HOME(0);
+    private int numArgs;
+	implementers(int args){
+    	this.numArgs=args;
+    }
+	}
 	public MovementInstruction(String[] input) {
 		super(input);
 		myInput = input;
@@ -50,36 +70,6 @@ public class MovementInstruction extends Instruction {
 
 	@Override
 	public int getNumberOfArguments() {
-		switch(myInput[0].toUpperCase()){
-		case "FORWARD":
-			return 1;
-		case "BACKWARD":
-			return 1;
-		case "LEFT":
-			return 1;
-		case "RIGHT":
-			return 1;
-		case "SETHEADING":
-			return 1;
-		case "TOWARDS":
-			return 2;
-		case "SETXY":
-			return 2;
-		case "PENDOWN":
-			return 0;
-		case "PENUP":
-			return 0;
-		case "SHOWTURTLE":
-			return 0;
-		case "HIDETURTLE":
-			return 0;
-		case "CLEARSCREEN":
-			return 0;
-		case "HOME":
-			return 0;
-		default: 
-			// view.displayException(new Exception());
-			return 0;
-		}
+		return implementers.valueOf(myInput[0].toUpperCase()).numArgs;
 	}
 }

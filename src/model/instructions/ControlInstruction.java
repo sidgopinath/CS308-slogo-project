@@ -6,6 +6,12 @@ public class ControlInstruction extends Instruction{
 		super(input);
 		// TODO Auto-generated constructor stub
 	}
+//	public enum implementers {
+//    private int numArgs;
+//	implementers(int args){
+//    	this.numArgs=args;
+//    }
+//}
 
 	@Override
 	public double execute() {

@@ -2,6 +2,20 @@ package model.instructions;
 
 public class BooleanInstruction extends Instruction {
 	String [] myInput;
+	// because of enums, need to trim the question mark
+	public enum implementers {
+			LESSTHAN (2),
+			GREATERTHAN (2),
+			EQUAL (2),
+			NOTEQUAL (2),
+			AND (2),
+			OR (2),
+			NOT (1);
+	    private int numArgs;
+		implementers(int args){
+	    	this.numArgs=args;
+	    }
+	}
 	public BooleanInstruction(String[] input) {
 		super(input);
 		myInput = input;
@@ -11,13 +25,13 @@ public class BooleanInstruction extends Instruction {
 	@Override
 	public double execute() {
 		switch(myInput[1].toUpperCase()){
-		case "LESS?":
+		case "LESSTHAN":
 			return boolToDouble(Double.parseDouble(myInput[1])<Double.parseDouble(myInput[2]));
-		case "GREATER?":
+		case "GREATERTHAN":
 			return boolToDouble(Double.parseDouble(myInput[1])>Double.parseDouble(myInput[2]));
-		case "EQUAL?":
+		case "EQUAL":
 			return boolToDouble(Double.parseDouble(myInput[1])==Double.parseDouble(myInput[2]));
-		case "NOTEQUAL?":
+		case "NOTEQUAL":
 			return boolToDouble(Double.parseDouble(myInput[1])!=Double.parseDouble(myInput[2]));
 		case "AND":
 			return boolToDouble(Double.parseDouble(myInput[1])==0&&Double.parseDouble(myInput[2])==0);
@@ -38,10 +52,7 @@ public class BooleanInstruction extends Instruction {
 	}
 	@Override
 	public int getNumberOfArguments() {
-		// TODO Auto-generated method stub
-		if(myInput[1]=="Not")
-			return 1;
-		return 2;
+		return implementers.valueOf(myInput[0].toUpperCase()).numArgs;
 	}
 
 }

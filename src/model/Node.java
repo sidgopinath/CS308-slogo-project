@@ -6,12 +6,9 @@ import model.instructions.Instruction;
 public class Node{
 		private Node myLeft;
 		private Node myRight;
-		String myValue;
+		private String myValue;
 		public Node(String me){
 			myValue = me;
-		}
-		public void updateNode(String newValue){
-			myValue = newValue;
 		}
 		public String getValue(){
 			return myValue;

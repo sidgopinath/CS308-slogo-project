@@ -9,13 +9,12 @@ public class TurtleRequestInstruction extends Instruction {
 
 	@Override
 	public double execute() {
-		// TODO Auto-generated method stub
+		// Need view for all of these, holding off
 		return 0;
 	}
 
 	@Override
 	public int getNumberOfArguments() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

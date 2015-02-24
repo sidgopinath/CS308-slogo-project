@@ -14,6 +14,7 @@ import model.turtle.Turtle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -28,6 +29,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -44,10 +46,10 @@ public class SLogoView {
 	private Scene myScene;
 	private GridPane myRoot;
     private ResourceBundle myResources;
-    private Rectangle myWorkspace;
+    private Rectangle myBackground;
     private Map<String,Node> variables;
     private Drawer drawer = new Drawer();
-    private AnchorPane anchorPane = new AnchorPane();
+    private StackPane myWorkspace;
     private SLogoController myController = new SLogoController();
     private List<TurtleView> myTurtles = new ArrayList<TurtleView>();
     
@@ -98,23 +100,25 @@ public class SLogoView {
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(30);
         
-        AnchorPane anchorPane = new AnchorPane();
+        myWorkspace = new StackPane();
+        
+        
        // Group display = new Group(new Rectangle(0, 0, GRID_SIZE, GRID_SIZE));
        // display.setAlignment(Pos.CENTER);
      //   myRoot.add(display,0,1);
         
-        anchorPane.setPadding(new Insets(15));
+        myWorkspace.setPadding(new Insets(15));
         
 //        anchorPane.setStyle("-fx-background-color: black;");
         //problem with the above line is that it will set the anchorpane black all the way to the end fo the stage
         
         //is there a way to dynamically set grid size
-        myWorkspace = new Rectangle(GRID_WIDTH,GRID_HEIGHT);
-        myWorkspace.setFill(Color.WHITE);
+        myBackground = new Rectangle(GRID_WIDTH,GRID_HEIGHT);
+        myBackground.setFill(Color.WHITE);
         
         System.out.println(myRoot.getColumnConstraints());
-        AnchorPane.setTopAnchor(myWorkspace, 0.0);
-        AnchorPane.setLeftAnchor(myWorkspace, 0.0);
+        AnchorPane.setTopAnchor(myBackground, 0.0);
+        AnchorPane.setLeftAnchor(myBackground, 0.0);
         
    
 
@@ -124,14 +128,17 @@ public class SLogoView {
         //why does the turtle end up so far down?
     
         //allow turtle to be initialized to this and then set this way somehow
-        AnchorPane.setTopAnchor(turtle, Y_ADJUSTMENT);
-        AnchorPane.setLeftAnchor(turtle,X_ADJUSTMENT);
-        anchorPane.getChildren().addAll(myWorkspace, turtle);
+       // AnchorPane.setTopAnchor(turtle, Y_ADJUSTMENT);
+       // AnchorPane.setLeftAnchor(turtle,X_ADJUSTMENT);
+        myWorkspace.setAlignment(turtle, Pos.CENTER);
+        myWorkspace.getChildren().addAll(myBackground, turtle);
         myTurtles.add(turtle);
+        System.out.println(turtle.getX());
+        System.out.println(turtle.getY());
         //add lines to a group
         
         
-        myRoot.add(anchorPane, 0, 1);
+        myRoot.add(myWorkspace, 0, 1);
         
         //getchildren.clear()
         
@@ -227,7 +234,6 @@ public class SLogoView {
 	    historyList.setItems(historyItems);
 	    historyList.setMaxWidth(Double.MAX_VALUE);
 	    historyList.setPrefHeight(225);
-	    
 	    sidePane.getChildren().add(historyList);
 	    
 	    return sidePane;
@@ -271,7 +277,7 @@ public class SLogoView {
 		//VariablesView.updateVars(command.getVariables());
 		//variables view will have configuredisplay(), update(), and event handlers
 		//updateHistory(command.getStrings());
-	    anchorPane.getChildren().addAll(drawer.draw(turtles, instructions));
+	    myWorkspace.getChildren().addAll(drawer.draw(turtles, instructions));
 	}
 	
 	public void changeStrokeColor(Color c){
@@ -308,7 +314,7 @@ public class SLogoView {
 	}
 	
 	private void changeBackgroundColor(Color color){
-		myWorkspace.setFill(color);
+		myBackground.setFill(color);
 	}
 	
 	private void uploadTurtleFile(TurtleView turtle){

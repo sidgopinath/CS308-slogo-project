@@ -1,17 +1,22 @@
 package controller;
 
+
 import javafx.animation.Timeline;
+import view.SLogoView;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
 	private SLogoController sLogoController;
+	private SLogoView myView;
 	public static final int HEIGHT = 600;
 	public static final int WIDTH = 600;
 
 	@Override
 	public void start(Stage stage) throws Exception {
+		myView = new SLogoView(stage);
 		stage.setTitle("SLogoController");
 		sLogoController = new SLogoController(HEIGHT, WIDTH, stage);
 		stage.setScene(sLogoController.getScene());

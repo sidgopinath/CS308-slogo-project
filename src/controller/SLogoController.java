@@ -2,6 +2,7 @@ package controller;
 
 import java.util.ResourceBundle;
 
+import model.Parser;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Group;
@@ -29,6 +30,7 @@ public class SLogoController {
 	private ResourceBundle myLanguageResourceBundle; //language resources
 	private Timeline myTimeline; //animation timeline
 	private Integer myFrameRate; //frame rate for animation timeline, allows it to be changed
+	private Parser myParser;
 	
 	/**
 	 * Called by Main to initialize Controller
@@ -40,6 +42,7 @@ public class SLogoController {
 	 * @param stage
 	 */
 	public SLogoController(int height, int width, Stage stage) {
+		myParser = new Parser();
 		myStage = stage;
 		initializeSLogoModel();
 		initializeSLogoView();
@@ -147,7 +150,4 @@ public class SLogoController {
 	private KeyFrame getKeyFrame(int frameRate) {
 		return new KeyFrame(Duration.millis(1000 /frameRate), e -> update());
 	}
-
-	
-
 }

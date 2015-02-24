@@ -195,7 +195,7 @@ public class SLogoView {
 	    
 	    // User can pick color for the stroke
         ColorPicker strokeColorChoice = new ColorPicker(Color.BLACK);
-        strokeColorChoice.setOnAction(t -> drawer.changeColor(strokeColorChoice.getValue()));
+        strokeColorChoice.setOnAction(e -> drawer.changeColor(strokeColorChoice.getValue()));
         // put the strokeColorChoice somewhere in the GUI
         
 	    hbox3.getChildren().addAll(selectBackgroundColor, backgroundChoice);
@@ -278,11 +278,7 @@ public class SLogoView {
 		//updateHistory(command.getStrings());
 	    myWorkspace.getChildren().addAll(drawer.draw(myTurtles, instructions));
 	}
-	
-	public void changeStrokeColor(Color c){
-	    drawer.changeColor(c);
-	}
-	
+
 	public Turtle getTurtleInfo(int index){
 	    ImageView temp=myTurtles.get(index);
 	    return new Turtle(temp.getX(),temp.getY(),temp.getRotate());

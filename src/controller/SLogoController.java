@@ -41,13 +41,13 @@ public class SLogoController {
 	 * @param width
 	 * @param stage
 	 */
-	public SLogoController(int height, int width, Stage stage) {
+	public SLogoController(Stage stage) {
 		myParser = new Parser();
 		myStage = stage;
 		initializeSLogoModel();
 		initializeSLogoView();
-		displaySLogoScreen(height, width);
-		myScene = new Scene(myGroup, width, height, Color.WHITE);
+		//displaySLogoScreen(height, width);
+		//myScene = new Scene(myGroup, width, height, Color.WHITE);
 		myLanguageResourceBundle = ResourceBundle.getBundle("resources/languages/English");
 	}
 
@@ -56,10 +56,10 @@ public class SLogoController {
 	 * Takes in height and width from Main and actually dispalys screen
 	 * @param height
 	 * @param width
-	 */
+	 *
 	private void displaySLogoScreen(int height, int width) {
 		
-	}
+	}*/
 	
 	/**
 	 * Method to initialize view

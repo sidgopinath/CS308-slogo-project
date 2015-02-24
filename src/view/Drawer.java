@@ -15,6 +15,7 @@ public class Drawer {
     private Color color = Color.BLACK;
 
    public List<Polyline> draw(Map<Integer, TurtleView> turtles, ArrayList<TurtleCommand> instrucions){
+	   System.out.println("hi");
        ArrayList<Polyline> lines= new ArrayList<Polyline>();
        Iterator<TurtleCommand> it = instrucions.iterator();
        while(it.hasNext()){
@@ -26,6 +27,7 @@ public class Drawer {
            if(polar.distance!=0){
                double turtleNewX=turtleX+Math.sin(polar.angle)*polar.distance;
                double turtleNewY=turtleY+Math.cos(polar.angle)*polar.distance;
+               //just use the converter for the above code
                turtle.setX(turtleNewX);
                turtle.setY(turtleNewY);
                System.out.println(turtle.getY());
@@ -42,7 +44,8 @@ public class Drawer {
        return lines;
    }
 
-    public void changeColor (Color c) {
+    public void changeColor(Color c) {
         color=c;
+        System.out.println(color.toString());
     }
 }

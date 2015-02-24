@@ -20,6 +20,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListView;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -152,17 +154,17 @@ public class SLogoView {
 	private VBox makeRightSidebar(){
 		VBox sidePane = new VBox();
 		sidePane.setPadding(new Insets(0,15,0,15));
-		sidePane.setSpacing(12);
+		sidePane.setSpacing(8);
 
 	    Hyperlink infoPage = new Hyperlink ("Get help");
 	  //  title.setTextAlignment(TextAlignment.CENTER); //why does this not work
    //     VBox.setMargin(infoPage, new Insets(0, 0, 0, 50));
 	    sidePane.getChildren().add(infoPage);
-		
+	    
 	    
 	    //customization
 	    Text title = new Text("Customization");
-	    title.setFont(new Font(15));
+	    title.setFont(new Font(13));
 	    title.setUnderline(true);
 	    sidePane.getChildren().add(title);
  
@@ -196,30 +198,62 @@ public class SLogoView {
 	    // User can pick color for the stroke
         ColorPicker strokeColorChoice = new ColorPicker(Color.BLACK);
         strokeColorChoice.setOnAction(e -> drawer.changeColor(strokeColorChoice.getValue()));
-        // put the strokeColorChoice somewhere in the GUI
         
 	    hbox3.getChildren().addAll(selectBackgroundColor, backgroundChoice);
 	    sidePane.getChildren().add(hbox3);
+	    
+	    
+	    
+	    
 	    
 	    // variables pane
 	    Text variables = new Text(myResources.getString(Strings.VARIABLES_HEADER)); //is this necessary to use a .properties file AND a strings class?
 	    variables.setFont(new Font(15));
 	    variables.setUnderline(true);
-	    sidePane.getChildren().add(variables);
+	    sidePane.getChildren().add(variables); 
 	    
-	    ListView<String> list = new ListView<String>();
-	    ObservableList<String> items =FXCollections.observableArrayList (
+	    
+	    
+	    ObservableList<String> variablesList =FXCollections.observableArrayList (
 	    	    "String1", "String2");
-	    list.setItems(items);
-	    list.setMaxWidth(Double.MAX_VALUE);
-	    list.setPrefHeight(225);
+	    TableView variablesTable = new TableView();
 	    
-	    sidePane.getChildren().add(list);
+	    variablesTable.setEditable(true);
+	    
+        TableColumn variablesCol = new TableColumn("Variables");
+        System.out.println("pref: " + sidePane.getMaxWidth());
+        variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
+        TableColumn valuesCol = new TableColumn("Values");
+        
+        variablesTable.getColumns().setAll(variablesCol, valuesCol);
+        variablesTable.setMaxWidth(Double.MAX_VALUE);
+        variablesTable.setPrefHeight(150);
+        
+        
+	    sidePane.getChildren().add(variablesTable);
+	    
+	    
+	    
+	    
 	    
 	    
 	    //example of how to set new elements to the observablelist
-	    items.add("Added String");
-	    list.setItems(items);
+	    variablesList.add("Added String");
+	    variablesTable.setItems(variablesList);
+	    
+	    //user-defined commands
+	    Text userCommands = new Text(myResources.getString(Strings.USER_DEFINED_COMMANDS_HEADER));
+	    userCommands.setFont(new Font(15));
+	    userCommands.setUnderline(true);
+	    sidePane.getChildren().add(userCommands);
+	    
+	    ListView<String> userCommandsList = new ListView<String>();
+	    ObservableList<String> commandsItems =FXCollections.observableArrayList (
+	    	    "String1", "String2", "String3", "String 4","String1", "String2", "String3", "String 4", "String1", "String2", "String3", "String 4");
+	    userCommandsList.setItems(commandsItems);
+	    userCommandsList.setMaxWidth(Double.MAX_VALUE);
+	    userCommandsList.setPrefHeight(150);
+	    sidePane.getChildren().add(userCommandsList);
 	    
 	    // history pane
 	    Text history = new Text(myResources.getString(Strings.HISTORY_HEADER));
@@ -232,8 +266,10 @@ public class SLogoView {
 	    	    "String1", "String2", "String3", "String 4","String1", "String2", "String3", "String 4", "String1", "String2", "String3", "String 4");
 	    historyList.setItems(historyItems);
 	    historyList.setMaxWidth(Double.MAX_VALUE);
-	    historyList.setPrefHeight(225);
+	    historyList.setPrefHeight(150);
 	    sidePane.getChildren().add(historyList);
+	    
+	 
 	    
 	    return sidePane;
 	}
@@ -351,5 +387,8 @@ public class SLogoView {
         String text = textField.getText();                              
     }
 });*/
+	
+	//consider using labels instead of text?
+	
 
 }

@@ -19,7 +19,7 @@ public class Parser {
 		patterns.addAll(makePatterns("resources/languages/English"));
 	    patterns.addAll(makePatterns("resources/languages/Syntax"));
 	}
-	// TODO: get rid of the if statement somehow
+	// TODO: get rid of this
 	int furthestDepth;
 	public void parse() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		String command = "fd fd fd fd 50 rt 90 BACK :distance Left :angle";
@@ -79,7 +79,7 @@ public class Parser {
 			// this is either a known command or invalid input.  instantiate the command, if reflection cannot find the file then must be invalid
 			Instruction myInt = null;
 			try{
-				myInt = Class.forName("model.instructions."+match).asSubclass(Instruction.class).getConstructor().newInstance();
+				myInt = Class.forName("model.instructions."+ match).asSubclass(Instruction.class).getConstructor().newInstance();
 				neededVars = myInt.getNumberOfArguments();
 				myNode = new Node(myInt, null);
 			}

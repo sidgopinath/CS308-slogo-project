@@ -77,6 +77,29 @@ The SLogoController has all the methods that handle user input. These methods ar
 
 After the users finish typing the command in the command window, they click a button/press enter in the window. This button's onClick() method is called, which is a lambda expression that calls the Controller Object's .parse(String s) with the string typed into the box by the user as the argument s. The controller then calls the model's .parse(String s) method, which uses a regular expression to split the string into a command format. From here, a specific Command object will be instantiated depending on which command is called - commands that do not need to update the turtle/turtle's position will be treated differently than commands which update the model, i.e. creating variables. In this case, a Forward object will be instantiated, whose .execute() method will be called to update the turtle's position. The .execute method returns a Instruction object, which contains the specific turtle's unique id, a Polar object, and a boolean to specify whether the pen was down. This Instruction object is returned to model.parse(), which adds the Instruction object to a list of Instruction objects. The model.parse() method calls view.update(list<Instruction>) with the newly created list.  
 
+[User types in values in a text field within the display. The user then clicks run]
+View.Button.onClick() -> Model.parse(String s)  and call HistoryView.update()
+Model.parse(String s) returns a Forward object (which extends the Command object)
+Forward.execute() updates the turtle object and returns an Instruction object to the model and thus to the controller
+
+* Grid.getLength() (get grid dimensions to properly update toroidal effects)
+* Grid.getWidth()
+* Turtle.getLocation()
+* Turtle.getHeading()
+* Turtle.getStart()
+* Turtle.setNewLocation()
+* Turtle.setNewHeading()
+* Turtle.setNewStart()
+View.updateGrid(List<Instruction>)
+
+* Line.getColor()
+* Grid.drawLine(startPoint, endPoint)
+* ImageView.setRotate() (the turtle in the view is represented by an ImageView)
+* ImageView.setTranslateX()
+* ImageView.setTranslateY()
+
+VariableView.update()
+
 ##    Design Considerations
 In the initial design of Slogo, we considered several different possibilities of information flow between the back-end and the front-end. 
 

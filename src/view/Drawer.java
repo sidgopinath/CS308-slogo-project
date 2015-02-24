@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import model.Polar;
-import model.instructions.TurtleCommand;
+import model.turtle.TurtleCommand;
 
 public class Drawer {
     private Color color = Color.BLACK;

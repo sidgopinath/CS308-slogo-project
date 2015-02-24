@@ -3,20 +3,12 @@ package model;
 import model.instructions.Instruction;
 
 /// TODO: make this abstract and create a commandnode and datanode
-class Node{
+public class Node{
 		private Node myLeft;
 		private Node myRight;
-		Instruction myInstruction;
-		String myValue;
-		public Node(Instruction i, String me){
-			myInstruction = i;
+		private String myValue;
+		public Node(String me){
 			myValue = me;
-		}
-		public void updateNode(String newValue){
-			myValue = newValue;
-		}
-		public Instruction getInstruction(){
-			return myInstruction;
 		}
 		public String getValue(){
 			return myValue;

@@ -42,7 +42,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Polar;
 import model.instructions.Instruction;
-import model.instructions.TurtleCommand;
 import model.turtle.Turtle;
 import resources.Strings;
 import controller.SLogoController;
@@ -203,9 +202,6 @@ public class SLogoView {
 	    sidePane.getChildren().add(hbox3);
 	    
 	    
-	    
-	    
-	    
 	    // variables pane
 	    Text variables = new Text(myResources.getString(Strings.VARIABLES_HEADER)); //is this necessary to use a .properties file AND a strings class?
 	    variables.setFont(new Font(15));
@@ -229,13 +225,11 @@ public class SLogoView {
         variablesTable.setMaxWidth(Double.MAX_VALUE);
         variablesTable.setPrefHeight(150);
         
-        
 	    sidePane.getChildren().add(variablesTable);
 	    
-	    
-	    
-	    
-	    
+	    /*When you call Cell.commitEdit(Object) an event is fired to the TableView, which you can observe by adding an EventHandler via TableColumn.setOnEditCommit(javafx.event.EventHandler). Similarly, you can also observe edit events for edit start and edit cancel.*/
+	    //how to remove the extra column?
+	  
 	    
 	    //example of how to set new elements to the observablelist
 	    variablesList.add("Added String");

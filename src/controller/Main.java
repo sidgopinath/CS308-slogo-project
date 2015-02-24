@@ -12,7 +12,7 @@ public class Main extends Application {
 
 	@Override
 	public void start(Stage stage) throws Exception {
-		//myView = new SLogoView(stage);
+		myView = new SLogoView(stage);
 		sLogoController = new SLogoController(stage);
 	}
 

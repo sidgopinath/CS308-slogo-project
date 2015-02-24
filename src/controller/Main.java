@@ -1,18 +1,34 @@
 package controller;
 
+
+import javafx.animation.Timeline;
+import view.SLogoView;
+
 import javafx.application.Application;
 import javafx.stage.Stage;
 
 public class Main extends Application {
 
-	SLogoController myController;
-	
+	private SLogoController sLogoController;
+	private SLogoView myView;
+	public static final int HEIGHT = 600;
+	public static final int WIDTH = 600;
+
 	@Override
-	public void start(Stage s) throws Exception {
-		myController = new SLogoController(s);
+	public void start(Stage stage) throws Exception {
+		myView = new SLogoView(stage);
+		stage.setTitle("SLogoController");
+		sLogoController = new SLogoController(HEIGHT, WIDTH, stage);
+		stage.setScene(sLogoController.getScene());
+		stage.setResizable(false);
+		stage.show();
+		Timeline animationTimeline = new Timeline(); //could be moved to controller?
+		int frameRate = 60;
+		sLogoController.setFrameRate(frameRate);
+		sLogoController.manageTimeline(animationTimeline, frameRate); //could be moved to controller
 	}
-	
+
 	public static void main(String[] args) {
 		launch(args);
-	}
+	}	
 }

@@ -1,7 +1,25 @@
 package model.instructions;
 
-public abstract class Instruction {
+import model.Polar;
 
-	protected abstract double execute();
-	public abstract int getNumberOfArguments();
+public abstract class Instruction {
+    public int turtleId;
+    public Polar polar;
+    public boolean penUp;
+    public boolean jump;
+    
+    public Instruction(int turtleId,Polar polar,boolean penUp,boolean jump){
+        this.turtleId=turtleId;
+        this.polar=polar;
+        this.penUp=penUp;
+        this.jump=jump;
+    }
+    
+    public abstract void execute();
+
+	public int getNumberOfArguments() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }
+

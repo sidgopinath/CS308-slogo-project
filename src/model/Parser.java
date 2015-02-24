@@ -22,7 +22,7 @@ public class Parser {
 		patterns.addAll(makePatterns("resources/languages/English"));
 	    patterns.addAll(makePatterns("resources/languages/Syntax"));
 	}
-	// TODO: get rid of the if statement somehow
+	// TODO: get rid of this
 	int furthestDepth;
 	public void parse() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		String command = "fd fd fd fd 50 rt 90 BACK :distance Left :angle";
@@ -46,7 +46,7 @@ public class Parser {
 		if(root.getLeft()!=null){
 			inOrderTraversal(root.getLeft());
 		}
-		System.out.println(root.getValue());
+		System.out.println(root.getValue()+" "+ root.getInstruction());
 		if(root.getRight()!=null){
 				inOrderTraversal(root.getLeft());
 		}
@@ -81,7 +81,17 @@ public class Parser {
 		default:
 			// this is either a known command or invalid input.  instantiate the command, if reflection cannot find the file then must be invalid
 			Instruction myInt = null;
-			myNode = new Node(match);
+			try{
+				Object[] myString = new String[]{"forward"};
+				System.out.println(Class.forName("model.instructions."+match).asSubclass(Instruction.class).getConstructor(String[].class));
+				String[] parameters=new String[]{"hello"};
+				myInt = Class.forName("model.instructions."+match).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
+				neededVars = myInt.getNumberOfArguments(match);
+				myNode = new Node(match);
+			}
+			catch(ClassNotFoundException e){
+				// Throw input error
+			}
 		}
 		if(myVars>=neededVars){
 			return myNode;
@@ -95,12 +105,6 @@ public class Parser {
 		myVars++;
 		return myNode;
 	}
-//	 do this stuff when we traverse the tree now
-//	Object[] myString = new String[]{"forward"};
-//	System.out.println(Class.forName("model.instructions."+match).asSubclass(Instruction.class).getConstructor(String[].class));
-//	String[] parameters=new String[]{"hello"};
-//	myInt = Class.forName("model.instructions."+match).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
-//	neededVars = myInt.getNumberOfArguments();
 	public static boolean match (String input, Pattern regex) {
         return regex.matcher(input).matches();
     }

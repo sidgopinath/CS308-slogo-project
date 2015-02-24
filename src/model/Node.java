@@ -6,17 +6,12 @@ import model.instructions.Instruction;
 class Node{
 		private Node myLeft;
 		private Node myRight;
-		Instruction myInstruction;
 		String myValue;
-		public Node(Instruction i, String me){
-			myInstruction = i;
+		public Node(String me){
 			myValue = me;
 		}
 		public void updateNode(String newValue){
 			myValue = newValue;
-		}
-		public Instruction getInstruction(){
-			return myInstruction;
 		}
 		public String getValue(){
 			return myValue;

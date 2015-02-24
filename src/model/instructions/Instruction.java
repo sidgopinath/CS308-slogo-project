@@ -5,9 +5,10 @@ import model.Polar;
 public abstract class Instruction {
     
     public Instruction(String[] input){
+    	System.out.println(input[0]);
     }
     
-    public abstract void execute();
+    public abstract double execute();
 
 	public abstract int getNumberOfArguments();
 }

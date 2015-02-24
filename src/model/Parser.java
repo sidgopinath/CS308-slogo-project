@@ -1,13 +1,16 @@
 package model;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
 import java.util.regex.Pattern;
+
 import model.instructions.Instruction;
 
 public class Parser {
@@ -43,7 +46,7 @@ public class Parser {
 		if(root.getLeft()!=null){
 			inOrderTraversal(root.getLeft());
 		}
-		System.out.println(root.getValue()+" "+ root.getInstruction());
+		System.out.println(root.getValue());
 		if(root.getRight()!=null){
 				inOrderTraversal(root.getLeft());
 		}
@@ -64,7 +67,7 @@ public class Parser {
 		case "CONSTANT":
 			// make node with string
 			myVars++;
-			return new Node(null,command[start]);
+			return new Node(command[start]);
 		case "COMMAND":
 			// make node with command, if found
 			// check map
@@ -78,14 +81,7 @@ public class Parser {
 		default:
 			// this is either a known command or invalid input.  instantiate the command, if reflection cannot find the file then must be invalid
 			Instruction myInt = null;
-			try{
-				myInt = Class.forName("model.instructions."+match).asSubclass(Instruction.class).getConstructor().newInstance();
-				neededVars = myInt.getNumberOfArguments();
-				myNode = new Node(myInt, null);
-			}
-			catch(ClassNotFoundException e){
-				// Throw input error
-			}
+			myNode = new Node(match);
 		}
 		if(myVars>=neededVars){
 			return myNode;
@@ -99,6 +95,12 @@ public class Parser {
 		myVars++;
 		return myNode;
 	}
+//	 do this stuff when we traverse the tree now
+//	Object[] myString = new String[]{"forward"};
+//	System.out.println(Class.forName("model.instructions."+match).asSubclass(Instruction.class).getConstructor(String[].class));
+//	String[] parameters=new String[]{"hello"};
+//	myInt = Class.forName("model.instructions."+match).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
+//	neededVars = myInt.getNumberOfArguments();
 	public static boolean match (String input, Pattern regex) {
         return regex.matcher(input).matches();
     }

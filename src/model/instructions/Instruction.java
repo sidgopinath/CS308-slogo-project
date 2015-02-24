@@ -2,7 +2,7 @@ package model.instructions;
 
 import model.Polar;
 
-public class Instruction {
+public abstract class Instruction {
     public int turtleId;
     public Polar polar;
     public boolean penUp;
@@ -14,4 +14,6 @@ public class Instruction {
         this.penUp=penUp;
         this.jump=jump;
     }
+    
+    public abstract void execute();
 }

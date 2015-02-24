@@ -50,20 +50,22 @@ public class Parser {
 	// TODO: get rid of this
 	static int furthestDepth;
 	static boolean runOnce = true;
-	public static List<Node> parse(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+	public static List<Instruction> parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		if(runOnce)
 			setUp();
 		String command = "[ fd + 200 40 fd fd 50 ] rt 90 BACK 40";
 		furthestDepth = 0;
 		String[] splitCommands = command.split(" ");
-		List<Node> outList = new ArrayList<Node>();
+		List<Node> nodeList = new ArrayList();
 		while(furthestDepth<splitCommands.length){
-			outList.add(makeTree(splitCommands));
+			nodeList.add(makeTree(splitCommands));
 		}
-		for(Node root:outList){
+		for(Node root:nodeList){
 			System.out.println("new tree");
 			inOrderTraversal(root);
 		}
+		List<Instruction> outList = new ArrayList();
+		// method here to convert from ArrayList to executable instruction, and then pass that to an executor by calling all of the .executes.
 		return outList;
 	}
 	private static void inOrderTraversal(Node root){
@@ -180,6 +182,6 @@ public class Parser {
 }
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException{
 	Parser p = new Parser();
-	p.parse(null);
+	p.parseAndExecute(null);
 	}
 }

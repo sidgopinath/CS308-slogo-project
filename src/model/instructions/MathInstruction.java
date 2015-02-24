@@ -7,6 +7,7 @@ public class MathInstruction extends Instruction{
 	String[] myInput;
 	public MathInstruction(String[] input) {
 		super(input);
+		System.out.println("yo");
 		myInput = input;
 	}
 

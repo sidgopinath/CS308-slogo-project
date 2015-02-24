@@ -14,12 +14,13 @@ public class Forward extends Instruction {
 		return 0;
 	}
 
-	@Override
-	public int getNumberOfArguments() {
-		// TODO Auto-generated method stub
-		return 1;
-	}
 	public String toString(){
 		return this.getClass().toString();
+	}
+
+	@Override
+	public int getNumberOfArguments(String match) {
+		// TODO Auto-generated method stub
+		return 1;
 	}
 }

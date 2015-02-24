@@ -15,7 +15,7 @@ public class UserCommand extends Instruction {
 	}
 
 	@Override
-	public int getNumberOfArguments() {
+	public int getNumberOfArguments(String s) {
 		// TODO Auto-generated method stub
 		return numArgs;
 	}

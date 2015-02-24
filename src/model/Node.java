@@ -3,7 +3,7 @@ package model;
 import model.instructions.Instruction;
 
 /// TODO: make this abstract and create a commandnode and datanode
-class Node{
+public class Node{
 		private Node myLeft;
 		private Node myRight;
 		String myValue;

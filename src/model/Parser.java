@@ -5,7 +5,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
@@ -17,15 +19,34 @@ public class Parser {
 	// To parse, first create a parsing tree to solve recursive problems.  Then use reflection to instantiate the proper commands.
 	// is created
 	private static List<Entry<String, Pattern>> patterns;
-	public Parser(){
+	private static Map<String,String> commandMap;
+	private static final String[] keyList = new String[]{"Forward","Sum"};
+	private static final String[] valueList = new String[]{"Forward","MathInstruction"};
+	private static void addAllPatterns(){
 		patterns = new ArrayList<>();
 		patterns.addAll(makePatterns("resources/languages/English"));
 	    patterns.addAll(makePatterns("resources/languages/Syntax"));
 	}
+	private static void setUp(){
+		addAllPatterns();
+		makeCommandMap();
+		runOnce = false;
+	}
+	
+	private static void makeCommandMap() {
+		commandMap = new HashMap();
+		for(int i=0; i<keyList.length; i++){
+			commandMap.put(keyList[i], valueList[i]);
+		}
+	}
+
 	// TODO: get rid of this
-	int furthestDepth;
-	public void parse() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		String command = "fd fd fd fd 50 rt 90 BACK :distance Left :angle";
+	static int furthestDepth;
+	static boolean runOnce = true;
+	public static List<Node> parse(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+		if(runOnce)
+			setUp();
+		String command = "fd + 50 40 fd fd 50 rt 90 BACK :distance Left :angle";
 		furthestDepth = -1;
 		String[] splitCommands = command.split(" ");
 		List<Node> outList = new ArrayList<Node>();
@@ -33,26 +54,28 @@ public class Parser {
 			if(furthestDepth>=i){
 				i = furthestDepth+1;
 			}
+			System.out.println("new tree at " + i+" "+ furthestDepth);
 			outList.add(makeTree(splitCommands, i));
 			
 		}
 		for(Node root:outList){
 			inOrderTraversal(root);
 		}
+		return outList;
 	}
-	private void inOrderTraversal(Node root){
+	private static void inOrderTraversal(Node root){
 		if(root==null)
 			return;
 		if(root.getLeft()!=null){
 			inOrderTraversal(root.getLeft());
 		}
-		System.out.println(root.getValue()+" "+ root.getInstruction());
+		System.out.println(root.getValue());
 		if(root.getRight()!=null){
 				inOrderTraversal(root.getLeft());
 		}
 		
 	}
-	private Node makeTree(String[] command, int start) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	private static Node makeTree(String[] command, int start) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		// base case
 		furthestDepth = start;
 		int myVars = 0;
@@ -82,20 +105,21 @@ public class Parser {
 			// this is either a known command or invalid input.  instantiate the command, if reflection cannot find the file then must be invalid
 			Instruction myInt = null;
 			try{
-				Object[] myString = new String[]{"forward"};
-				System.out.println(Class.forName("model.instructions."+match).asSubclass(Instruction.class).getConstructor(String[].class));
+				System.out.println(Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class));
 				String[] parameters=new String[]{"hello"};
-				myInt = Class.forName("model.instructions."+match).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
+				myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
 				neededVars = myInt.getNumberOfArguments(match);
 				myNode = new Node(match);
 			}
 			catch(ClassNotFoundException e){
 				// Throw input error
+				System.out.println("No such class, yet!");
 			}
 		}
 		if(myVars>=neededVars){
 			return myNode;
 		}
+		System.out.println("making left tree now");
 		myNode.addChildLeft(makeTree(command,start+1));
 		myVars++;
 		if(myVars>=neededVars)
@@ -137,6 +161,6 @@ public class Parser {
 }
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException{
 	Parser p = new Parser();
-	p.parse();
+	p.parse(null);
 	}
 }

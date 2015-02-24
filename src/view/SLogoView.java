@@ -40,6 +40,7 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Polar;
 import model.instructions.Instruction;
+import model.instructions.TurtleCommand;
 import model.turtle.Turtle;
 import resources.Strings;
 import controller.SLogoController;
@@ -54,7 +55,6 @@ public class SLogoView {
     private Map<String,Node> variables;
     private Drawer drawer = new Drawer();
     private StackPane myWorkspace;
-    private SLogoController myController = new SLogoController();
     private Group lines = new Group();
     private int count=1;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
@@ -270,7 +270,7 @@ public class SLogoView {
 	}
 	
 	
-	public void updateWorkspace(ArrayList<Instruction> instructions){
+	public void updateWorkspace(ArrayList<TurtleCommand> instructions){
 		//update the grid
 		//updateGrid(command.getLines());
 		//VariablesView.updateVars(command.getVariables());
@@ -316,8 +316,8 @@ public class SLogoView {
 	private void handleKeyInput (KeyEvent e) {
 	    KeyCode keyCode = e.getCode();
 	    if(keyCode == KeyCode.W){
-            ArrayList<Instruction> instructions = new ArrayList<Instruction>();
-            instructions.add(new Instruction(0,new Polar(0,10*count),false,false));
+            ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
+            instructions.add(new TurtleCommand(0,new Polar(0,10*count),false,false));
             lines.getChildren().addAll(drawer.draw(myTurtles, instructions));
 	    }
         count++;

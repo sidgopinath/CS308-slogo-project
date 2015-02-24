@@ -40,8 +40,8 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Polar;
 import model.instructions.Instruction;
-import model.instructions.TurtleCommand;
 import model.turtle.Turtle;
+import model.turtle.TurtleCommand;
 import resources.Strings;
 import controller.SLogoController;
 

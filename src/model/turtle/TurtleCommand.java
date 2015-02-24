@@ -1,4 +1,4 @@
-package model.instructions;
+package model.turtle;
 import model.Polar;
 
 public class TurtleCommand {

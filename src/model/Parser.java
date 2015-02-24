@@ -53,13 +53,12 @@ public class Parser {
 	public static List<Node> parse(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		if(runOnce)
 			setUp();
-		String command = "fd + 200 40 fd fd 50 rt 90 BACK 40";
+		String command = "[ fd + 200 40 fd fd 50 ] rt 90 BACK 40";
 		furthestDepth = 0;
 		String[] splitCommands = command.split(" ");
 		List<Node> outList = new ArrayList<Node>();
 		while(furthestDepth<splitCommands.length){
 			outList.add(makeTree(splitCommands));
-			//furthestDepth++;
 		}
 		for(Node root:outList){
 			System.out.println("new tree");
@@ -87,7 +86,11 @@ public class Parser {
 		Node myNode = null;
 		// go through and determine what type of node we are adding
 		String match = testMatches(command[furthestDepth]).toUpperCase();
+		//this switch will eventually be combined into the map.
 		switch (match){
+		case "LISTSTART":
+			furthestDepth++;
+			return new Node(command[furthestDepth-1]);
 		case "COMMENT":
 			furthestDepth++;
 			return makeTree(command);
@@ -101,11 +104,9 @@ public class Parser {
 			// check map
 			// return new usercommand using map
 			// user command makes the tree for us, so just return the root node that returns
-		case "LISTSTART":
-			// need to count brackets
-			break;
 		case "LISTEND":
-			// handle nested lists
+			furthestDepth++;
+			return new Node(command[furthestDepth-1]);
 		case "GROUPSTART":
 			break;
 		default:
@@ -144,7 +145,6 @@ public class Parser {
 		System.out.println("making right tree now for "+myNode);
 		System.out.println(command[furthestDepth]);
 		myNode.addChildRight(makeTree(command));
-		System.out.println("myright is now" + myNode.getRight()+" "+myNode.getRight().getValue());
 		myVars++;
 		return myNode;
 	}

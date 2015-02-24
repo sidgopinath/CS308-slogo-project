@@ -1,5 +1,7 @@
 package model.instructions;
 
-public class Instruction {
+public abstract class Instruction {
 
+	protected abstract double execute();
+	public abstract int getNumberOfArguments();
 }

@@ -1,8 +1,12 @@
 package model.instructions;
 
-import model.Polar;
 
 public class Forward extends Instruction {
+
+	public Forward(String[] input) {
+		super(input);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	protected double execute() {

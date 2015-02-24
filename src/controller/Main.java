@@ -2,10 +2,9 @@ package controller;
 
 
 import javafx.animation.Timeline;
-import view.SLogoView;
-
 import javafx.application.Application;
 import javafx.stage.Stage;
+import view.SLogoView;
 
 public class Main extends Application {
 

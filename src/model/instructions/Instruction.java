@@ -1,13 +1,12 @@
 package model.instructions;
 
-import model.Polar;
 
 public abstract class Instruction {
     
     public Instruction(String[] input){
     }
     
-    public abstract void execute();
+    protected abstract double execute();
 
 	public abstract int getNumberOfArguments();
 }

@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
@@ -42,10 +41,9 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Polar;
-import model.instructions.Instruction;
 import model.turtle.Turtle;
+import model.turtle.TurtleCommand;
 import resources.Strings;
-import controller.SLogoController;
 
 public class SLogoView {
 	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer,TurtleView>();

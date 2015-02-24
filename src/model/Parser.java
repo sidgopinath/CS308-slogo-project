@@ -51,12 +51,10 @@ public class Parser {
 	}
 	private Node makeTree(String[] command, int start) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		// base case
-		System.out.println(furthestDepth+" "+ start);
 		furthestDepth = start;
 		int myVars = 0;
 		int neededVars = -1;
 		Node myNode = null;
-		System.out.println("running for "+ command[start] + " "+ start);
 		// go through and determine what type of node we are adding
 		String match = testMatches(command[start]);
 		switch (match.toUpperCase()){
@@ -92,8 +90,6 @@ public class Parser {
 		if(myVars>=neededVars){
 			return myNode;
 		}
-		System.out.println(command[start] +" is a " +match);
-		System.out.println("making left tree now");
 		myNode.addChildLeft(makeTree(command,start+1));
 		myVars++;
 		if(myVars>=neededVars)

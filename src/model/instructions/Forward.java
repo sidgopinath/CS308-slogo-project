@@ -1,5 +1,7 @@
 package model.instructions;
 
+import model.Polar;
+
 public class Forward extends Instruction {
 
 	@Override

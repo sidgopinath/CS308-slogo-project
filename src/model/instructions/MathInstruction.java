@@ -7,7 +7,6 @@ public class MathInstruction extends Instruction{
 	String[] myInput;
 	public MathInstruction(String[] input) {
 		super(input);
-		System.out.println("yo");
 		myInput = input;
 	}
 
@@ -56,7 +55,7 @@ public class MathInstruction extends Instruction{
 	}
 
 	@Override
-	public int getNumberOfArguments(String match) {
+	public int getNumberOfArguments() {
 		switch(myInput[0].toUpperCase()){
 		case "SUM":
 			return 2;

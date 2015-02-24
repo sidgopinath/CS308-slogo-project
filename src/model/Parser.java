@@ -108,7 +108,7 @@ public class Parser {
 				System.out.println(Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class));
 				String[] parameters=new String[]{"hello"};
 				myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
-				neededVars = myInt.getNumberOfArguments(match);
+				neededVars = myInt.getNumberOfArguments();
 				myNode = new Node(match);
 			}
 			catch(ClassNotFoundException e){

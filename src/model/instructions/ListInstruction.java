@@ -7,9 +7,9 @@ import java.util.List;
 import model.Node;
 import model.Parser;
 
-public class CommandList extends Instruction {
+public class ListInstruction extends Instruction {
 	String list;
-	public CommandList(String[] input) {
+	public ListInstruction(String[] input) {
 		super(input);
 		list = input[1];
 	}
@@ -23,7 +23,7 @@ public class CommandList extends Instruction {
 	}
 
 	@Override
-	public int getNumberOfArguments(String match) {
+	public int getNumberOfArguments() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

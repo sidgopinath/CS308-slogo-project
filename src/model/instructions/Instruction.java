@@ -9,6 +9,6 @@ public abstract class Instruction {
     
     public abstract double execute();
 
-	public abstract int getNumberOfArguments(String match);
+	public abstract int getNumberOfArguments();
 }
 

@@ -1,9 +1,9 @@
 package model.instructions;
 
 
-public class UserCommand extends Instruction {
+public class UserInstruction extends Instruction {
 	private int numArgs;
-	public UserCommand(String[] input) {
+	public UserInstruction(String[] input) {
 		super(input);
 		// TODO Auto-generated constructor stub
 	}
@@ -15,7 +15,7 @@ public class UserCommand extends Instruction {
 	}
 
 	@Override
-	public int getNumberOfArguments(String s) {
+	public int getNumberOfArguments() {
 		// TODO Auto-generated method stub
 		return numArgs;
 	}

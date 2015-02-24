@@ -1,9 +1,9 @@
 package model.instructions;
 
 
-public class Forward extends Instruction {
+public class MovementInstruction extends Instruction {
 
-	public Forward(String[] input) {
+	public MovementInstruction(String[] input) {
 		super(input);
 		// TODO Auto-generated constructor stub
 	}
@@ -19,7 +19,7 @@ public class Forward extends Instruction {
 	}
 
 	@Override
-	public int getNumberOfArguments(String match) {
+	public int getNumberOfArguments() {
 		// TODO Auto-generated method stub
 		return 1;
 	}

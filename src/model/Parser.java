@@ -1,9 +1,7 @@
 package model;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -182,6 +180,6 @@ public class Parser {
 }
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException{
 	Parser p = new Parser();
-	p.parseAndExecute(null);
+	Parser.parseAndExecute(null);
 	}
 }

@@ -9,16 +9,17 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import model.Polar;
-import model.instructions.Instruction;
+import model.instructions.TurtleCommand;
 
 public class Drawer {
     private Color color = Color.BLACK;
 
-   public List<Polyline> draw(Map<Integer, TurtleView> turtles, ArrayList<Instruction> instrucions){
+   public List<Polyline> draw(Map<Integer, TurtleView> turtles, ArrayList<TurtleCommand> instrucions){
+	   System.out.println("hi");
        ArrayList<Polyline> lines= new ArrayList<Polyline>();
-       Iterator<Instruction> it = instrucions.iterator();
+       Iterator<TurtleCommand> it = instrucions.iterator();
        while(it.hasNext()){
-           Instruction instruction = it.next();
+           TurtleCommand instruction = it.next();
            TurtleView turtle = turtles.get(instruction.turtleId);
            Polar polar = instruction.polar;
            double turtleX=turtle.getX();
@@ -26,8 +27,10 @@ public class Drawer {
            if(polar.distance!=0){
                double turtleNewX=turtleX+Math.sin(polar.angle)*polar.distance;
                double turtleNewY=turtleY+Math.cos(polar.angle)*polar.distance;
+               //just use the converter for the above code
                turtle.setX(turtleNewX);
                turtle.setY(turtleNewY);
+               System.out.println(turtle.getY());
                if(!instruction.penUp){
                    Polyline polyline = new Polyline();
                    polyline.setStroke(color);
@@ -41,7 +44,8 @@ public class Drawer {
        return lines;
    }
 
-    public void changeColor (Color c) {
+    public void changeColor(Color c) {
         color=c;
+        System.out.println(color.toString());
     }
 }

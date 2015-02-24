@@ -1,6 +1,5 @@
 package model.instructions;
 
-import model.Polar;
 
 public abstract class Instruction {
     

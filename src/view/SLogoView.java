@@ -9,9 +9,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
-import controller.SLogoController;
-import resources.Strings;
-import model.turtle.Turtle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -28,7 +25,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -44,11 +40,13 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Polar;
 import model.instructions.Instruction;
+import model.instructions.TurtleCommand;
 import model.turtle.Turtle;
 import resources.Strings;
+import controller.SLogoController;
 
 public class SLogoView {
-	private Map<Integer, TurtleView> turtles = new HashMap<Integer,TurtleView>();
+	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer,TurtleView>();
 	private Stage myStage;
 	private Scene myScene;
 	private GridPane myRoot;
@@ -57,16 +55,14 @@ public class SLogoView {
     private Map<String,Node> variables;
     private Drawer drawer = new Drawer();
     private StackPane myWorkspace;
-    private SLogoController myController = new SLogoController();
-    private List<TurtleView> myTurtles = new ArrayList<TurtleView>();
     private Group lines = new Group();
-    
+    private int count=1;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
 	public static final int GRID_WIDTH = 800;
 	public static final int GRID_HEIGHT = 550;
 	//adjusts anchorpane coordinates to set 0,0 as the center of the gridsets center point at the
-	public static final double X_ADJUSTMENT = GRID_WIDTH / 2 - 50;  
-	public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2 - 50;  
+	public static final double X_ADJUSTMENT = GRID_WIDTH / 2;  
+	public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2;  
 
 	public SLogoView(Stage s) {
 		 
@@ -117,7 +113,6 @@ public class SLogoView {
         
         myWorkspace.setPadding(new Insets(15));
         
-//        anchorPane.setStyle("-fx-background-color: black;");
         //problem with the above line is that it will set the anchorpane black all the way to the end fo the stage
         
         //is there a way to dynamically set grid size
@@ -125,28 +120,24 @@ public class SLogoView {
         myBackground.setFill(Color.WHITE);
         
         System.out.println(myRoot.getColumnConstraints());
-        AnchorPane.setTopAnchor(myBackground, 0.0);
-        AnchorPane.setLeftAnchor(myBackground, 0.0);
         
    
 
         TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
-        turtles.put(0,turtle);
         
         //why does the turtle end up so far down?
     
         //allow turtle to be initialized to this and then set this way somehow
 
-        myWorkspace.setAlignment(turtle, Pos.CENTER);
-        myWorkspace.getChildren().addAll(myBackground, turtle);
-        myTurtles.add(turtle);
-        System.out.println(turtle.getX());
-        System.out.println(turtle.getY());
+        myWorkspace.setAlignment(Pos.CENTER);
+        lines.getChildren().add(turtle);
+        myWorkspace.getChildren().addAll(myBackground,lines);
+        myTurtles.put(0,turtle);
         //add lines to a group
         
         
         myRoot.add(myWorkspace, 0, 1);
-
+        
         
         //getchildren.clear()
         
@@ -204,7 +195,7 @@ public class SLogoView {
 	    
 	    // User can pick color for the stroke
         ColorPicker strokeColorChoice = new ColorPicker(Color.BLACK);
-        strokeColorChoice.setOnAction(t -> drawer.changeColor(strokeColorChoice.getValue()));
+        strokeColorChoice.setOnAction(e -> drawer.changeColor(strokeColorChoice.getValue()));
         // put the strokeColorChoice somewhere in the GUI
         
 	    hbox3.getChildren().addAll(selectBackgroundColor, backgroundChoice);
@@ -279,21 +270,17 @@ public class SLogoView {
 	}
 	
 	
-	public void updateWorkspace(ArrayList<Instruction> instructions){
+	public void updateWorkspace(ArrayList<TurtleCommand> instructions){
 		//update the grid
 		//updateGrid(command.getLines());
 		//VariablesView.updateVars(command.getVariables());
 		//variables view will have configuredisplay(), update(), and event handlers
 		//updateHistory(command.getStrings());
-	    myWorkspace.getChildren().addAll(drawer.draw(turtles, instructions));
+	    myWorkspace.getChildren().addAll(drawer.draw(myTurtles, instructions));
 	}
-	
-	public void changeStrokeColor(Color c){
-	    drawer.changeColor(c);
-	}
-	
+
 	public Turtle getTurtleInfo(int index){
-	    ImageView temp=turtles.get(index);
+	    ImageView temp=myTurtles.get(index);
 	    return new Turtle(temp.getX(),temp.getY(),temp.getRotate());
 	}
 	
@@ -317,11 +304,22 @@ public class SLogoView {
 		myScene = new Scene(myRoot, 1200, 750);
 		myStage.setTitle(myResources.getString("Title"));
 		myStage.setScene(myScene);
+		myScene.setOnKeyPressed(e -> handleKeyInput(e));
 		//what happens if you set multiple scenes?
 		myStage.show();
 	}
 	
-	private void changeBackgroundColor(Color color){
+	private void handleKeyInput (KeyEvent e) {
+	    KeyCode keyCode = e.getCode();
+	    if(keyCode == KeyCode.W){
+            ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
+            instructions.add(new TurtleCommand(0,new Polar(0,10*count),false,false));
+            lines.getChildren().addAll(drawer.draw(myTurtles, instructions));
+	    }
+        count++;
+    }
+
+    private void changeBackgroundColor(Color color){
 		myBackground.setFill(color);
 	}
 	

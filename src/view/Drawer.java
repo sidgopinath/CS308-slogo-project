@@ -14,12 +14,12 @@ import model.instructions.Instruction;
 public class Drawer {
     private Color color = Color.BLACK;
 
-   public List<Polyline> draw(Map<Integer, ImageView> turtles, ArrayList<Instruction> instrucions){
+   public List<Polyline> draw(Map<Integer, TurtleView> turtles, ArrayList<Instruction> instrucions){
        ArrayList<Polyline> lines= new ArrayList<Polyline>();
        Iterator<Instruction> it = instrucions.iterator();
        while(it.hasNext()){
            Instruction instruction = it.next();
-           ImageView turtle = turtles.get(instruction.turtleId);
+           TurtleView turtle = turtles.get(instruction.turtleId);
            Polar polar = instruction.polar;
            double turtleX=turtle.getX();
            double turtleY=turtle.getY();

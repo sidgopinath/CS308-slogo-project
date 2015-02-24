@@ -2,6 +2,7 @@ package view;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -24,6 +26,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -38,10 +42,13 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.Polar;
 import model.instructions.Instruction;
+import model.turtle.Turtle;
+import resources.Strings;
 
 public class SLogoView {
-	private Map<Integer, ImageView> turtles;
+	private Map<Integer, TurtleView> turtles = new HashMap<Integer,TurtleView>();
 	private Stage myStage;
 	private Scene myScene;
 	private GridPane myRoot;
@@ -52,13 +59,14 @@ public class SLogoView {
     private StackPane myWorkspace;
     private SLogoController myController = new SLogoController();
     private List<TurtleView> myTurtles = new ArrayList<TurtleView>();
+    private Group lines = new Group();
     
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
 	public static final int GRID_WIDTH = 800;
 	public static final int GRID_HEIGHT = 550;
 	//adjusts anchorpane coordinates to set 0,0 as the center of the gridsets center point at the
-	public static final double X_ADJUSTMENT = GRID_WIDTH / 2;  
-	public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2;  
+	public static final double X_ADJUSTMENT = GRID_WIDTH / 2 - 50;  
+	public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2 - 50;  
 
 	public SLogoView(Stage s) {
 		 
@@ -102,7 +110,7 @@ public class SLogoView {
         
         myWorkspace = new StackPane();
         
-        
+
        // Group display = new Group(new Rectangle(0, 0, GRID_SIZE, GRID_SIZE));
        // display.setAlignment(Pos.CENTER);
      //   myRoot.add(display,0,1);
@@ -123,13 +131,12 @@ public class SLogoView {
    
 
         TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
-
+        turtles.put(0,turtle);
         
         //why does the turtle end up so far down?
     
         //allow turtle to be initialized to this and then set this way somehow
-       // AnchorPane.setTopAnchor(turtle, Y_ADJUSTMENT);
-       // AnchorPane.setLeftAnchor(turtle,X_ADJUSTMENT);
+
         myWorkspace.setAlignment(turtle, Pos.CENTER);
         myWorkspace.getChildren().addAll(myBackground, turtle);
         myTurtles.add(turtle);
@@ -139,6 +146,7 @@ public class SLogoView {
         
         
         myRoot.add(myWorkspace, 0, 1);
+
         
         //getchildren.clear()
         

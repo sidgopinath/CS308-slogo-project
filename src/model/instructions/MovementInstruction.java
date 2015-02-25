@@ -10,7 +10,6 @@ public class MovementInstruction extends Instruction {
 	private boolean myPenUp;
 	private boolean myJump;
 	private Polar myPolar;
-	//private int myTurtleId;
 	
 	public enum implementers {
 		FORWARD(1),
@@ -27,7 +26,7 @@ public class MovementInstruction extends Instruction {
 		NATURALLOG(1),
 		CLEARSCREEN(2),
 		HOME(0);
-    private int numArgs;
+		private int numArgs;
 	implementers(int args){
     	this.numArgs=args;
     }

@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
+import controller.SLogoController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -70,6 +71,7 @@ public class SLogoView {
 	private Drawer drawer = new Drawer();
 	private Workspace myWorkspace;
 	private Group lines = new Group();
+	private SLogoController myController;
 
 	private SideBar mySidebar;
 	private Editor myEditor;
@@ -77,6 +79,8 @@ public class SLogoView {
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
 	public SLogoView(Stage s) {
+		myController = new SLogoController(this, s);
+		
 		myStage = s;
 		// create root node
 		myRoot = new GridPane();

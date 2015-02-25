@@ -39,7 +39,7 @@ public class SLogoView {
 	private Map<String, Node> variables;
 	private double myWidth;
 	private double myHeight;
-	private Drawer drawer = new Drawer();
+	private Drawer drawer;
 	private Workspace myWorkspace;
 	private Group lines = new Group();
 	private SLogoController myController;
@@ -53,7 +53,6 @@ public class SLogoView {
 
 	public SLogoView(Stage s) {
 		myController = new SLogoController(this, s);
-		
 		myStage = s;
 		// create root node
 		myRoot = new GridPane();
@@ -104,11 +103,13 @@ public class SLogoView {
 		TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
 		myTurtles.put(0, turtle);
 		myWorkspace = new Workspace(myTurtles, lines);
+		drawer = new Drawer(myWorkspace.getWidth(), myWorkspace.getHeight());
+
 		// LILA
 		myRoot.add(myWorkspace, 0, 1);
 		myRoot.getColumnConstraints().add(col1);
 		myRoot.getColumnConstraints().add(col2);
-		mySidebar = new SideBar(myTurtles, myStage, myWorkspace, drawer);
+		mySidebar = new SideBar(myTurtles, myStage, myWorkspace, drawer, myController);
 		myRoot.add(mySidebar, 1, 1, 1, 2); // col,
 		myEditor = new Editor(myController, mySidebar); // row,
 		// colspan,
@@ -139,6 +140,7 @@ public class SLogoView {
 		for (TurtleCommand instruction : instructionList) {
 			returnString += updateFromInstruction(instruction) + "\n";
 		}
+		//or just pass the entire workspace?
         List<Polyline> newlines=drawer.draw(myTurtles, instructionList);
         lines.getChildren().addAll(newlines);
 		// return value of command or null if there is no return value

@@ -1,9 +1,11 @@
 package view;
 
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
 
+import controller.SLogoController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -12,6 +14,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
@@ -40,6 +43,7 @@ public class SideBar extends VBox {
 	Map<Integer,TurtleView> myTurtles;
 	ListView<String> historyList;
 	ObservableList<String> historyItems;
+	SLogoController myController;
 
 	// make this into a new class with its own stuff that have variablesView and
 	// commandView and historyView?
@@ -47,13 +51,14 @@ public class SideBar extends VBox {
 	// location
 	// dependencies are bad!!!!!!  
 	public SideBar(Map<Integer,TurtleView> turtleList, Stage mainStage, Workspace workspace,
-			Drawer drawer) {
+			Drawer drawer, SLogoController controller) {
 		myStage = mainStage;
 		myWorkspace = workspace;
 		myTurtles = turtleList;
-
+		myController = controller;
+		
 		setPadding(new Insets(0, 15, 0, 15));
-		setSpacing(8);
+		setSpacing(5);
 		setMaxWidth(Double.MAX_VALUE);
 
 		Hyperlink infoPage = new Hyperlink("Get help");
@@ -76,11 +81,34 @@ public class SideBar extends VBox {
 
 		// customization
 		Text title = new Text("Customization");
-		title.setFont(new Font(13));
+		title.setFont(new Font(15));
 		title.setUnderline(true);
 		title.setTextAlignment(TextAlignment.CENTER);
 		getChildren().add(title);
 
+		// select language
+		HBox selectLanguage = new HBox(10);
+		Text select = new Text("Select Language");
+		ComboBox languageOptions = new ComboBox();
+		ObservableList<String> languages = 
+			    FXCollections.observableArrayList(
+			        "English",
+			        "Chinese",
+			        "French",
+			        "German",
+			        "Italian",
+			        "Japanese",
+			        "Korean",
+			        "Portugese",
+			        "Russian",
+			        "Spanish"
+			    );
+		languageOptions.setItems(languages);
+		languageOptions.setValue(languages.get(0));
+	
+		selectLanguage.getChildren().addAll(select, languageOptions);
+		getChildren().add(selectLanguage);
+		
 		// select turtle image
 		HBox hbox = new HBox(10);
 		Text selectTurtle = new Text("Select Turtle");
@@ -237,13 +265,37 @@ public class SideBar extends VBox {
 		getChildren().add(historyList);
 		
 		
-		//TODO: Fix
-		 historyList.getSelectionModel().selectedItemProperty().addListener(
-		            new ChangeListener<String>() {
-		                public void changed(ObservableValue<? extends String> ov, 
-		                    String old_val, String new_val) {
-		                        myController.parseInput();
-		            }
+		//TODO: Selected item can only have action once until other item is selected
+		//TODO: Selecting the same command after another of the same command does not work
+		 historyList.getFocusModel().focusedItemProperty().addListener(
+	            new ChangeListener<String>() {
+	                public void changed(ObservableValue<? extends String> ov, 
+	                    String old_val, String new_val) {
+	                        try {
+								myController.parseInput(historyList.getFocusModel().getFocusedItem());
+	    
+
+						
+							} catch (SecurityException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (InstantiationException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IllegalAccessException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (IllegalArgumentException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (InvocationTargetException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							} catch (NoSuchMethodException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+	            }
 		        });
 
 		// return sidePane;
@@ -272,8 +324,6 @@ public class SideBar extends VBox {
 	}
 	
 	public void setHistory(String string){
-		historyItems.add(string);	
-		//TODO: WHY DOESN'T THIS WORK?
-		
+		historyItems.add(string);			
 	}
 }

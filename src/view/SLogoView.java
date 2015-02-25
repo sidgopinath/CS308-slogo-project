@@ -139,7 +139,8 @@ public class SLogoView {
 		for (TurtleCommand instruction : instructionList) {
 			returnString += updateFromInstruction(instruction) + "\n";
 		}
-		myWorkspace.getChildren().addAll(drawer.draw(myTurtles, instructionList));
+        List<Polyline> newlines=drawer.draw(myTurtles, instructionList);
+        lines.getChildren().addAll(newlines);
 		// return value of command or null if there is no return value
 		return returnString;
 	}

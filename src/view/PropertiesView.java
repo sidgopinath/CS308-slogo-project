@@ -6,12 +6,14 @@ import javafx.scene.text.TextAlignment;
 
 public abstract class PropertiesView {
 
+	//protected class PropertiesView(Region parent);
+	
 	protected void setTitleText(String string){
 		Text title = new Text("Customization");
 		title.setFont(new Font(13));
 		title.setUnderline(true);
 		title.setTextAlignment(TextAlignment.CENTER);
-		getChildren().add(title);
+		.getChildren().add(title);
 	}
 	
 	protected abstract 

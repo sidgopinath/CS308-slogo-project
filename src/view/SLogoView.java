@@ -136,7 +136,7 @@ public class SLogoView {
 		myRoot.getColumnConstraints().add(col2);
 		mySidebar = new SideBar(myTurtles, myStage, myWorkspace, drawer);
 		myRoot.add(mySidebar, 1, 1, 1, 2); // col,
-		myEditor = new Editor(); // row,
+		myEditor = new Editor(myController); // row,
 		// colspan,
 		// rowspan
 		myRoot.add(myEditor, 0, 2);

@@ -134,7 +134,7 @@ public class SLogoView {
 	 * return bottomRow; }
 	 */
 
-	public String updateWorkspace(ArrayList<TurtleCommand> instructionList) {
+	public String updateWorkspace(List<TurtleCommand> instructionList) {
 		String returnString = null;
 		for (TurtleCommand instruction : instructionList) {
 			returnString += updateFromInstruction(instruction) + "\n";

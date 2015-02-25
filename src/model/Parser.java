@@ -12,6 +12,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import view.SLogoView;
+import model.instructions.Constant;
 import model.instructions.Instruction;
 import model.turtle.TurtleCommand;
 
@@ -68,7 +69,7 @@ public class Parser {
 		}
 	}
 	List<Instruction> outList;
-	public List<Node> parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		input = "[ fd + 200 400 ] fd fd 50 rt 90 BACK 40";
 		furthestDepth = 0;
 		String[] splitCommands = input.split(" ");
@@ -79,96 +80,90 @@ public class Parser {
 		}
 		for(Node root:nodeList){
 			System.out.println("new tree");
-			inOrderTraversal(root,0);
+			printInOrderTraversal(root);
 		}
 		for(Node root:nodeList){
 			System.out.println("new tree");
 			inOrderInstructionExecuter(root,0);
+			System.out.println(root.getValue()+" "+root.getInstruction());
+			root.getInstruction().execute();
+			// Call turtlecommand maker
+			List<TurtleCommand> commandList =new ArrayList();
+			turtleCommandGetter(commandList, root);
+			if(!commandList.isEmpty())
+				mySLogoView.updateWorkspace(commandList);
+			//mySLogoView.updateVariables(myVariableMap);
 		}
+		
 		// method here to convert from ArrayList to executable instruction, and then pass that to an executor by calling all of the .executes.
 		
-		return nodeList;
-		
 	}
-	private void inOrderTraversal(Node root, int depth){
-		if(root.getChildren()!=null){
-			List<Node> children = root.getChildren();
-			depth++;
-			for(int i =0; i<children.size();i++){
-				inOrderTraversal(children.get(i), depth);
-			}
-		}
-		System.out.println(root.getValue()+" at depth: "+depth);
-	}
-	private void inOrderInstructionExecuter(Node root, int depth){
-		boolean exploring = false;
-		if(root==null){
-			return;
-		}
-		String list = null;
-		if(root.getChildren()!=null){
-			List<Node> children = root.getChildren();
-			depth++;
-			
-			for(int i =0; i<children.size();i++){
-				if(root.getValue().equals("[")){
-					StringBuffer myBuff = new StringBuffer();
-					exploring = true;
-					listExplorer(myBuff, children.get(i));
-					list = myBuff.toString().trim();
-					System.out.println("the list is "+ list);
-					break;
-				}
-				inOrderInstructionExecuter(children.get(i), depth);
-			}
-		}
-		try {
-			if(root.getChildren().size()!=0){
-			String[] parameters;
-			if(exploring)
-				parameters= new String[]{list};
-			else
-				parameters = makeParameters(root);
-			System.out.println("model.instructions."+commandMap.get(root.getValue()));
-			Instruction myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
-			root.updateValue(myInt.execute());
-			TurtleCommand tempTurtle=myInt.getTurtleCommand();
-			if(tempTurtle!=null){
-				ArrayList<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
-				commandList.add(tempTurtle);
-				//mySLogoView.updateWorkspace(commandList);
-				//mySLogoView.updateVariables(myVariableMap);
-			}
-			}
-		} catch (InstantiationException | IllegalAccessException
-				| IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException
-				| ClassNotFoundException e) {
-			System.out.println("FAILED");
-		}
-	}
-	private void listExplorer(StringBuffer sb, Node root) {
-		System.out.println(root.getValue());
-		if(root!=null){
-			sb.append(root.getValue()+" ");
-		}
-		if(root.getChildren()!=null){
-			List<Node> children = root.getChildren();
-			for(int i =0; i<children.size();i++){
-				System.out.println("Found" + children.get(i).getValue());	
-				listExplorer(sb,children.get(i));
-			}
+	private void turtleCommandGetter(List<TurtleCommand> cList, Node root) {
+		for(Node n: inOrderTraverser(root)){
+			System.out.println(n.getValue());
+			TurtleCommand t = n.getInstruction().getTurtleCommand();
+			System.out.println(t);
+			if(t!=null)
+				cList.add(t);
 		}
 	}
 
-	private String[] makeParameters(Node root) {
-		String[] myKids = root.childrenToStringArray();
-		String[] output = new String[myKids.length+1];
-		output[0] = root.getValue();
-		System.out.println("parameters " + output[0]);
-		for(int i =0; i<myKids.length;i++){
-			output[i+1] = myKids[i];
-			System.out.println("parameters " + output[i+1]);
+	private List<Node> inOrderTraverser(Node root) {
+		List<Node> output = new ArrayList();
+		inOrderTraverserHelper(output,root);
+		return output;
+	}
+	private void inOrderTraverserHelper(List<Node> in,Node root) {
+		if(root.getChildren()!=null){
+			List<Node> children = root.getChildren();
+			for(int i =0; i<children.size();i++){
+				inOrderTraverserHelper(in,children.get(i));
+			}
+		}
+		in.add(root);
+	}
+	private void printInOrderTraversal(Node root){
+		for(Node n:inOrderTraverser(root)){
+			System.out.println(n.getValue());
+		}
+	}
+	private void inOrderInstructionExecuter(Node root, int depth){
+		if(root==null){
+			return;
+		}
+		if(root.getChildren()!=null){
+			List<Node> children = root.getChildren();
+			depth++;
+			for(int i =0; i<children.size();i++){
+				inOrderInstructionExecuter(children.get(i), depth);
+			}
+		}	
+			System.out.println("model.instructions."+root.getValue()+" "+commandMap.get(root.getValue()));
+			List<Instruction> descendantInstructions = getChildInstructions(root);
+			Instruction myInt;
+			try {
+				if(testMatches(root.getValue()).equalsIgnoreCase("Constant"))
+					myInt = new Constant(root.getValue());
+				else
+					myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class}).newInstance(new Object[]{descendantInstructions, root.getValue()});
+				System.out.println("made int "+ myInt);
+				root.setInstruction(myInt);
+			} catch (InstantiationException | IllegalAccessException
+					| IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException
+					| ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	}
+	
+	private List<Instruction> getChildInstructions(Node root) {
+		List<Node> rootChildren = root.getChildren();
+		if(root.getChildren().size()==0)
+			return null;
+		List<Instruction> output = new ArrayList();
+		for(Node n:rootChildren){
+			output.add(n.getInstruction());
 		}
 		return output;
 	}

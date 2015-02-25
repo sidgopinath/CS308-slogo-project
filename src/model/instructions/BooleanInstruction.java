@@ -25,23 +25,21 @@ public class BooleanInstruction extends Instruction {
 	}
 	@Override
 	public double execute() {
-		Instruction arg1 = myDependencies.get(0);
-		Instruction arg2 = myDependencies.get(1);
 		switch(myType.toUpperCase()){
 		case "LESSTHAN":
-			return boolToDouble(arg1.execute()<arg2.execute());
+			return boolToDouble(myDependencies.get(0).execute()<myDependencies.get(1).execute());
 		case "GREATERTHAN":
-			return boolToDouble(arg1.execute()>arg2.execute());
+			return boolToDouble(myDependencies.get(0).execute()>myDependencies.get(1).execute());
 		case "EQUAL":
-			return boolToDouble(arg1.execute()==arg2.execute());
+			return boolToDouble(myDependencies.get(0).execute()==myDependencies.get(1).execute());
 		case "NOTEQUAL":
-			return boolToDouble(arg1.execute()!=arg2.execute());
+			return boolToDouble(myDependencies.get(0).execute()!=myDependencies.get(1).execute());
 		case "AND":
-			return boolToDouble(arg1.execute()==0&&arg2.execute()==0);
+			return boolToDouble(myDependencies.get(0).execute()==0&&myDependencies.get(1).execute()==0);
 		case "OR":
-			return boolToDouble(arg1.execute()!=0||arg2.execute()!=0);
+			return boolToDouble(myDependencies.get(0).execute()!=0||myDependencies.get(1).execute()!=0);
 		case "NOT":
-			return boolToDouble(arg1.execute()==0);
+			return boolToDouble(myDependencies.get(0).execute()==0);
 		default:
 			// need Error
 			return -1;

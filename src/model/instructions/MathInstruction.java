@@ -34,35 +34,33 @@ public class MathInstruction extends Instruction{
 	}
 	@Override
 	public double execute() {
-		Instruction arg1 = myDependencies.get(0);
-		Instruction arg2 = myDependencies.get(1);
 		switch(instructionType.toUpperCase()){
 		case "SUM":
-			return arg1.execute()+arg2.execute();
+			return myDependencies.get(0).execute()+myDependencies.get(1).execute();
 		case "DIFFERENCE":
-			return arg1.execute()-arg2.execute();
+			return myDependencies.get(0).execute()-myDependencies.get(1).execute();
 		case "PRODUCT":
-			return arg1.execute()*arg2.execute();
+			return myDependencies.get(0).execute()*myDependencies.get(1).execute();
 		case "QUOTIENT":
-			return divByZeroCheck(arg1.execute()/arg2.execute());
+			return divByZeroCheck(myDependencies.get(0).execute()/myDependencies.get(1).execute());
 		case "REMAINDER":
-			return arg1.execute()%arg2.execute();
+			return myDependencies.get(0).execute()%myDependencies.get(1).execute();
 		case "MINUS":
-			return -arg1.execute();
+			return -myDependencies.get(0).execute();
 		case "RANDOM":
-			return Math.random()*arg1.execute();
+			return Math.random()*myDependencies.get(0).execute();
 		case "SIN":
-			return Math.toDegrees(Math.sin(arg1.execute()));
+			return Math.toDegrees(Math.sin(myDependencies.get(0).execute()));
 		case "COS":
-			return Math.toDegrees(Math.cos(arg1.execute()));
+			return Math.toDegrees(Math.cos(myDependencies.get(0).execute()));
 		case "TAN":
-			return Math.toDegrees(divByZeroCheck((Math.tan(arg1.execute()))));
+			return Math.toDegrees(divByZeroCheck((Math.tan(myDependencies.get(0).execute()))));
 		case "ATAN":
-			return Math.toDegrees(divByZeroCheck((Math.atan(arg1.execute()))));
+			return Math.toDegrees(divByZeroCheck((Math.atan(myDependencies.get(0).execute()))));
 		case "LOG":
-			return Math.log(arg1.execute());
+			return Math.log(myDependencies.get(0).execute());
 		case "POW":
-			return Math.pow(arg1.execute(), arg2.execute());
+			return Math.pow(myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "PI":
 			return Math.PI;
 		default: 

@@ -10,7 +10,7 @@ public class Node{
 		
 		private List<Node> myChildren;
 		private String myValue;
-		
+		private Instruction myInstruction;
 		public Node(String me){
 			myValue = me;
 			myChildren = new ArrayList<Node>();
@@ -32,8 +32,10 @@ public class Node{
 	public List<Node> getChildren(){
 		return myChildren;
 	}
-	public void updateValue(double execute) {
-		myValue = Double.toString(execute);
-		
+	public Instruction getInstruction(){
+		return myInstruction;
+	}
+	public void setInstruction(Instruction inInstruction){
+		myInstruction = inInstruction;
 	}
 }

@@ -45,29 +45,27 @@ public class MovementInstruction extends Instruction {
 	
 	@Override
 	public double execute() {
-		Instruction arg1 = myDependencies.get(0);
-		Instruction arg2 = myDependencies.get(1);
 		double inputDouble;
 		switch(instructionType.toUpperCase()){
 		case "FORWARD":
-			inputDouble = arg1.execute();
+			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(0, inputDouble);
 			return inputDouble;
 		case "BACKWARD":
-			inputDouble = arg1.execute();
+			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(0, -inputDouble);
-			return arg1.execute();
+			return myDependencies.get(0).execute();
 		case "LEFT":
-			inputDouble = arg1.execute();
+			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(-inputDouble, 0);
-			return arg1.execute();
+			return myDependencies.get(0).execute();
 		case "RIGHT":
-			inputDouble = arg1.execute();
+			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(inputDouble, 0);
-			return arg1.execute();
+			return myDependencies.get(0).execute();
 		case "SETHEADING":
 			// Need view
-			inputDouble = arg1.execute();
+			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(inputDouble, 0);
 			return 0.0;
 		case "TOWARDS":
@@ -76,7 +74,7 @@ public class MovementInstruction extends Instruction {
 		case "SETXY":
 			//need view
 			myJump = true;
-			myPolar = new Polar(arg1.execute(), arg2.execute());
+			myPolar = new Polar(myDependencies.get(0).execute(), myDependencies.get(1).execute());
 			return 0.0;
 		case "PENDOWN":
 			myPenUp = false;

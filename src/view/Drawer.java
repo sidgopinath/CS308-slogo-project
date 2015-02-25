@@ -14,7 +14,7 @@ import model.turtle.TurtleCommand;
 public class Drawer {
     private Color color = Color.BLACK;
 
-   public List<Polyline> draw(Map<Integer, TurtleView> turtles, ArrayList<TurtleCommand> instrucions){
+   public List<Polyline> draw(Map<Integer, TurtleView> turtles, List<TurtleCommand> instrucions){
        ArrayList<Polyline> lines= new ArrayList<Polyline>();
        Iterator<TurtleCommand> it = instrucions.iterator();
        while(it.hasNext()){

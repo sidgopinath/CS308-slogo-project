@@ -1,10 +1,7 @@
 package model.instructions;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import model.Node;
-import model.turtle.TurtleCommand;
 import view.SLogoView;
 
 public class ControlInstruction extends Instruction{

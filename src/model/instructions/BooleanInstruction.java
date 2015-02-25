@@ -7,8 +7,6 @@ import view.SLogoView;
 
 public class BooleanInstruction extends Instruction {
 
-
-	
 	public BooleanInstruction(List<Instruction> dependencies, String instructionType, SLogoView view) {
 		super(dependencies, instructionType, view);
 	}
@@ -26,27 +24,25 @@ public class BooleanInstruction extends Instruction {
 	    	this.numArgs=args;
 	    }
 	}
+	
 	@Override
 	public double execute() {
-		double firstDependency = myDependencies.get(0).execute();
-		double secondDependency = myDependencies.get(1).execute();
 		switch(myInstructionType.toUpperCase()){
 		case "LESSTHAN":
-			return boolToDouble(firstDependency<secondDependency);
+			return boolToDouble(myDependencies.get(0).execute()<myDependencies.get(1).execute());
 		case "GREATERTHAN":
-			return boolToDouble(firstDependency>secondDependency);
+			return boolToDouble(myDependencies.get(0).execute()>myDependencies.get(1).execute());
 		case "EQUAL":
-			return boolToDouble(firstDependency==secondDependency);
+			return boolToDouble(myDependencies.get(0).execute()==myDependencies.get(1).execute());
 		case "NOTEQUAL":
-			return boolToDouble(firstDependency!=secondDependency);
+			return boolToDouble(myDependencies.get(0).execute()!=myDependencies.get(1).execute());
 		case "AND":
-			return boolToDouble(firstDependency==0 && secondDependency==0);
+			return boolToDouble(myDependencies.get(0).execute()!=0 && myDependencies.get(1).execute()!=0);
 		case "OR":
-			return boolToDouble(firstDependency!=0 || secondDependency!=0);
+			return boolToDouble(myDependencies.get(0).execute()!=0 || myDependencies.get(1).execute()!=0);
 		case "NOT":
-			return boolToDouble(firstDependency==0);
+			return boolToDouble(myDependencies.get(0).execute()==0);
 		default:
-			//TODO: need Error
 			return -1;
 		}
 	}

@@ -13,7 +13,7 @@ public abstract class PropertiesView {
 		title.setFont(new Font(13));
 		title.setUnderline(true);
 		title.setTextAlignment(TextAlignment.CENTER);
-		.getChildren().add(title);
+		getChildren().add(title);
 	}
 	
 	protected abstract 

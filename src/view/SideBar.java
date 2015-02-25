@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Map;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -36,11 +38,14 @@ public class SideBar extends VBox {
 	Workspace myWorkspace;
 	Stage myStage;
 	Map<Integer,TurtleView> myTurtles;
+	ListView<String> historyList;
+	ObservableList<String> historyItems;
 
 	// make this into a new class with its own stuff that have variablesView and
 	// commandView and historyView?
 	// sidebarPane class with parameters that specify column constraints /
 	// location
+	// dependencies are bad!!!!!!  
 	public SideBar(Map<Integer,TurtleView> turtleList, Stage mainStage, Workspace workspace,
 			Drawer drawer) {
 		myStage = mainStage;
@@ -211,8 +216,7 @@ public class SideBar extends VBox {
 
 		ListView<String> userCommandsList = new ListView<String>();
 		ObservableList<String> commandsItems = FXCollections.observableArrayList(
-				"String1", "String2", "String3", "String 4", "String1", "String2",
-				"String3", "String 4", "String1", "String2", "String3", "String 4");
+				"String1", "String2", "String3");
 		userCommandsList.setItems(commandsItems);
 		userCommandsList.setMaxWidth(Double.MAX_VALUE);
 		userCommandsList.setPrefHeight(150);
@@ -224,14 +228,23 @@ public class SideBar extends VBox {
 		history.setUnderline(true);
 		getChildren().add(history);
 
-		ListView<String> historyList = new ListView<String>();
-		ObservableList<String> historyItems = FXCollections.observableArrayList(
-				"String1", "String2", "String3", "String 4", "String1", "String2",
-				"String3", "String 4", "String1", "String2", "String3", "String 4");
+		historyList = new ListView<String>();
+		historyItems = FXCollections.observableArrayList();
 		historyList.setItems(historyItems);
 		historyList.setMaxWidth(Double.MAX_VALUE);
 		historyList.setPrefHeight(150);
+		//setHistory("test");
 		getChildren().add(historyList);
+		
+		
+		//TODO: Fix
+		 historyList.getSelectionModel().selectedItemProperty().addListener(
+		            new ChangeListener<String>() {
+		                public void changed(ObservableValue<? extends String> ov, 
+		                    String old_val, String new_val) {
+		                        myController.parseInput();
+		            }
+		        });
 
 		// return sidePane;
 	}
@@ -256,5 +269,11 @@ public class SideBar extends VBox {
 
 	private void changeBackgroundColor(Color color) {
 		myWorkspace.setBackground(color);
+	}
+	
+	public void setHistory(String string){
+		historyItems.add(string);	
+		//TODO: WHY DOESN'T THIS WORK?
+		
 	}
 }

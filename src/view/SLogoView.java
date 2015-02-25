@@ -15,6 +15,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -41,8 +42,12 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.web.PopupFeatures;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import javafx.util.StringConverter;
 import model.Polar;
 import model.turtle.Turtle;
@@ -51,10 +56,9 @@ import resources.Strings;
 
 public class SLogoView {
 	private Stage myStage;
-	private Scene myScene;
+	//private Scene myScene;
 	private GridPane myRoot;
     private ResourceBundle myResources;
-    private Rectangle myBackground;
     private Map<String,Node> variables;
     private Drawer drawer = new Drawer();
     //private StackPane myWorkspace;
@@ -64,16 +68,14 @@ public class SLogoView {
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
 	
 	public SLogoView(Stage s) {
-		myStage = s;
-		
-		//potentially make this into an individual class
+		myStage = s;	
 		//create root node
 		myRoot = new GridPane();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 		
 		configureUI();
-		setupScene();
-        System.out.println(myRoot.getColumnConstraints());
+		//lila may not need instance variables anymore
+		setupScene(myStage, myRoot, 1200, 750);
 	}
 	
 	private void configureUI() {
@@ -120,18 +122,32 @@ public class SLogoView {
 			VBox sidePane = new VBox();
 			sidePane.setPadding(new Insets(0,15,0,15));
 			sidePane.setSpacing(8);
+			sidePane.setMaxWidth(Double.MAX_VALUE);
 
-		    Hyperlink infoPage = new Hyperlink ("Get help");
-		  //  title.setTextAlignment(TextAlignment.CENTER); //why does this not work
+		    Hyperlink infoPage = new Hyperlink("Get help");
+		    infoPage.setOnAction((event) -> {
+		    	WebView browser = new WebView();
+		    	WebEngine webEngine = browser.getEngine();
+		    	webEngine.load("http://www.cs.duke.edu/courses/compsci308/spring15/assign/03_slogo/commands.php");
+		    	
+		    	Stage stage = new Stage();
+		    	setupScene(stage, browser, 1000, 750);   	 
+		    }
+		    );
+		    
+		   // title.setTextAlignment(TextAlignment.CENTER); //why does this not work
 	   //     VBox.setMargin(infoPage, new Insets(0, 0, 0, 50));
 		    sidePane.getChildren().add(infoPage);
 		    
 		    
 		    //customization
+		    
 		    Text title = new Text("Customization");
 		    title.setFont(new Font(13));
 		    title.setUnderline(true);
+		    title.setTextAlignment(TextAlignment.CENTER); 
 		    sidePane.getChildren().add(title);
+		    
 	 
 		    
 		    // select turtle image    
@@ -147,8 +163,6 @@ public class SLogoView {
 		    
 		    // select pen color	
 		    HBox hbox2 = new HBox(10);  
-		    
-		   
 		    
 	        Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);   
 		    
@@ -167,9 +181,7 @@ public class SLogoView {
 	        backgroundChoice.setOnAction(e -> changeBackgroundColor(backgroundChoice.getValue()));
 	    
 		  //   User can pick color for the stroke
-	        
-	        
-	        
+  
 		    hbox3.getChildren().addAll(selectBackgroundColor, backgroundChoice);
 		    sidePane.getChildren().add(hbox3);
 		    
@@ -246,12 +258,7 @@ public class SLogoView {
 	                }
 	            }
 	        );
-	       // variablesCol.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
-	       // valuesCol.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
-	        
-	        //variablesTable.getColumns().setAll(variablesCol, valuesCol);
-	       // variablesTable.setItems(variablesList);
-	        
+	  
 	        variablesTable.getColumns().addAll(variablesCol, valuesCol);
 		    variablesTable.setEditable(true);
 
@@ -361,13 +368,13 @@ public class SLogoView {
        }
     }
 	
-	private void setupScene() {
-		myScene = new Scene(myRoot, 1200, 750);
-		myStage.setTitle(myResources.getString("Title"));
-		myStage.setScene(myScene);
-		myScene.setOnKeyPressed(e -> handleKeyInput(e));
+	private void setupScene(Stage stage, Parent root, int xSize, int ySize) {
+		Scene scene = new Scene(root, xSize, ySize);
+		stage.setTitle(myResources.getString("Title"));
+		stage.setScene(scene);
+		scene.setOnKeyPressed(e -> handleKeyInput(e));
 		//what happens if you set multiple scenes?
-		myStage.show();
+		stage.show();
 	}
 	
 	private void handleKeyInput (KeyEvent e) {

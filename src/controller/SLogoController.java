@@ -30,5 +30,9 @@ public class SLogoController {
 	public void parseInput(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		myParser.parseAndExecute(input);
 	}
+	
+	public void setLanguage(String language){
+		myParser.setLanguage(language);
+	}
 
 }

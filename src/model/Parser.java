@@ -34,12 +34,17 @@ public class Parser {
 		myVariableMap = new HashMap<String, Double>();
 		patterns = new ArrayList<>();
 		commandMap = new HashMap<String, String>();
-		addAllPatterns();
+		addAllPatterns("English");
 		makeCommandMap();
 	}
 	
-	private void addAllPatterns(){
-		makePatterns("resources/languages/English");
+	public void setLanguage(String language){
+		patterns = new ArrayList<>();
+		addAllPatterns(language);
+	}
+	
+	private void addAllPatterns(String language){
+		makePatterns("resources/languages/" + language);
 	    makePatterns("resources/languages/Syntax");
 	}
 	

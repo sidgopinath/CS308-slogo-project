@@ -30,13 +30,5 @@ public class SLogoController {
 	public void parseInput(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		myParser.parseAndExecute(input);
 	}
-	
-	/**
-	 * After input has been received and parsed, this is called
-	 * Passes input to View
-	 * @param input
-	 */
-	public void passInputToView(Object input){
-		
-	}
+
 }

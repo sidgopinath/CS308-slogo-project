@@ -30,6 +30,7 @@ public class Parser {
 	
 	public Parser(SLogoView view){
 		mySLogoView = view;
+		myVariableMap = new HashMap<String, Double>();
 		patterns = new ArrayList<>();
 		commandMap = new HashMap<String, String>();
 		addAllPatterns();
@@ -136,13 +137,13 @@ public class Parser {
 				ArrayList<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
 				commandList.add(tempTurtle);
 				mySLogoView.updateWorkspace(commandList);
+				mySLogoView.updateVariables(myVariableMap);
 			}
 			}
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException
 				| ClassNotFoundException e) {
-			// TODO Auto-generated catch block
 			System.out.println("FAILED");
 		}
 	}

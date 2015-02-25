@@ -1,15 +1,30 @@
 package model.instructions;
 
+
 public class TurtleRequestInstruction extends Instruction {
-	// TODO call view for these fields, make sure that before calling .execute we first update view. also mode turtle command out of this package
+	// TODO call view for these fields
+	private String[] myInput;
+
 	public TurtleRequestInstruction(String[] input) {
-		// TODO Auto-generated constructor stub
+		myInput = input;
 	}
 
 	@Override
 	public double execute() {
-		// Need view for all of these, holding off
-		return 0;
+		switch(myInput[0].toUpperCase()){
+		case "XCOR":
+			return 0;
+		case "YCOR":
+			return 0;
+		case "HEADING":
+			return 0;
+		case "PENDOWN":
+			return 0;
+		case "SHOWING":
+			return 0;
+		default: 
+			return 0;
+		}
 	}
 
 	@Override

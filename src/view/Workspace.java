@@ -15,8 +15,8 @@ public class Workspace extends StackPane{
 	private Rectangle myBackground;
 
 
-	public static final int GRID_WIDTH = 800;
-	public static final int GRID_HEIGHT = 550;
+	public static final double GRID_WIDTH = 800;
+	public static final double GRID_HEIGHT = 550;
 	//adjusts anchorpane coordinates to set 0,0 as the center of the gridsets center point at the
 	public static final double X_ADJUSTMENT = GRID_WIDTH / 2;  
 	public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2;  
@@ -45,4 +45,11 @@ public class Workspace extends StackPane{
 		myBackground.setFill(color);
 	}
 
+	public double getGridWidth(){
+		return GRID_WIDTH;
+	}
+	
+	public double getGridHeight(){
+		return GRID_HEIGHT;
+	}
 }

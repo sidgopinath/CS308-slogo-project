@@ -2,7 +2,6 @@
 
 package view;
 
-import controller.Converter;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -24,6 +23,16 @@ public class TurtleView extends ImageView{
 	}
 
     public void turn (double angle) {
+        setRotate(angle);
+    }
+
+    public void setXY (double x, double y) {
+        System.out.println("go to "+x+","+y);
+        setTranslateX(x);
+        setTranslateY(y);
+    }
+
+    public void setHeading (double angle) {
         setRotate(angle);
     }
 	

@@ -2,7 +2,6 @@
 
 package view;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -11,55 +10,27 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
-import controller.SLogoController;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.Hyperlink;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.web.PopupFeatures;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import javafx.stage.FileChooser;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.util.Callback;
-import javafx.util.StringConverter;
 import model.Polar;
 import model.turtle.Turtle;
 import model.turtle.TurtleCommand;
 import resources.Strings;
+import controller.SLogoController;
 
 public class SLogoView {
 	private Stage myStage;
@@ -77,6 +48,8 @@ public class SLogoView {
 	private Editor myEditor;
 	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>();
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
+    private double originX;
+    private double originY;
 
 	public SLogoView(Stage s) {
 		myController = new SLogoController(this, s);
@@ -95,6 +68,8 @@ public class SLogoView {
 		 * bounds.getHeight();
 		 */
 		setupScene(myStage, myRoot, 1200, 750);
+        originX=myTurtles.get(0).getLayoutX();
+        originY=myTurtles.get(0).getLayoutY();
 	}
 
 	private void configureUI() {
@@ -131,7 +106,6 @@ public class SLogoView {
 		myWorkspace = new Workspace(myTurtles, lines);
 		// LILA
 		myRoot.add(myWorkspace, 0, 1);
-
 		myRoot.getColumnConstraints().add(col1);
 		myRoot.getColumnConstraints().add(col2);
 		mySidebar = new SideBar(myTurtles, myStage, myWorkspace, drawer);
@@ -209,21 +183,59 @@ public class SLogoView {
 		// what happens if you set multiple scenes?
 		stage.show();
 	}
+	private void handleKeyInput (KeyEvent e) {
+	    KeyCode keyCode = e.getCode();
+	    if(keyCode == KeyCode.D){
+            ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
+            instructions.add(new TurtleCommand(0,new Polar(30,0),false,false));
+            List<Polyline> newlines=drawer.draw(myTurtles, instructions);
+            lines.getChildren().addAll(newlines);
+	    }else if(keyCode == KeyCode.W){
+            ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
+            instructions.add(new TurtleCommand(0,new Polar(0,10),false,false));
+            List<Polyline> newlines=drawer.draw(myTurtles, instructions);
+            lines.getChildren().addAll(newlines);
+	    }else if(keyCode == KeyCode.E){
+	        setXY(0,0,0);
+        }else if(keyCode == KeyCode.Q){
+            setHeading(0,90);
+        }
+    }
+    public void setXY(int id, double x,double y){
+        TurtleView turtle=myTurtles.get(id);
+        myTurtles.get(id).setXY(originX+x-turtle.getLayoutX(),originY+y-turtle.getLayoutY());
+    }
+    public void setHeading(int id, double angle){
+        myTurtles.get(id).setHeading(angle);
+    }
+	//make update from a single command
+	
+	//UPON BUTTON CLICK:
+	
+	//  File newFile = displayFileChooser();
+	
+	/* colorPicker.setOnAction(new EventHandler() {
+            public void handle(Event t) {
+                text.setFill(colorPicker.getValue());               
+            }
+        });
+        
+        
+        button.setOnAction(new EventHandler<ActionEvent>() {
 
-	private void handleKeyInput(KeyEvent e) {
-		KeyCode keyCode = e.getCode();
-		if (keyCode == KeyCode.D) {
-			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-			instructions.add(new TurtleCommand(0, new Polar(30, 0), false, false));
-			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
-			lines.getChildren().addAll(newlines);
-		} else if (keyCode == KeyCode.W) {
-			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-			instructions.add(new TurtleCommand(0, new Polar(0, 10), false, false));
-			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
-			lines.getChildren().addAll(newlines);
-		}
-	}
+    @Override
+    public void handle(ActionEvent event) {
+        String text = textField.getText();                              
+    }
+});*/
+	
+	//consider using labels instead of text?
+	
+	/*public void changeColor(Color c) {
+        System.out.println("color" + c.toString());
+
+
+>>>>>>> 362817cc7ce9eda7709752b2584fb82e89ec7be4
 
 	/*
 	 * colorPicker.setOnAction(new EventHandler() { public void handle(Event t)

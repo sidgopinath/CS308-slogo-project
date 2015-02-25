@@ -1,5 +1,9 @@
 package view;
 
+
+//move lambda function into the main UI? 
+
+
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
@@ -34,7 +38,6 @@ import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
-import resources.Strings;
 
 public class SideBar extends VBox {
 
@@ -46,10 +49,10 @@ public class SideBar extends VBox {
 	SLogoController myController;
 
 	// make this into a new class with its own stuff that have variablesView and
-	// commandView and historyView?
+	// commandView and historyView???
 	// sidebarPane class with parameters that specify column constraints /
-	// location
-	// dependencies are bad!!!!!!  
+	// location  
+	
 	public SideBar(Map<Integer,TurtleView> turtleList, Stage mainStage, Workspace workspace,
 			Drawer drawer, SLogoController controller) {
 		myStage = mainStage;
@@ -61,23 +64,7 @@ public class SideBar extends VBox {
 		setSpacing(5);
 		setMaxWidth(Double.MAX_VALUE);
 
-		Hyperlink infoPage = new Hyperlink("Get help");
-		infoPage.setOnAction((event) -> {
-			WebView browser = new WebView();
-			WebEngine webEngine = browser.getEngine();
-			webEngine
-					.load("http://www.cs.duke.edu/courses/compsci308/spring15/assign/03_slogo/commands.php");
-
-			Stage stage = new Stage();
-			// setupScene(stage, browser, 1000, 750);
-			// TODO: Figure out how to utilize the setupScene method without
-			// duplicating code
-		});
-
-		// title.setTextAlignment(TextAlignment.CENTER); //why does this not
-		// work
-		// VBox.setMargin(infoPage, new Insets(0, 0, 0, 50));
-		getChildren().add(infoPage);
+		
 
 		// customization
 		Text title = new Text("Customization");
@@ -89,7 +76,7 @@ public class SideBar extends VBox {
 		// select language
 		HBox selectLanguage = new HBox(10);
 		Text select = new Text("Select Language");
-		ComboBox languageOptions = new ComboBox();
+		ComboBox<String> languageOptions = new ComboBox<String>();
 		ObservableList<String> languages = 
 			    FXCollections.observableArrayList(
 			        "English",
@@ -103,6 +90,7 @@ public class SideBar extends VBox {
 			        "Russian",
 			        "Spanish"
 			    );
+		
 		languageOptions.setItems(languages);
 		languageOptions.setValue(languages.get(0));
 	
@@ -189,23 +177,23 @@ public class SideBar extends VBox {
 
 		// some issue with strings and ints
 		valuesCol.setCellFactory(TextFieldTableCell
-				.forTableColumn(new StringConverter<Double>() {
+			.forTableColumn(new StringConverter<Double>() {
 
-					@Override
-					public Double fromString(String userInput) {
-						// try{
-						return Double.valueOf(userInput);
-						/*
-						 * } catch(NumberFormatException e){
-						 * System.out.println("Number Format Exception"); }
-						 */
-					}
+				@Override
+				public Double fromString(String userInput) {
+					// try{
+					return Double.valueOf(userInput);
+					/*
+					 * } catch(NumberFormatException e){
+					 * System.out.println("Number Format Exception"); }
+					 */
+				}
 
-					@Override
-					public String toString(Double t) {
-						return t.toString();
-					}
-				}));
+				@Override
+				public String toString(Double t) {
+					return t.toString();
+				}
+			}));
 		// CellValueFactory(.forTableColumn());
 		valuesCol.setOnEditCommit(new EventHandler<CellEditEvent<Variable, Double>>() {
 			@Override
@@ -271,30 +259,27 @@ public class SideBar extends VBox {
 	            new ChangeListener<String>() {
 	                public void changed(ObservableValue<? extends String> ov, 
 	                    String old_val, String new_val) {
-	                        try {
-								myController.parseInput(historyList.getFocusModel().getFocusedItem());
-	    
-
-						
-							} catch (SecurityException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (InstantiationException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (IllegalAccessException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (IllegalArgumentException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (InvocationTargetException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							} catch (NoSuchMethodException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
+                        try {
+							myController.parseInput(historyList.getFocusModel().getFocusedItem());		
+						} catch (SecurityException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (InstantiationException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IllegalAccessException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (IllegalArgumentException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (InvocationTargetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (NoSuchMethodException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 	            }
 		        });
 

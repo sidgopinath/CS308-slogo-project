@@ -10,10 +10,17 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Hyperlink;
+import javafx.scene.control.Menu;
+import javafx.scene.control.MenuBar;
+import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -25,17 +32,18 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 import model.Polar;
 import model.turtle.Turtle;
 import model.turtle.TurtleCommand;
-import resources.Strings;
 import controller.SLogoController;
 
 public class SLogoView {
 	private Stage myStage;
 	private GridPane myRoot;
-	private ResourceBundle myResources;
+	protected ResourceBundle myResources;
 	private Map<String, Node> variables;
 	private double myWidth;
 	private double myHeight;
@@ -78,21 +86,59 @@ public class SLogoView {
 		// use a new class for things like the text box since pressing update
 		// will have to update naw and then the view will have to be updated as
 		// well
+		
+		Menu file = new Menu("File"); 	
+		Menu info = new Menu("Info"); 	
+		MenuItem help = new MenuItem("Help");
+		
+		//perhaps change these expressions into lambdas?
+		help.setOnAction(new EventHandler<ActionEvent>() {
+            public void handle(ActionEvent t) {		
+//            	Hyperlink infoPage = new Hyperlink("Get help");
+        		//infoPage.setOnAction((event) -> {
+        			WebView browser = new WebView();
+        			WebEngine webEngine = browser.getEngine();
+        			System.out.println(System.getProperty("user.dir") + "/resources/help.html");
+        			//why does this not work?
+        			webEngine.load("file://" + System.getProperty("user.dir") + "/src/resources/help.html");
+        		//	webEngine.load("http://google.com");
+
+        			Stage stage = new Stage();
+        			setupScene(stage, browser, 1000, 750);        	
+            }
+        });
+		
+		MenuItem exit = new MenuItem("Exit");
+		file.getItems().addAll(exit);
+		info.getItems().addAll(help);
+		
+		exit.setOnAction(new EventHandler<ActionEvent>() {
+	            public void handle(ActionEvent t) {
+	                Platform.exit();
+	            }
+	        });        
+		 
+		MenuBar menuBar = new MenuBar();
+		menuBar.getMenus().addAll(file, info); //include help page
+		myRoot.add(menuBar,0,0,2,1);
 
 		Text title = new Text("SLogo");
 		title.setFont(new Font(30));
 		title.setTextAlignment(TextAlignment.CENTER); // why does this not work
-		myRoot.add(title, 0, 0, 2, 1);
+		myRoot.add(title, 0, 1, 2, 1);
 
 		RowConstraints row1 = new RowConstraints();
-		row1.setPercentHeight(5);
+		row1.setPercentHeight(2);
 		RowConstraints row2 = new RowConstraints();
-		row2.setPercentHeight(75);
+		row2.setPercentHeight(5);
 		RowConstraints row3 = new RowConstraints();
-		row3.setPercentHeight(20);
+		row3.setPercentHeight(73);
+		RowConstraints row4 = new RowConstraints();
+		row4.setPercentHeight(20);
 		myRoot.getRowConstraints().add(row1);
 		myRoot.getRowConstraints().add(row2);
 		myRoot.getRowConstraints().add(row3);
+		myRoot.getRowConstraints().add(row4);
 
 		ColumnConstraints col1 = new ColumnConstraints();
 		col1.setPercentWidth(70);
@@ -105,35 +151,16 @@ public class SLogoView {
 		myWorkspace = new Workspace(myTurtles, lines);
 		drawer = new Drawer(myWorkspace.getWidth(), myWorkspace.getHeight());
 
-		// LILA
-		myRoot.add(myWorkspace, 0, 1);
+		myRoot.add(myWorkspace, 0, 2);
 		myRoot.getColumnConstraints().add(col1);
 		myRoot.getColumnConstraints().add(col2);
 		mySidebar = new SideBar(myTurtles, myStage, myWorkspace, drawer, myController);
-		myRoot.add(mySidebar, 1, 1, 1, 2); // col,
+		myRoot.add(mySidebar, 1, 2, 1, 2); // col,
 		myEditor = new Editor(myController, mySidebar); // row,
 		// colspan,
 		// rowspan
-		myRoot.add(myEditor, 0, 2);
+		myRoot.add(myEditor, 0, 3);
 	}
-
-	// bottom row
-	/*
-	 * private HBox makeEditor() { HBox bottomRow = new HBox();
-	 * bottomRow.setPadding(new Insets(15)); bottomRow.setSpacing(15);
-	 * 
-	 * // text area TextArea textEditor = new TextArea();
-	 * textEditor.setMaxHeight(Double.MAX_VALUE); textEditor.setPrefSize(750,
-	 * 120); // this should be dynamically // alterable?
-	 * bottomRow.getChildren().add(textEditor);
-	 * 
-	 * // run button Button runButton = new Button("Run"); //
-	 * runButton.setPrefSize(100, 120); runButton.setMaxWidth(Double.MAX_VALUE);
-	 * runButton.setMaxHeight(Double.MAX_VALUE); // runButton.setPadding(new
-	 * Insets(0,0,0,3)); bottomRow.getChildren().add(runButton);
-	 * 
-	 * return bottomRow; }
-	 */
 
 	public String updateWorkspace(List<TurtleCommand> instructionList) {
 		String returnString = null;
@@ -211,55 +238,5 @@ public class SLogoView {
     public void setHeading(int id, double angle){
         myTurtles.get(id).setHeading(angle);
     }
-	//make update from a single command
-	
-	//UPON BUTTON CLICK:
-	
-	//  File newFile = displayFileChooser();
-	
-	/* colorPicker.setOnAction(new EventHandler() {
-            public void handle(Event t) {
-                text.setFill(colorPicker.getValue());               
-            }
-        });
-        
-        
-        button.setOnAction(new EventHandler<ActionEvent>() {
-
-    @Override
-    public void handle(ActionEvent event) {
-        String text = textField.getText();                              
-    }
-});*/
-	
-	//consider using labels instead of text?
-	
-	/*public void changeColor(Color c) {
-        System.out.println("color" + c.toString());
-
-
->>>>>>> 362817cc7ce9eda7709752b2584fb82e89ec7be4
-
-	/*
-	 * colorPicker.setOnAction(new EventHandler() { public void handle(Event t)
-	 * { text.setFill(colorPicker.getValue()); } });
-	 * 
-	 * 
-	 * button.setOnAction(new EventHandler<ActionEvent>() {
-	 * 
-	 * @Override public void handle(ActionEvent event) { String text =
-	 * textField.getText(); } });
-	 */
-
-	// consider using labels instead of text?
-
-	/*
-	 * public void changeColor(Color c) { System.out.println("color" +
-	 * c.toString());
-	 * 
-	 * 
-	 * 
-	 * }
-	 */
 
 }

@@ -53,8 +53,10 @@ public class MovementInstruction extends Instruction {
 		case "PENUP":
 			return 0.0;
 		case "SHOWTURTLE":
+			//need view
 			return 1.0;
 		case "HIDETURTLE":
+			//need view
 			return 0.0;
 		case "CLEARSCREEN":
 			//need view

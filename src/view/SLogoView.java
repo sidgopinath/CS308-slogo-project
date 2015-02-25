@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -20,9 +21,11 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -40,13 +43,13 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import model.Polar;
 import model.turtle.Turtle;
 import model.turtle.TurtleCommand;
 import resources.Strings;
 
 public class SLogoView {
-	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer,TurtleView>();
 	private Stage myStage;
 	private Scene myScene;
 	private GridPane myRoot;
@@ -54,19 +57,12 @@ public class SLogoView {
     private Rectangle myBackground;
     private Map<String,Node> variables;
     private Drawer drawer = new Drawer();
-    private StackPane myWorkspace;
-    private Group lines = new Group();
+    //private StackPane myWorkspace;
+    private Workspace myWorkspace;
     private int count=1;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
-	public static final int GRID_WIDTH = 800;
-	public static final int GRID_HEIGHT = 550;
-	//adjusts anchorpane coordinates to set 0,0 as the center of the gridsets center point at the
-	public static final double X_ADJUSTMENT = GRID_WIDTH / 2;  
-	public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2;  
-
+	
 	public SLogoView(Stage s) {
-		 
-		
 		myStage = s;
 		
 		//potentially make this into an individual class
@@ -104,181 +100,193 @@ public class SLogoView {
         ColumnConstraints col2 = new ColumnConstraints();
         col2.setPercentWidth(30);
         
-        myWorkspace = new StackPane();
         
-
-       // Group display = new Group(new Rectangle(0, 0, GRID_SIZE, GRID_SIZE));
-       // display.setAlignment(Pos.CENTER);
-     //   myRoot.add(display,0,1);
-        
-        myWorkspace.setPadding(new Insets(15));
-        
-        //problem with the above line is that it will set the anchorpane black all the way to the end fo the stage
-        
-        //is there a way to dynamically set grid size
-        myBackground = new Rectangle(GRID_WIDTH,GRID_HEIGHT);
-        myBackground.setFill(Color.WHITE);
-        
-        System.out.println(myRoot.getColumnConstraints());
-        
-   
-
-        TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
-        
-        //why does the turtle end up so far down?
-    
-        //allow turtle to be initialized to this and then set this way somehow
-
-        myWorkspace.setAlignment(Pos.CENTER);
-        lines.getChildren().add(turtle);
-        myWorkspace.getChildren().addAll(myBackground,lines);
-        myTurtles.put(0,turtle);
         //add lines to a group
-        
-        
+        myWorkspace = new Workspace();
+        //LILA
         myRoot.add(myWorkspace, 0, 1);
-        
-        
-        //getchildren.clear()
-        
 		myRoot.getColumnConstraints().add(col1);
 		myRoot.getColumnConstraints().add(col2);
 		myRoot.add(makeRightSidebar(),1,1,1,2); //col, row, colspan, rowspan
 		myRoot.add(makeEditor(),0,2);
 	}
 	
-	//make this into a new class with its own stuff that have variablesView and selectionView and historyView?
-	//sidebarPane class with parameters that specify column constraints / location
-	private VBox makeRightSidebar(){
-		VBox sidePane = new VBox();
-		sidePane.setPadding(new Insets(0,15,0,15));
-		sidePane.setSpacing(8);
+	//make this into a new class with its own stuff that have variablesView and commandView and historyView?
+		//sidebarPane class with parameters that specify column constraints / location
+		private VBox makeRightSidebar(){
+			VBox sidePane = new VBox();
+			sidePane.setPadding(new Insets(0,15,0,15));
+			sidePane.setSpacing(8);
 
-	    Hyperlink infoPage = new Hyperlink ("Get help");
-	  //  title.setTextAlignment(TextAlignment.CENTER); //why does this not work
-   //     VBox.setMargin(infoPage, new Insets(0, 0, 0, 50));
-	    sidePane.getChildren().add(infoPage);
-	    
-	    
-	    //customization
-	    Text title = new Text("Customization");
-	    title.setFont(new Font(13));
-	    title.setUnderline(true);
-	    sidePane.getChildren().add(title);
- 
-	    
-	    // select turtle image    
-	    HBox hbox = new HBox(10);  
-	    Text selectTurtle = new Text("Select Turtle");    
-	    Button uploadImg = new Button("Upload");
-	    uploadImg.setPrefSize(100, 20);
-	    uploadImg.setPadding(new Insets(0,0,0,3));
-	    uploadImg.setOnAction(e -> uploadTurtleFile(myTurtles.get(0)));
+		    Hyperlink infoPage = new Hyperlink ("Get help");
+		  //  title.setTextAlignment(TextAlignment.CENTER); //why does this not work
+	   //     VBox.setMargin(infoPage, new Insets(0, 0, 0, 50));
+		    sidePane.getChildren().add(infoPage);
+		    
+		    
+		    //customization
+		    Text title = new Text("Customization");
+		    title.setFont(new Font(13));
+		    title.setUnderline(true);
+		    sidePane.getChildren().add(title);
+	 
+		    
+		    // select turtle image    
+		    HBox hbox = new HBox(10);  
+		    Text selectTurtle = new Text("Select Turtle");    
+		    Button uploadImg = new Button("Upload");
+		    uploadImg.setPrefSize(100, 20);
+		    uploadImg.setPadding(new Insets(0,0,0,3));
+		    uploadImg.setOnAction(e -> uploadTurtleFile(myWorkspace.getTurtles().get(0)));
 
+		    hbox.getChildren().addAll(selectTurtle, uploadImg);
+		    sidePane.getChildren().add(hbox); 
+		    
+		    // select pen color	
+		    HBox hbox2 = new HBox(10);  
+		    Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);   
+		    ColorPicker penColorChoice = new ColorPicker(Color.BLACK);
+		    hbox2.getChildren().addAll(selectPenColor, penColorChoice);
+		    sidePane.getChildren().add(hbox2);
 
-	    hbox.getChildren().addAll(selectTurtle, uploadImg);
-	    sidePane.getChildren().add(hbox); 
+		    // select background color
+		    HBox hbox3 = new HBox(10);  
+		    Text selectBackgroundColor = new Text(Strings.SELECT_BACKGROUND_COLOR);   
+		    ColorPicker backgroundChoice = new ColorPicker(Color.WHITE);
+	        backgroundChoice.setOnAction(e -> changeBackgroundColor(backgroundChoice.getValue()));
 	    
-	    // select pen color	
-	    HBox hbox2 = new HBox(10);  
-	    Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);   
-	    ColorPicker penColorChoice = new ColorPicker(Color.BLACK);
-	    hbox2.getChildren().addAll(selectPenColor, penColorChoice);
-	    sidePane.getChildren().add(hbox2);
+		    // User can pick color for the stroke
+	        ColorPicker strokeColorChoice = new ColorPicker(Color.BLACK);
+	        strokeColorChoice.setOnAction(e -> drawer.changeColor(strokeColorChoice.getValue()));
+	        
+		    hbox3.getChildren().addAll(selectBackgroundColor, backgroundChoice);
+		    sidePane.getChildren().add(hbox3);
+		    
+		    
+		    // variables pane
+		    Text variables = new Text(myResources.getString(Strings.VARIABLES_HEADER)); //is this necessary to use a .properties file AND a strings class?
+		    variables.setFont(new Font(15));
+		    variables.setUnderline(true);
+		    sidePane.getChildren().add(variables); 
+		    
+		    ObservableList<Variable> variablesList =FXCollections.observableArrayList (
+		    	new Variable("var1", 1.5),
+		    	new Variable("var2", 2.5)	
+		    );
+		    variablesList.add(new Variable("Added var2.5", 5));
+		    
+		    TableView<Variable> variablesTable = new TableView<Variable>();
+		    
+		    //why can't I add columns to this table??
+		    //http://code.makery.ch/java/javafx-8-tutorial-part2/
+		    //http://docs.oracle.com/javafx/2/ui_controls/table-view.htm
+		    
+	        TableColumn<Variable, String> variablesCol = new TableColumn<Variable, String>("Variables");
+	        //System.out.println("pref: " + sidePane.getMaxWidth());
+	        //variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
+	        TableColumn<Variable, Double> valuesCol = new TableColumn<Variable, Double>("Values");
+	        
+	        variablesCol.setCellValueFactory(new PropertyValueFactory<Variable,String>("myName"));
+	        valuesCol.setCellValueFactory(new PropertyValueFactory<Variable,Double>("myVar"));
+	        
+	        //is it possible to dynamically set this?
+	        variablesCol.setPrefWidth(164);
+	        valuesCol.setPrefWidth(164);
+	        valuesCol.setEditable(true);
+	        
+	        variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
+	        variablesCol.setOnEditCommit(
+	            new EventHandler<CellEditEvent<Variable, String>>() {
+	                @Override
+	                public void handle(CellEditEvent<Variable, String> t) {
+	                    ((Variable) t.getTableView().getItems().get(
+	                        t.getTablePosition().getRow())
+	                        ).setName(t.getNewValue());
+	                }
+	            }
+	        );
 
-	    // select background color
-	    HBox hbox3 = new HBox(10);  
-	    Text selectBackgroundColor = new Text(Strings.SELECT_BACKGROUND_COLOR);   
-	    ColorPicker backgroundChoice = new ColorPicker(Color.WHITE);
-        backgroundChoice.setOnAction(e -> changeBackgroundColor(backgroundChoice.getValue()));
+	        
+	        
+	        //some issue with strings and ints
+	        valuesCol.setCellFactory(TextFieldTableCell.forTableColumn(new StringConverter<Double>(){
+	            
+	        	@Override public Double fromString(String userInput) {
+	                //try{
+	        		return Double.valueOf(userInput);
+	            	/*}
+	            	catch(NumberFormatException e){
+	            		System.out.println("Number Format Exception");
+	            	}*/
+	            }
 
-	    
-	    // User can pick color for the stroke
-        ColorPicker strokeColorChoice = new ColorPicker(Color.BLACK);
-        strokeColorChoice.setOnAction(e -> drawer.changeColor(strokeColorChoice.getValue()));
-        
-	    hbox3.getChildren().addAll(selectBackgroundColor, backgroundChoice);
-	    sidePane.getChildren().add(hbox3);
-	    
-	    
-	    // variables pane
-	    Text variables = new Text(myResources.getString(Strings.VARIABLES_HEADER)); //is this necessary to use a .properties file AND a strings class?
-	    variables.setFont(new Font(15));
-	    variables.setUnderline(true);
-	    sidePane.getChildren().add(variables); 
-	    
+	            @Override public String toString(Double t) {
+	                return t.toString();
+	            }
+	        }));
+	     //   CellValueFactory(.forTableColumn());
+	        valuesCol.setOnEditCommit(
+	            new EventHandler<CellEditEvent<Variable, Double>>() {
+	                @Override
+	                public void handle(CellEditEvent<Variable, Double> t) {
+	                    ((Variable) t.getTableView().getItems().get(
+	                        t.getTablePosition().getRow())
+	                        ).setValue(t.getNewValue());
+	                }
+	            }
+	        );
+	       // variablesCol.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
+	       // valuesCol.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
+	        
+	        //variablesTable.getColumns().setAll(variablesCol, valuesCol);
+	       // variablesTable.setItems(variablesList);
+	        
+	        variablesTable.getColumns().addAll(variablesCol, valuesCol);
+		    variablesTable.setEditable(true);
 
-	    
-	    ObservableList<Variable> variablesList =FXCollections.observableArrayList (
-	    	new Variable("var1", 1),
-	    	new Variable("var2", 2)	
-	    );
-	    variablesList.add(new Variable("Added var2.5", 5));
-
-	    
-	    TableView<Variable> variablesTable = new TableView<Variable>();
-	    variablesTable.setEditable(true);
-	    
-	    //why can't I add columns to this table??
-	    //http://code.makery.ch/java/javafx-8-tutorial-part2/
-	    //http://docs.oracle.com/javafx/2/ui_controls/table-view.htm
-	    
-        TableColumn<Variable, String> variablesCol = new TableColumn<Variable, String>("Variables");
-        //System.out.println("pref: " + sidePane.getMaxWidth());
-        //variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
-        TableColumn<Variable, Integer> valuesCol = new TableColumn<Variable, Integer>("Values");
-        
-        variablesCol.setCellValueFactory(new PropertyValueFactory<Variable,String>("myName"));
-        valuesCol.setCellValueFactory(new PropertyValueFactory<Variable,Integer>("myValue"));
-        
-       // variablesCol.setCellValueFactory(cellData -> cellData.getValue().firstNameProperty());
-       // valuesCol.setCellValueFactory(cellData -> cellData.getValue().lastNameProperty());
-        
-        //variablesTable.getColumns().setAll(variablesCol, valuesCol);
-        variablesTable.setItems(variablesList);
-        
-        variablesTable.setMaxWidth(Double.MAX_VALUE);
-        variablesTable.setPrefHeight(150);
-        
-	    sidePane.getChildren().add(variablesTable);
-	    
-	    /*When you call Cell.commitEdit(Object) an event is fired to the TableView, which you can observe by adding an EventHandler via TableColumn.setOnEditCommit(javafx.event.EventHandler). Similarly, you can also observe edit events for edit start and edit cancel.*/
-	    //how to remove the extra column?
-	    
-	    //example of how to set new elements to the observablelist
-	    variablesList.add(new Variable("Added var3", 3));
-	    variablesTable.setItems(variablesList);
-	    
-	    //user-defined commands
-	    Text userCommands = new Text(myResources.getString(Strings.USER_DEFINED_COMMANDS_HEADER));
-	    userCommands.setFont(new Font(15));
-	    userCommands.setUnderline(true);
-	    sidePane.getChildren().add(userCommands);
-	    
-	    ListView<String> userCommandsList = new ListView<String>();
-	    ObservableList<String> commandsItems =FXCollections.observableArrayList (
-	    	    "String1", "String2", "String3", "String 4","String1", "String2", "String3", "String 4", "String1", "String2", "String3", "String 4");
-	    userCommandsList.setItems(commandsItems);
-	    userCommandsList.setMaxWidth(Double.MAX_VALUE);
-	    userCommandsList.setPrefHeight(150);
-	    sidePane.getChildren().add(userCommandsList);
-	    
-	    // history pane
-	    Text history = new Text(myResources.getString(Strings.HISTORY_HEADER));
-	    history.setFont(new Font(15));
-	    history.setUnderline(true);
-	    sidePane.getChildren().add(history);
-	    
-	    ListView<String> historyList = new ListView<String>();
-	    ObservableList<String> historyItems =FXCollections.observableArrayList (
-	    	    "String1", "String2", "String3", "String 4","String1", "String2", "String3", "String 4", "String1", "String2", "String3", "String 4");
-	    historyList.setItems(historyItems);
-	    historyList.setMaxWidth(Double.MAX_VALUE);
-	    historyList.setPrefHeight(150);
-	    sidePane.getChildren().add(historyList);
- 
-	    return sidePane;
-	}
+	        
+	        variablesTable.setMaxWidth(Double.MAX_VALUE);
+	        variablesTable.setPrefHeight(150);
+	        
+		    sidePane.getChildren().add(variablesTable);
+		    
+		    /*When you call Cell.commitEdit(Object) an event is fired to the TableView, which you can observe by adding an EventHandler via TableColumn.setOnEditCommit(javafx.event.EventHandler). Similarly, you can also observe edit events for edit start and edit cancel.*/
+		    //how to remove the extra column?
+		    
+		    //example of how to set new elements to the observablelist
+		    variablesList.add(new Variable("Added var3", 3));
+		    variablesTable.setItems(variablesList);
+		    
+		    //user-defined commands
+		    Text userCommands = new Text(myResources.getString(Strings.USER_DEFINED_COMMANDS_HEADER));
+		    userCommands.setFont(new Font(15));
+		    userCommands.setUnderline(true);
+		    sidePane.getChildren().add(userCommands);
+		    
+		    ListView<String> userCommandsList = new ListView<String>();
+		    ObservableList<String> commandsItems =FXCollections.observableArrayList (
+		    	    "String1", "String2", "String3", "String 4","String1", "String2", "String3", "String 4", "String1", "String2", "String3", "String 4");
+		    userCommandsList.setItems(commandsItems);
+		    userCommandsList.setMaxWidth(Double.MAX_VALUE);
+		    userCommandsList.setPrefHeight(150);
+		    sidePane.getChildren().add(userCommandsList);
+		    
+		    // history pane
+		    Text history = new Text(myResources.getString(Strings.HISTORY_HEADER));
+		    history.setFont(new Font(15));
+		    history.setUnderline(true);
+		    sidePane.getChildren().add(history);
+		    
+		    ListView<String> historyList = new ListView<String>();
+		    ObservableList<String> historyItems =FXCollections.observableArrayList (
+		    	    "String1", "String2", "String3", "String 4","String1", "String2", "String3", "String 4", "String1", "String2", "String3", "String 4");
+		    historyList.setItems(historyItems);
+		    historyList.setMaxWidth(Double.MAX_VALUE);
+		    historyList.setPrefHeight(150);
+		    sidePane.getChildren().add(historyList);
+	 
+		    return sidePane;
+		}
 	
 	//bottom row
 	private HBox makeEditor(){
@@ -318,11 +326,11 @@ public class SLogoView {
 		//VariablesView.updateVars(command.getVariables());
 		//variables view will have configuredisplay(), update(), and event handlers
 		//updateHistory(command.getStrings());
-	    myWorkspace.getChildren().addAll(drawer.draw(myTurtles, instructions));
+	    myWorkspace.getChildren().addAll(drawer.draw(myWorkspace.getTurtles(), instructions));
 	}
 
 	public Turtle getTurtleInfo(int index){
-	    ImageView temp=myTurtles.get(index);
+	    ImageView temp=myWorkspace.getTurtles().get(index);
 	    return new Turtle(temp.getX(),temp.getY(),temp.getRotate());
 	}
 	
@@ -356,13 +364,13 @@ public class SLogoView {
 	    if(keyCode == KeyCode.W){
             ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
             instructions.add(new TurtleCommand(0,new Polar(0,10*count),false,false));
-            lines.getChildren().addAll(drawer.draw(myTurtles, instructions));
+            myWorkspace.getLines().getChildren().addAll(drawer.draw(myWorkspace.getTurtles(), instructions));
 	    }
         count++;
     }
 
     private void changeBackgroundColor(Color color){
-		myBackground.setFill(color);
+		myWorkspace.setBackground(color);
 	}
 	
 	private void uploadTurtleFile(TurtleView turtle){
@@ -373,6 +381,25 @@ public class SLogoView {
 	private void changeTurtleImage(TurtleView turtle, Image img){
 		System.out.println(img.toString());
 		turtle.setImage(img);
+	}
+	
+	public String updateWorkspace(List<Instruction> instructionList){
+		String returnString = null;
+		
+		for (Instruction instruction : instructionList){
+			returnString += updateFromInstruction(instruction) + "\n";
+		}
+		
+		//return value of command or null if there is no return value
+		return returnString;
+	}
+	
+	//make update from a single command
+	private String updateFromInstruction(Instruction instruction){
+		
+		
+		
+		return "return value";
 	}
 	
 	//UPON BUTTON CLICK:

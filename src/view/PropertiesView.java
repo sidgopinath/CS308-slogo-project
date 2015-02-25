@@ -1,6 +1,6 @@
 package view;
 
-public abstract class PropertiesView {
+public abstract class PropertiesView extends SLogoView{
 
 	
 	

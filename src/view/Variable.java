@@ -1,6 +1,8 @@
 package view;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -8,11 +10,11 @@ import javafx.beans.property.StringProperty;
 public class Variable {
 	
      private StringProperty myName;
-     private IntegerProperty myVar;
+     private DoubleProperty myVar;
 
-     public Variable(String varName, Integer varValue){
+     public Variable(String varName, double varValue){
     	 this.myName = new SimpleStringProperty(varName);
-    	 this.myVar = new SimpleIntegerProperty(varValue);
+    	 this.myVar = new SimpleDoubleProperty(varValue);
      }
      
      public void setName(String name){// NameProperty().set(value); }
@@ -23,17 +25,17 @@ public class Variable {
     	 return myName.get();
      }
      
-     public void setValue(int value){// NameProperty().set(value); }
+     public void setValue(double value){// NameProperty().set(value); }
     	 myVar.set(value);
      }
      
-     public int getVar() { //return NameProperty().get(); }
+     public double getVar() { //return NameProperty().get(); }
     	 return myVar.get();
      }
     	
      public StringProperty myNameProperty() {return myName;}
      
-     public IntegerProperty myVarProperty() {return myVar;}
+     public DoubleProperty myVarProperty() {return myVar;}
      /*
      public StringProperty NameProperty() { 
          if (myName == null) 

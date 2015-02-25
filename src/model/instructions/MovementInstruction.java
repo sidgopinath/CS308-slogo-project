@@ -5,8 +5,8 @@ import model.turtle.TurtleCommand;
 
 
 public class MovementInstruction extends Instruction {
-	String[] myInput;
-	TurtleCommand myTurtle;
+	private String[] myInput;
+	private TurtleCommand myTurtle;
 	private boolean myPenUp;
 	private boolean myJump;
 	private Polar myPolar;
@@ -34,35 +34,43 @@ public class MovementInstruction extends Instruction {
 	public MovementInstruction(String[] input) {
 		myInput = input;
 		myTurtle = null;
+		myPenUp = false;
+		myJump = false;
 	}
 	
 	@Override
 	public double execute() {
+		double inputDouble = Double.parseDouble(myInput[1]);
 		switch(myInput[0].toUpperCase()){
 		case "FORWARD":
-			double inputDouble = Double.parseDouble(myInput[1]);
 			myPolar = new Polar(0, inputDouble);
-			myPenUp = false;
-			myJump = false;
 			return inputDouble;
 		case "BACKWARD":
+			myPolar = new Polar(0, -inputDouble);
 			return Double.parseDouble(myInput[1]);
 		case "LEFT":
+			myPolar = new Polar(-inputDouble, 0);
 			return Double.parseDouble(myInput[1]);
 		case "RIGHT":
+			myPolar = new Polar(inputDouble, 0);
 			return Double.parseDouble(myInput[1]);
 		case "SETHEADING":
 			// Need view
+			myPolar = new Polar(inputDouble, 0);
 			return 0.0;
 		case "TOWARDS":
 			// need view
 			return 0.0;
 		case "SETXY":
 			//need view
+			myJump = true;
+			myPolar = new Polar(Double.parseDouble(myInput[1]), Double.parseDouble(myInput[2]));
 			return 0.0;
 		case "PENDOWN":
+			myPenUp = false;
 			return 1.0;
 		case "PENUP":
+			myPenUp = true;
 			return 0.0;
 		case "SHOWTURTLE":
 			//need view
@@ -77,7 +85,6 @@ public class MovementInstruction extends Instruction {
 			//need view
 			return 0.0;
 		default: 
-			// view.displayException(new Exception());
 			return 0;
 		}
 	}

@@ -69,9 +69,9 @@ public class Parser {
 	}
 	List<Instruction> outList;
 	public List<Node> parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		String command = "[ fd + 200 400 ] fd fd 50 rt 90 BACK 40";
+		//String command = "[ fd + 200 400 ] fd fd 50 rt 90 BACK 40";
 		furthestDepth = 0;
-		String[] splitCommands = command.split(" ");
+		String[] splitCommands = input.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
 		while(furthestDepth<splitCommands.length){
 			nodeList.add(makeTree(splitCommands));

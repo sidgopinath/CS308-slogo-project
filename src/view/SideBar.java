@@ -1,14 +1,10 @@
 package view;
 
-
 //move lambda function into the main UI? 
-
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
-import java.util.List;
 import java.util.Map;
-
 import controller.SLogoController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -19,7 +15,6 @@ import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -33,8 +28,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
@@ -43,7 +36,7 @@ public class SideBar extends VBox {
 
 	Workspace myWorkspace;
 	Stage myStage;
-	Map<Integer,TurtleView> myTurtles;
+	Map<Integer, TurtleView> myTurtles;
 	ListView<String> historyList;
 	ObservableList<String> historyItems;
 	SLogoController myController;
@@ -51,20 +44,18 @@ public class SideBar extends VBox {
 	// make this into a new class with its own stuff that have variablesView and
 	// commandView and historyView???
 	// sidebarPane class with parameters that specify column constraints /
-	// location  
-	
-	public SideBar(Map<Integer,TurtleView> turtleList, Stage mainStage, Workspace workspace,
-			Drawer drawer, SLogoController controller) {
+	// location
+
+	public SideBar(Map<Integer, TurtleView> turtleList, Stage mainStage,
+			Workspace workspace, Drawer drawer, SLogoController controller) {
 		myStage = mainStage;
 		myWorkspace = workspace;
 		myTurtles = turtleList;
 		myController = controller;
-		
+
 		setPadding(new Insets(0, 15, 0, 15));
 		setSpacing(5);
 		setMaxWidth(Double.MAX_VALUE);
-
-		
 
 		// customization
 		Text title = new Text("Customization");
@@ -77,45 +68,26 @@ public class SideBar extends VBox {
 		HBox selectLanguage = new HBox(10);
 		Text select = new Text("Select Language");
 		ComboBox<String> languageOptions = new ComboBox<String>();
-		ObservableList<String> languages = 
-			    FXCollections.observableArrayList(
-			        "English",
-			        "Chinese",
-			        "French",
-			        "German",
-			        "Italian",
-			        "Japanese",
-			        "Korean",
-			        "Portugese",
-			        "Russian",
-			        "Spanish"
-			    );
-		
+		ObservableList<String> languages = FXCollections.observableArrayList("English",
+				"Chinese", "French", "German", "Italian", "Japanese", "Korean",
+				"Portugese", "Russian", "Spanish");
+
 		languageOptions.setItems(languages);
 		languageOptions.setValue(languages.get(0));
-	
-		selectLanguage.getChildren().addAll(select, languageOptions);
-		getChildren().add(selectLanguage);                
-    
-	    languageOptions.getSelectionModel().selectedItemProperty().addListener(
-	            new ChangeListener<String>() {
-	                public void changed(ObservableValue<? extends String> ov, 
-	                    String old_val, String new_val) {
-	                	System.out.println(new_val);
-	    	        	myController.setLanguage(new_val);
 
-	                }
-		        });
-	                
-	                
-	                
-	                
-	                
-	                
-		
-		
-		
-		
+		selectLanguage.getChildren().addAll(select, languageOptions);
+		getChildren().add(selectLanguage);
+
+		languageOptions.getSelectionModel().selectedItemProperty()
+				.addListener(new ChangeListener<String>() {
+					public void changed(ObservableValue<? extends String> ov,
+							String old_val, String new_val) {
+						System.out.println(new_val);
+						myController.setLanguage(new_val);
+
+					}
+				});
+
 		// select turtle image
 		HBox hbox = new HBox(10);
 		Text selectTurtle = new Text("Select Turtle");
@@ -174,7 +146,7 @@ public class SideBar extends VBox {
 		valuesCol
 				.setCellValueFactory(new PropertyValueFactory<Variable, Double>("myVar"));
 
-		variablesCol.setPrefWidth(164); //TODO: set dynamically
+		variablesCol.setPrefWidth(164); // TODO: set dynamically
 		valuesCol.setPrefWidth(164);
 		valuesCol.setEditable(true);
 
@@ -189,23 +161,23 @@ public class SideBar extends VBox {
 
 		// some issue with strings and ints
 		valuesCol.setCellFactory(TextFieldTableCell
-			.forTableColumn(new StringConverter<Double>() {
+				.forTableColumn(new StringConverter<Double>() {
 
-				@Override
-				public Double fromString(String userInput) {
-					// try{
-					return Double.valueOf(userInput);
-					/*
-					 * } catch(NumberFormatException e){
-					 * System.out.println("Number Format Exception"); }
-					 */
-				}
+					@Override
+					public Double fromString(String userInput) {
+						// try{
+						return Double.valueOf(userInput);
+						/*
+						 * } catch(NumberFormatException e){
+						 * System.out.println("Number Format Exception"); }
+						 */
+					}
 
-				@Override
-				public String toString(Double t) {
-					return t.toString();
-				}
-			}));
+					@Override
+					public String toString(Double t) {
+						return t.toString();
+					}
+				}));
 		valuesCol.setOnEditCommit(new EventHandler<CellEditEvent<Variable, Double>>() {
 			@Override
 			public void handle(CellEditEvent<Variable, Double> t) {
@@ -235,8 +207,7 @@ public class SideBar extends VBox {
 		variablesTable.setItems(variablesList);
 
 		// user-defined commands
-		Text userCommands = new Text(
-				Strings.USER_DEFINED_COMMANDS_HEADER);
+		Text userCommands = new Text(Strings.USER_DEFINED_COMMANDS_HEADER);
 		userCommands.setFont(new Font(15));
 		userCommands.setUnderline(true);
 		getChildren().add(userCommands);
@@ -260,18 +231,20 @@ public class SideBar extends VBox {
 		historyList.setItems(historyItems);
 		historyList.setMaxWidth(Double.MAX_VALUE);
 		historyList.setPrefHeight(150);
-		//setHistory("test");
+		// setHistory("test");
 		getChildren().add(historyList);
-		
-		
-		//TODO: Selected item can only have action once until other item is selected
-		//TODO: Selecting the same command after another of the same command does not work
-		 historyList.getFocusModel().focusedItemProperty().addListener(
-	            new ChangeListener<String>() {
-	                public void changed(ObservableValue<? extends String> ov, 
-	                    String old_val, String new_val) {
-                        try {
-							myController.parseInput(historyList.getFocusModel().getFocusedItem());		
+
+		// TODO: Selected item can only have action once until other item is
+		// selected
+		// TODO: Selecting the same command after another of the same command
+		// does not work
+		historyList.getFocusModel().focusedItemProperty()
+				.addListener(new ChangeListener<String>() {
+					public void changed(ObservableValue<? extends String> ov,
+							String old_val, String new_val) {
+						try {
+							myController.parseInput(historyList.getFocusModel()
+									.getFocusedItem());
 						} catch (SecurityException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -291,8 +264,8 @@ public class SideBar extends VBox {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-	            }
-		        });
+					}
+				});
 
 		// return sidePane;
 	}
@@ -318,8 +291,8 @@ public class SideBar extends VBox {
 	private void changeBackgroundColor(Color color) {
 		myWorkspace.setBackground(color);
 	}
-	
-	public void setHistory(String string){
-		historyItems.add(string);			
+
+	public void setHistory(String string) {
+		historyItems.add(string);
 	}
 }

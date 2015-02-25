@@ -14,7 +14,6 @@ public class Workspace extends StackPane{
 	//private StackPane myDisplay;
 	private Rectangle myBackground;
 
-
 	public static final double GRID_WIDTH = 800;
 	public static final double GRID_HEIGHT = 550;
 //	public static final double X_ADJUSTMENT = GRID_WIDTH / 2;  
@@ -43,10 +42,10 @@ public class Workspace extends StackPane{
 	}
 
 	public double getGridWidth(){
-		return GRID_WIDTH;
+		return myBackground.getWidth();
 	}
 	
 	public double getGridHeight(){
-		return GRID_HEIGHT;
+		return myBackground.getHeight();
 	}
 }

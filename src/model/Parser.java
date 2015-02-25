@@ -106,13 +106,12 @@ public class Parser {
 			}
 		}
 		try {
-			for(String s:root.childrenToStringArray()){
-				System.out.println(s);
-			}
+			if(root.getChildren().size()!=0){
 			String[] parameters = makeParameters(root);
 			Instruction myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
 			System.out.println(myInt.getClass());
 			System.out.println(myInt.execute());
+			}
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException
@@ -125,8 +124,8 @@ public class Parser {
 		String[] myKids = root.childrenToStringArray();
 		String[] output = new String[myKids.length+1];
 		output[0] = root.getValue();
-		for(int i =1; i<myKids.length+1;i++){
-			output[i] = myKids[i];
+		for(int i =0; i<myKids.length;i++){
+			output[i+1] = myKids[i];
 		}
 		return output;
 	}

@@ -1,8 +1,11 @@
 package model.instructions;
 
+import model.turtle.TurtleCommand;
+
 
 public class MovementInstruction extends Instruction {
 	String[] myInput;
+	TurtleCommand myTurtle;
 	public enum implementers {
 		FORWARD(1),
 		BACKWARD(1),
@@ -24,10 +27,10 @@ public class MovementInstruction extends Instruction {
     }
 	}
 	public MovementInstruction(String[] input) {
-		super(input);
 		myInput = input;
+		myTurtle = null;
 	}
-
+	
 	@Override
 	public double execute() {
 		switch(myInput[0].toUpperCase()){
@@ -53,8 +56,10 @@ public class MovementInstruction extends Instruction {
 		case "PENUP":
 			return 0.0;
 		case "SHOWTURTLE":
+			//need view
 			return 1.0;
 		case "HIDETURTLE":
+			//need view
 			return 0.0;
 		case "CLEARSCREEN":
 			//need view
@@ -71,5 +76,10 @@ public class MovementInstruction extends Instruction {
 	@Override
 	public int getNumberOfArguments() {
 		return implementers.valueOf(myInput[0].toUpperCase()).numArgs;
+	}
+
+	@Override
+	public TurtleCommand getTurtleCommand() {
+		return myTurtle;
 	}
 }

@@ -1,18 +1,18 @@
 package model;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
-import java.util.Stack;
+import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
 import model.instructions.Instruction;
+import model.turtle.TurtleCommand;
 
 /**
  * To parse, first create a parsing tree which will be created/traversed recursively
@@ -59,17 +59,18 @@ public class Parser {
 			for(Object d:c.getEnumConstants()){
 				commandMap.put(d.toString(), s);
 			}
+			commandMap.put("[", "ListInstruction");
 		}
 	}
 	List<Instruction> outList;
 	public List<Node> parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		String command = "[ fd [ + 200 400 ] fd fd 50 ] rt 90 BACK 40";
+		String command = "[ fd + 200 400 ] fd fd 50 rt 90 BACK 40";
 		furthestDepth = 0;
 		String[] splitCommands = command.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
 		while(furthestDepth<splitCommands.length){
 			nodeList.add(makeTree(splitCommands));
-			System.out.println("tree done");
+			// System.out.println("tree done");
 		}
 		for(Node root:nodeList){
 			System.out.println("new tree");
@@ -95,22 +96,41 @@ public class Parser {
 		System.out.println(root.getValue()+" at depth: "+depth);
 	}
 	private void inOrderInstructionExecuter(Node root, int depth){
+		boolean exploring = false;
 		if(root==null){
 			return;
 		}
+		String list = null;
 		if(root.getChildren()!=null){
 			List<Node> children = root.getChildren();
 			depth++;
+			
 			for(int i =0; i<children.size();i++){
+				if(root.getValue().equals("[")){
+					StringBuffer myBuff = new StringBuffer();
+					exploring = true;
+					listExplorer(myBuff, children.get(i));
+					list = myBuff.toString().trim();
+					System.out.println("the list is "+ list);
+					break;
+				}
 				inOrderInstructionExecuter(children.get(i), depth);
 			}
 		}
 		try {
 			if(root.getChildren().size()!=0){
-			String[] parameters = makeParameters(root);
+			String[] parameters;
+			if(exploring)
+				parameters= new String[]{list};
+			else
+				parameters = makeParameters(root);
+			System.out.println("model.instructions."+commandMap.get(root.getValue()));
 			Instruction myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
-			System.out.println(myInt.getClass());
-			System.out.println(myInt.execute());
+			root.updateValue(myInt.execute());
+			TurtleCommand tempTurtle=myInt.getTurtleCommand();
+			if(tempTurtle!=null){
+				// Call view method
+			}
 			}
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
@@ -120,12 +140,29 @@ public class Parser {
 			System.out.println("FAILED");
 		}
 	}
+	private void listExplorer(StringBuffer sb, Node root) {
+		System.out.println(root.getValue());
+		if(root!=null){
+			sb.append(root.getValue()+" ");
+		}
+		if(root.getChildren()!=null){
+			List<Node> children = root.getChildren();
+			for(int i =0; i<children.size();i++){
+				System.out.println("Found" + children.get(i).getValue());	
+				listExplorer(sb,children.get(i));
+			}
+		}
+		//System.out.println("Found" + root.getValue());	
+	}
+
 	private String[] makeParameters(Node root) {
 		String[] myKids = root.childrenToStringArray();
 		String[] output = new String[myKids.length+1];
 		output[0] = root.getValue();
+		System.out.println("parameters " + output[0]);
 		for(int i =0; i<myKids.length;i++){
 			output[i+1] = myKids[i];
+			System.out.println("parameters " + output[i+1]);
 		}
 		return output;
 	}
@@ -133,7 +170,7 @@ public class Parser {
 	// add catch for array out of bounds
 	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		// base case
-		System.out.println(furthestDepth);
+		// System.out.println(furthestDepth);
 		int myVars = 0;
 		int neededVars = -1;
 		Node myNode = null;
@@ -172,11 +209,11 @@ public class Parser {
 			//this is either a known command or invalid input.  
 			//instantiate the command, if reflection cannot find the file then must be invalid
 			try{
-				String[] parameters=new String[]{match};
-				System.out.println(commandMap.get(match));
-				// Get rid of this by making tree non-binary
+				String[] parameters=new String[]{match};	
+				System.out.println(match + " "+ commandMap.get(match));
 				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
 				furthestDepth++;
+				System.out.println(myInt);
 				neededVars = myInt.getNumberOfArguments();
 				myNode = new Node(match);
 			}
@@ -185,18 +222,10 @@ public class Parser {
 				System.out.println("No such class/function, yet!");
 			}
 		}
-		if(myVars>=neededVars){
-			return myNode;
+		while(myVars<neededVars){
+			myNode.addChild(makeTree(command));
+			myVars++;
 		}
-		System.out.println("making left tree now for "+myNode);
-		myNode.addChild(makeTree(command));
-		myVars++;
-		if(myVars>=neededVars){
-			return myNode;
-		}
-		System.out.println("making right tree now for "+myNode);
-		myNode.addChild(makeTree(command));
-		myVars++;
 		return myNode;
 	}
 	
@@ -212,12 +241,12 @@ public class Parser {
 		if (test.trim().length() > 0) {
 			for (Entry<String, Pattern> p : patterns) {
 				if (match(test, p.getValue())) {
-					System.out.println(String.format("%s matches %s", test, p.getKey()));
+					// System.out.println(String.format("%s matches %s", test, p.getKey()));
 					return p.getKey();
 				}
 			}
 		}
-		System.out.println(String.format("%s not matched", test));
+		// System.out.println(String.format("%s not matched", test));
 		return "NONE";
 	}
 	

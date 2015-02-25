@@ -26,7 +26,6 @@ public class MathInstruction extends Instruction{
 }
 	String[] myInput;
 	public MathInstruction(String[] input) {
-		super(input);
 		myInput = input;
 	}
 
@@ -34,7 +33,6 @@ public class MathInstruction extends Instruction{
 	public double execute() {
 		switch(myInput[0].toUpperCase()){
 		case "SUM":
-			System.out.println("called");
 			return Double.parseDouble(myInput[1])+Double.parseDouble(myInput[2]);
 		case "DIFFERENCE":
 			return Double.parseDouble(myInput[1])-Double.parseDouble(myInput[2]);

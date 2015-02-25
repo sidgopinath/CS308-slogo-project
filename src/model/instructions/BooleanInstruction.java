@@ -1,5 +1,7 @@
 package model.instructions;
 
+import model.turtle.TurtleCommand;
+
 public class BooleanInstruction extends Instruction {
 	String [] myInput;
 	// because of enums, need to trim the question mark
@@ -17,7 +19,6 @@ public class BooleanInstruction extends Instruction {
 	    }
 	}
 	public BooleanInstruction(String[] input) {
-		super(input);
 		myInput = input;
 		// TODO Auto-generated constructor stub
 	}

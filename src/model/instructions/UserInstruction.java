@@ -7,7 +7,6 @@ public class UserInstruction extends Instruction {
 		To;
 	}
 	public UserInstruction(String[] input) {
-		super(input);
 		// TODO Auto-generated constructor stub
 	}
 

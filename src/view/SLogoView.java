@@ -6,6 +6,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
@@ -41,6 +42,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -67,18 +69,19 @@ public class SLogoView {
 	private double myHeight;
 	private Drawer drawer = new Drawer();
 	private Workspace myWorkspace;
-	private int count = 1;
+	private Group lines = new Group();
+
 	private SideBar mySidebar;
 	private Editor myEditor;
 	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>();
-	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; 
+	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
 	public SLogoView(Stage s) {
 		myStage = s;
 		// create root node
 		myRoot = new GridPane();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
-
+		lines.setManaged(false);
 		configureUI();
 
 		// TODO: dynamically set screen size using percents:
@@ -121,56 +124,60 @@ public class SLogoView {
 		// add lines to a group
 		TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
 		myTurtles.put(0, turtle);
-		myWorkspace = new Workspace(myTurtles);
+		myWorkspace = new Workspace(myTurtles, lines);
 		// LILA
 		myRoot.add(myWorkspace, 0, 1);
+
 		myRoot.getColumnConstraints().add(col1);
 		myRoot.getColumnConstraints().add(col2);
 		mySidebar = new SideBar(myTurtles, myStage, myWorkspace, drawer);
 		myRoot.add(mySidebar, 1, 1, 1, 2); // col,
-		myEditor = new Editor();																				// row,
-																						// colspan,
-																					// rowspan
+		myEditor = new Editor(); // row,
+		// colspan,
+		// rowspan
 		myRoot.add(myEditor, 0, 2);
 	}
 
 	// bottom row
-	/*private HBox makeEditor() {
-		HBox bottomRow = new HBox();
-		bottomRow.setPadding(new Insets(15));
-		bottomRow.setSpacing(15);
+	/*
+	 * private HBox makeEditor() { HBox bottomRow = new HBox();
+	 * bottomRow.setPadding(new Insets(15)); bottomRow.setSpacing(15);
+	 * 
+	 * // text area TextArea textEditor = new TextArea();
+	 * textEditor.setMaxHeight(Double.MAX_VALUE); textEditor.setPrefSize(750,
+	 * 120); // this should be dynamically // alterable?
+	 * bottomRow.getChildren().add(textEditor);
+	 * 
+	 * // run button Button runButton = new Button("Run"); //
+	 * runButton.setPrefSize(100, 120); runButton.setMaxWidth(Double.MAX_VALUE);
+	 * runButton.setMaxHeight(Double.MAX_VALUE); // runButton.setPadding(new
+	 * Insets(0,0,0,3)); bottomRow.getChildren().add(runButton);
+	 * 
+	 * return bottomRow; }
+	 */
 
-		// text area
-		TextArea textEditor = new TextArea();
-		textEditor.setMaxHeight(Double.MAX_VALUE);
-		textEditor.setPrefSize(750, 120); // this should be dynamically
-											// alterable?
-		bottomRow.getChildren().add(textEditor);
+	public String updateWorkspace(ArrayList<TurtleCommand> instructionList) {
+		String returnString = null;
+		for (TurtleCommand instruction : instructionList) {
+			returnString += updateFromInstruction(instruction) + "\n";
+		}
+		myWorkspace.getChildren().addAll(drawer.draw(myTurtles, instructionList));
+		// return value of command or null if there is no return value
+		return returnString;
+	}
 
-		// run button
-		Button runButton = new Button("Run");
-		// runButton.setPrefSize(100, 120);
-		runButton.setMaxWidth(Double.MAX_VALUE);
-		runButton.setMaxHeight(Double.MAX_VALUE);
-		// runButton.setPadding(new Insets(0,0,0,3));
-		bottomRow.getChildren().add(runButton);
+	public void setXY(double x, double y) {
+	}
 
-		return bottomRow;
-	}*/
-
-	public void updateWorkspace(ArrayList<TurtleCommand> instructions) {
-		// update the grid
-		// updateGrid(command.getLines());
-		// VariablesView.updateVars(command.getVariables());
-		// variables view will have configuredisplay(), update(), and event
-		// handlers
-		// updateHistory(command.getStrings());
-		myWorkspace.getChildren().addAll(drawer.draw(myTurtles, instructions));
+	// make update from a single command
+	private String updateFromInstruction(TurtleCommand instruction) {
+		return "return value";
 	}
 
 	public Turtle getTurtleInfo(int index) {
 		ImageView temp = myTurtles.get(index);
 		return new Turtle(temp.getX(), temp.getY(), temp.getRotate());
+
 	}
 
 	public void updateVariables(Map<String, Double> variableUpdates) {
@@ -201,36 +208,18 @@ public class SLogoView {
 
 	private void handleKeyInput(KeyEvent e) {
 		KeyCode keyCode = e.getCode();
-		if (keyCode == KeyCode.W) {
+		if (keyCode == KeyCode.D) {
 			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-			instructions
-					.add(new TurtleCommand(0, new Polar(0, 10 * count), false, false));
-			myWorkspace.getLines().getChildren()
-					.addAll(drawer.draw(myTurtles, instructions));
+			instructions.add(new TurtleCommand(0, new Polar(30, 0), false, false));
+			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
+			lines.getChildren().addAll(newlines);
+		} else if (keyCode == KeyCode.W) {
+			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
+			instructions.add(new TurtleCommand(0, new Polar(0, 10), false, false));
+			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
+			lines.getChildren().addAll(newlines);
 		}
-		count++;
 	}
-
-	public String updateWorkspace(List<TurtleCommand> instructionList) {
-		String returnString = null;
-
-		for (TurtleCommand instruction : instructionList) {
-			returnString += updateFromInstruction(instruction) + "\n";
-		}
-
-		// return value of command or null if there is no return value
-		return returnString;
-	}
-
-	// make update from a single command
-	private String updateFromInstruction(Instruction instruction) {
-
-		return "return value";
-	}
-
-	// UPON BUTTON CLICK:
-
-	// File newFile = displayFileChooser();
 
 	/*
 	 * colorPicker.setOnAction(new EventHandler() { public void handle(Event t)

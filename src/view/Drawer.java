@@ -21,23 +21,27 @@ public class Drawer {
            TurtleCommand instruction = it.next();
            TurtleView turtle = turtles.get(instruction.turtleId);
            Polar polar = instruction.polar;
-           double turtleX=turtle.getX();
-           double turtleY=turtle.getY();
            if(polar.distance!=0){
-               double turtleNewX=turtleX+Math.sin(polar.angle)*polar.distance;
-               double turtleNewY=turtleY+Math.cos(polar.angle)*polar.distance;
-               //just use the converter for the above code
-               turtle.setX(turtleNewX);
-               turtle.setY(turtleNewY);
-               System.out.println(turtle.getY());
+               double angle=turtle.getRotate();
+               double turtleX=turtle.getLayoutX();
+               double turtleY=turtle.getLayoutY();
+               double moveX=Math.sin(Math.toRadians(polar.angle+180-angle))*polar.distance;
+               double moveY=Math.cos(Math.toRadians(polar.angle+180-angle))*polar.distance;
+               double startX=turtleX+turtle.getTranslateX()+turtle.getFitWidth()/2;
+               double startY=turtleY+turtle.getTranslateY()+turtle.getFitHeight()/2;
+               System.out.println(startX+","+startY);
+               turtle.move(turtle.getTranslateX()+moveX,turtle.getTranslateY()+moveY);
+               double endX=turtle.getTranslateX()+turtleX+turtle.getFitWidth()/2;
+               double endY=turtle.getTranslateY()+turtleY+turtle.getFitHeight()/2;
+               System.out.println(endX+","+endY);
                if(!instruction.penUp){
                    Polyline polyline = new Polyline();
                    polyline.setStroke(color);
-                   polyline.getPoints().addAll(new Double[]{turtleX, turtleY,turtleNewX, turtleNewY});
+                   polyline.getPoints().addAll(new Double[]{startX, startY,endX, endY});
                    lines.add(polyline);
                }
            }else{
-               turtle.setRotate(turtle.getRotate()+polar.angle);
+               turtle.turn(turtle.getRotate()+polar.angle);
            }
        }
        return lines;

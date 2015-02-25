@@ -34,12 +34,7 @@ public class ControlInstruction extends Instruction{
 			return 0;
 		case "REPEAT":
 			for(int i =0; i<myDependencies.get(0).execute(); i++){
-				System.out.println("THIS THIS THIS: " + i);
 				myDependencies.get(1).execute();
-				List<TurtleCommand> instructionList = new ArrayList<TurtleCommand>();
-				instructionList.add(myDependencies.get(1).getTurtleCommand());
-				myView.updateWorkspace(instructionList);
-				System.out.println(	myDependencies.get(1).execute());
 			}
 			return myDependencies.get(0).execute();
 		case "DOTIMES":

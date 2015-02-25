@@ -1,5 +1,6 @@
 package model.instructions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import view.SLogoView;
@@ -45,20 +46,23 @@ public class MovementInstruction extends Instruction {
 	
 	@Override
 	public double execute() {
-		double inputDouble = myDependencies.get(0).execute();;
+		double inputDouble = myDependencies.get(0).execute();
 		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
 			myPolar = new Polar(0, inputDouble);
-			System.out.println("MOVE FORWARD" + inputDouble);
+			updateView();
 			return inputDouble;
 		case "BACKWARD":
 			myPolar = new Polar(0, -inputDouble);
+			updateView();
 			return myDependencies.get(0).execute();
 		case "LEFT":
 			myPolar = new Polar(-inputDouble, 0);
+			updateView();
 			return myDependencies.get(0).execute();
 		case "RIGHT":
 			myPolar = new Polar(inputDouble, 0);
+			updateView();
 			return myDependencies.get(0).execute();
 		case "SETHEADING":
 			// Need view
@@ -93,6 +97,12 @@ public class MovementInstruction extends Instruction {
 		default: 
 			return 0;
 		}
+	}
+
+	private void updateView() {
+		List<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
+		commandList.add(new TurtleCommand(0, myPolar, myPenUp, myJump));
+		myView.updateWorkspace(commandList);
 	}
 
 	@Override

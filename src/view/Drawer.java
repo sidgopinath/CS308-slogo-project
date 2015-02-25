@@ -47,7 +47,6 @@ public class Drawer {
         System.out.println("color" + color.toString());
 
         color=c;
-        System.out.println(color.toString());
 
     }
 }

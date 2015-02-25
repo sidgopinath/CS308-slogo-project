@@ -41,7 +41,7 @@ public class Drawer {
                
                double newX = turtle.getTranslateX()+moveX;
                double newY = turtle.getTranslateY()+moveY;
-               if (newX < myXBounds && newY < myYBounds){
+        //       if (newX < myXBounds && newY < myYBounds){
 	               turtle.move(turtle.getTranslateX()+moveX,turtle.getTranslateY()+moveY);
 	               double endX=turtle.getTranslateX()+turtleX+turtle.getFitWidth()/2;
 	               double endY=turtle.getTranslateY()+turtleY+turtle.getFitHeight()/2;
@@ -52,7 +52,7 @@ public class Drawer {
 	                   polyline.getPoints().addAll(new Double[]{startX, startY,endX, endY});
 	                   lines.add(polyline);
 	               }
-               }
+             //  }
                else{
             	   //TODO: make turtles and lines invisible when out of bounds
                }

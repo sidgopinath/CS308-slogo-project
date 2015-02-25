@@ -4,12 +4,11 @@ import java.util.List;
 
 
 public class BooleanInstruction extends Instruction {
-	List<Instruction> myDependencies;
-	String myType;
-	public BooleanInstruction(List<Instruction> dependencies, String myInstructionType) {
-		myDependencies = dependencies;
-		myType = myInstructionType;
+
+	public BooleanInstruction(List<Instruction> dependencies, String instructionType) {
+		super(dependencies, instructionType);
 	}
+	
 	public enum implementers {
 			LESSTHAN (2),
 			GREATERTHAN (2),
@@ -25,35 +24,38 @@ public class BooleanInstruction extends Instruction {
 	}
 	@Override
 	public double execute() {
-		switch(myType.toUpperCase()){
+		double firstDependency = myDependencies.get(0).execute();
+		double secondDependency = myDependencies.get(1).execute();
+		switch(myInstructionType.toUpperCase()){
 		case "LESSTHAN":
-			return boolToDouble(myDependencies.get(0).execute()<myDependencies.get(1).execute());
+			return boolToDouble(firstDependency<secondDependency);
 		case "GREATERTHAN":
-			return boolToDouble(myDependencies.get(0).execute()>myDependencies.get(1).execute());
+			return boolToDouble(firstDependency>secondDependency);
 		case "EQUAL":
-			return boolToDouble(myDependencies.get(0).execute()==myDependencies.get(1).execute());
+			return boolToDouble(firstDependency==secondDependency);
 		case "NOTEQUAL":
-			return boolToDouble(myDependencies.get(0).execute()!=myDependencies.get(1).execute());
+			return boolToDouble(firstDependency!=secondDependency);
 		case "AND":
-			return boolToDouble(myDependencies.get(0).execute()==0&&myDependencies.get(1).execute()==0);
+			return boolToDouble(firstDependency==0 && secondDependency==0);
 		case "OR":
-			return boolToDouble(myDependencies.get(0).execute()!=0||myDependencies.get(1).execute()!=0);
+			return boolToDouble(firstDependency!=0 || secondDependency!=0);
 		case "NOT":
-			return boolToDouble(myDependencies.get(0).execute()==0);
+			return boolToDouble(firstDependency==0);
 		default:
-			// need Error
+			//TODO: need Error
 			return -1;
 		}
-		
 	}
+	
 	private double boolToDouble(Boolean input){
-		if(input)
+		if(input){
 			return 1;
+		}
 		return 0;
 	}
+	
 	@Override
 	public int getNumberOfArguments() {
-		return implementers.valueOf(myType.toUpperCase()).numArgs;
+		return implementers.valueOf(myInstructionType.toUpperCase()).numArgs;
 	}
-
 }

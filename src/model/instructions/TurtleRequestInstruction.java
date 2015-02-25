@@ -5,17 +5,14 @@ import java.util.List;
 
 public class TurtleRequestInstruction extends Instruction {
 	// TODO call view for these fields
-	List<Instruction> myDependencies;
-	String instructionType;
-	
-	public TurtleRequestInstruction(List<Instruction> dependencies, String inType) {
-		myDependencies = dependencies;
-		instructionType = inType;
-		}
+
+	public TurtleRequestInstruction(List<Instruction> dependencies, String instructionType) {
+		super(dependencies, instructionType);
+	}
 
 	@Override
 	public double execute() {
-		switch(instructionType.toUpperCase()){
+		switch(myInstructionType.toUpperCase()){
 		case "XCOR":
 			return 0.0;
 		case "YCOR":
@@ -35,5 +32,4 @@ public class TurtleRequestInstruction extends Instruction {
 	public int getNumberOfArguments() {
 		return 0;
 	}
-
 }

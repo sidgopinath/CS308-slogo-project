@@ -2,17 +2,16 @@ package model.instructions;
 
 import java.util.List;
 
-// First instruction will be a listinstruction, second will be a listinstruction
 public class UserInstruction extends Instruction {
+
 	private int numArgs;
+	
+	public UserInstruction(List<Instruction> dependencies, String instructionType) {
+		super(dependencies, instructionType);
+	}
+
 	public enum implementers {
 		To;
-	}
-	List<Instruction> myDependencies;
-	String instructionType;
-	public UserInstruction(List<Instruction> dependencies, String inType) {
-		myDependencies = dependencies;
-		instructionType = inType;
 	}
 
 	@Override
@@ -26,5 +25,4 @@ public class UserInstruction extends Instruction {
 		// TODO Auto-generated method stub
 		return numArgs;
 	}
-
 }

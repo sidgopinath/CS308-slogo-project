@@ -1,11 +1,14 @@
 package model.instructions;
 
 import java.util.List;
+import java.util.Random;
 
 public class MathInstruction extends Instruction{
-	// First input is command type, second is first argument, third is second argument
-	// Division by Zero returns 0 always
-	// need to fix so that it returns the right number of arguments needed to the command tree
+	
+	public MathInstruction(List<Instruction> dependencies, String instructionType) {
+		super(dependencies, instructionType);
+	}
+
 	public enum implementers {
 		SUM(2),
 		DIFFERENCE (2),
@@ -24,43 +27,41 @@ public class MathInstruction extends Instruction{
     private int numArgs;
 	implementers(int args){
     	this.numArgs=args;
-    }
-}
-	String instructionType;
-	List<Instruction> myDependencies;
-    public MathInstruction(List<Instruction> dependencies, String inType) {
-    	myDependencies=dependencies;
-    	instructionType = inType;
 	}
+}
+
 	@Override
 	public double execute() {
-		switch(instructionType.toUpperCase()){
+		double firstDependency = myDependencies.get(0).execute();
+		double secondDependency = myDependencies.get(1).execute();
+		switch(myInstructionType.toUpperCase()){
 		case "SUM":
-			return myDependencies.get(0).execute()+myDependencies.get(1).execute();
+			return firstDependency+secondDependency;
 		case "DIFFERENCE":
-			return myDependencies.get(0).execute()-myDependencies.get(1).execute();
+			return firstDependency-secondDependency;
 		case "PRODUCT":
-			return myDependencies.get(0).execute()*myDependencies.get(1).execute();
+			return firstDependency*secondDependency;
 		case "QUOTIENT":
-			return divByZeroCheck(myDependencies.get(0).execute()/myDependencies.get(1).execute());
+			return divByZeroCheck(firstDependency/secondDependency);
 		case "REMAINDER":
-			return myDependencies.get(0).execute()%myDependencies.get(1).execute();
+			return firstDependency%secondDependency;
 		case "MINUS":
-			return -myDependencies.get(0).execute();
+			return -firstDependency;
 		case "RANDOM":
-			return Math.random()*myDependencies.get(0).execute();
+			Random randomNum = new Random();
+			return randomNum.nextInt((int)firstDependency);
 		case "SIN":
-			return Math.toDegrees(Math.sin(myDependencies.get(0).execute()));
+			return Math.toDegrees(Math.sin(firstDependency));
 		case "COS":
-			return Math.toDegrees(Math.cos(myDependencies.get(0).execute()));
+			return Math.toDegrees(Math.cos(secondDependency));
 		case "TAN":
-			return Math.toDegrees(divByZeroCheck((Math.tan(myDependencies.get(0).execute()))));
+			return Math.toDegrees(divByZeroCheck((Math.tan(secondDependency))));
 		case "ATAN":
-			return Math.toDegrees(divByZeroCheck((Math.atan(myDependencies.get(0).execute()))));
+			return Math.toDegrees(divByZeroCheck((Math.atan(secondDependency))));
 		case "LOG":
-			return Math.log(myDependencies.get(0).execute());
+			return Math.log(firstDependency);
 		case "POW":
-			return Math.pow(myDependencies.get(0).execute(), myDependencies.get(1).execute());
+			return Math.pow(firstDependency, secondDependency);
 		case "PI":
 			return Math.PI;
 		default: 
@@ -70,15 +71,14 @@ public class MathInstruction extends Instruction{
 	}
 
 	private double divByZeroCheck(double zeroCheck) {
-		if(zeroCheck==Double.POSITIVE_INFINITY||zeroCheck==Double.NEGATIVE_INFINITY||zeroCheck==Double.NaN)
+		if(zeroCheck==Double.POSITIVE_INFINITY||zeroCheck==Double.NEGATIVE_INFINITY||zeroCheck==Double.NaN){
 			return 0.0;
-		else
-			return zeroCheck;
+		}
+		return zeroCheck;
 	}
 
 	@Override
 	public int getNumberOfArguments() {
-		return implementers.valueOf(instructionType.toUpperCase()).numArgs;
+		return implementers.valueOf(myInstructionType.toUpperCase()).numArgs;
 	}
-
 }

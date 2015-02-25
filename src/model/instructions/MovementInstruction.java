@@ -32,12 +32,11 @@ public class MovementInstruction extends Instruction {
     	this.numArgs=args;
     }
 	}
-	List<Instruction> myDependencies;
-	String instructionType;
 	
-	public MovementInstruction(List<Instruction> dependencies, String inType) {
+	public MovementInstruction(List<Instruction> dependencies, String instructionType) {
+		super(dependencies, instructionType);
 		myDependencies = dependencies;
-		instructionType = inType;
+		myInstructionType = instructionType;
 		myTurtle = null;
 		myPenUp = false;
 		myJump = false;
@@ -45,27 +44,22 @@ public class MovementInstruction extends Instruction {
 	
 	@Override
 	public double execute() {
-		double inputDouble;
-		switch(instructionType.toUpperCase()){
+		double inputDouble = myDependencies.get(0).execute();;
+		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
-			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(0, inputDouble);
 			return inputDouble;
 		case "BACKWARD":
-			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(0, -inputDouble);
 			return myDependencies.get(0).execute();
 		case "LEFT":
-			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(-inputDouble, 0);
 			return myDependencies.get(0).execute();
 		case "RIGHT":
-			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(inputDouble, 0);
 			return myDependencies.get(0).execute();
 		case "SETHEADING":
 			// Need view
-			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(inputDouble, 0);
 			return 0.0;
 		case "TOWARDS":
@@ -101,7 +95,7 @@ public class MovementInstruction extends Instruction {
 
 	@Override
 	public int getNumberOfArguments() {
-		return implementers.valueOf(instructionType.toUpperCase()).numArgs;
+		return implementers.valueOf(myInstructionType.toUpperCase()).numArgs;
 	}
 
 	@Override

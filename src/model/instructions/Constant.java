@@ -1,10 +1,15 @@
 package model.instructions;
 
+
 public class Constant extends Instruction{
-	double myValue;
-	public Constant(String input){
-		myValue = Double.parseDouble(input);
+
+	private double myValue;
+	
+	public Constant(String constantInput) {
+		super(constantInput);
+		myValue = Double.parseDouble(constantInput);
 	}
+
 	@Override
 	public double execute() {
 		return myValue;
@@ -14,6 +19,4 @@ public class Constant extends Instruction{
 	public int getNumberOfArguments() {
 		return 0;
 	}
-	
-
 }

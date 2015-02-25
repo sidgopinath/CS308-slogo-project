@@ -67,6 +67,8 @@ public class SLogoView {
     //private StackPane myWorkspace;
     private Workspace myWorkspace;
 	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer,TurtleView>();
+    private double originX;
+    private double originY;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
 
 	public SLogoView(Stage s) {
@@ -78,6 +80,8 @@ public class SLogoView {
 		configureUI();
 		//lila may not need instance variables anymore
 		setupScene(myStage, myRoot, 1200, 750);
+        originX=myTurtles.get(0).getLayoutX();
+        originY=myTurtles.get(0).getLayoutY();
 	}
 	
 	private void configureUI() {
@@ -109,6 +113,7 @@ public class SLogoView {
         //add lines to a group
 	    TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
 	    myTurtles.put(0,turtle);
+	    lines.getChildren().addAll(turtle);
         myWorkspace = new Workspace(myTurtles,lines);
         //LILA
         myRoot.add(myWorkspace, 0, 1);
@@ -381,7 +386,11 @@ public class SLogoView {
             instructions.add(new TurtleCommand(0,new Polar(0,10),false,false));
             List<Polyline> newlines=drawer.draw(myTurtles, instructions);
             lines.getChildren().addAll(newlines);
-	    }
+	    }else if(keyCode == KeyCode.E){
+	        setXY(0,0,0);
+        }else if(keyCode == KeyCode.Q){
+            setHeading(0,90);
+        }
     }
 
     private void changeBackgroundColor(Color color){
@@ -409,8 +418,12 @@ public class SLogoView {
 		//return value of command or null if there is no return value
 		return returnString;
 	}
-    public void setXY(double x,double y){
-           
+    public void setXY(int id, double x,double y){
+        TurtleView turtle=myTurtles.get(id);
+        myTurtles.get(id).setXY(originX+x-turtle.getLayoutX(),originY+y-turtle.getLayoutY());
+    }
+    public void setHeading(int id, double angle){
+        myTurtles.get(id).setHeading(angle);
     }
 	//make update from a single command
 	private String updateFromInstruction(TurtleCommand instruction){

@@ -4,13 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 
 import javafx.stage.Stage;
 import model.Parser;
-import view.SLogoView;
 
 
 public class SLogoController {
 
 	private Parser myParser;
-	private SLogoView myView;
 	
 	/**
 	 * Called by Main to initialize Controller
@@ -21,16 +19,6 @@ public class SLogoController {
 	 */
 	public SLogoController(Stage stage) {
 		myParser = new Parser();
-		myView = new SLogoView(stage);
-		initializeSLogoView();
-	}
-	
-	/**
-	 * Method to initialize view
-	 * After initialized, this is not called again
-	 */
-	private void initializeSLogoView(){
-		
 	}
 	
 	/**

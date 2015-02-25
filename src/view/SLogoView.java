@@ -60,6 +60,7 @@ public class SLogoView {
     //private StackPane myWorkspace;
     private Workspace myWorkspace;
     private int count=1;
+	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer,TurtleView>();
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
 	
 	public SLogoView(Stage s) {
@@ -102,7 +103,9 @@ public class SLogoView {
         
         
         //add lines to a group
-        myWorkspace = new Workspace();
+	    TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
+	    myTurtles.put(0,turtle);
+        myWorkspace = new Workspace(myTurtles);
         //LILA
         myRoot.add(myWorkspace, 0, 1);
 		myRoot.getColumnConstraints().add(col1);
@@ -137,27 +140,35 @@ public class SLogoView {
 		    Button uploadImg = new Button("Upload");
 		    uploadImg.setPrefSize(100, 20);
 		    uploadImg.setPadding(new Insets(0,0,0,3));
-		    uploadImg.setOnAction(e -> uploadTurtleFile(myWorkspace.getTurtles().get(0)));
+		    uploadImg.setOnAction(e -> uploadTurtleFile(myTurtles.get(0)));
 
 		    hbox.getChildren().addAll(selectTurtle, uploadImg);
 		    sidePane.getChildren().add(hbox); 
 		    
 		    // select pen color	
 		    HBox hbox2 = new HBox(10);  
-		    Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);   
-		    ColorPicker penColorChoice = new ColorPicker(Color.BLACK);
+		    
+		   
+		    
+	        Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);   
+		    
+	        ColorPicker penColorChoice = new ColorPicker(Color.BLACK);
+	        penColorChoice.setOnAction(e -> drawer.changeColor(penColorChoice.getValue()));
+	        
 		    hbox2.getChildren().addAll(selectPenColor, penColorChoice);
+		  //  sidePane.getChildren().addAll(hbox2, strokeColorChoice);
 		    sidePane.getChildren().add(hbox2);
 
 		    // select background color
 		    HBox hbox3 = new HBox(10);  
 		    Text selectBackgroundColor = new Text(Strings.SELECT_BACKGROUND_COLOR);   
+		    
 		    ColorPicker backgroundChoice = new ColorPicker(Color.WHITE);
 	        backgroundChoice.setOnAction(e -> changeBackgroundColor(backgroundChoice.getValue()));
 	    
-		    // User can pick color for the stroke
-	        ColorPicker strokeColorChoice = new ColorPicker(Color.BLACK);
-	        strokeColorChoice.setOnAction(e -> drawer.changeColor(strokeColorChoice.getValue()));
+		  //   User can pick color for the stroke
+	        
+	        
 	        
 		    hbox3.getChildren().addAll(selectBackgroundColor, backgroundChoice);
 		    sidePane.getChildren().add(hbox3);
@@ -326,11 +337,11 @@ public class SLogoView {
 		//VariablesView.updateVars(command.getVariables());
 		//variables view will have configuredisplay(), update(), and event handlers
 		//updateHistory(command.getStrings());
-	    myWorkspace.getChildren().addAll(drawer.draw(myWorkspace.getTurtles(), instructions));
+	    myWorkspace.getChildren().addAll(drawer.draw(myTurtles, instructions));
 	}
 
 	public Turtle getTurtleInfo(int index){
-	    ImageView temp=myWorkspace.getTurtles().get(index);
+	    ImageView temp=myTurtles.get(index);
 	    return new Turtle(temp.getX(),temp.getY(),temp.getRotate());
 	}
 	
@@ -364,7 +375,7 @@ public class SLogoView {
 	    if(keyCode == KeyCode.W){
             ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
             instructions.add(new TurtleCommand(0,new Polar(0,10*count),false,false));
-            myWorkspace.getLines().getChildren().addAll(drawer.draw(myWorkspace.getTurtles(), instructions));
+            myWorkspace.getLines().getChildren().addAll(drawer.draw(myTurtles, instructions));
 	    }
         count++;
     }
@@ -422,6 +433,13 @@ public class SLogoView {
 });*/
 	
 	//consider using labels instead of text?
+	
+	/*public void changeColor(Color c) {
+        System.out.println("color" + c.toString());
+
+
+
+    }*/
 	
 
 }

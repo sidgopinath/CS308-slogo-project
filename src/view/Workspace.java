@@ -17,7 +17,6 @@ public class Workspace extends StackPane{
 	//private StackPane myDisplay;
 	private Rectangle myBackground;
     private Group myLines = new Group();
-	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer,TurtleView>();
 
 
 	public static final int GRID_WIDTH = 800;
@@ -27,32 +26,38 @@ public class Workspace extends StackPane{
 	public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2;  
 	
 	
-	public Workspace(){
+	public Workspace(Map<Integer, TurtleView> turtleList){
 	     setPadding(new Insets(15));
 	     setAlignment(Pos.CENTER);
 	     
 	     //is there a way to dynamically set grid size
 	     myBackground = new Rectangle(GRID_WIDTH,GRID_HEIGHT);
 	     myBackground.setFill(Color.WHITE);
-	     	     
-	     TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
+	     	  
+	     TurtleView turtle = turtleList.get(0);
 	     myLines.getChildren().add(turtle);
-	     myTurtles.put(0,turtle);
+	     turtleList.put(0,turtle);
 	     
 	     getChildren().addAll(myBackground,myLines);
 	     
 	}
 	
-	public Map<Integer, TurtleView> getTurtles(){
+	/*public Map<Integer, TurtleView> getTurtles(){
 		return myTurtles;
-	}
+	}*/
 	
 	public void addTurtle(int id, TurtleView turtle){
-		myTurtles.put(id, turtle);
+		//myTurtles.put(id, turtle);
+		//add turtle into the workspace
 	}
 	
 	public void setBackground(Color color){
 		myBackground.setFill(color);
 	}
+	
+	public Group getLines(){
+		return myLines;
+	}
+	
 
 }

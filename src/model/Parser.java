@@ -40,7 +40,6 @@ public class Parser {
 				e.printStackTrace();
 			}
 			for(Object d:c.getEnumConstants()){
-				System.out.println(d+" " +s);
 				commandMap.put(d.toString(), s);
 			}
 		}
@@ -114,10 +113,7 @@ public class Parser {
 			// this is either a known command or invalid input.  instantiate the command, if reflection cannot find the file then must be invalid
 			Instruction myInt = null;
 			try{
-
-				
 				String[] parameters=new String[]{match};
-				System.out.println(commandMap.get(match));
 				myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
 				furthestDepth++;
 				neededVars = myInt.getNumberOfArguments();

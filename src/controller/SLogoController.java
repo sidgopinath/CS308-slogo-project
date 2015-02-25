@@ -2,6 +2,7 @@ package controller;
 
 import java.lang.reflect.InvocationTargetException;
 
+import view.SLogoView;
 import javafx.stage.Stage;
 import model.Parser;
 
@@ -17,8 +18,8 @@ public class SLogoController {
 	 * @param width
 	 * @param stage
 	 */
-	public SLogoController(Stage stage) {
-		myParser = new Parser();
+	public SLogoController(SLogoView view, Stage stage) {
+		myParser = new Parser(view);
 	}
 	
 	/**

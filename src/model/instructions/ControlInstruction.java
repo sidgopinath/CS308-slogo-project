@@ -1,7 +1,10 @@
 package model.instructions;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import model.Node;
+import model.turtle.TurtleCommand;
 import view.SLogoView;
 
 public class ControlInstruction extends Instruction{
@@ -28,9 +31,17 @@ public class ControlInstruction extends Instruction{
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "MAKEVARIABLE":
-			return 0.0;
+			return 0;
 		case "REPEAT":
-			return 0.0;
+			for(int i =0; i<myDependencies.get(0).execute(); i++){
+				System.out.println("THIS THIS THIS: " + i);
+				myDependencies.get(1).execute();
+				List<TurtleCommand> instructionList = new ArrayList<TurtleCommand>();
+				instructionList.add(myDependencies.get(1).getTurtleCommand());
+				myView.updateWorkspace(instructionList);
+				System.out.println(	myDependencies.get(1).execute());
+			}
+			return myDependencies.get(0).execute();
 		case "DOTIMES":
 			return 0.0;
 		case "FOR":

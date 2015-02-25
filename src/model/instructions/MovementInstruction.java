@@ -49,6 +49,7 @@ public class MovementInstruction extends Instruction {
 		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
 			myPolar = new Polar(0, inputDouble);
+			System.out.println("MOVE FORWARD" + inputDouble);
 			return inputDouble;
 		case "BACKWARD":
 			myPolar = new Polar(0, -inputDouble);

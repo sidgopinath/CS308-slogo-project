@@ -71,6 +71,7 @@ public class Parser {
 				commandMap.put(d.toString(), s);
 			}
 			commandMap.put("[", "ListInstruction");
+			commandMap.put("REPEAT", "ControlInstruction");
 		}
 	}
 	List<Instruction> outList;
@@ -93,10 +94,10 @@ public class Parser {
 			System.out.println(root.getValue()+" "+root.getInstruction());
 			root.getInstruction().execute();
 			// Call turtlecommand maker
-			List<TurtleCommand> commandList =new ArrayList();
-			turtleCommandGetter(commandList, root);
-			if(!commandList.isEmpty())
-				mySLogoView.updateWorkspace(commandList);
+//			List<TurtleCommand> commandList =new ArrayList();
+//			turtleCommandGetter(commandList, root);
+//			if(!commandList.isEmpty())
+//				mySLogoView.updateWorkspace(commandList);
 			//mySLogoView.updateVariables(myVariableMap);
 		}
 		

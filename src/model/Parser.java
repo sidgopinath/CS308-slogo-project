@@ -12,26 +12,41 @@ import java.util.Map.Entry;
 import java.util.regex.Pattern;
 import model.instructions.Instruction;
 
+/**
+ * To parse, first create a parsing tree which will be created/traversed recursively
+ * Then, use reflection to instantiate the proper commands
+ * @author Primary: Greg, Secondary: Sid
+ */
 public class Parser {
-	// To parse, first create a parsing tree to solve recursive problems.  Then use reflection to instantiate the proper commands.
-	// is created
 	private static List<Entry<String, Pattern>> patterns;
 	private static Map<String,String> commandMap;
 	private static final String[] commandTypes = new String[]{"BooleanInstruction","MathInstruction","MovementInstruction"};
-	private static void addAllPatterns(){
+	private int furthestDepth;
+	
+	public Parser(){
 		patterns = new ArrayList<>();
-		patterns.addAll(makePatterns("resources/languages/English"));
-	    patterns.addAll(makePatterns("resources/languages/Syntax"));
-	}
-
-	private static void setUp(){
+		commandMap = new HashMap<String, String>();
 		addAllPatterns();
 		makeCommandMap();
-		runOnce = false;
 	}
 	
-	private static void makeCommandMap(){
-		commandMap = new HashMap<String, String>();
+	private void addAllPatterns(){
+		makePatterns("resources/languages/English");
+	    makePatterns("resources/languages/Syntax");
+	}
+	
+	public void makePatterns (String resourceInput) {
+        ResourceBundle resources = ResourceBundle.getBundle(resourceInput);
+        Enumeration<String> iter = resources.getKeys();
+        while (iter.hasMoreElements()) {
+            String key = iter.nextElement();
+            String value = resources.getString(key);
+            patterns.add(new SimpleEntry<String, Pattern>(key,
+                         Pattern.compile(value, Pattern.CASE_INSENSITIVE)));
+        }
+    }
+	
+	private void makeCommandMap(){
 		for(String s:commandTypes){
 			Class<?> c = null;
 			try {
@@ -46,15 +61,11 @@ public class Parser {
 	}
 
 	// TODO: get rid of this
-	static int furthestDepth;
-	static boolean runOnce = true;
-	public static List<Instruction> parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		if(runOnce)
-			setUp();
+	public List<Instruction> parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		String command = "[ fd + 200 40 fd fd 50 ] rt 90 BACK 40";
 		furthestDepth = 0;
 		String[] splitCommands = command.split(" ");
-		List<Node> nodeList = new ArrayList();
+		List<Node> nodeList = new ArrayList<Node>();
 		while(furthestDepth<splitCommands.length){
 			nodeList.add(makeTree(splitCommands));
 		}
@@ -62,10 +73,11 @@ public class Parser {
 			System.out.println("new tree");
 			inOrderTraversal(root);
 		}
-		List<Instruction> outList = new ArrayList();
+		List<Instruction> outList = new ArrayList<Instruction>();
 		// method here to convert from ArrayList to executable instruction, and then pass that to an executor by calling all of the .executes.
 		return outList;
 	}
+	
 	private static void inOrderTraversal(Node root){
 		if(root==null)
 			return;
@@ -74,11 +86,11 @@ public class Parser {
 		}
 		System.out.println(root.getValue());
 		if(root.getRight()!=null){
-				inOrderTraversal(root.getRight());
+			inOrderTraversal(root.getRight());
 		}
-		
 	}
-	private static Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	
+	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		// base case
 		System.out.println(furthestDepth);
 		int myVars = 0;
@@ -110,21 +122,16 @@ public class Parser {
 		case "GROUPSTART":
 			break;
 		default:
-			// this is either a known command or invalid input.  instantiate the command, if reflection cannot find the file then must be invalid
-			Instruction myInt = null;
+			//this is either a known command or invalid input.  
+			//instantiate the command, if reflection cannot find the file then must be invalid
 			try{
 				String[] parameters=new String[]{match};
-				myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
+				System.out.println(commandMap.get(match));
+				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
 				furthestDepth++;
 				neededVars = myInt.getNumberOfArguments();
 				myNode = new Node(match);
 			}
-//			furthestDepth++;
-//			String[] parameters=new String[]{match};
-//			System.out.println(commandMap.get(match));
-//			myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
-//			neededVars = myInt.getNumberOfArguments();
-//			myNode = new Node(match);
 			catch(ClassNotFoundException e){
 				// Throw input error
 				System.out.println("No such class/function, yet!");
@@ -146,38 +153,30 @@ public class Parser {
 		myVars++;
 		return myNode;
 	}
-	public static boolean match (String input, Pattern regex) {
+	
+	public boolean match (String input, Pattern regex) {
         return regex.matcher(input).matches();
     }
-	public static boolean matchString (String input, String regex) {
+	
+	public boolean matchString (String input, String regex) {
 		return input.matches(regex);
     }
-
-	public static List<Entry<String, Pattern>> makePatterns (String syntax) {
-        ResourceBundle resources = ResourceBundle.getBundle(syntax);
-        Enumeration<String> iter = resources.getKeys();
-        while (iter.hasMoreElements()) {
-            String key = iter.nextElement();
-            String regex = resources.getString(key);
-            patterns.add(new SimpleEntry<String, Pattern>(key,
-                         Pattern.compile(regex, Pattern.CASE_INSENSITIVE)));
-        }
-        return patterns;
-    }
-	private static String testMatches (String test) {
-            if (test.trim().length() > 0) {
-                for (Entry<String, Pattern> p : patterns) {
-                    if (match(test, p.getValue())) {
-                        System.out.println(String.format("%s matches %s", test, p.getKey()));
-                        return p.getKey();
-                    }
-                }
-            }
+	
+	private String testMatches(String test) {
+		if (test.trim().length() > 0) {
+			for (Entry<String, Pattern> p : patterns) {
+				if (match(test, p.getValue())) {
+					System.out.println(String.format("%s matches %s", test, p.getKey()));
+					return p.getKey();
+				}
+			}
+		}
 		System.out.println(String.format("%s not matched", test));
 		return "NONE";
-}
+	}
+	
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException{
-	Parser p = new Parser();
-	Parser.parseAndExecute(null);
+		Parser p = new Parser();
+		p.parseAndExecute(null);
 	}
 }

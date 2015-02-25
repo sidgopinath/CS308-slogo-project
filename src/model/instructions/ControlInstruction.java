@@ -1,11 +1,15 @@
 package model.instructions;
 
+import java.util.List;
+
 
 public class ControlInstruction extends Instruction{
 	// if else is implemented as two commands: an if with the expression an if with the expression and the false statement, with the expression leading to the true statement
-	String[] myInput;
-	public ControlInstruction(String[] input) {
-		myInput = input;
+	List<Instruction> myDependencies;
+	String myType;
+	public ControlInstruction(List<Instruction> input, String myInstructionType) {
+		myDependencies = input;
+		myType = myInstructionType;
 	}
 	public enum implementers {
 		MAKEVARIABLE(2),
@@ -28,7 +32,7 @@ public class ControlInstruction extends Instruction{
 
 	@Override
 	public int getNumberOfArguments() {
-		return implementers.valueOf(myInput[0].toUpperCase()).numArgs;
+		return implementers.valueOf(myType.toUpperCase()).numArgs;
 	}
 
 }

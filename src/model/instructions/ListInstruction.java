@@ -1,13 +1,14 @@
 package model.instructions;
 
+import java.util.List;
+
 
 
 public class ListInstruction extends Instruction {
 	
-	String list;
-	public ListInstruction(String[] input) {
-		System.out.println("Constructed! "+ input[0]);
-		list = input[0];
+	List<Instruction> myDependencies;
+	public ListInstruction(List<Instruction> input, String myInstructionType) {
+		myDependencies = input;
 	}
 	
 //	public List<Instruction> getInstructionList() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
@@ -17,6 +18,9 @@ public class ListInstruction extends Instruction {
 	@Override
 	public double execute() {
 		//for loop, execute every node in the instruction set. return the value of the last one.
+		for(Instruction i:myDependencies){
+			i.execute();
+		}
 		return 0;
 	}
 

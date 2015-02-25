@@ -14,9 +14,10 @@ public abstract class PropertiesView {
 		title.setUnderline(true);
 		title.setTextAlignment(TextAlignment.CENTER);
 		getChildren().add(title);
+
 	}
 	
-	protected abstract 
+	//protected abstract 
 	
 	
 	//update();

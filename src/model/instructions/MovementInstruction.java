@@ -1,11 +1,12 @@
 package model.instructions;
 
+import java.util.List;
+
 import model.Polar;
 import model.turtle.TurtleCommand;
 
 
 public class MovementInstruction extends Instruction {
-	private String[] myInput;
 	private TurtleCommand myTurtle;
 	private boolean myPenUp;
 	private boolean myJump;
@@ -31,8 +32,12 @@ public class MovementInstruction extends Instruction {
     	this.numArgs=args;
     }
 	}
-	public MovementInstruction(String[] input) {
-		myInput = input;
+	List<Instruction> myDependencies;
+	String instructionType;
+	
+	public MovementInstruction(List<Instruction> dependencies, String inType) {
+		myDependencies = dependencies;
+		instructionType = inType;
 		myTurtle = null;
 		myPenUp = false;
 		myJump = false;
@@ -40,22 +45,27 @@ public class MovementInstruction extends Instruction {
 	
 	@Override
 	public double execute() {
-		double inputDouble = Double.parseDouble(myInput[1]);
-		switch(myInput[0].toUpperCase()){
+		double inputDouble;
+		switch(instructionType.toUpperCase()){
 		case "FORWARD":
+			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(0, inputDouble);
 			return inputDouble;
 		case "BACKWARD":
+			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(0, -inputDouble);
-			return Double.parseDouble(myInput[1]);
+			return myDependencies.get(0).execute();
 		case "LEFT":
+			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(-inputDouble, 0);
-			return Double.parseDouble(myInput[1]);
+			return myDependencies.get(0).execute();
 		case "RIGHT":
+			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(inputDouble, 0);
-			return Double.parseDouble(myInput[1]);
+			return myDependencies.get(0).execute();
 		case "SETHEADING":
 			// Need view
+			inputDouble = myDependencies.get(0).execute();
 			myPolar = new Polar(inputDouble, 0);
 			return 0.0;
 		case "TOWARDS":
@@ -64,7 +74,7 @@ public class MovementInstruction extends Instruction {
 		case "SETXY":
 			//need view
 			myJump = true;
-			myPolar = new Polar(Double.parseDouble(myInput[1]), Double.parseDouble(myInput[2]));
+			myPolar = new Polar(myDependencies.get(0).execute(), myDependencies.get(1).execute());
 			return 0.0;
 		case "PENDOWN":
 			myPenUp = false;
@@ -91,7 +101,7 @@ public class MovementInstruction extends Instruction {
 
 	@Override
 	public int getNumberOfArguments() {
-		return implementers.valueOf(myInput[0].toUpperCase()).numArgs;
+		return implementers.valueOf(instructionType.toUpperCase()).numArgs;
 	}
 
 	@Override

@@ -1,10 +1,15 @@
 package model.instructions;
 
-import model.turtle.TurtleCommand;
+import java.util.List;
+
 
 public class BooleanInstruction extends Instruction {
-	String [] myInput;
-	// because of enums, need to trim the question mark
+	List<Instruction> myDependencies;
+	String myType;
+	public BooleanInstruction(List<Instruction> dependencies, String myInstructionType) {
+		myDependencies = dependencies;
+		myType = myInstructionType;
+	}
 	public enum implementers {
 			LESSTHAN (2),
 			GREATERTHAN (2),
@@ -18,28 +23,23 @@ public class BooleanInstruction extends Instruction {
 	    	this.numArgs=args;
 	    }
 	}
-	public BooleanInstruction(String[] input) {
-		myInput = input;
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public double execute() {
-		switch(myInput[1].toUpperCase()){
+		switch(myType.toUpperCase()){
 		case "LESSTHAN":
-			return boolToDouble(Double.parseDouble(myInput[1])<Double.parseDouble(myInput[2]));
+			return boolToDouble(myDependencies.get(0).execute()<myDependencies.get(1).execute());
 		case "GREATERTHAN":
-			return boolToDouble(Double.parseDouble(myInput[1])>Double.parseDouble(myInput[2]));
+			return boolToDouble(myDependencies.get(0).execute()>myDependencies.get(1).execute());
 		case "EQUAL":
-			return boolToDouble(Double.parseDouble(myInput[1])==Double.parseDouble(myInput[2]));
+			return boolToDouble(myDependencies.get(0).execute()==myDependencies.get(1).execute());
 		case "NOTEQUAL":
-			return boolToDouble(Double.parseDouble(myInput[1])!=Double.parseDouble(myInput[2]));
+			return boolToDouble(myDependencies.get(0).execute()!=myDependencies.get(1).execute());
 		case "AND":
-			return boolToDouble(Double.parseDouble(myInput[1])==0&&Double.parseDouble(myInput[2])==0);
+			return boolToDouble(myDependencies.get(0).execute()==0&&myDependencies.get(1).execute()==0);
 		case "OR":
-			return boolToDouble(Double.parseDouble(myInput[1])!=0||Double.parseDouble(myInput[2])!=0);
+			return boolToDouble(myDependencies.get(0).execute()!=0||myDependencies.get(1).execute()!=0);
 		case "NOT":
-			return boolToDouble(Double.parseDouble(myInput[1])==0);
+			return boolToDouble(myDependencies.get(0).execute()==0);
 		default:
 			// need Error
 			return -1;
@@ -53,7 +53,7 @@ public class BooleanInstruction extends Instruction {
 	}
 	@Override
 	public int getNumberOfArguments() {
-		return implementers.valueOf(myInput[0].toUpperCase()).numArgs;
+		return implementers.valueOf(myType.toUpperCase()).numArgs;
 	}
 
 }

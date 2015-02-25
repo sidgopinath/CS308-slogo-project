@@ -1,13 +1,18 @@
 package model.instructions;
 
+import java.util.List;
 
+// First instruction will be a listinstruction, second will be a listinstruction
 public class UserInstruction extends Instruction {
 	private int numArgs;
 	public enum implementers {
 		To;
 	}
-	public UserInstruction(String[] input) {
-		// TODO Auto-generated constructor stub
+	List<Instruction> myDependencies;
+	String instructionType;
+	public UserInstruction(List<Instruction> dependencies, String inType) {
+		myDependencies = dependencies;
+		instructionType = inType;
 	}
 
 	@Override

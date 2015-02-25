@@ -1,12 +1,13 @@
 package model.instructions;
 
 
+
 public class ListInstruction extends Instruction {
 	
 	String list;
 	public ListInstruction(String[] input) {
-		super(input);
-		list = input[1];
+		System.out.println("Constructed! "+ input[0]);
+		list = input[0];
 	}
 	
 //	public List<Instruction> getInstructionList() throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
@@ -23,5 +24,7 @@ public class ListInstruction extends Instruction {
 	public int getNumberOfArguments() {
 		return 1;
 	}
+
+
 
 }

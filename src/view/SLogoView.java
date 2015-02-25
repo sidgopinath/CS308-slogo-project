@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
@@ -37,6 +38,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polyline;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
@@ -57,12 +59,12 @@ public class SLogoView {
     private Rectangle myBackground;
     private Map<String,Node> variables;
     private Drawer drawer = new Drawer();
+    private Group lines = new Group();
     //private StackPane myWorkspace;
     private Workspace myWorkspace;
-    private int count=1;
 	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer,TurtleView>();
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/"; //can this be put somewhere else? public variable in a different class?
-	
+
 	public SLogoView(Stage s) {
 		myStage = s;
 		
@@ -70,7 +72,7 @@ public class SLogoView {
 		//create root node
 		myRoot = new GridPane();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
-		
+		lines.setManaged(false);
 		configureUI();
 		setupScene();
         System.out.println(myRoot.getColumnConstraints());
@@ -105,7 +107,7 @@ public class SLogoView {
         //add lines to a group
 	    TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
 	    myTurtles.put(0,turtle);
-        myWorkspace = new Workspace(myTurtles);
+        myWorkspace = new Workspace(myTurtles,lines);
         //LILA
         myRoot.add(myWorkspace, 0, 1);
 		myRoot.getColumnConstraints().add(col1);
@@ -329,16 +331,6 @@ public class SLogoView {
 		new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
 		return fileChooser.showOpenDialog(myStage);
 	}
-	
-	
-	public void updateWorkspace(ArrayList<TurtleCommand> instructions){
-		//update the grid
-		//updateGrid(command.getLines());
-		//VariablesView.updateVars(command.getVariables());
-		//variables view will have configuredisplay(), update(), and event handlers
-		//updateHistory(command.getStrings());
-	    myWorkspace.getChildren().addAll(drawer.draw(myTurtles, instructions));
-	}
 
 	public Turtle getTurtleInfo(int index){
 	    ImageView temp=myTurtles.get(index);
@@ -372,12 +364,17 @@ public class SLogoView {
 	
 	private void handleKeyInput (KeyEvent e) {
 	    KeyCode keyCode = e.getCode();
-	    if(keyCode == KeyCode.W){
+	    if(keyCode == KeyCode.D){
             ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-            instructions.add(new TurtleCommand(0,new Polar(0,10*count),false,false));
-            myWorkspace.getLines().getChildren().addAll(drawer.draw(myTurtles, instructions));
+            instructions.add(new TurtleCommand(0,new Polar(30,0),false,false));
+            List<Polyline> newlines=drawer.draw(myTurtles, instructions);
+            lines.getChildren().addAll(newlines);
+	    }else if(keyCode == KeyCode.W){
+            ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
+            instructions.add(new TurtleCommand(0,new Polar(0,10),false,false));
+            List<Polyline> newlines=drawer.draw(myTurtles, instructions);
+            lines.getChildren().addAll(newlines);
 	    }
-        count++;
     }
 
     private void changeBackgroundColor(Color color){
@@ -394,22 +391,23 @@ public class SLogoView {
 		turtle.setImage(img);
 	}
 	
-	public String updateWorkspace(List<Instruction> instructionList){
+	public String updateWorkspace(ArrayList<TurtleCommand> instructionList){
 		String returnString = null;
 		
-		for (Instruction instruction : instructionList){
+		for (TurtleCommand instruction : instructionList){
 			returnString += updateFromInstruction(instruction) + "\n";
 		}
-		
+
+        myWorkspace.getChildren().addAll(drawer.draw(myTurtles, instructionList));
 		//return value of command or null if there is no return value
 		return returnString;
 	}
-	
+    public void setXY(double x,double y){
+           
+    }
 	//make update from a single command
-	private String updateFromInstruction(Instruction instruction){
-		
-		
-		
+	private String updateFromInstruction(TurtleCommand instruction){
+	    
 		return "return value";
 	}
 	

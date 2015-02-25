@@ -18,11 +18,13 @@ public class TurtleView extends ImageView{
         myHeading = 0;
 	}
 	
-	public void move(double degrees, double r){
-		Converter converter = new Converter();
-		double[] coords = converter.convertPolartoCartesian(degrees, r);
-		setX(coords[0]);
-		setY(coords[1]);
+	public void move(double moveX, double moveY){
+        setTranslateX(moveX);
+        setTranslateY(moveY);
 	}
+
+    public void turn (double angle) {
+        setRotate(angle);
+    }
 	
 }

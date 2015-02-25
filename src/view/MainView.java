@@ -17,35 +17,21 @@ public class MainView {
 	private Stage myStage;
 	private Scene myScene;
 	private GridPane myRoot;
-    private ResourceBundle myResources;
-    private Group myDefaultGrid;
+
     
-    public static final String DEFAULT_RESOURCE_DISPLAY_PACKAGE = "resources.display/";
+    //public static final String DEFAULT_RESOURCE_DISPLAY_PACKAGE = "resources.display/";
     
 	public MainView(Stage s) {
 		myRoot = new GridPane();
 		myStage = s;
-		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_DISPLAY_PACKAGE + "english");
+	//	myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_DISPLAY_PACKAGE + "english");
 	
 		
-		configureUI();
-		setupGameScene();
+	//	configureUI();
+	//	setupGameScene();
 
 	}
 	
-	private void configureUI() {
-		myRoot.setAlignment(Pos.CENTER);
-		myRoot.setHgap(10);
-		myRoot.setVgap(10);
-		myRoot.add(myDefaultGrid, 1, 1);
-		myRoot.getColumnConstraints().add(new ColumnConstraints(500));
-	}
-	
-	private void setupGameScene() {
-		myScene = new Scene(myRoot);
-		myStage.setTitle(myResources.getString("Title"));
-		myStage.setScene(myScene);
-		myStage.show();
-	}
+
 
 }

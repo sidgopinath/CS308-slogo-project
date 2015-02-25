@@ -3,6 +3,9 @@ package model.instructions;
 
 public class UserInstruction extends Instruction {
 	private int numArgs;
+	public enum implementers {
+		To;
+	}
 	public UserInstruction(String[] input) {
 		super(input);
 		// TODO Auto-generated constructor stub

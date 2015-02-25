@@ -4,7 +4,6 @@ package model.instructions;
 public class ListInstruction extends Instruction {
 	
 	String list;
-	
 	public ListInstruction(String[] input) {
 		super(input);
 		list = input[1];

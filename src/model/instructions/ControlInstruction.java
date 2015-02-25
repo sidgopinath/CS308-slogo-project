@@ -14,7 +14,7 @@ public class ControlInstruction extends Instruction{
 		DOTIMES(2),
 		FOR(2),
 		IF(2),
-		IFELSE(2);
+		IFELSE(3);
 		private int numArgs;
 	implementers(int args){
     	this.numArgs=args;

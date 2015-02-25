@@ -75,14 +75,16 @@ public class Parser {
 			System.out.println("new tree");
 			inOrderTraversal(root,0);
 		}
+		for(Node root:nodeList){
+			System.out.println("new tree");
+			inOrderInstructionExecuter(root,0);
+		}
 		// method here to convert from ArrayList to executable instruction, and then pass that to an executor by calling all of the .executes.
 		
 		return nodeList;
 		
 	}
-	private static void inOrderTraversal(Node root, int depth){
-		if(root.getChildren()==null)
-			return;
+	private void inOrderTraversal(Node root, int depth){
 		if(root.getChildren()!=null){
 			List<Node> children = root.getChildren();
 			depth++;
@@ -92,6 +94,44 @@ public class Parser {
 		}
 		System.out.println(root.getValue()+" at depth: "+depth);
 	}
+	private void inOrderInstructionExecuter(Node root, int depth){
+		if(root==null){
+			return;
+		}
+		if(root.getChildren()!=null){
+			List<Node> children = root.getChildren();
+			depth++;
+			for(int i =0; i<children.size();i++){
+				inOrderInstructionExecuter(children.get(i), depth);
+			}
+		}
+		try {
+			for(String s:root.childrenToStringArray()){
+				System.out.println(s);
+			}
+			String[] parameters = makeParameters(root);
+			Instruction myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
+			System.out.println(myInt.getClass());
+			System.out.println(myInt.execute());
+		} catch (InstantiationException | IllegalAccessException
+				| IllegalArgumentException | InvocationTargetException
+				| NoSuchMethodException | SecurityException
+				| ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			System.out.println("FAILED");
+		}
+	}
+	private String[] makeParameters(Node root) {
+		String[] myKids = root.childrenToStringArray();
+		String[] output = new String[myKids.length+1];
+		output[0] = root.getValue();
+		for(int i =1; i<myKids.length+1;i++){
+			output[i] = myKids[i];
+		}
+		return output;
+	}
+
+	// add catch for array out of bounds
 	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		// base case
 		System.out.println(furthestDepth);
@@ -114,6 +154,7 @@ public class Parser {
 			furthestDepth++;
 			return makeTree(command);
 		case "VARIABLE":
+			// look up in map, if not throw error
 		case "CONSTANT":
 			// make node with string
 			furthestDepth++;

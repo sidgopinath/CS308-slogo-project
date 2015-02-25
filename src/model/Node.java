@@ -23,7 +23,11 @@ public class Node{
 		return n;
 	}
 	public String[] childrenToStringArray(){
-		return (String[]) myChildren.toArray();
+		String[] output = new String [myChildren.size()];
+		for(int i = 0; i<myChildren.size();i++){
+			output[i] = myChildren.get(i).getValue();
+		}
+		return output;
 	}
 	public List<Node> getChildren(){
 		return myChildren;

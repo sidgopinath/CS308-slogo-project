@@ -69,7 +69,7 @@ public class Parser {
 	}
 	List<Instruction> outList;
 	public List<Node> parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		//String command = "[ fd + 200 400 ] fd fd 50 rt 90 BACK 40";
+		input = "[ fd + 200 400 ] fd fd 50 rt 90 BACK 40";
 		furthestDepth = 0;
 		String[] splitCommands = input.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
@@ -136,8 +136,8 @@ public class Parser {
 			if(tempTurtle!=null){
 				ArrayList<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
 				commandList.add(tempTurtle);
-				mySLogoView.updateWorkspace(commandList);
-				mySLogoView.updateVariables(myVariableMap);
+				//mySLogoView.updateWorkspace(commandList);
+				//mySLogoView.updateVariables(myVariableMap);
 			}
 			}
 		} catch (InstantiationException | IllegalAccessException
@@ -159,7 +159,6 @@ public class Parser {
 				listExplorer(sb,children.get(i));
 			}
 		}
-		//System.out.println("Found" + root.getValue());	
 	}
 
 	private String[] makeParameters(Node root) {
@@ -216,11 +215,8 @@ public class Parser {
 			//this is either a known command or invalid input.  
 			//instantiate the command, if reflection cannot find the file then must be invalid
 			try{
-				String[] parameters=new String[]{match};	
-				System.out.println(match + " "+ commandMap.get(match));
-				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
+				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class}).newInstance(new Object[]{null, match});
 				furthestDepth++;
-				System.out.println(myInt);
 				neededVars = myInt.getNumberOfArguments();
 				myNode = new Node(match);
 			}

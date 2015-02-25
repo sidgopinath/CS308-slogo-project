@@ -1,5 +1,7 @@
 package model.instructions;
 
+import java.util.List;
+
 public class MathInstruction extends Instruction{
 	// First input is command type, second is first argument, third is second argument
 	// Division by Zero returns 0 always
@@ -24,40 +26,43 @@ public class MathInstruction extends Instruction{
     	this.numArgs=args;
     }
 }
-	String[] myInput;
-	public MathInstruction(String[] input) {
-		myInput = input;
+	String instructionType;
+	List<Instruction> myDependencies;
+    public MathInstruction(List<Instruction> dependencies, String inType) {
+    	myDependencies=dependencies;
+    	instructionType = inType;
 	}
-
 	@Override
 	public double execute() {
-		switch(myInput[0].toUpperCase()){
+		Instruction arg1 = myDependencies.get(0);
+		Instruction arg2 = myDependencies.get(1);
+		switch(instructionType.toUpperCase()){
 		case "SUM":
-			return Double.parseDouble(myInput[1])+Double.parseDouble(myInput[2]);
+			return arg1.execute()+arg2.execute();
 		case "DIFFERENCE":
-			return Double.parseDouble(myInput[1])-Double.parseDouble(myInput[2]);
+			return arg1.execute()-arg2.execute();
 		case "PRODUCT":
-			return Double.parseDouble(myInput[1])*Double.parseDouble(myInput[2]);
+			return arg1.execute()*arg2.execute();
 		case "QUOTIENT":
-			return divByZeroCheck(Double.parseDouble(myInput[1])/Double.parseDouble(myInput[2]));
+			return divByZeroCheck(arg1.execute()/arg2.execute());
 		case "REMAINDER":
-			return Double.parseDouble(myInput[1])%Double.parseDouble(myInput[2]);
+			return arg1.execute()%arg2.execute();
 		case "MINUS":
-			return -Double.parseDouble(myInput[1]);
+			return -arg1.execute();
 		case "RANDOM":
-			return Math.random()*Double.parseDouble(myInput[1]);
+			return Math.random()*arg1.execute();
 		case "SIN":
-			return Math.toDegrees(Math.sin(Double.parseDouble(myInput[1])));
+			return Math.toDegrees(Math.sin(arg1.execute()));
 		case "COS":
-			return Math.toDegrees(Math.cos(Double.parseDouble(myInput[1])));
+			return Math.toDegrees(Math.cos(arg1.execute()));
 		case "TAN":
-			return Math.toDegrees(divByZeroCheck((Math.tan(Double.parseDouble(myInput[1])))));
+			return Math.toDegrees(divByZeroCheck((Math.tan(arg1.execute()))));
 		case "ATAN":
-			return Math.toDegrees(divByZeroCheck((Math.atan(Double.parseDouble(myInput[1])))));
+			return Math.toDegrees(divByZeroCheck((Math.atan(arg1.execute()))));
 		case "LOG":
-			return Math.log(Double.parseDouble(myInput[1]));
+			return Math.log(arg1.execute());
 		case "POW":
-			return Math.pow(Double.parseDouble(myInput[1]), Double.parseDouble(myInput[2]));
+			return Math.pow(arg1.execute(), arg2.execute());
 		case "PI":
 			return Math.PI;
 		default: 
@@ -75,7 +80,7 @@ public class MathInstruction extends Instruction{
 
 	@Override
 	public int getNumberOfArguments() {
-		return implementers.valueOf(myInput[0].toUpperCase()).numArgs;
+		return implementers.valueOf(instructionType.toUpperCase()).numArgs;
 	}
 
 }

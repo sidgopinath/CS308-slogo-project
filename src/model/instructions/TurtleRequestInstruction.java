@@ -2,13 +2,18 @@ package model.instructions;
 
 import java.util.List;
 
+import view.SLogoView;
+
 
 public class TurtleRequestInstruction extends Instruction {
+	
+	public TurtleRequestInstruction(List<Instruction> dependencies, String instructionType, SLogoView view) {
+		super(dependencies, instructionType, view);
+	}
+
 	// TODO call view for these fields
 
-	public TurtleRequestInstruction(List<Instruction> dependencies, String instructionType) {
-		super(dependencies, instructionType);
-	}
+
 
 	@Override
 	public double execute() {

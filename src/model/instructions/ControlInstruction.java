@@ -2,10 +2,12 @@ package model.instructions;
 
 import java.util.List;
 
+import view.SLogoView;
+
 public class ControlInstruction extends Instruction{
-	
-	public ControlInstruction(List<Instruction> dependencies, String instructionType) {
-		super(dependencies, instructionType);
+
+	public ControlInstruction(List<Instruction> dependencies, String instructionType, SLogoView view) {
+		super(dependencies, instructionType, view);
 	}
 
 	public enum implementers {

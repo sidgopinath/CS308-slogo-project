@@ -122,6 +122,8 @@ public class Parser {
 		}
 		in.add(root);
 	}
+	
+
 	private void printInOrderTraversal(Node root){
 		for(Node n:inOrderTraverser(root)){
 			System.out.println(n.getValue());
@@ -145,7 +147,7 @@ public class Parser {
 				if(testMatches(root.getValue()).equalsIgnoreCase("Constant"))
 					myInt = new Constant(root.getValue());
 				else
-					myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class}).newInstance(new Object[]{descendantInstructions, root.getValue()});
+					myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class, SLogoView.class}).newInstance(new Object[]{descendantInstructions, root.getValue(), mySLogoView});
 				System.out.println("made int "+ myInt);
 				root.setInstruction(myInt);
 			} catch (InstantiationException | IllegalAccessException
@@ -210,7 +212,7 @@ public class Parser {
 			//this is either a known command or invalid input.  
 			//instantiate the command, if reflection cannot find the file then must be invalid
 			try{
-				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class}).newInstance(new Object[]{null, match});
+				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class, SLogoView.class}).newInstance(new Object[]{null, match, mySLogoView});
 				furthestDepth++;
 				neededVars = myInt.getNumberOfArguments();
 				myNode = new Node(match);

@@ -2,10 +2,13 @@ package model.instructions;
 
 import java.util.List;
 
+import view.SLogoView;
+
 public class ListInstruction extends Instruction {
 	
-	public ListInstruction(List<Instruction> dependencies, String instructionType) {
-		super(dependencies, instructionType);
+
+	public ListInstruction(List<Instruction> dependencies, String instructionType, SLogoView view) {
+		super(dependencies, instructionType, view);
 	}
 
 	@Override

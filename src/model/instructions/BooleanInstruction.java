@@ -2,13 +2,17 @@ package model.instructions;
 
 import java.util.List;
 
+import view.SLogoView;
+
 
 public class BooleanInstruction extends Instruction {
 
-	public BooleanInstruction(List<Instruction> dependencies, String instructionType) {
-		super(dependencies, instructionType);
-	}
+
 	
+	public BooleanInstruction(List<Instruction> dependencies, String instructionType, SLogoView view) {
+		super(dependencies, instructionType, view);
+	}
+
 	public enum implementers {
 			LESSTHAN (2),
 			GREATERTHAN (2),

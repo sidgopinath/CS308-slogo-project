@@ -2,14 +2,16 @@ package model.instructions;
 
 import java.util.List;
 
+import view.SLogoView;
+
 public class UserInstruction extends Instruction {
 
 	private int numArgs;
 	
-	public UserInstruction(List<Instruction> dependencies, String instructionType) {
-		super(dependencies, instructionType);
+	public UserInstruction(List<Instruction> dependencies, String instructionType, SLogoView view) {
+		super(dependencies, instructionType, view);
 	}
-
+	
 	public enum implementers {
 		To;
 	}

@@ -1,6 +1,5 @@
 package model.instructions;
 
-import model.instructions.BooleanInstruction.implementers;
 
 public class ControlInstruction extends Instruction{
 	// if else is implemented as two commands: an if with the expression an if with the expression and the false statement, with the expression leading to the true statement

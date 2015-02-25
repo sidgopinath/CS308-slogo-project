@@ -63,13 +63,13 @@ public class Parser {
 	}
 	List<Instruction> outList;
 	public List<Node> parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		String command = "[ fd [ + 200 400 ] fd fd 50 ] rt 90 BACK 40";
+		String command = "fd + 200 400 fd fd 50 rt 90 BACK 40";
 		furthestDepth = 0;
 		String[] splitCommands = command.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
 		while(furthestDepth<splitCommands.length){
 			nodeList.add(makeTree(splitCommands));
-			System.out.println("tree done");
+			// System.out.println("tree done");
 		}
 		for(Node root:nodeList){
 			System.out.println("new tree");
@@ -109,8 +109,7 @@ public class Parser {
 			if(root.getChildren().size()!=0){
 			String[] parameters = makeParameters(root);
 			Instruction myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
-			System.out.println(myInt.getClass());
-			System.out.println(myInt.execute());
+			root.updateValue(myInt.execute());
 			}
 		} catch (InstantiationException | IllegalAccessException
 				| IllegalArgumentException | InvocationTargetException
@@ -124,8 +123,10 @@ public class Parser {
 		String[] myKids = root.childrenToStringArray();
 		String[] output = new String[myKids.length+1];
 		output[0] = root.getValue();
+		System.out.println("parameters " + output[0]);
 		for(int i =0; i<myKids.length;i++){
 			output[i+1] = myKids[i];
+			System.out.println("parameters " + output[i+1]);
 		}
 		return output;
 	}
@@ -133,7 +134,7 @@ public class Parser {
 	// add catch for array out of bounds
 	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		// base case
-		System.out.println(furthestDepth);
+		// System.out.println(furthestDepth);
 		int myVars = 0;
 		int neededVars = -1;
 		Node myNode = null;
@@ -173,11 +174,12 @@ public class Parser {
 			//instantiate the command, if reflection cannot find the file then must be invalid
 			try{
 				String[] parameters=new String[]{match};
-				System.out.println(commandMap.get(match));
-				// Get rid of this by making tree non-binary
+				// System.out.println(commandMap.get(match));
+				// Get rid of this by making tree non-binary		
 				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
 				furthestDepth++;
 				neededVars = myInt.getNumberOfArguments();
+				System.out.println("here");
 				myNode = new Node(match);
 			}
 			catch(ClassNotFoundException e){
@@ -185,18 +187,10 @@ public class Parser {
 				System.out.println("No such class/function, yet!");
 			}
 		}
-		if(myVars>=neededVars){
-			return myNode;
+		while(myVars<neededVars){
+			myNode.addChild(makeTree(command));
+			myVars++;
 		}
-		System.out.println("making left tree now for "+myNode);
-		myNode.addChild(makeTree(command));
-		myVars++;
-		if(myVars>=neededVars){
-			return myNode;
-		}
-		System.out.println("making right tree now for "+myNode);
-		myNode.addChild(makeTree(command));
-		myVars++;
 		return myNode;
 	}
 	
@@ -212,12 +206,12 @@ public class Parser {
 		if (test.trim().length() > 0) {
 			for (Entry<String, Pattern> p : patterns) {
 				if (match(test, p.getValue())) {
-					System.out.println(String.format("%s matches %s", test, p.getKey()));
+					// System.out.println(String.format("%s matches %s", test, p.getKey()));
 					return p.getKey();
 				}
 			}
 		}
-		System.out.println(String.format("%s not matched", test));
+		// System.out.println(String.format("%s not matched", test));
 		return "NONE";
 	}
 	

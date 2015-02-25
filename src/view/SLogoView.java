@@ -92,22 +92,7 @@ public class SLogoView {
 		MenuItem help = new MenuItem("Help");
 		
 		//perhaps change these expressions into lambdas?
-		help.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {		
-//            	Hyperlink infoPage = new Hyperlink("Get help");
-        		//infoPage.setOnAction((event) -> {
-        			WebView browser = new WebView();
-        			WebEngine webEngine = browser.getEngine();
-        			System.out.println(System.getProperty("user.dir") + "/resources/help.html");
-        			//why does this not work?
-        			webEngine.load("file://" + System.getProperty("user.dir") + "/src/resources/help.html");
-        		//	webEngine.load("http://google.com");
-
-        			Stage stage = new Stage();
-        			setupScene(stage, browser, 1000, 750);        	
-            }
-        });
-		
+		help.setOnAction(e -> displayHelpPage());		
 		MenuItem exit = new MenuItem("Exit");
 		file.getItems().addAll(exit);
 		info.getItems().addAll(help);
@@ -237,6 +222,19 @@ public class SLogoView {
     }
     public void setHeading(int id, double angle){
         myTurtles.get(id).setHeading(angle);
+    }
+    
+    private void displayHelpPage(){
+    	
+		WebView browser = new WebView();
+		WebEngine webEngine = browser.getEngine();
+		System.out.println(System.getProperty("user.dir") + "/resources/help.html");
+		webEngine.load("file://" + System.getProperty("user.dir") + "/src/resources/help.html");
+
+		Stage stage = new Stage();
+		setupScene(stage, browser, 1000, 750);        	
+
+
     }
 
 }

@@ -95,7 +95,26 @@ public class SideBar extends VBox {
 		languageOptions.setValue(languages.get(0));
 	
 		selectLanguage.getChildren().addAll(select, languageOptions);
-		getChildren().add(selectLanguage);
+		getChildren().add(selectLanguage);                
+    
+	    languageOptions.getSelectionModel().selectedItemProperty().addListener(
+	            new ChangeListener<String>() {
+	                public void changed(ObservableValue<? extends String> ov, 
+	                    String old_val, String new_val) {
+	                	System.out.println(new_val);
+	    	        	myController.setLanguage(new_val);
+
+	                }
+		        });
+	                
+	                
+	                
+	                
+	                
+	                
+		
+		
+		
 		
 		// select turtle image
 		HBox hbox = new HBox(10);
@@ -144,14 +163,8 @@ public class SideBar extends VBox {
 		variablesList.add(new Variable("Added var2.5", 5));
 
 		TableView<Variable> variablesTable = new TableView<Variable>();
-
-		// why can't I add columns to this table??
-		// http://code.makery.ch/java/javafx-8-tutorial-part2/
-		// http://docs.oracle.com/javafx/2/ui_controls/table-view.htm
-
 		TableColumn<Variable, String> variablesCol = new TableColumn<Variable, String>(
 				"Variables");
-		// System.out.println("pref: " + sidePane.getMaxWidth());
 		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
 		TableColumn<Variable, Double> valuesCol = new TableColumn<Variable, Double>(
 				"Values");
@@ -161,8 +174,7 @@ public class SideBar extends VBox {
 		valuesCol
 				.setCellValueFactory(new PropertyValueFactory<Variable, Double>("myVar"));
 
-		// is it possible to dynamically set this?
-		variablesCol.setPrefWidth(164);
+		variablesCol.setPrefWidth(164); //TODO: set dynamically
 		valuesCol.setPrefWidth(164);
 		valuesCol.setEditable(true);
 
@@ -194,7 +206,6 @@ public class SideBar extends VBox {
 					return t.toString();
 				}
 			}));
-		// CellValueFactory(.forTableColumn());
 		valuesCol.setOnEditCommit(new EventHandler<CellEditEvent<Variable, Double>>() {
 			@Override
 			public void handle(CellEditEvent<Variable, Double> t) {

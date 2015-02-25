@@ -32,4 +32,8 @@ public class Node{
 	public List<Node> getChildren(){
 		return myChildren;
 	}
+	public void updateValue(double execute) {
+		myValue = Double.toString(execute);
+		
+	}
 }

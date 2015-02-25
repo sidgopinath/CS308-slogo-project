@@ -9,7 +9,9 @@ import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.Map.Entry;
+import java.util.Stack;
 import java.util.regex.Pattern;
+
 import model.instructions.Instruction;
 
 /**
@@ -59,37 +61,37 @@ public class Parser {
 			}
 		}
 	}
-
-	// TODO: get rid of this
-	public List<Instruction> parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		String command = "[ fd + 200 40 fd fd 50 ] rt 90 BACK 40";
+	List<Instruction> outList;
+	public List<Node> parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+		String command = "[ fd [ + 200 400 ] fd fd 50 ] rt 90 BACK 40";
 		furthestDepth = 0;
 		String[] splitCommands = command.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
 		while(furthestDepth<splitCommands.length){
 			nodeList.add(makeTree(splitCommands));
+			System.out.println("tree done");
 		}
 		for(Node root:nodeList){
 			System.out.println("new tree");
-			inOrderTraversal(root);
+			inOrderTraversal(root,0);
 		}
-		List<Instruction> outList = new ArrayList<Instruction>();
 		// method here to convert from ArrayList to executable instruction, and then pass that to an executor by calling all of the .executes.
-		return outList;
+		
+		return nodeList;
+		
 	}
-	
-	private static void inOrderTraversal(Node root){
-		if(root==null)
+	private static void inOrderTraversal(Node root, int depth){
+		if(root.getChildren()==null)
 			return;
-		if(root.getLeft()!=null){
-			inOrderTraversal(root.getLeft());
+		if(root.getChildren()!=null){
+			List<Node> children = root.getChildren();
+			depth++;
+			for(int i =0; i<children.size();i++){
+				inOrderTraversal(children.get(i), depth);
+			}
 		}
-		System.out.println(root.getValue());
-		if(root.getRight()!=null){
-			inOrderTraversal(root.getRight());
-		}
+		System.out.println(root.getValue()+" at depth: "+depth);
 	}
-	
 	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		// base case
 		System.out.println(furthestDepth);
@@ -102,7 +104,12 @@ public class Parser {
 		switch (match){
 		case "LISTSTART":
 			furthestDepth++;
-			return new Node(command[furthestDepth-1]);
+			myNode = new Node(command[furthestDepth-1]);
+			Node temp;
+			while(!(temp=makeTree(command)).getValue().equals("]")){
+				myNode.addChild(temp);
+			}
+			return myNode;
 		case "COMMENT":
 			furthestDepth++;
 			return makeTree(command);
@@ -127,6 +134,7 @@ public class Parser {
 			try{
 				String[] parameters=new String[]{match};
 				System.out.println(commandMap.get(match));
+				// Get rid of this by making tree non-binary
 				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(String[].class).newInstance(new Object[]{parameters});
 				furthestDepth++;
 				neededVars = myInt.getNumberOfArguments();
@@ -141,15 +149,13 @@ public class Parser {
 			return myNode;
 		}
 		System.out.println("making left tree now for "+myNode);
-		myNode.addChildLeft(makeTree(command));
+		myNode.addChild(makeTree(command));
 		myVars++;
 		if(myVars>=neededVars){
-			System.out.println("im done");
 			return myNode;
 		}
 		System.out.println("making right tree now for "+myNode);
-		System.out.println(command[furthestDepth]);
-		myNode.addChildRight(makeTree(command));
+		myNode.addChild(makeTree(command));
 		myVars++;
 		return myNode;
 	}

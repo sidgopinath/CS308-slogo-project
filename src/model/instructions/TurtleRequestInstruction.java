@@ -13,11 +13,11 @@ public class TurtleRequestInstruction extends Instruction {
 	}
 	
 	public enum implementers {
-		XCOR(0),
-		YCOR(0),
+		XCOORDINATE(0),
+		YCOORDINATE(0),
 		HEADING(0),
-		PENDOWN(0),
-		SHOWING(0);
+		ISPENDOWN(0),
+		ISSHOWING(0);
 		private int numArgs;
 	implementers(int args){
     	this.numArgs=args;
@@ -27,15 +27,16 @@ public class TurtleRequestInstruction extends Instruction {
 	@Override
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
-		case "XCOR":
+		case "XCOORDINATE":
 			return 0.0;
-		case "YCOR":
+		case "YCOORDINATE":
 			return 0.0;
 		case "HEADING":
 			return myView.getHeading(0);
-		case "PENDOWN":
+		case "ISPENDOWN":
+			System.out.println("PEN DOWN" + myView.getPenDown(0));
 			return myView.getPenDown(0);
-		case "SHOWING":
+		case "ISSHOWING":
 			return myView.isShowing(0);
 		default: 
 			return 0.0;

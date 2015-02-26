@@ -103,7 +103,6 @@ public class SLogoView {
 	//	return returnString;
 	}
 
-
 	// make update from a single command
 /*	private String updateFromInstruction(TurtleCommand instruction) {
 		return "return value";
@@ -170,6 +169,12 @@ public class SLogoView {
 		System.out.println(turtle.getLayoutY());
 		System.out.println(Math.sqrt(Math.pow(turtle.getLayoutX(),2)+Math.pow(turtle.getLayoutY(),2)));
 		return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
+	}
+	
+	public double towards(int id, double x, double y){
+		
+		
+		setHeading()
 	}
 
 	public void setHeading(int id, double angle, boolean relative) {
@@ -295,12 +300,12 @@ public class SLogoView {
 	}
 
 	//these definitely methods should not be in SLogoView; 
-	public double getXCor(){
-		
+	public double getXCor(int id){
+		return myTurtles.get(0).getTranslateX(); 
 	}
 	
-	public double getYCor(){
-		
+	public double getYCor(int id){
+		return myTurtles.get(0).getYCoord(); 
 	}
 	
 	public void openDialog(String message){
@@ -314,8 +319,7 @@ public class SLogoView {
 
 		stage.setTitle("Error");
 		stage.setScene(scene);
-		stage.show();
-		
+		stage.show();	
 	}
 	
 	//LILA TODO THIS

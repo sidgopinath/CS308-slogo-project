@@ -8,8 +8,10 @@ import javafx.scene.image.ImageView;
 public class TurtleView extends ImageView {
 
 	private double myHeading;
-	private boolean penUp;
 	private boolean isVisible;
+	private boolean penUp=false;
+	private double myXCoord;
+	private double myYCoord;
 
 	// private int myID;
 
@@ -22,38 +24,26 @@ public class TurtleView extends ImageView {
 		isVisible = true;
 	}
 
+	//relative
 	public void move(double moveX, double moveY) {
 		setTranslateX(moveX);
 		setTranslateY(moveY);
 	}
 
-	public void setXY(double x, double y) {
-		System.out.println("go to " + x + "," + y);
+	//absolute
+	public double setXY(double x, double y) {
+        double newX=getTranslateX();
+        double newY=getTranslateY();
 		setTranslateX(x);
-		setTranslateY(y);
+		setTranslateY(-y);
+		return Math.sqrt(Math.pow(newX-x,2)+Math.pow(newY-y, 2));
 	}
 	
-	
-	//TODO: Test this
-	public double getXCoord(){
-		System.out.println(getTranslateX());
-		return getTranslateX();
-	}
-	
-	public double getYCoord(){
-		System.out.println(getTranslateY());
-		return getTranslateY();
-	}
 
 	public void setRelativeHeading(double angle) {
-		
 		myHeading = myHeading + angle; 
 		myHeading = adjustAngle(myHeading);
 		setRotate(myHeading);
-		
-		System.out.println("angle adjusted");
-		System.out.println(myHeading);
-
 	}
 	
 	public void setAbsoluteHeading(double angle){
@@ -80,6 +70,10 @@ public class TurtleView extends ImageView {
 	public void showTurtle(boolean show){
 		setVisible(show);
 		isVisible = show;
+	}
+	
+	public double getYCoord(){
+		return -1 * getTranslateY();	
 	}
 	
 	private double adjustAngle(double angle){

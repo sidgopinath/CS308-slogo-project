@@ -118,6 +118,4 @@ public class MovementInstruction extends Instruction {
 		myTurtle = new TurtleCommand(0, myPolar, myJump);
 		return myTurtle;
 	}
-	
-	//somewhere add something to setpenup in the view
 }

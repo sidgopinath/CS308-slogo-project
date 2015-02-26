@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
 
@@ -15,6 +17,7 @@ import view.SLogoView;
 import model.instructions.Constant;
 import model.instructions.Instruction;
 import model.instructions.ListInstruction;
+import model.instructions.Variable;
 import model.turtle.TurtleCommand;
 
 /**
@@ -23,7 +26,7 @@ import model.turtle.TurtleCommand;
  * Note, our list implementation does not allow a list to return a value
  * @author Primary: Greg, Secondary: Sid
  */
-public class Parser {
+public class Parser implements Observer{
 	private static List<Entry<String, Pattern>> patterns;
 	private static Map<String,String> commandMap;
 	private static final String[] commandTypes = new String[]{"BooleanInstruction","ControlInstruction","MathInstruction","MovementInstruction","TurtleRequestInstruction"};
@@ -36,6 +39,8 @@ public class Parser {
 		patterns = new ArrayList<>();
 		commandMap = new HashMap<String, String>();
 		executionParameters = new ExecutionEnvironment();
+		executionParameters.addObserver(this);
+		executionParameters.addObserver(view);
 		addAllPatterns();
 		makeCommandMap();
 	}
@@ -73,13 +78,12 @@ public class Parser {
 				commandMap.put(d.toString(), s);
 			}
 			commandMap.put("[", "ListInstruction");
-			commandMap.put("MAKEVARIABLE","Variable");
 			commandMap.put("VARIABLE","Variable");
 		}
 	}
 	List<Instruction> outList;
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		//input = "[ fd + 200 400 [ fd fd 50 ] rt 90 ] BACK 40";
+		input = "MAKE :var 50 fd :var";
 		furthestDepth = 0;
 		
 			input = input.replaceAll("\\s+", " ");
@@ -90,16 +94,14 @@ public class Parser {
 			// System.out.println("tree done");
 		}
 		for(Node root:nodeList){
-			System.out.println("new tree");
-			System.out.println(root.getInstruction());
-			printTree(root);
+			//System.out.println("new tree");
+			//System.out.println(root.getInstruction());
+			//printTree(root);
 			//printInOrderTraversal(root);
 		}
-		List<TurtleCommand> commandList =new ArrayList();;
+		List<TurtleCommand> commandList =new ArrayList();
 		for(Node root:nodeList){
 			root.getInstruction().execute();
-			// Call turtlecommand make
-			turtleCommandGetter(commandList, root);
 			//if(!commandList.isEmpty())
 				//mySLogoView.updateWorkspace(commandList);
 			  //mySLogoView.updateVariables(myVariableMap);
@@ -197,6 +199,15 @@ public class Parser {
 			// make node with string
 			furthestDepth++;
 			return new Node(new Constant(command[furthestDepth-1]));
+		case "VARIABLE":
+			furthestDepth++;
+			if(executionParameters.getVariable(command[furthestDepth-1])!=null)
+				return new Node(executionParameters.getVariable(command[furthestDepth-1]));
+			else{
+				Instruction tempInt=new Variable(command[furthestDepth-1]);
+				executionParameters.addObserver(tempInt);
+				return new Node(tempInt);
+			}
 		case "COMMAND":
 			// make node with command, if found
 			// check map
@@ -213,9 +224,9 @@ public class Parser {
 			//instantiate the command, if reflection cannot find the file then must be invalid
 			List<Instruction> futureInstructions= new ArrayList<Instruction>();
 			try{
-				System.out.println(match);
 				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,mySLogoView, executionParameters});
 				furthestDepth++;
+				executionParameters.addObserver(myInt);
 				myNode = new Node(myInt);
 				neededVars = myInt.getNumberOfArguments();
 			}
@@ -265,4 +276,10 @@ public class Parser {
 		patterns = new ArrayList<>();
 		addAllPatterns(language);
 	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		executionParameters = (ExecutionEnvironment) o;
+		//System.out.println("notified"+executionParameters.get());
+			}
 }

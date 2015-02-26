@@ -38,7 +38,6 @@ public class Drawer {
            Polar polar = command.getPolar();
           
            //move turtle and draw line
-           //TODO: this is a conditional, nested if-else. Could we possibly make this less condition-specific?
            if(polar.distance!=0){
                double angle=turtle.getRotate();
                double turtleX=turtle.getLayoutX();

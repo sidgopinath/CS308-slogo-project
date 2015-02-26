@@ -161,7 +161,7 @@ public class SLogoView implements Observer{
 	// for testing
 	private void handleKeyInput(KeyEvent e) {
 		KeyCode keyCode = e.getCode();
-	/*	if (keyCode == KeyCode.D) {
+		if (keyCode == KeyCode.D) {
 			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
 			instructions.add(new TurtleCommand(0, new Polar(30, 0), true));
 			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
@@ -178,7 +178,7 @@ public class SLogoView implements Observer{
 		} else if (keyCode == KeyCode.A) {
 			System.out.print(myTurtles.get(0).getTranslateX() + ","
 					+ myTurtles.get(0).getTranslateY());
-		}*/
+		}
 	}
 
 	public double setXY(int id, double x, double y) {
@@ -263,22 +263,6 @@ public class SLogoView implements Observer{
 		drawer = new Drawer(myWorkspace.getGridWidth(), myWorkspace.getGridHeight());
 	}
 
-	// method implementations. Is this bad design to have so many for each?
-
-	// DESIGN ISSUES:
-
-	// 1. consider moving this to the controller and giving the list of turtles
-	// to
-	// the controller?
-
-	// 2. or these can be put back into the turtlecommand object and call
-	// setPenUp and showTurtle every time. it will not be very efficient, but
-	// may be better in design
-
-	// here our SLogoView is acting like a controller
-	// these are all methods that could technically be contained within
-	// updateworkspace method....or at least conceptually are related enough to
-	// be in there
 	public void setPenUp(int id, boolean setPen) {
 		/*
 		 * if (setPen){ myTurtles.get(id).setPenUp(true); //return 0; }

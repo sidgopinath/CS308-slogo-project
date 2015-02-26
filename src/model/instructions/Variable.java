@@ -1,9 +1,5 @@
 package model.instructions;
 
-import java.util.List;
-
-import model.ExecutionEnvironment;
-import view.SLogoView;
 
 public class Variable extends Instruction{
 	public Variable(String myName) {

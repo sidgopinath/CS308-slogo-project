@@ -40,6 +40,7 @@ public class Parser implements Observer{
 		commandMap = new HashMap<String, String>();
 		executionParameters = new ExecutionEnvironment();
 		executionParameters.addObserver(this);
+		executionParameters.addObserver(view);
 		addAllPatterns();
 		makeCommandMap();
 	}

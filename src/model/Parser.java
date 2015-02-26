@@ -26,7 +26,7 @@ import model.turtle.TurtleCommand;
 public class Parser {
 	private static List<Entry<String, Pattern>> patterns;
 	private static Map<String,String> commandMap;
-	private static final String[] commandTypes = new String[]{"BooleanInstruction","ControlInstruction","MathInstruction","MovementInstruction"};
+	private static final String[] commandTypes = new String[]{"BooleanInstruction","ControlInstruction","MathInstruction","MovementInstruction","TurtleRequestInstruction"};
 	private int furthestDepth;
 	private SLogoView mySLogoView;
 	private ExecutionEnvironment executionParameters;

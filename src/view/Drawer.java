@@ -83,8 +83,6 @@ public class Drawer {
     private void wrapY (int dir,TurtleView turtle,Polar polar, ArrayList<Polyline> lines, int i, double newY, double startX, double moveX, double moveY, double turtleY, double startY) {
         double endX1=startX+moveX*Math.abs((Math.pow(-1, i)*(myYBounds[i]-newY+moveY))/moveY);
         double endX2=startX+moveX;
-        System.out.println(startX);
-        System.out.println(moveX);
         turtle.move(turtle.getTranslateX()+moveX,Math.pow(-1,i)*half[dir]-myYBounds[i]+newY);
         if(!turtle.getPenUp()){
             double endY=turtle.getTranslateY()+turtleY+turtle.getFitHeight()/2;

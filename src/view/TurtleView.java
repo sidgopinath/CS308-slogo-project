@@ -8,8 +8,8 @@ import javafx.scene.image.ImageView;
 public class TurtleView extends ImageView {
 
 	private double myHeading;
-	private boolean penUp;
 	private boolean isVisible;
+	private boolean penUp=false;
 
 	// private int myID;
 
@@ -22,29 +22,31 @@ public class TurtleView extends ImageView {
 		isVisible = true;
 	}
 
+<<<<<<< HEAD
+	//relative movement
+=======
+
+	//relative movement
+
+>>>>>>> 1641265b01a815e27bb627617a5cca5adc4d5251
 	public void move(double moveX, double moveY) {
 		setTranslateX(moveX);
 		setTranslateY(moveY);
 	}
 
-	public void setXY(double x, double y) {
-		System.out.println("go to " + x + "," + y);
+	//absolute movement
+	public double setXY(double x, double y) {
+        double newX=getTranslateX();
+        double newY=getTranslateY();
 		setTranslateX(x);
-		setTranslateY(y);
+		setTranslateY(-y);
+		return Math.sqrt(Math.pow(newX-x,2)+Math.pow(newY-y, 2));
 	}
 
 	public void setRelativeHeading(double angle) {
-		setRotate(myHeading + angle);
-		
-		System.out.println("angle");
-		System.out.println(getRotate());
-		
-		myHeading = myHeading + angle; 
+        myHeading = myHeading + angle; 
+		setRotate(myHeading);
 		myHeading = adjustAngle(myHeading);
-		
-		System.out.println("angle adjusted");
-		System.out.println(myHeading);
-
 	}
 	
 	public void setAbsoluteHeading(double angle){
@@ -72,11 +74,23 @@ public class TurtleView extends ImageView {
 		isVisible = show;
 	}
 	
-	private double adjustAngle(double angle){
+	public double getYCoord(){
+		return -1 * getTranslateY();	
+	}
+	
+	/**
+	 * Normalizes a double parameter to an angle between 0-360
+	 * @param angle
+	 * @return normalized angle between 0-360
+	 */
+
+private double adjustAngle(double angle){
 		angle = angle % 360;
 		if (angle < 0){
 			angle = 360 - (-1)*angle;
 		}
 		return angle;
 	}
+	
+	
 }

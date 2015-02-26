@@ -1,5 +1,5 @@
 package view;
 
-public class HistoryView extends PropertiesView{
+public class HistoryView extends PropertiesView {
 
 }

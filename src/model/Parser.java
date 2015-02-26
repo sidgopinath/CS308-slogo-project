@@ -84,6 +84,8 @@ public class Parser implements Observer{
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		input = "MAKE :var 50 fd :var";
 		furthestDepth = 0;
+		
+			input = input.replaceAll("\\s+", " ");
 		String[] splitCommands = input.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
 		while(furthestDepth<splitCommands.length){
@@ -221,7 +223,6 @@ public class Parser implements Observer{
 			//instantiate the command, if reflection cannot find the file then must be invalid
 			List<Instruction> futureInstructions= new ArrayList<Instruction>();
 			try{
-				System.out.println(match+" "+commandMap.get(match));
 				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,mySLogoView, executionParameters});
 				furthestDepth++;
 				executionParameters.addObserver(myInt);

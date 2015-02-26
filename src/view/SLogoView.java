@@ -143,7 +143,7 @@ public class SLogoView {
 	    KeyCode keyCode = e.getCode();
 	    if(keyCode == KeyCode.D){
             ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-            instructions.add(new TurtleCommand(0,new Polar(30,0),false));
+            instructions.add(new TurtleCommand(0,new Polar(30,0),true));
             List<Polyline> newlines=drawer.draw(myTurtles, instructions);
             lines.getChildren().addAll(newlines);
 	    }else if(keyCode == KeyCode.W){
@@ -152,13 +152,15 @@ public class SLogoView {
             List<Polyline> newlines=drawer.draw(myTurtles, instructions);
             lines.getChildren().addAll(newlines);
 	    }else if(keyCode == KeyCode.E){
-	        setXY(0,-100,100);
+	        setXY(0,0,0);
         }else if(keyCode == KeyCode.Q){
             setHeading(0,90);
+        }else if(keyCode == KeyCode.A){
+            System.out.print(myTurtles.get(0).getTranslateX()+","+myTurtles.get(0).getTranslateY());
         }
     }
     public void setXY(int id, double x,double y){
-        myTurtles.get(id).setXY(originX,originY,x,y);
+        System.out.println(myTurtles.get(id).setXY(originX,originY,x,y));
     }
     public void setHeading(int id, double angle){
         myTurtles.get(id).setAbsoluteHeading(angle);

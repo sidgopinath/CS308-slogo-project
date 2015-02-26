@@ -34,10 +34,10 @@ public class TurtleView extends ImageView {
 		setTranslateY(-y);
 		return Math.sqrt(Math.pow(newX-x,2)+Math.pow(newY-y, 2));
 	}
-
+   
 	public void setRelativeHeading(double angle) {
-		setRotate(myHeading + angle);
-		myHeading = myHeading + angle; 
+        myHeading = myHeading + angle;
+		setRotate(myHeading);
 		myHeading = adjustAngle(myHeading);
 	}
 	

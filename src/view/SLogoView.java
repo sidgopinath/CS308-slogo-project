@@ -313,11 +313,11 @@ public class SLogoView implements Observer{
 	// this should be in the workspace, but it would have to be called twice in
 	// this class and in that class
 	// but then again maybe not because the group is added on in this class
-	public void clearScreen(int id) {
+	public double clearScreen(int id) {
 		// these group of lines somehow need to be connected with the turtle
 		lines.getChildren().clear();
-        myTurtles.get(id).setAbsoluteHeading(0);
-		myTurtles.get(id).setXY(0, 0); //clear only the current turtle
+		myTurtles.get(id).setAbsoluteHeading(0);
+        return myTurtles.get(id).setXY(0, 0);
 	}
 
 	@Override

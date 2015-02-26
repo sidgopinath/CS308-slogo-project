@@ -185,12 +185,6 @@ public class SLogoView implements Observer{
 		myTurtles.get(id).setAbsoluteHeading(angle);
 	}
 
-	// public double towards(int id, double x, double y){
-	//
-	//
-	// setHeading()
-	// }
-
 	public void setHeading(int id, double angle, boolean relative) {
 		if (relative)
 			myTurtles.get(id).setRelativeHeading(angle);

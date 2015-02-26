@@ -20,14 +20,13 @@ public class MovementInstruction extends Instruction {
 		LEFT(1),
 		RIGHT(1),
 		SETHEADING(1),
-		TOWARDS(2),
+		SETTOWARDS(2),
 		SETPOSITION(2),
 		PENDOWN(0),
 		PENUP(0),
 		SHOWTURTLE(0),
 		HIDETURTLE(0),
-		NATURALLOG(1),
-		CLEARSCREEN(2),
+		CLEARSCREEN(0),
 		HOME(0);
 		private int numArgs;
 	implementers(int args){
@@ -72,9 +71,8 @@ public class MovementInstruction extends Instruction {
 			myPolar = new Polar(myDependencies.get(0).execute(), 0);
 			updateView();
 			return 0.0;
-		case "TOWARDS":
-			// need view
-			return 0.0;
+		case "SETTOWARDS":
+			return myView.towards(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "SETPOSITION":
 			myJump = true;
 			return myView.setXY(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());
@@ -91,6 +89,7 @@ public class MovementInstruction extends Instruction {
 			myView.showTurtle(0, false);
 			return 0.0;
 		case "CLEARSCREEN":
+			System.out.println(myView.clearScreen(0));
 			return myView.clearScreen(0);
 		case "HOME":
 			myJump = true;

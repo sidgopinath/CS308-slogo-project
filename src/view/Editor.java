@@ -2,6 +2,7 @@ package view;
 
 import java.lang.reflect.InvocationTargetException;
 
+import model.ModelException;
 import controller.SLogoController;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;

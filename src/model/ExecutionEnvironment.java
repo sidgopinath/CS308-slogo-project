@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Observable;
 import java.util.Observer;
-
 import model.instructions.Instruction;
 
 public class ExecutionEnvironment extends Observable{
@@ -31,7 +30,10 @@ public class ExecutionEnvironment extends Observable{
 	public Instruction getInstruction(String key){
 		return userInstructionMap.get(key);
 	}
-	
+	public void removeDuplicate(String s){
+		if(variableMap.containsKey(s))
+			variableMap.remove(s);
+	}
 	public void clear(){
 		userInstructionMap=new HashMap();
 		variableMap = new HashMap();

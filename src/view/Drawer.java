@@ -36,9 +36,7 @@ public class Drawer {
             TurtleCommand command = it.next();
            TurtleView turtle = turtles.get(command.getTurtleId());
            Polar polar = command.getPolar();
-          
            //move turtle and draw line
-           //TODO: this is a conditional, nested if-else. Could we possibly make this less condition-specific?
            if(polar.distance!=0){
                double angle=turtle.getRotate();
                double turtleX=turtle.getLayoutX();
@@ -84,6 +82,7 @@ public class Drawer {
     private void wrapY (int dir,TurtleView turtle,Polar polar, ArrayList<Polyline> lines, int i, double newY, double startX, double moveX, double moveY, double turtleY, double startY) {
         double endX1=startX+moveX*Math.abs((Math.pow(-1, i)*(myYBounds[i]-newY+moveY))/moveY);
         double endX2=startX+moveX;
+        System.out.println(Math.pow(-1,i)*myHalf[dir]-myYBounds[i]+newY);
         turtle.move(turtle.getTranslateX()+moveX,Math.pow(-1,i)*myHalf[dir]-myYBounds[i]+newY);
         if(!turtle.getPenUp()){
             double endY=turtle.getTranslateY()+turtleY+turtle.getFitHeight()/2;

@@ -134,7 +134,7 @@ public class SideBar extends VBox {
 		variables.setUnderline(true);
 		getChildren().add(variables);
 
-		variablesList = FXCollections.observableArrayList();
+		variablesList = FXCollections.observableArrayList(new VariableView("var2.5", 5));
 		//variablesList.add(new Variable("Added var2.5", 5));
 
 		variablesTable = new TableView<VariableView>();
@@ -207,7 +207,7 @@ public class SideBar extends VBox {
 
 		// example of how to set new elements to the observablelist
 		//variablesList.add(new Variable("Added var3", 3));
-		//variablesTable.setItems(variablesList);
+		variablesTable.setItems(variablesList);
 
 		//System.out.println("beforeupdatevar");
 		updateVariable(new VariableView("Added var3", 4));

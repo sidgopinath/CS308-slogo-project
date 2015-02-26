@@ -31,8 +31,19 @@ public class ExecutionEnvironment extends Observable{
 	public Instruction getInstruction(String key){
 		return userInstructionMap.get(key);
 	}
+	
 	public void clear(){
 		userInstructionMap=new HashMap();
 		variableMap = new HashMap();
 	}
+	
+	public Map<String, Instruction> getUserInstructionMap(){
+		return userInstructionMap;
+	}
+	
+	public Map<String, Instruction> getVariableMap(){
+		return variableMap;
+	}
+	
+	
 }

@@ -11,19 +11,19 @@ import model.Polar;
 import model.turtle.TurtleCommand;
 
 public class Drawer {
-	private Color color;
+	private Color myColor;
 	private double[] myXBounds = new double[2];
 	private double[] myYBounds = new double[2];
-	private double[] half = new double[2];
+	private double[] myHalf = new double[2];
 
 	public Drawer(double xMax, double yMax) {
 		myXBounds[0] = 20;
 		myXBounds[1] = xMax + 20;
 		myYBounds[0] = 15;
 		myYBounds[1] = yMax + 15;
-		half[0] = 0.5 * (myXBounds[1] - myXBounds[0]);
-		half[1] = 0.5 * (myYBounds[1] - myYBounds[0]);
-		color = Color.BLACK;
+		myHalf[0] = 0.5 * (myXBounds[1] - myXBounds[0]);
+		myHalf[1] = 0.5 * (myYBounds[1] - myYBounds[0]);
+		myColor = Color.BLACK;
 	}
 
 	// may have to remove list from turtlecommand
@@ -74,7 +74,7 @@ public class Drawer {
 					// }
 					wrapX(0, turtle, polar, lines, 0, newX);
 				} else if (newX > myXBounds[1]) {
-					double left = -(half[0] - newX + myXBounds[1]);
+					double left = -(myHalf[0] - newX + myXBounds[1]);
 					turtle.move(left, turtle.getTranslateY() + moveY);
 					if (!turtle.getPenUp()) {
 						double endX = turtle.getTranslateX() + turtleX
@@ -92,7 +92,7 @@ public class Drawer {
 					System.out.println(endX + "," + endY);
 					if (!turtle.getPenUp()) {
 						Polyline polyline = new Polyline();
-						polyline.setStroke(color);
+						polyline.setStroke(myColor);
 						polyline.getPoints().addAll(
 								new Double[] { startX, startY, endX, endY });
 						lines.add(polyline);
@@ -123,7 +123,7 @@ public class Drawer {
 		double endX1 = startX + moveX
 				* Math.abs((myYBounds[i] + Math.pow(-1, i) * (-newY + moveY)) / moveY);
 		double endX2 = startX + moveX;
-		turtle.move(turtle.getTranslateX() + moveX, Math.pow(-1, i) * half[dir]
+		turtle.move(turtle.getTranslateX() + moveX, Math.pow(-1, i) * myHalf[dir]
 				- myYBounds[i] + newY);
 		if (!turtle.getPenUp()) {
 			double endY = turtle.getTranslateY() + turtleY + turtle.getFitHeight() / 2;
@@ -143,7 +143,7 @@ public class Drawer {
 				* polar.distance;
 		double startX = turtleX + turtle.getTranslateX() + turtle.getFitWidth() / 2;
 		double startY = turtleY + turtle.getTranslateY() + turtle.getFitHeight() / 2;
-		double right = Math.pow(-1, i) * (half[dir] - myXBounds[i] + newX);
+		double right = Math.pow(-1, i) * (myHalf[dir] - myXBounds[i] + newX);
 		System.out.println(newX);
 		System.out.println(moveY);
 		double endY1 = startY
@@ -162,15 +162,13 @@ public class Drawer {
 
 	private Polyline drawLine(double startX, double startY, double endX, double endY) {
 		Polyline polyline = new Polyline();
-		polyline.setStroke(color);
+		polyline.setStroke(myColor);
 		polyline.getPoints().addAll(new Double[] { startX, startY, endX, endY });
 		return polyline;
 	}
 
 	public void changeColor(Color c) {
-		System.out.println("color" + color.toString());
-
-		color = c;
+		myColor = c;
 	}
 
 	/*

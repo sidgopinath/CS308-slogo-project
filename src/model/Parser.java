@@ -83,10 +83,11 @@ public class Parser implements Observer{
 	}
 	List<Instruction> outList;
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		input = "MAKE :var 50 fd :var";
+	//	input = "MAKE :var 50 fd :var";
 		furthestDepth = 0;
+		System.out.println("parser input" + input);
 		
-			input = input.replaceAll("\\s+", " ");
+		input = input.replaceAll("\\s+", " ");
 		String[] splitCommands = input.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
 		while(furthestDepth<splitCommands.length){

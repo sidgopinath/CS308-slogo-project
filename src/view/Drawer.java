@@ -16,11 +16,9 @@ public class Drawer {
     private double myXBounds;
     private double myYBounds;
     
-
      private static final int NO_CHANGE = 0;
      private static final int CHANGE_TO_DOWN = 1;
-     private static final int CHANGE_TO_UP = 2;
-
+     private static final int CHANGE_TO_UP = -1;
     
     public Drawer(double xMax, double yMax){
     	myXBounds = xMax;
@@ -34,14 +32,8 @@ public class Drawer {
        Iterator<TurtleCommand> it = instructions.iterator();
        while(it.hasNext()){
            TurtleCommand command = it.next();
-    	   int penChange = command.getPenChange();
 
            TurtleView turtle = turtles.get(command.getTurtleId());
-           if (penChange == CHANGE_TO_DOWN)
-        	   turtle.setPenUp(false);
-           if (penChange == CHANGE_TO_UP)
-        	   turtle.setPenUp(true);
-
            
            Polar polar = command.getPolar();
           

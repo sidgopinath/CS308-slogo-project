@@ -242,4 +242,15 @@ public class SLogoView {
 		myWorkspace = new Workspace(myTurtles, lines);
 		drawer = new Drawer(myWorkspace.getGridWidth(), myWorkspace.getGridHeight());
     }
+    
+    //consider moving this to the controller and giving the list of turtles to the controller?
+    public double setPenUp(int id, boolean setPen){
+    	if (setPen){
+     	   myTurtles.get(id).setPenUp(true);
+     	   return 0;
+    	}
+    	myTurtles.get(id).setPenUp(false);
+    	return 1;
+      
+    }
 }

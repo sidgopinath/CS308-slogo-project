@@ -40,7 +40,7 @@ public class Parser implements Observer{
 		commandMap = new HashMap<String, String>();
 		executionParameters = new ExecutionEnvironment();
 		executionParameters.addObserver(this);
-		//executionParameters.addObserver(view);
+		executionParameters.addObserver(view);
 		addAllPatterns();
 		makeCommandMap();
 	}
@@ -81,13 +81,10 @@ public class Parser implements Observer{
 			commandMap.put("VARIABLE","Variable");
 		}
 	}
-	List<Instruction> outList;
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		//input = "MAKE :var 50 fd :var";
-
+		//input = "MAKE :var 50 MAKE :var 200";
+		System.out.println("NEW RUN");
 		furthestDepth = 0;
-		System.out.println("parser input" + input);
-		
 		input = input.replaceAll("\\s+", " ");
 		String[] splitCommands = input.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
@@ -96,10 +93,10 @@ public class Parser implements Observer{
 			// System.out.println("tree done");
 		}
 		for(Node root:nodeList){
-			//System.out.println("new tree");
-			//System.out.println(root.getInstruction());
-			//printTree(root);
-			//printInOrderTraversal(root);
+			System.out.println("new tree");
+			System.out.println(root.getInstruction());
+			printTree(root);
+			printInOrderTraversal(root);
 		}
 		List<TurtleCommand> commandList =new ArrayList();
 		for(Node root:nodeList){
@@ -108,6 +105,10 @@ public class Parser implements Observer{
 				//mySLogoView.updateWorkspace(commandList);
 			  //mySLogoView.updateVariables(myVariableMap);
 		}
+		for(String i:executionParameters.getVariableMap().keySet()){
+			System.out.println(i+" "+ executionParameters.getVariable(i).execute());
+		}
+		
 	}
 	private void turtleCommandGetter(List<TurtleCommand> cList, Node root) {
 		for(Node n: inOrderTraverser(root)){
@@ -203,13 +204,9 @@ public class Parser implements Observer{
 			return new Node(new Constant(command[furthestDepth-1]));
 		case "VARIABLE":
 			furthestDepth++;
-			if(executionParameters.getVariable(command[furthestDepth-1])!=null)
-				return new Node(executionParameters.getVariable(command[furthestDepth-1]));
-			else{
 				Instruction tempInt=new Variable(command[furthestDepth-1]);
 				executionParameters.addObserver(tempInt);
 				return new Node(tempInt);
-			}
 		case "COMMAND":
 			// make node with command, if found
 			// check map
@@ -225,6 +222,7 @@ public class Parser implements Observer{
 			//this is either a known command or invalid input.  
 			//instantiate the command, if reflection cannot find the file then must be invalid
 			List<Instruction> futureInstructions= new ArrayList<Instruction>();
+			System.out.println("match" + match);
 			try{
 				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,mySLogoView, executionParameters});
 				furthestDepth++;
@@ -238,8 +236,9 @@ public class Parser implements Observer{
 			}
 		
 		while(myVars<neededVars){
-			System.out.println("got kid "+ myVars+ " "+ neededVars);
-			myNode.addChild(makeTree(command));
+			Node level = makeTree(command);
+			System.out.println("got kid "+ level.getInstruction()+" for "+myNode.getInstruction()+" "+ myVars+ " "+ neededVars);
+			myNode.addChild(level);
 			myVars++;
 		}
 		for(Node child:myNode.getChildren()){
@@ -267,11 +266,6 @@ public class Parser implements Observer{
 		}
 		// System.out.println(String.format("%s not matched", test));
 		return "NONE";
-	}
-	
-	public static void main(String[] args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException{
-		Parser p = new Parser(null);
-		p.parseAndExecute(null);
 	}
 
 	public void setLanguage(String language){

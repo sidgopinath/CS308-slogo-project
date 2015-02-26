@@ -30,8 +30,9 @@ public class ControlInstruction extends Instruction{
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "MAKEVARIABLE":
+			myEnvironment.removeDuplicate(myDependencies.get(0).getName());
 			myEnvironment.addVariable(myDependencies.get(0).getName(), myDependencies.get(1));
-			return myDependencies.get(1).execute();
+			return myDependencies.get(0).execute();
 		case "REPEAT":
 			for(int i =0; i<myDependencies.get(0).execute(); i++){
 				myDependencies.get(1).execute();

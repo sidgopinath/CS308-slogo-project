@@ -28,9 +28,9 @@ public class TurtleRequestInstruction extends Instruction {
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "XCOORDINATE":
-			return 0.0;
+			return myView.getXCor(0);
 		case "YCOORDINATE":
-			return 0.0;
+			return myView.getYCor(0);
 		case "HEADING":
 			return myView.getHeading(0);
 		case "ISPENDOWN":

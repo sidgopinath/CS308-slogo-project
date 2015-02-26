@@ -5,7 +5,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import model.Polar;
@@ -37,16 +36,11 @@ public class Drawer {
     	   int penChange = command.getPenChange();
 
            TurtleView turtle = turtles.get(command.getTurtleId());
-           if (penChange == CHANGE_TO_DOWN)
-        	   turtle.setPenUp(false);
-           if (penChange == CHANGE_TO_UP)
-        	   turtle.setPenUp(true);
-
-           
            Polar polar = command.getPolar();
           
            //move turtle and draw line
            if(polar.distance!=0){
+               System.out.println("bounds are: "+myXBounds+","+myYBounds);
                double angle=turtle.getRotate();
                double turtleX=turtle.getLayoutX();
                double turtleY=turtle.getLayoutY();
@@ -54,13 +48,8 @@ public class Drawer {
                double moveY=Math.cos(Math.toRadians(polar.angle+180-angle))*polar.distance;
                double startX=turtleX+turtle.getTranslateX()+turtle.getFitWidth()/2;
                double startY=turtleY+turtle.getTranslateY()+turtle.getFitHeight()/2;
-               System.out.println(startX+","+startY);
-               
-               //what? the printouts don't make sense
                double newX = turtle.getTranslateX()+moveX+turtle.getFitWidth()/2;
                double newY = turtle.getTranslateY()+moveY+turtle.getFitHeight()/2;
-               System.out.println("XBounds" + myXBounds);
-               System.out.println("newX" + newX);
                if (newX <= myXBounds && newY <= myYBounds){
 	               turtle.move(turtle.getTranslateX()+moveX,turtle.getTranslateY()+moveY);
 	               double endX=turtle.getTranslateX()+turtleX+turtle.getFitWidth()/2;

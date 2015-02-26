@@ -149,12 +149,12 @@ public class SLogoView {
 	    KeyCode keyCode = e.getCode();
 	    if(keyCode == KeyCode.D){
             ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-            instructions.add(new TurtleCommand(0,new Polar(30,0),false,false));
+            instructions.add(new TurtleCommand(0,new Polar(30,0),0,false));
             List<Polyline> newlines=drawer.draw(myTurtles, instructions);
             lines.getChildren().addAll(newlines);
 	    }else if(keyCode == KeyCode.W){
             ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-            instructions.add(new TurtleCommand(0,new Polar(0,10),false,false));
+            instructions.add(new TurtleCommand(0,new Polar(0,10),0,false));
             List<Polyline> newlines=drawer.draw(myTurtles, instructions);
             lines.getChildren().addAll(newlines);
 	    }else if(keyCode == KeyCode.E){

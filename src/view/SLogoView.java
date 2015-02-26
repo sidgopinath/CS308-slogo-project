@@ -167,7 +167,7 @@ public class SLogoView implements Observer{
 		} else if (keyCode == KeyCode.E) {
 		    System.out.print(towards(0,-10,10));
 		} else if (keyCode == KeyCode.Q) {
-		    clearScreen(0);
+		    System.out.print(clearScreen(0));
 		} else if (keyCode == KeyCode.A) {
 			System.out.print(myTurtles.get(0).getTranslateX() + ","
 					+ myTurtles.get(0).getTranslateY());

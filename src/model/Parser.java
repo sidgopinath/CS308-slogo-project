@@ -40,7 +40,7 @@ public class Parser implements Observer{
 		commandMap = new HashMap<String, String>();
 		executionParameters = new ExecutionEnvironment();
 		executionParameters.addObserver(this);
-		executionParameters.addObserver(view);
+		//executionParameters.addObserver(view);
 		addAllPatterns();
 		makeCommandMap();
 	}
@@ -83,7 +83,8 @@ public class Parser implements Observer{
 	}
 	List<Instruction> outList;
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-	//	input = "MAKE :var 50 fd :var";
+		//input = "MAKE :var 50 fd :var";
+
 		furthestDepth = 0;
 		System.out.println("parser input" + input);
 		

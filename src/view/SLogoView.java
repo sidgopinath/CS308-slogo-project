@@ -330,7 +330,7 @@ public class SLogoView implements Observer{
 		stage.show();
 	}
 
-	public void updateVariable(Variable variable) {
+	public void updateVariable(VariableView variable) {
 		mySidebar.updateVariable(variable);
 	}
 
@@ -348,14 +348,14 @@ public class SLogoView implements Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
+		System.out.println("hi");
 		ExecutionEnvironment env = (ExecutionEnvironment) o;
 		for (String s: env.getVariableMap().keySet()){
 			double value =  env.getVariableMap().get(s).execute();
 			System.out.println("======s" + s);
 			System.out.println("======value" + value);
-			updateVariable(new Variable(s, value));
+			updateVariable(new VariableView(s, value));
 			System.out.println("==============updated==========");
-			
 		}
 			
 		

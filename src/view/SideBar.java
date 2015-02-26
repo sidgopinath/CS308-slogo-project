@@ -39,9 +39,9 @@ public class SideBar extends VBox {
 	Map<Integer, TurtleView> myTurtles;
 	ListView<String> historyList;
 	ObservableList<String> historyItems;
-	ObservableList<Variable> variablesList;
+	ObservableList<VariableView> variablesList;
 	SLogoController myController;
-	TableView<Variable> variablesTable;
+	TableView<VariableView> variablesTable;
 
 	// make this into a new class with its own stuff that have variablesView and
 	// commandView and historyView???
@@ -134,30 +134,29 @@ public class SideBar extends VBox {
 		variables.setUnderline(true);
 		getChildren().add(variables);
 
-		variablesList = FXCollections.observableArrayList(new Variable("var1", 1.5),
-				new Variable("var2", 2.5));
-		variablesList.add(new Variable("Added var2.5", 5));
+		variablesList = FXCollections.observableArrayList();
+		//variablesList.add(new Variable("Added var2.5", 5));
 
-		variablesTable = new TableView<Variable>();
-		TableColumn<Variable, String> variablesCol = new TableColumn<Variable, String>(
+		variablesTable = new TableView<VariableView>();
+		TableColumn<VariableView, String> variablesCol = new TableColumn<VariableView, String>(
 				"Variables");
 		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
-		TableColumn<Variable, Double> valuesCol = new TableColumn<Variable, Double>(
+		TableColumn<VariableView, Double> valuesCol = new TableColumn<VariableView, Double>(
 				"Values");
 
-		variablesCol.setCellValueFactory(new PropertyValueFactory<Variable, String>(
+		variablesCol.setCellValueFactory(new PropertyValueFactory<VariableView, String>(
 				"myName"));
 		valuesCol
-				.setCellValueFactory(new PropertyValueFactory<Variable, Double>("myVar"));
+				.setCellValueFactory(new PropertyValueFactory<VariableView, Double>("myVar"));
 
 		variablesCol.setPrefWidth(164); // TODO: set dynamically
 		valuesCol.setPrefWidth(164);
 		valuesCol.setEditable(true);
 
 		variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		variablesCol.setOnEditCommit(new EventHandler<CellEditEvent<Variable, String>>() {
+		variablesCol.setOnEditCommit(new EventHandler<CellEditEvent<VariableView, String>>() {
 			@Override
-			public void handle(CellEditEvent<Variable, String> t) {
+			public void handle(CellEditEvent<VariableView, String> t) {
 				t.getTableView().getItems().get(t.getTablePosition().getRow())
 						.setName(t.getNewValue());
 			}
@@ -182,9 +181,9 @@ public class SideBar extends VBox {
 						return t.toString();
 					}
 				}));
-		valuesCol.setOnEditCommit(new EventHandler<CellEditEvent<Variable, Double>>() {
+		valuesCol.setOnEditCommit(new EventHandler<CellEditEvent<VariableView, Double>>() {
 			@Override
-			public void handle(CellEditEvent<Variable, Double> t) {
+			public void handle(CellEditEvent<VariableView, Double> t) {
 				t.getTableView().getItems().get(t.getTablePosition().getRow())
 						.setValue(t.getNewValue());
 			}
@@ -207,12 +206,12 @@ public class SideBar extends VBox {
 		// how to remove the extra column?
 
 		// example of how to set new elements to the observablelist
-		variablesList.add(new Variable("Added var3", 3));
-		variablesTable.setItems(variablesList);
+		//variablesList.add(new Variable("Added var3", 3));
+		//variablesTable.setItems(variablesList);
 
-		System.out.println("beforeupdatevar");
-		updateVariable(new Variable("Added var3", 4));
-		System.out.println("afterupdatevar");
+		//System.out.println("beforeupdatevar");
+		updateVariable(new VariableView("Added var3", 4));
+		//System.out.println("afterupdatevar");
 
 		// user-defined commands
 		Text userCommands = new Text(Strings.USER_DEFINED_COMMANDS_HEADER);
@@ -223,6 +222,7 @@ public class SideBar extends VBox {
 		ListView<String> userCommandsList = new ListView<String>();
 		ObservableList<String> commandsItems = FXCollections.observableArrayList(
 				"String1", "String2", "String3");
+		//create an object instead
 		userCommandsList.setItems(commandsItems);
 		userCommandsList.setMaxWidth(Double.MAX_VALUE);
 		userCommandsList.setPrefHeight(150);
@@ -305,10 +305,10 @@ public class SideBar extends VBox {
 		historyItems.add(string);
 	}
 
-	public void updateVariable(Variable variable) {
+	public void updateVariable(VariableView variable) {
 		// variablesTable.getItems().stream().forEach((o) ->
-		for (Variable o : variablesTable.getItems()) {
-			System.out.println("updatevar");
+		for (VariableView o : variablesTable.getItems()) {
+			System.out.println("updatevar in sidebar class");
 			System.out.println(o.getName());
 			System.out.println(variable.getName());
 			if (o.getName().equals(variable.getName())) {

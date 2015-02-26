@@ -27,6 +27,10 @@ public class Variable {
     	 myVar.set(value);
      }
      
+     public double getValue(){
+    	 return myVar.get();
+     }
+     
      public double getVar() {
     	 return myVar.get();
      }

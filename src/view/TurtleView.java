@@ -24,13 +24,13 @@ public class TurtleView extends ImageView {
 		isVisible = true;
 	}
 
-	//relative
+	//relative movement
 	public void move(double moveX, double moveY) {
 		setTranslateX(moveX);
 		setTranslateY(moveY);
 	}
 
-	//absolute
+	//absolute movement
 	public double setXY(double x, double y) {
         double newX=getTranslateX();
         double newY=getTranslateY();
@@ -39,7 +39,6 @@ public class TurtleView extends ImageView {
 		return Math.sqrt(Math.pow(newX-x,2)+Math.pow(newY-y, 2));
 	}
 	
-
 	public void setRelativeHeading(double angle) {
 		myHeading = myHeading + angle; 
 		myHeading = adjustAngle(myHeading);
@@ -76,6 +75,11 @@ public class TurtleView extends ImageView {
 		return -1 * getTranslateY();	
 	}
 	
+	/**
+	 * Normalizes a double parameter to an angle between 0-360
+	 * @param angle
+	 * @return normalized angle between 0-360
+	 */
 	private double adjustAngle(double angle){
 		angle = angle % 360;
 		if (angle < 0){
@@ -83,4 +87,6 @@ public class TurtleView extends ImageView {
 		}
 		return angle;
 	}
+	
+	
 }

@@ -79,6 +79,7 @@ public class MovementInstruction extends Instruction {
 			//need view
 			myJump = true;
 			myPolar = new Polar(myDependencies.get(0).execute(), myDependencies.get(1).execute());
+			
 			return 0.0;
 		case "PENDOWN":
 			myView.setPenUp(0, false);

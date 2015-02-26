@@ -173,9 +173,11 @@ public class SLogoView {
 	
 	public double towards(int id, double x, double y){
 		
-		
-		setHeading()
+		//TODO
+		return 10;
 	}
+	
+	
 
 	public void setHeading(int id, double angle, boolean relative) {
 		if (relative)
@@ -270,6 +272,7 @@ public class SLogoView {
 	
 	
 	
+	//here our SLogoView is acting like a controller
 	//these are all methods that could technically be contained within updateworkspace method....or at least conceptually are related enough to be in there
 	public void setPenUp(int id, boolean setPen) {
 		/*
@@ -320,6 +323,10 @@ public class SLogoView {
 		stage.setTitle("Error");
 		stage.setScene(scene);
 		stage.show();	
+	}
+	
+	public void updateVariable(Variable variable){
+		mySidebar.addVariable(variable);
 	}
 	
 	//LILA TODO THIS

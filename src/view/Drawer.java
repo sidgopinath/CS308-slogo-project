@@ -102,11 +102,9 @@ public class Drawer {
                }
            }else{
         	   if (command.isRelative()){
-            	   System.out.println("HIHIHIHIHI");
         		   turtle.setRelativeHeading(polar.angle);
         	   }
         	   else{
-            	   System.out.println("OHOHOHOHOHO");
         		   turtle.setAbsoluteHeading(polar.angle);
         	   }
            }

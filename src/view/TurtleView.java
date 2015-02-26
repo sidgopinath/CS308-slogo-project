@@ -32,15 +32,24 @@ public class TurtleView extends ImageView {
 		setTranslateX(x);
 		setTranslateY(y);
 	}
+	
+	
+	//TODO: Test this
+	public double getXCoord(){
+		System.out.println(getTranslateX());
+		return getTranslateX();
+	}
+	
+	public double getYCoord(){
+		System.out.println(getTranslateY());
+		return getTranslateY();
+	}
 
 	public void setRelativeHeading(double angle) {
-		setRotate(myHeading + angle);
-		
-		System.out.println("angle");
-		System.out.println(getRotate());
 		
 		myHeading = myHeading + angle; 
 		myHeading = adjustAngle(myHeading);
+		setRotate(myHeading);
 		
 		System.out.println("angle adjusted");
 		System.out.println(myHeading);
@@ -50,6 +59,7 @@ public class TurtleView extends ImageView {
 	public void setAbsoluteHeading(double angle){
 		double distanceToMove = myHeading - angle;
 		myHeading = adjustAngle(myHeading - distanceToMove);
+		setRotate(myHeading);
 	}
 	
 	public void setPenUp(boolean isUp){

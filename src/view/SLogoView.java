@@ -13,6 +13,7 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -26,6 +27,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Font;
@@ -91,21 +93,21 @@ public class SLogoView {
 
 	// does this do anything?
 	//do we need to return anything
-	public String updateWorkspace(List<TurtleCommand> instructionList) {
-		String returnString = null;
-		for (TurtleCommand instruction : instructionList) {
+	public void updateWorkspace(List<TurtleCommand> instructionList) {
+	//	String returnString = null;
+	/*	for (TurtleCommand instruction : instructionList) {
 			returnString += updateFromInstruction(instruction) + "\n";
-		}
+		}*/
 		List<Polyline> newlines = drawer.draw(myTurtles, instructionList);
 		lines.getChildren().addAll(newlines);
-		return returnString;
+	//	return returnString;
 	}
 
 
 	// make update from a single command
-	private String updateFromInstruction(TurtleCommand instruction) {
+/*	private String updateFromInstruction(TurtleCommand instruction) {
 		return "return value";
-	}
+	}*/
 
 	public Turtle getTurtleInfo(int index) {
 		ImageView temp = myTurtles.get(index);
@@ -158,11 +160,16 @@ public class SLogoView {
 		}
 	}
 
-	public void setXY(int id, double x, double y) {
+	public double setXY(int id, double x, double y) {
 		TurtleView turtle = myTurtles.get(id);
 		
 		myTurtles.get(id).setXY(originX + x - turtle.getLayoutX(),
 				-1 * originY - y + turtle.getLayoutY());
+		System.out.println("setXY");
+		System.out.println(turtle.getLayoutX());
+		System.out.println(turtle.getLayoutY());
+		System.out.println(Math.sqrt(Math.pow(turtle.getLayoutX(),2)+Math.pow(turtle.getLayoutY(),2)));
+		return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
 	}
 
 	public void setHeading(int id, double angle, boolean relative) {
@@ -179,7 +186,6 @@ public class SLogoView {
 
 		Stage stage = new Stage();
 		setupScene(stage, browser, 1000, 750);
-
 	}
 
 	private MenuBar configureTopMenu() {
@@ -288,6 +294,29 @@ public class SLogoView {
 		return myTurtles.get(id).getRotate();
 	}
 
+	//these definitely methods should not be in SLogoView; 
+	public double getXCor(){
+		
+	}
+	
+	public double getYCor(){
+		
+	}
+	
+	public void openDialog(String message){
+		Stage stage = new Stage();
+		HBox root = new HBox();
+		root.setAlignment(Pos.CENTER);
+		Text text = new Text(message);
+		root.getChildren().add(text);
+
+		Scene scene = new Scene(root, 300, 100);
+
+		stage.setTitle("Error");
+		stage.setScene(scene);
+		stage.show();
+		
+	}
 	
 	//LILA TODO THIS
 	//this should be in the workspace, but it would have to be called twice in this class and in that class

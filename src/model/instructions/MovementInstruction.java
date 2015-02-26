@@ -68,9 +68,9 @@ public class MovementInstruction extends Instruction {
 			updateView();
 			return returnVal;
 		case "SETHEADING":
-			// Need view
 			myJump = false;
 			myPolar = new Polar(myDependencies.get(0).execute(), 0);
+			updateView();
 			return 0.0;
 		case "TOWARDS":
 			// need view

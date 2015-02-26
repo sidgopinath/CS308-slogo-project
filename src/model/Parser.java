@@ -44,6 +44,11 @@ public class Parser {
 	    makePatterns("resources/languages/Syntax");
 	}
 	
+	private void addAllPatterns(String language){
+		makePatterns("resources/languages/" + language);
+	    makePatterns("resources/languages/Syntax");
+	}
+	
 	public void makePatterns (String resourceInput) {
         ResourceBundle resources = ResourceBundle.getBundle(resourceInput);
         Enumeration<String> iter = resources.getKeys();
@@ -232,5 +237,10 @@ public class Parser {
 	public static void main(String[] args) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ClassNotFoundException{
 		Parser p = new Parser(null);
 		p.parseAndExecute(null);
+	}
+
+	public void setLanguage(String language){
+		patterns = new ArrayList<>();
+		addAllPatterns(language);
 	}
 }

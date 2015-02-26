@@ -12,6 +12,7 @@ public class ControlInstruction extends Instruction{
 	}
 
 	public enum implementers {
+		MAKEVARIABLE(2),
 		REPEAT(2),
 		DOTIMES(2),
 		FOR(2),
@@ -27,6 +28,8 @@ public class ControlInstruction extends Instruction{
 	@Override
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
+		case "VARIABLE":
+			myEnvironment.addInstruction(myDependencies[1].execute, inInstruction);
 		case "REPEAT":
 			for(int i =0; i<myDependencies.get(0).execute(); i++){
 				myDependencies.get(1).execute();

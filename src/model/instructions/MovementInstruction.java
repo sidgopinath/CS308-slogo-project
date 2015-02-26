@@ -50,7 +50,7 @@ public class MovementInstruction extends Instruction {
 		case "FORWARD":
 			returnVal = myDependencies.get(0).execute();
 			myPolar = new Polar(0, returnVal);
-			updateView();
+			//updateView();
 			return returnVal;
 		case "BACKWARD":
 			returnVal = myDependencies.get(0).execute();
@@ -105,7 +105,7 @@ public class MovementInstruction extends Instruction {
 	private void updateView() {
 		List<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
 		commandList.add(new TurtleCommand(0, myPolar, myJump));
-		myView.updateWorkspace(commandList);
+		//myView.updateWorkspace(commandList);
 	}
 
 	@Override

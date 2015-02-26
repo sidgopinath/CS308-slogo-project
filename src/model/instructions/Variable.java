@@ -9,12 +9,11 @@ public class Variable extends Instruction{
 	public Variable(List<Instruction> dependencies, String instructionType,
 			SLogoView view, ExecutionEnvironment environment) {
 		super(dependencies, instructionType, view, environment);
-		myEnvironment.addVariable(myInstructionType, this);
 	}
 
 	@Override
 	public double execute() {
-		return myDependencies.get(0).execute();
+		return myEnvironment.getVariable(myInstructionType).execute();
 	}
 
 	@Override

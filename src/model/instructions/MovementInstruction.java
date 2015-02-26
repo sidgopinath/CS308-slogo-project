@@ -86,7 +86,7 @@ public class MovementInstruction extends Instruction {
 			myView.showTurtle(0, false);
 			return 0.0;
 		case "CLEARSCREEN":
-			//need view
+			myView.clearScreen();
 			return 0.0;
 		case "HOME":
 			//need view

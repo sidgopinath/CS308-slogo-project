@@ -115,6 +115,7 @@ public class SLogoView {
 
 	}
 
+	//TODO: what is being passed in and how to update the tableview? may have to iterate through observablelist
 	public void updateVariables(Map<String, Double> variableUpdates) {
 		Iterator<Entry<String, Double>> it = variableUpdates.entrySet().iterator();
 		while (it.hasNext()) {
@@ -122,12 +123,9 @@ public class SLogoView {
 			String name = variable.getKey();
 			double value = variable.getValue();
 			if (variables.get(name) == null) {
-
-				// TODO:
-				// create the UI element to hold this variable
-				// then add this element to variables (variables.put(name,UI
-				// node));
-				// then add this element to the grid
+				//TODO: it should be passed in not as a map but as the actual variable object in the parameter
+				//or we can just keep the variables object as just a front end thing for displaying (otherwise both front and back end have access to it which may not be good)
+				mySidebar.addVariable(new Variable(name, value));
 			} else {
 				// variables.get(name).setText(value);
 			}
@@ -252,6 +250,7 @@ public class SLogoView {
 	// the controller?
 	
 	//2. or these can be put back into the turtlecommand object and call setPenUp and showTurtle every time. it will not be very efficient, but may be better in design
+	
 	public void setPenUp(int id, boolean setPen) {
 		/*
 		 * if (setPen){ myTurtles.get(id).setPenUp(true); //return 0; }
@@ -263,5 +262,18 @@ public class SLogoView {
 	public void showTurtle(int id, boolean show) {
 		myTurtles.get(id).showTurtle(show);
 	}
+	
+	public double getHeading(int id){
+		return myTurtles.get(id).getHeading();
+	}
 
+	
+	//LILA TODO THIS
+	
+	//this should be in the workspace, but it would have to be called twice in this class and in that class
+	//but then again maybe not because the group is added on in this class 
+	public void clearScreen(){
+		lines.getChildren().clear();
+		myWorkspace.getChildren().clear();
+	}
 }

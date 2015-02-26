@@ -1,5 +1,5 @@
 package view;
 
-public class VariablesView extends PropertiesView{
+public class VariablesView extends PropertiesView {
 
 }

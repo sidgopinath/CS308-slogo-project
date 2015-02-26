@@ -28,6 +28,7 @@ public class ControlInstruction extends Instruction{
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "MAKEVARIABLE":
+			//need variable map
 			return 0;
 		case "REPEAT":
 			for(int i =0; i<myDependencies.get(0).execute(); i++){
@@ -35,19 +36,27 @@ public class ControlInstruction extends Instruction{
 			}
 			return myDependencies.get(0).execute();
 		case "DOTIMES":
+			//need variable map
 			return 0.0;
 		case "FOR":
+			//need variable map
 			return 0.0;
 		case "IF":
+			if(myDependencies.get(0).execute() != 0){
+				return myDependencies.get(1).execute(); 
+			}
 			return 0.0;
 		case "IFELSE":
-			return 0.0;
-		case "NOT":
-			return 0.0;
+			if(myDependencies.get(0).execute() != 0){
+				return myDependencies.get(1).execute();
+			}
+			else{
+				return myDependencies.get(2).execute();
+			}
 		case "TO":
+			//need variable map/user commands
 			return 0.0;
 		default:
-			//TODO: need Error
 			return -1;
 		}
 	}

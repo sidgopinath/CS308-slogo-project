@@ -17,7 +17,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -80,97 +79,27 @@ public class SLogoView {
 	}
 
 	private void configureUI() {
-		// myRoot.setAlignment(Pos.CENTER);
-		// myRoot.add(makeSimulationButtons(), 1, 2); // new root from a class?
-		// or just a new mehtod?
-		// use a new class for things like the text box since pressing update
-		// will have to update naw and then the view will have to be updated as
-		// well
-		
-		Menu file = new Menu("File"); 	
-		Menu info = new Menu("Info"); 	
-		MenuItem help = new MenuItem("Help");
-		
-		//perhaps change these expressions into lambdas?
-		help.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent t) {		
-//            	Hyperlink infoPage = new Hyperlink("Get help");
-        		//infoPage.setOnAction((event) -> {
-        			WebView browser = new WebView();
-        			WebEngine webEngine = browser.getEngine();
-        			System.out.println(System.getProperty("user.dir") + "/resources/help.html");
-        			//why does this not work?
-        			webEngine.load("file://" + System.getProperty("user.dir") + "/src/resources/help.html");
-        		//	webEngine.load("http://google.com");
-
-        			Stage stage = new Stage();
-        			setupScene(stage, browser, 1000, 750);        	
-            }
-        });
-		
-		MenuItem exit = new MenuItem("Exit");
-		file.getItems().addAll(exit);
-		info.getItems().addAll(help);
-		
-		exit.setOnAction(new EventHandler<ActionEvent>() {
-	            public void handle(ActionEvent t) {
-	                Platform.exit();
-	            }
-	        });        
-		 
-		MenuBar menuBar = new MenuBar();
-		menuBar.getMenus().addAll(file, info); //include help page
-		myRoot.add(menuBar,0,0,2,1);
-
-		Text title = new Text("SLogo");
-		title.setFont(new Font(30));
-		title.setTextAlignment(TextAlignment.CENTER); // why does this not work
-		myRoot.add(title, 0, 1, 2, 1);
-
-		RowConstraints row1 = new RowConstraints();
-		row1.setPercentHeight(2);
-		RowConstraints row2 = new RowConstraints();
-		row2.setPercentHeight(5);
-		RowConstraints row3 = new RowConstraints();
-		row3.setPercentHeight(73);
-		RowConstraints row4 = new RowConstraints();
-		row4.setPercentHeight(20);
-		myRoot.getRowConstraints().add(row1);
-		myRoot.getRowConstraints().add(row2);
-		myRoot.getRowConstraints().add(row3);
-		myRoot.getRowConstraints().add(row4);
-
-		ColumnConstraints col1 = new ColumnConstraints();
-		col1.setPercentWidth(70);
-		ColumnConstraints col2 = new ColumnConstraints();
-		col2.setPercentWidth(30);
-
-		// add lines to a group
-		TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
-		myTurtles.put(0, turtle);
-		myWorkspace = new Workspace(myTurtles, lines);
-		drawer = new Drawer(myWorkspace.getWidth(), myWorkspace.getHeight());
-
+		setGridPaneConstraints();
+		setDefaultWorkspace();	
+		myRoot.add(configureTopMenu(),0,0,2,1);
+		myRoot.add(configureTopRow(), 0, 1, 2, 1);
 		myRoot.add(myWorkspace, 0, 2);
-		myRoot.getColumnConstraints().add(col1);
-		myRoot.getColumnConstraints().add(col2);
 		mySidebar = new SideBar(myTurtles, myStage, myWorkspace, drawer, myController);
 		myRoot.add(mySidebar, 1, 2, 1, 2); // col,
 		myEditor = new Editor(myController, mySidebar); // row,
-		// colspan,
-		// rowspan
 		myRoot.add(myEditor, 0, 3);
 	}
 
+	
+	
+	//does this do anything?
 	public String updateWorkspace(List<TurtleCommand> instructionList) {
 		String returnString = null;
 		for (TurtleCommand instruction : instructionList) {
 			returnString += updateFromInstruction(instruction) + "\n";
 		}
-		//or just pass the entire workspace?
         List<Polyline> newlines=drawer.draw(myTurtles, instructionList);
         lines.getChildren().addAll(newlines);
-		// return value of command or null if there is no return value
 		return returnString;
 	}
 
@@ -195,6 +124,8 @@ public class SLogoView {
 			String name = variable.getKey();
 			double value = variable.getValue();
 			if (variables.get(name) == null) {
+				
+				//TODO:
 				// create the UI element to hold this variable
 				// then add this element to variables (variables.put(name,UI
 				// node));
@@ -210,9 +141,10 @@ public class SLogoView {
 		stage.setTitle(myResources.getString("Title"));
 		stage.setScene(scene);
 		scene.setOnKeyPressed(e -> handleKeyInput(e));
-		// what happens if you set multiple scenes?
 		stage.show();
 	}
+	
+	//for testing
 	private void handleKeyInput (KeyEvent e) {
 	    KeyCode keyCode = e.getCode();
 	    if(keyCode == KeyCode.D){
@@ -238,5 +170,78 @@ public class SLogoView {
     public void setHeading(int id, double angle){
         myTurtles.get(id).setHeading(angle);
     }
+    
+    private void displayPage(String loc){
+    	
+		WebView browser = new WebView();
+		WebEngine webEngine = browser.getEngine();
+		webEngine.load("file://" + System.getProperty("user.dir") + loc);
 
+		Stage stage = new Stage();
+		setupScene(stage, browser, 1000, 750);        	
+
+
+    }
+    
+    public void penUp(boolean isUp){
+    	drawer.setPen(isUp);
+    }
+    
+    private MenuBar configureTopMenu(){
+		Menu file = new Menu("File"); 	
+		Menu info = new Menu("Info"); 	
+		MenuItem help = new MenuItem("Help");
+		
+		//perhaps change these expressions into lambdas?
+		help.setOnAction(e -> displayPage("/src/resources/help.html"));		
+		MenuItem exit = new MenuItem("Exit");
+		file.getItems().addAll(exit);
+		info.getItems().addAll(help);
+		
+		exit.setOnAction(new EventHandler<ActionEvent>() {
+	            public void handle(ActionEvent t) {
+	                Platform.exit();
+	            }
+	        });        
+		 
+		MenuBar menuBar = new MenuBar();
+		menuBar.getMenus().addAll(file, info);
+		return menuBar;
+    }
+
+    private Text configureTopRow(){
+    	Text title = new Text("SLogo");
+		title.setFont(new Font(30));
+		title.setTextAlignment(TextAlignment.CENTER); // why does this not work
+    	return title;
+	}
+    
+    private void setGridPaneConstraints(){
+    	RowConstraints row1 = new RowConstraints();
+		row1.setPercentHeight(2);
+		RowConstraints row2 = new RowConstraints();
+		row2.setPercentHeight(5);
+		RowConstraints row3 = new RowConstraints();
+		row3.setPercentHeight(73);
+		RowConstraints row4 = new RowConstraints();
+		row4.setPercentHeight(20);
+		myRoot.getRowConstraints().add(row1);
+		myRoot.getRowConstraints().add(row2);
+		myRoot.getRowConstraints().add(row3);
+		myRoot.getRowConstraints().add(row4);
+
+		ColumnConstraints col1 = new ColumnConstraints();
+		col1.setPercentWidth(70);
+		ColumnConstraints col2 = new ColumnConstraints();
+		col2.setPercentWidth(30);
+		myRoot.getColumnConstraints().add(col1);
+		myRoot.getColumnConstraints().add(col2);
+    }
+    
+    private void setDefaultWorkspace(){
+    	TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
+		myTurtles.put(0, turtle);
+		myWorkspace = new Workspace(myTurtles, lines);
+		drawer = new Drawer(myWorkspace.getGridWidth(), myWorkspace.getGridHeight());
+    }
 }

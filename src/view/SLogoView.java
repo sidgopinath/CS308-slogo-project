@@ -50,8 +50,6 @@ public class SLogoView implements Observer{
 	private GridPane myRoot;
 	protected ResourceBundle myResources;
 	private Map<String, Node> variables;
-	private double myWidth;
-	private double myHeight;
 	private Drawer drawer;
 	private Workspace myWorkspace;
 	private Group lines = new Group();
@@ -61,8 +59,6 @@ public class SLogoView implements Observer{
 	private Editor myEditor;
 	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>();
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
-	private double originX;
-	private double originY;
 
 	public SLogoView(Stage s) {
 		myController = new SLogoController(this, s);
@@ -82,8 +78,6 @@ public class SLogoView implements Observer{
 		 * bounds.getHeight();
 		 */
 		setupScene(myStage, myRoot, 1200, 750);
-		originX = myTurtles.get(0).getLayoutX();
-		originY = myTurtles.get(0).getLayoutY();
 	}
 
 	private void configureUI() {

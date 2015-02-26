@@ -46,5 +46,8 @@ public class TurtleView extends ImageView {
 	public boolean getPenUp(){
 		return penUp;
 	}
-
+	
+	public void showTurtle(boolean show){
+		setVisible(show);
+	}
 }

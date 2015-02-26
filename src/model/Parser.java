@@ -146,7 +146,7 @@ public class Parser {
 				if(testMatches(root.getValue()).equalsIgnoreCase("Constant"))
 					myInt = new Constant(root.getValue());
 				else
-					myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class}).newInstance(new Object[]{descendantInstructions, root.getValue(),mySLogoView});
+					myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class,ExecutionEnvironment.class}).newInstance(new Object[]{descendantInstructions, root.getValue(),mySLogoView,executionParameters});
 				//System.out.println("made int "+ myInt);
 				root.setInstruction(myInt);
 			} catch (InstantiationException | IllegalAccessException

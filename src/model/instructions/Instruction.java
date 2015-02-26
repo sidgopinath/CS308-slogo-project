@@ -19,12 +19,11 @@ public abstract class Instruction {
 		myView = view;
 		myEnvironment=environment;
 	}
-	
 	public Instruction(String constantInput){}
 	
     public abstract double execute();
 	public abstract int getNumberOfArguments();
-	
+	public abstract String getValue();
 	public TurtleCommand getTurtleCommand() {
 		return null;
 	}

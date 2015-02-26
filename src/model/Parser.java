@@ -212,7 +212,6 @@ public class Parser {
 			List<Instruction> futureInstructions= new ArrayList<Instruction>();
 			try{
 				System.out.println(match);
-				
 				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,mySLogoView, executionParameters});
 				furthestDepth++;
 				myNode = new Node(myInt);

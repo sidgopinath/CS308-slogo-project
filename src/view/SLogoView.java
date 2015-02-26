@@ -287,8 +287,8 @@ public class SLogoView {
 	
 	public double isShowing(int id){
 		if (myTurtles.get(id).isShowing())
-			return 0;
-		return 1;	
+			return 1;
+		return 0;	
 	}
 
 	public void showTurtle(int id, boolean show) {

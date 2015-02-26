@@ -105,7 +105,7 @@ public class MovementInstruction extends Instruction {
 	private void updateView() {
 		List<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
 		commandList.add(new TurtleCommand(0, myPolar, myJump));
-		myView.updateWorkspace(commandList);
+		//myView.updateWorkspace(commandList);
 	}
 
 	@Override

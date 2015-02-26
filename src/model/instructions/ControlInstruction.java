@@ -1,6 +1,7 @@
 package model.instructions;
 
 import java.util.List;
+import java.util.Observable;
 
 import model.ExecutionEnvironment;
 import view.SLogoView;
@@ -28,8 +29,10 @@ public class ControlInstruction extends Instruction{
 	@Override
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
-		case "VARIABLE":
-			//myEnvironment.addInstruction(myDependencies[1].execute, inInstruction);
+		case "MAKEVARIABLE":
+			System.out.println(myDependencies.get(0).getName());
+			myEnvironment.addVariable(myDependencies.get(0).getName(), myDependencies.get(1));
+			return myDependencies.get(1).execute();
 		case "REPEAT":
 			for(int i =0; i<myDependencies.get(0).execute(); i++){
 				myDependencies.get(1).execute();

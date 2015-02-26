@@ -1,13 +1,15 @@
 package model.instructions;
 
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
-import view.SLogoView;
 import model.ExecutionEnvironment;
 import model.turtle.TurtleCommand;
+import view.SLogoView;
 
 
-public abstract class Instruction {
+public abstract class Instruction implements Observer{
  
 	protected List<Instruction> myDependencies;
 	protected String myInstructionType;
@@ -19,12 +21,21 @@ public abstract class Instruction {
 		myView = view;
 		myEnvironment=environment;
 	}
-	public Instruction(String constantInput){}
+	public Instruction(String constantInput){
+		myInstructionType=constantInput;
+	}
 	
     public abstract double execute();
 	public abstract int getNumberOfArguments();
 	public TurtleCommand getTurtleCommand() {
 		return null;
+	}
+	public String getName(){
+		return this.myInstructionType;
+	}
+	@Override
+	public void update(Observable o, Object arg) {
+		myEnvironment = (ExecutionEnvironment) o;
 	}
 }
 

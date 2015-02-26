@@ -14,13 +14,13 @@ public class ListInstruction extends Instruction {
 
 	@Override
 	public double execute() {
-		//for loop, execute every node in the instruction set. return the value of the last one.
-		for(Instruction i:myDependencies){
-			i.execute();
-		}
+		// Does nothing, since lists cant be executed
 		return 0;
 	}
-
+	public List<Instruction> getDependencies(){
+		// Returns the list back to the caller
+		return myDependencies;
+	}
 	@Override
 	public int getNumberOfArguments() {
 		return 1;

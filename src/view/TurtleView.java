@@ -27,7 +27,7 @@ public class TurtleView extends ImageView {
 		setTranslateY(moveY);
 	}
 
-	public double setXY(double originX, double originY, double x, double y) {
+	public double setXY(double x, double y) {
         double newX=getTranslateX();
         double newY=getTranslateY();
 		setTranslateX(x);
@@ -36,7 +36,7 @@ public class TurtleView extends ImageView {
 	}
    
 	public void setRelativeHeading(double angle) {
-        myHeading = myHeading + angle;
+        myHeading = myHeading + angle; 
 		setRotate(myHeading);
 		myHeading = adjustAngle(myHeading);
 	}

@@ -2,15 +2,15 @@ package model.instructions;
 
 import java.util.List;
 
+import model.ExecutionEnvironment;
 import view.SLogoView;
 
 
 public class TurtleRequestInstruction extends Instruction {
 	
-	public TurtleRequestInstruction(List<Instruction> dependencies, String instructionType, SLogoView view) {
-		super(dependencies, instructionType, view);
+	public TurtleRequestInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, view, environment);
 	}
-
 	// TODO call view for these fields
 
 

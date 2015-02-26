@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import view.SLogoView;
+import model.ExecutionEnvironment;
 import model.Polar;
 import model.turtle.TurtleCommand;
 
@@ -35,8 +36,8 @@ public class MovementInstruction extends Instruction {
     }
 	}
 	
-	public MovementInstruction(List<Instruction> dependencies, String instructionType, SLogoView view) {
-		super(dependencies, instructionType, view);
+	public MovementInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, view, environment);
 		myDependencies = dependencies;
 		myInstructionType = instructionType;
 		myTurtle = null;
@@ -50,19 +51,19 @@ public class MovementInstruction extends Instruction {
 		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
 			myPolar = new Polar(0, inputDouble);
-			updateView();
+			//updateView();
 			return inputDouble;
 		case "BACKWARD":
 			myPolar = new Polar(0, -inputDouble);
-			updateView();
+			//updateView();
 			return myDependencies.get(0).execute();
 		case "LEFT":
 			myPolar = new Polar(-inputDouble, 0);
-			updateView();
+			//updateView();
 			return myDependencies.get(0).execute();
 		case "RIGHT":
 			myPolar = new Polar(inputDouble, 0);
-			updateView();
+			//updateView();
 			return myDependencies.get(0).execute();
 		case "SETHEADING":
 			// Need view

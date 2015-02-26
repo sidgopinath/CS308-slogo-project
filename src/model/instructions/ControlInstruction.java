@@ -2,16 +2,16 @@ package model.instructions;
 
 import java.util.List;
 
+import model.ExecutionEnvironment;
 import view.SLogoView;
 
 public class ControlInstruction extends Instruction{
 
-	public ControlInstruction(List<Instruction> dependencies, String instructionType, SLogoView view) {
-		super(dependencies, instructionType, view);
+	public ControlInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, view, environment);
 	}
 
 	public enum implementers {
-		MAKEVARIABLE(2),
 		REPEAT(2),
 		DOTIMES(2),
 		FOR(2),
@@ -27,9 +27,6 @@ public class ControlInstruction extends Instruction{
 	@Override
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
-		case "MAKEVARIABLE":
-			//need variable map
-			return 0;
 		case "REPEAT":
 			for(int i =0; i<myDependencies.get(0).execute(); i++){
 				myDependencies.get(1).execute();

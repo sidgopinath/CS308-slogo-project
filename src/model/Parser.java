@@ -19,21 +19,22 @@ import model.turtle.TurtleCommand;
 /**
  * To parse, first create a parsing tree which will be created/traversed recursively
  * Then, use reflection to instantiate the proper commands
+ * Note, our list implementation does not allow a list to return a value
  * @author Primary: Greg, Secondary: Sid
  */
 public class Parser {
 	private static List<Entry<String, Pattern>> patterns;
 	private static Map<String,String> commandMap;
-	private static final String[] commandTypes = new String[]{"BooleanInstruction","MathInstruction","MovementInstruction"};
+	private static final String[] commandTypes = new String[]{"BooleanInstruction","ControlInstruction","MathInstruction","MovementInstruction"};
 	private int furthestDepth;
 	private SLogoView mySLogoView;
-	private Map<String, Double> myVariableMap; 
+	private ExecutionEnvironment executionParameters;
 	
 	public Parser(SLogoView view){
 		mySLogoView = view;
-		myVariableMap = new HashMap<String, Double>();
 		patterns = new ArrayList<>();
 		commandMap = new HashMap<String, String>();
+		executionParameters = new ExecutionEnvironment();
 		addAllPatterns();
 		makeCommandMap();
 	}
@@ -66,14 +67,14 @@ public class Parser {
 				commandMap.put(d.toString(), s);
 			}
 			commandMap.put("[", "ListInstruction");
-			commandMap.put("REPEAT", "ControlInstruction");
-			commandMap.put("IF", "ControlInstruction");
-			commandMap.put("IFELSE", "ControlInstruction");
+			commandMap.put("MAKEVARIABLE","Variable");
+			commandMap.put("VARIABLE","Variable");
 		}
 	}
 	List<Instruction> outList;
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		input = "[ fd + 200 400 ] fd fd 50 rt 90 BACK 40";
+		//input = "[ fd + 200 400 ] fd fd 50 rt 90 BACK 40";
+		input = "make :var 50";
 		furthestDepth = 0;
 		String[] splitCommands = input.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
@@ -95,17 +96,14 @@ public class Parser {
 			turtleCommandGetter(commandList, root);
 			if(!commandList.isEmpty())
 				mySLogoView.updateWorkspace(commandList);
-			//mySLogoView.updateVariables(myVariableMap);
+			  //mySLogoView.updateVariables(myVariableMap);
 		}
-		
-		// method here to convert from ArrayList to executable instruction, and then pass that to an executor by calling all of the .executes.
-		
 	}
 	private void turtleCommandGetter(List<TurtleCommand> cList, Node root) {
 		for(Node n: inOrderTraverser(root)){
-			System.out.println(n.getValue());
+			//System.out.println(n.getValue());
 			TurtleCommand t = n.getInstruction().getTurtleCommand();
-			System.out.println(t);
+			//System.out.println(t);
 			if(t!=null)
 				cList.add(t);
 		}
@@ -149,7 +147,7 @@ public class Parser {
 					myInt = new Constant(root.getValue());
 				else
 					myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class}).newInstance(new Object[]{descendantInstructions, root.getValue(),mySLogoView});
-				System.out.println("made int "+ myInt);
+				//System.out.println("made int "+ myInt);
 				root.setInstruction(myInt);
 			} catch (InstantiationException | IllegalAccessException
 					| IllegalArgumentException | InvocationTargetException
@@ -194,8 +192,6 @@ public class Parser {
 		case "COMMENT":
 			furthestDepth++;
 			return makeTree(command);
-		case "VARIABLE":
-			// look up in map, if not throw error
 		case "CONSTANT":
 			// make node with string
 			furthestDepth++;
@@ -215,7 +211,7 @@ public class Parser {
 			//instantiate the command, if reflection cannot find the file then must be invalid
 			try{
 				System.out.println(match);
-				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class}).newInstance(new Object[]{null, match,mySLogoView});
+				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class,ExecutionEnvironment.class}).newInstance(new Object[]{null, match,mySLogoView, executionParameters});
 				furthestDepth++;
 				neededVars = myInt.getNumberOfArguments();
 				myNode = new Node(match);
@@ -225,7 +221,9 @@ public class Parser {
 				System.out.println("No such class/function, yet!");
 			}
 		}
+		
 		while(myVars<neededVars){
+			System.out.println("got kid "+ myVars+ " "+ neededVars);
 			myNode.addChild(makeTree(command));
 			myVars++;
 		}

@@ -173,7 +173,7 @@ public class SLogoView implements Observer{
 		} else if (keyCode == KeyCode.E) {
 		    System.out.print(towards(0,-10,10));
 		} else if (keyCode == KeyCode.Q) {
-			setHeading(0, 45,true);
+		    clearScreen(0);
 		} else if (keyCode == KeyCode.A) {
 			System.out.print(myTurtles.get(0).getTranslateX() + ","
 					+ myTurtles.get(0).getTranslateY());
@@ -319,12 +319,11 @@ public class SLogoView implements Observer{
 	// this should be in the workspace, but it would have to be called twice in
 	// this class and in that class
 	// but then again maybe not because the group is added on in this class
-	public double clearScreen(int id) {
+	public void clearScreen(int id) {
 		// these group of lines somehow need to be connected with the turtle
 		lines.getChildren().clear();
-		myWorkspace.getChildren().remove(myTurtles.get(id)); //clear only the current turtle
-
-		return 10; // TODO: calculatedistance()
+        myTurtles.get(id).setAbsoluteHeading(0);
+		myTurtles.get(id).setXY(0, 0); //clear only the current turtle
 	}
 
 	@Override

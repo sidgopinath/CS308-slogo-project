@@ -39,7 +39,7 @@ public class MovementInstruction extends Instruction {
 		myDependencies = dependencies;
 		myInstructionType = instructionType;
 		myTurtle = null;
-		myJump = false;
+		myJump = true;
 	}
 	
 	@Override
@@ -63,6 +63,7 @@ public class MovementInstruction extends Instruction {
 			return myDependencies.get(0).execute();
 		case "SETHEADING":
 			// Need view
+			myJump = false;
 			myPolar = new Polar(myDependencies.get(0).execute(), 0);
 			return 0.0;
 		case "TOWARDS":
@@ -89,7 +90,7 @@ public class MovementInstruction extends Instruction {
 			myView.clearScreen(0);
 			return 0.0;
 		case "HOME":
-			myView.sendHome(0);
+			myView.setXY(0,0,0);
 			return 0.0;
 		default: 
 			return 0;

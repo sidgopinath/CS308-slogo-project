@@ -27,30 +27,37 @@ public class TurtleView extends ImageView {
 		setTranslateY(moveY);
 	}
 
-	public void turn(double angle) {
-		setRotate(angle);
-	}
-
 	public void setXY(double x, double y) {
 		System.out.println("go to " + x + "," + y);
 		setTranslateX(x);
 		setTranslateY(y);
 	}
 
-	public void setHeading(double angle) {
-		setRotate(angle);
+	public void setRelativeHeading(double angle) {
+		setRotate(myHeading + angle);
 		
-		myHeading = myHeading + angle;
-		if (myHeading > 360)
-			myHeading = myHeading % 360;
+		System.out.println("angle");
+		System.out.println(getRotate());
+		
+		myHeading = myHeading + angle; 
+		myHeading = adjustAngle(myHeading);
+		
+		System.out.println("angle adjusted");
+		System.out.println(myHeading);
+
 	}
 	
-	public double getHeading() {
-		return myHeading;
+	public void setAbsoluteHeading(double angle){
+		double distanceToMove = myHeading - angle;
+		myHeading = adjustAngle(myHeading - distanceToMove);
 	}
 	
 	public void setPenUp(boolean isUp){
 		penUp = isUp;
+	}
+	
+	public double getHeading(){
+		return myHeading;
 	}
 	
 	public boolean getPenUp(){
@@ -63,5 +70,13 @@ public class TurtleView extends ImageView {
 	public void showTurtle(boolean show){
 		setVisible(show);
 		isVisible = show;
+	}
+	
+	private double adjustAngle(double angle){
+		angle = angle % 360;
+		if (angle < 0){
+			angle = 360 - (-1)*angle;
+		}
+		return angle;
 	}
 }

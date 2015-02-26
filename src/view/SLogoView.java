@@ -61,7 +61,6 @@ public class SLogoView {
 	public SLogoView(Stage s) {
 		myController = new SLogoController(this, s);
 		myStage = s;
-		// create root node
 		myRoot = new GridPane();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 		lines.setManaged(false);
@@ -91,6 +90,7 @@ public class SLogoView {
 	}
 
 	// does this do anything?
+	//do we need to return anything
 	public String updateWorkspace(List<TurtleCommand> instructionList) {
 		String returnString = null;
 		for (TurtleCommand instruction : instructionList) {
@@ -101,8 +101,6 @@ public class SLogoView {
 		return returnString;
 	}
 
-	public void setXY(double x, double y) {
-	}
 
 	// make update from a single command
 	private String updateFromInstruction(TurtleCommand instruction) {
@@ -154,20 +152,23 @@ public class SLogoView {
 			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
 			lines.getChildren().addAll(newlines);
 		} else if (keyCode == KeyCode.E) {
-			setXY(0, 0, 0);
+			setXY(0, 100, 100);
 		} else if (keyCode == KeyCode.Q) {
-			setHeading(0, 90);
+			setHeading(0, 90, true);
 		}
 	}
 
 	public void setXY(int id, double x, double y) {
 		TurtleView turtle = myTurtles.get(id);
+		
 		myTurtles.get(id).setXY(originX + x - turtle.getLayoutX(),
-				originY + y - turtle.getLayoutY());
+				-1 * originY - y + turtle.getLayoutY());
 	}
 
-	public void setHeading(int id, double angle) {
-		myTurtles.get(id).setHeading(angle);
+	public void setHeading(int id, double angle, boolean relative) {
+		if (relative)
+			myTurtles.get(id).setRelativeHeading(angle);
+		myTurtles.get(id).setAbsoluteHeading(angle);
 	}
 
 	private void displayPage(String loc) {
@@ -240,6 +241,11 @@ public class SLogoView {
 	}
 
 	
+	
+	
+	
+	
+	
 	// method implementations. Is this bad design to have so many for each?
 
 	
@@ -279,7 +285,7 @@ public class SLogoView {
 	}
 	
 	public double getHeading(int id){
-		return myTurtles.get(id).getHeading();
+		return myTurtles.get(id).getRotate();
 	}
 
 	
@@ -294,8 +300,4 @@ public class SLogoView {
 		return 10; //TODO: calculatedistance()
 	}
 	
-	public double sendHome(int id){
-		//these group of lines somehow need to be connected with the turtle
-		return 5; //TODO: calculatedistance()
-	}
 }

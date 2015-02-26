@@ -284,7 +284,7 @@ public class SideBar extends VBox {
 						"*.gif"));
 		return fileChooser.showOpenDialog(myStage);
 	}
-
+	
 	private void changeTurtleImage(TurtleView turtle, Image img) {
 		turtle.setImage(img);
 	}

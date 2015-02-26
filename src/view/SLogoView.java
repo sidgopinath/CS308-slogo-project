@@ -138,38 +138,6 @@ public class SLogoView {
 		scene.setOnKeyPressed(e -> handleKeyInput(e));
 		stage.show();
 	}
-
-	// for testing
-	private void handleKeyInput(KeyEvent e) {
-		KeyCode keyCode = e.getCode();
-		if (keyCode == KeyCode.D) {
-			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-			instructions.add(new TurtleCommand(0, new Polar(30, 0), false));
-			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
-			lines.getChildren().addAll(newlines);
-		} else if (keyCode == KeyCode.W) {
-			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-			instructions.add(new TurtleCommand(0, new Polar(0, 10), false));
-			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
-			lines.getChildren().addAll(newlines);
-		} else if (keyCode == KeyCode.E) {
-			setXY(0, 100, 100);
-		} else if (keyCode == KeyCode.Q) {
-			setHeading(0, 90, true);
-		}
-	}
-
-	public double setXY(int id, double x, double y) {
-		TurtleView turtle = myTurtles.get(id);
-		
-		myTurtles.get(id).setXY(originX + x - turtle.getLayoutX(),
-				-1 * originY - y + turtle.getLayoutY());
-		System.out.println("setXY");
-		System.out.println(turtle.getLayoutX());
-		System.out.println(turtle.getLayoutY());
-		System.out.println(Math.sqrt(Math.pow(turtle.getLayoutX(),2)+Math.pow(turtle.getLayoutY(),2)));
-		return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
-	}
 	
 	public double towards(int id, double x, double y){
 		
@@ -178,6 +146,40 @@ public class SLogoView {
 	}
 	
 	
+	//for testing
+	private void handleKeyInput (KeyEvent e) {
+	    KeyCode keyCode = e.getCode();
+	    if(keyCode == KeyCode.D){
+            ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
+            instructions.add(new TurtleCommand(0,new Polar(30,0),true));
+            List<Polyline> newlines=drawer.draw(myTurtles, instructions);
+            lines.getChildren().addAll(newlines);
+	    }else if(keyCode == KeyCode.W){
+            ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
+            instructions.add(new TurtleCommand(0,new Polar(0,15),false));
+            List<Polyline> newlines=drawer.draw(myTurtles, instructions);
+            lines.getChildren().addAll(newlines);
+	    }else if(keyCode == KeyCode.E){
+	        setXY(0,0,0);
+        }else if(keyCode == KeyCode.Q){
+            setHeading(0,90);
+        }else if(keyCode == KeyCode.A){
+            System.out.print(myTurtles.get(0).getTranslateX()+","+myTurtles.get(0).getTranslateY());
+        }
+    }
+    public double setXY(int id, double x,double y){
+       return myTurtles.get(id).setXY(x,y);
+    }
+    
+    public void setHeading(int id, double angle){
+        myTurtles.get(id).setAbsoluteHeading(angle);
+    }
+    
+//	public double towards(int id, double x, double y){
+//		
+//		
+//		setHeading()
+//	}
 
 	public void setHeading(int id, double angle, boolean relative) {
 		if (relative)
@@ -186,7 +188,6 @@ public class SLogoView {
 	}
 
 	private void displayPage(String loc) {
-
 		WebView browser = new WebView();
 		WebEngine webEngine = browser.getEngine();
 		webEngine.load("file://" + System.getProperty("user.dir") + loc);
@@ -308,7 +309,7 @@ public class SLogoView {
 	}
 	
 	public double getYCor(int id){
-		return myTurtles.get(0).getYCoord(); 
+		return (-1)*myTurtles.get(0).getTranslateY(); 
 	}
 	
 	public void openDialog(String message){

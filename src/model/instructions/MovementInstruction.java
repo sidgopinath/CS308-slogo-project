@@ -21,7 +21,7 @@ public class MovementInstruction extends Instruction {
 		RIGHT(1),
 		SETHEADING(1),
 		TOWARDS(2),
-		SETXY(2),
+		SETPOSITION(2),
 		PENDOWN(0),
 		PENUP(0),
 		SHOWTURTLE(0),
@@ -75,12 +75,9 @@ public class MovementInstruction extends Instruction {
 		case "TOWARDS":
 			// need view
 			return 0.0;
-		case "SETXY":
-			//need view
+		case "SETPOSITION":
 			myJump = true;
-			myPolar = new Polar(myDependencies.get(0).execute(), myDependencies.get(1).execute());
-			
-			return 0.0;
+			return myView.setXY(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "PENDOWN":
 			myView.setPenUp(0, false);
 			return 1.0;
@@ -96,8 +93,8 @@ public class MovementInstruction extends Instruction {
 		case "CLEARSCREEN":
 			return myView.clearScreen(0);
 		case "HOME":
-			myView.setXY(0,0,0);
-			return 0.0;
+			myJump = true;
+			return myView.setXY(0,0,0);
 		default: 
 			return 0;
 		}

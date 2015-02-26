@@ -8,6 +8,7 @@ import javafx.scene.image.ImageView;
 public class TurtleView extends ImageView {
 
 	private int myHeading;
+	private boolean penUp;
 
 	// private int myID;
 
@@ -15,6 +16,7 @@ public class TurtleView extends ImageView {
 		super(img);
 		setFitWidth(30);
 		setFitHeight(30);
+		penUp = true;
 		myHeading = 0;
 	}
 
@@ -35,6 +37,14 @@ public class TurtleView extends ImageView {
 
 	public void setHeading(double angle) {
 		setRotate(angle);
+	}
+	
+	public void setPenUp(boolean isUp){
+		penUp = isUp;
+	}
+	
+	public boolean getPenUp(){
+		return penUp;
 	}
 
 }

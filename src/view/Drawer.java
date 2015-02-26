@@ -16,19 +16,36 @@ public class Drawer {
     private double myXBounds;
     private double myYBounds;
     
+
+     private static final int NO_CHANGE = 0;
+     private static final int CHANGE_TO_DOWN = 1;
+     private static final int CHANGE_TO_UP = 2;
+
+    
     public Drawer(double xMax, double yMax){
     	myXBounds = xMax;
     	myYBounds = yMax;
     	color = Color.BLACK;
     }
-
-   public List<Polyline> draw(Map<Integer, TurtleView> turtles, List<TurtleCommand> instrucions){
-       ArrayList<Polyline> lines= new ArrayList<Polyline>();
-       Iterator<TurtleCommand> it = instrucions.iterator();
+    
+   //may have to remove list from turtlecommand
+   public List<Polyline> draw(Map<Integer, TurtleView> turtles, List<TurtleCommand> instructions){
+	   ArrayList<Polyline> lines= new ArrayList<Polyline>();
+       Iterator<TurtleCommand> it = instructions.iterator();
        while(it.hasNext()){
-           TurtleCommand instruction = it.next();
-           TurtleView turtle = turtles.get(instruction.turtleId);
-           Polar polar = instruction.polar;
+           TurtleCommand command = it.next();
+    	   int penChange = command.getPenChange();
+
+           TurtleView turtle = turtles.get(command.getTurtleId());
+           if (penChange == CHANGE_TO_DOWN)
+        	   turtle.setPenUp(false);
+           if (penChange == CHANGE_TO_UP)
+        	   turtle.setPenUp(true);
+
+           
+           Polar polar = command.getPolar();
+          
+           //move turtle and draw line
            if(polar.distance!=0){
                double angle=turtle.getRotate();
                double turtleX=turtle.getLayoutX();
@@ -49,12 +66,15 @@ public class Drawer {
 	               double endX=turtle.getTranslateX()+turtleX+turtle.getFitWidth()/2;
 	               double endY=turtle.getTranslateY()+turtleY+turtle.getFitHeight()/2;
 	               System.out.println(endX+","+endY);
-	               if(!instruction.penUp){
+	               if(!turtle.getPenUp()){
 	                   Polyline polyline = new Polyline();
 	                   polyline.setStroke(color);
 	                   polyline.getPoints().addAll(new Double[]{startX, startY,endX, endY});
 	                   lines.add(polyline);
 	               }
+	           //    else{
+	            	   
+	            //   }
                }
                else{
             	   //TODO: make turtles and lines invisible when out of bounds
@@ -70,6 +90,9 @@ public class Drawer {
         System.out.println("color" + color.toString());
 
         color=c;
-
     }
+    
+   /* public void setPenUp(boolean isUp){
+    	penUp = isUp;
+    } */
 }

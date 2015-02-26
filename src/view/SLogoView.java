@@ -183,9 +183,7 @@ public class SLogoView {
 
     }
     
-    public void penUp(boolean isUp){
-    	drawer.setPen(isUp);
-    }
+   
     
     private MenuBar configureTopMenu(){
 		Menu file = new Menu("File"); 	

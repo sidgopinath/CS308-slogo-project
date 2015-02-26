@@ -10,7 +10,6 @@ import model.turtle.TurtleCommand;
 
 public class MovementInstruction extends Instruction {
 	private TurtleCommand myTurtle;
-	private boolean myPenUp;
 	private boolean myJump;
 	private Polar myPolar;
 	
@@ -40,33 +39,31 @@ public class MovementInstruction extends Instruction {
 		myDependencies = dependencies;
 		myInstructionType = instructionType;
 		myTurtle = null;
-//		myPenUp = false;
 		myJump = false;
 	}
 	
 	@Override
 	public double execute() {
-		double inputDouble = myDependencies.get(0).execute();
 		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
-			myPolar = new Polar(0, inputDouble);
+			myPolar = new Polar(0, myDependencies.get(0).execute());
 			updateView();
-			return inputDouble;
+			return myDependencies.get(0).execute();
 		case "BACKWARD":
-			myPolar = new Polar(0, -inputDouble);
+			myPolar = new Polar(0, -myDependencies.get(0).execute());
 			updateView();
 			return myDependencies.get(0).execute();
 		case "LEFT":
-			myPolar = new Polar(-inputDouble, 0);
+			myPolar = new Polar(-myDependencies.get(0).execute(), 0);
 			updateView();
 			return myDependencies.get(0).execute();
 		case "RIGHT":
-			myPolar = new Polar(inputDouble, 0);
+			myPolar = new Polar(myDependencies.get(0).execute(), 0);
 			updateView();
 			return myDependencies.get(0).execute();
 		case "SETHEADING":
 			// Need view
-			myPolar = new Polar(inputDouble, 0);
+			myPolar = new Polar(myDependencies.get(0).execute(), 0);
 			return 0.0;
 		case "TOWARDS":
 			// need view
@@ -77,11 +74,9 @@ public class MovementInstruction extends Instruction {
 			myPolar = new Polar(myDependencies.get(0).execute(), myDependencies.get(1).execute());
 			return 0.0;
 		case "PENDOWN":
-			//myPenUp = false;
 			myView.setPenUp(0, false);
 			return 1.0;
 		case "PENUP":
-		//	myPenUp = true;
 			myView.setPenUp(0, true);
 			return 0.0;
 		case "SHOWTURTLE":

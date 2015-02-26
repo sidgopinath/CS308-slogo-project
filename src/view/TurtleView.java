@@ -16,7 +16,7 @@ public class TurtleView extends ImageView {
 		super(img);
 		setFitWidth(30);
 		setFitHeight(30);
-		penUp = true;
+		penUp = false;
 		myHeading = 0;
 	}
 

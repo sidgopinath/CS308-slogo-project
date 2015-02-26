@@ -6,24 +6,24 @@ public class TurtleCommand {
  /*
   * Note to use final variables:
   * NOCHANGE = 0
-  * CHANGE_TO_DOWN = 1
-  * CHANGE_TO_UP = 2
+  * CHANGE_TO_DOWN = -1
+  * CHANGE_TO_UP = 1
   * 
   */
 
 	private int myTurtleId;
     private Polar myPolar;
-    private int myPenChange;
+    private int myPenChange; //we utilize 0,1, and -1 since back-end does not store the current penUp of the turtle. The model instead will just alert us if the user inputs a change to the pen 
     private boolean isRelative;
 
-    public TurtleCommand(int turtleId, Polar polar, int change, boolean relative){
+    public TurtleCommand(int turtleId, Polar polar, boolean relative){
     	myTurtleId=turtleId;
     	myPolar=polar;
-        myPenChange = change;
+       // myPenChange = penChange;
         isRelative=relative;
     }
     
-    public void setTurtleId(int turtleId) {
+	public void setTurtleId(int turtleId) {
  		myTurtleId = turtleId;
  	}
 

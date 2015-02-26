@@ -40,7 +40,7 @@ public class MovementInstruction extends Instruction {
 		myDependencies = dependencies;
 		myInstructionType = instructionType;
 		myTurtle = null;
-		myPenUp = false;
+//		myPenUp = false;
 		myJump = false;
 	}
 	
@@ -77,16 +77,18 @@ public class MovementInstruction extends Instruction {
 			myPolar = new Polar(myDependencies.get(0).execute(), myDependencies.get(1).execute());
 			return 0.0;
 		case "PENDOWN":
-			myPenUp = false;
+			//myPenUp = false;
+			myView.setPenUp(0, false);
 			return 1.0;
 		case "PENUP":
-			myPenUp = true;
+		//	myPenUp = true;
+			myView.setPenUp(0, true);
 			return 0.0;
 		case "SHOWTURTLE":
-			//need view
+			myView.showTurtle(0, true);
 			return 1.0;
 		case "HIDETURTLE":
-			//need view
+			myView.showTurtle(0, false);
 			return 0.0;
 		case "CLEARSCREEN":
 			//need view

@@ -61,7 +61,6 @@ public class SLogoView {
 	public SLogoView(Stage s) {
 		myController = new SLogoController(this, s);
 		myStage = s;
-		// create root node
 		myRoot = new GridPane();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 		lines.setManaged(false);
@@ -91,6 +90,7 @@ public class SLogoView {
 	}
 
 	// does this do anything?
+	//do we need to return anything
 	public String updateWorkspace(List<TurtleCommand> instructionList) {
 		String returnString = null;
 		for (TurtleCommand instruction : instructionList) {
@@ -101,8 +101,6 @@ public class SLogoView {
 		return returnString;
 	}
 
-	public void setXY(double x, double y) {
-	}
 
 	// make update from a single command
 	private String updateFromInstruction(TurtleCommand instruction) {
@@ -115,6 +113,7 @@ public class SLogoView {
 
 	}
 
+	//TODO: what is being passed in and how to update the tableview? may have to iterate through observablelist
 	public void updateVariables(Map<String, Double> variableUpdates) {
 		Iterator<Entry<String, Double>> it = variableUpdates.entrySet().iterator();
 		while (it.hasNext()) {
@@ -122,12 +121,9 @@ public class SLogoView {
 			String name = variable.getKey();
 			double value = variable.getValue();
 			if (variables.get(name) == null) {
-
-				// TODO:
-				// create the UI element to hold this variable
-				// then add this element to variables (variables.put(name,UI
-				// node));
-				// then add this element to the grid
+				//TODO: it should be passed in not as a map but as the actual variable object in the parameter
+				//or we can just keep the variables object as just a front end thing for displaying (otherwise both front and back end have access to it which may not be good)
+				mySidebar.addVariable(new Variable(name, value));
 			} else {
 				// variables.get(name).setText(value);
 			}
@@ -156,20 +152,23 @@ public class SLogoView {
 			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
 			lines.getChildren().addAll(newlines);
 		} else if (keyCode == KeyCode.E) {
-			setXY(0, 0, 0);
+			setXY(0, 100, 100);
 		} else if (keyCode == KeyCode.Q) {
-			setHeading(0, 90);
+			setHeading(0, 90, true);
 		}
 	}
 
 	public void setXY(int id, double x, double y) {
 		TurtleView turtle = myTurtles.get(id);
+		
 		myTurtles.get(id).setXY(originX + x - turtle.getLayoutX(),
-				originY + y - turtle.getLayoutY());
+				-1 * originY - y + turtle.getLayoutY());
 	}
 
-	public void setHeading(int id, double angle) {
-		myTurtles.get(id).setHeading(angle);
+	public void setHeading(int id, double angle, boolean relative) {
+		if (relative)
+			myTurtles.get(id).setRelativeHeading(angle);
+		myTurtles.get(id).setAbsoluteHeading(angle);
 	}
 
 	private void displayPage(String loc) {
@@ -242,6 +241,11 @@ public class SLogoView {
 	}
 
 	
+	
+	
+	
+	
+	
 	// method implementations. Is this bad design to have so many for each?
 
 	
@@ -252,6 +256,10 @@ public class SLogoView {
 	// the controller?
 	
 	//2. or these can be put back into the turtlecommand object and call setPenUp and showTurtle every time. it will not be very efficient, but may be better in design
+	
+	
+	
+	//these are all methods that could technically be contained within updateworkspace method....or at least conceptually are related enough to be in there
 	public void setPenUp(int id, boolean setPen) {
 		/*
 		 * if (setPen){ myTurtles.get(id).setPenUp(true); //return 0; }
@@ -259,9 +267,37 @@ public class SLogoView {
 		 */
 		myTurtles.get(id).setPenUp(setPen);
 	}
+	
+	public double getPenDown(int id){
+		if (myTurtles.get(id).getPenUp())
+			return 0;
+		return 1;	
+	}
+	
+	public double isShowing(int id){
+		if (myTurtles.get(id).isShowing())
+			return 0;
+		return 1;	
+	}
 
 	public void showTurtle(int id, boolean show) {
 		myTurtles.get(id).showTurtle(show);
 	}
+	
+	public double getHeading(int id){
+		return myTurtles.get(id).getRotate();
+	}
 
+	
+	//LILA TODO THIS
+	//this should be in the workspace, but it would have to be called twice in this class and in that class
+	//but then again maybe not because the group is added on in this class 
+	public double clearScreen(int id){
+		//these group of lines somehow need to be connected with the turtle
+		lines.getChildren().clear();
+		myWorkspace.getChildren().clear();
+		
+		return 10; //TODO: calculatedistance()
+	}
+	
 }

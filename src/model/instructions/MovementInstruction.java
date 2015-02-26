@@ -40,7 +40,7 @@ public class MovementInstruction extends Instruction {
 		myDependencies = dependencies;
 		myInstructionType = instructionType;
 		myTurtle = null;
-		myJump = false;
+		myJump = true;
 	}
 	
 	double returnVal;
@@ -50,7 +50,7 @@ public class MovementInstruction extends Instruction {
 		case "FORWARD":
 			returnVal = myDependencies.get(0).execute();
 			myPolar = new Polar(0, returnVal);
-			//updateView();
+			updateView();
 			return returnVal;
 		case "BACKWARD":
 			returnVal = myDependencies.get(0).execute();
@@ -69,6 +69,7 @@ public class MovementInstruction extends Instruction {
 			return returnVal;
 		case "SETHEADING":
 			// Need view
+			myJump = false;
 			myPolar = new Polar(myDependencies.get(0).execute(), 0);
 			return 0.0;
 		case "TOWARDS":
@@ -92,10 +93,9 @@ public class MovementInstruction extends Instruction {
 			myView.showTurtle(0, false);
 			return 0.0;
 		case "CLEARSCREEN":
-			//need view
-			return 0.0;
+			return myView.clearScreen(0);
 		case "HOME":
-			//need view
+			myView.setXY(0,0,0);
 			return 0.0;
 		default: 
 			return 0;
@@ -105,7 +105,7 @@ public class MovementInstruction extends Instruction {
 	private void updateView() {
 		List<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
 		commandList.add(new TurtleCommand(0, myPolar, myJump));
-		//myView.updateWorkspace(commandList);
+		myView.updateWorkspace(commandList);
 	}
 
 	@Override

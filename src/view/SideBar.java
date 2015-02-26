@@ -39,6 +39,7 @@ public class SideBar extends VBox {
 	Map<Integer, TurtleView> myTurtles;
 	ListView<String> historyList;
 	ObservableList<String> historyItems;
+	ObservableList<Variable> variablesList;
 	SLogoController myController;
 
 	// make this into a new class with its own stuff that have variablesView and
@@ -130,7 +131,7 @@ public class SideBar extends VBox {
 		variables.setUnderline(true);
 		getChildren().add(variables);
 
-		ObservableList<Variable> variablesList = FXCollections.observableArrayList(
+		variablesList = FXCollections.observableArrayList(
 				new Variable("var1", 1.5), new Variable("var2", 2.5));
 		variablesList.add(new Variable("Added var2.5", 5));
 
@@ -283,7 +284,7 @@ public class SideBar extends VBox {
 						"*.gif"));
 		return fileChooser.showOpenDialog(myStage);
 	}
-
+	
 	private void changeTurtleImage(TurtleView turtle, Image img) {
 		turtle.setImage(img);
 	}
@@ -294,5 +295,9 @@ public class SideBar extends VBox {
 
 	public void setHistory(String string) {
 		historyItems.add(string);
+	}
+	
+	public void addVariable(Variable variable){
+		variablesList.add(variable);
 	}
 }

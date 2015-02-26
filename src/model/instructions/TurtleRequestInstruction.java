@@ -23,11 +23,11 @@ public class TurtleRequestInstruction extends Instruction {
 		case "YCOR":
 			return 0.0;
 		case "HEADING":
-			return 0.0;
+			return myView.getHeading();
 		case "PENDOWN":
-			return 0.0;
+			return myView.getPenDown();
 		case "SHOWING":
-			return 0.0;
+			return myView.isShowing();
 		default: 
 			return 0.0;
 		}

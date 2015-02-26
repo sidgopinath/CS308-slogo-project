@@ -16,10 +16,6 @@ public class Drawer {
     private double myXBounds;
     private double myYBounds;
     
-     private static final int NO_CHANGE = 0;
-     private static final int CHANGE_TO_DOWN = 1;
-     private static final int CHANGE_TO_UP = -1;
-    
     public Drawer(double xMax, double yMax){
     	myXBounds = xMax;
     	myYBounds = yMax;
@@ -38,6 +34,7 @@ public class Drawer {
            Polar polar = command.getPolar();
           
            //move turtle and draw line
+           //TODO: this is a conditional, nested if-else. Could we possibly make this less condition-specific?
            if(polar.distance!=0){
                double angle=turtle.getRotate();
                double turtleX=turtle.getLayoutX();
@@ -72,7 +69,14 @@ public class Drawer {
             	   //TODO: make turtles and lines invisible when out of bounds
                }
            }else{
-               turtle.turn(turtle.getRotate()+polar.angle);
+        	   if (command.isRelative()){
+            	   System.out.println("HIHIHIHIHI");
+        		   turtle.setRelativeHeading(polar.angle);
+        	   }
+        	   else{
+            	   System.out.println("OHOHOHOHOHO");
+        		   turtle.setAbsoluteHeading(polar.angle);
+        	   }
            }
        }
        return lines;

@@ -153,9 +153,8 @@ public class SLogoView implements Observer{
 	}
 
 	public double towards(int id, double x, double y) {
-
-		// TODO
-		return 10;
+	    double angle = Math.toDegrees(Math.atan2(x, y));
+	    return setHeading(id, angle, false);
 	}
 
 	// for testing
@@ -172,9 +171,9 @@ public class SLogoView implements Observer{
 			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
 			lines.getChildren().addAll(newlines);
 		} else if (keyCode == KeyCode.E) {
-			setXY(0, 0, 0);
+		    System.out.print(towards(0,-10,10));
 		} else if (keyCode == KeyCode.Q) {
-			setHeading(0, 90);
+			setHeading(0, 45,true);
 		} else if (keyCode == KeyCode.A) {
 			System.out.print(myTurtles.get(0).getTranslateX() + ","
 					+ myTurtles.get(0).getTranslateY());
@@ -185,14 +184,12 @@ public class SLogoView implements Observer{
 		return myTurtles.get(id).setXY(x, y);
 	}
 
-	public void setHeading(int id, double angle) {
-		myTurtles.get(id).setAbsoluteHeading(angle);
-	}
-
-	public void setHeading(int id, double angle, boolean relative) {
-		if (relative)
-			myTurtles.get(id).setRelativeHeading(angle);
-		myTurtles.get(id).setAbsoluteHeading(angle);
+	public double setHeading(int id, double angle, boolean relative) {
+		if (relative){
+		    return myTurtles.get(id).setRelativeHeading(angle);
+		}else{
+		    return myTurtles.get(id).setAbsoluteHeading(angle);
+		}
 	}
 
 	private void displayPage(String loc) {

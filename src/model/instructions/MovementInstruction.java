@@ -20,7 +20,7 @@ public class MovementInstruction extends Instruction {
 		LEFT(1),
 		RIGHT(1),
 		SETHEADING(1),
-		TOWARDS(2),
+		SETTOWARDS(2),
 		SETPOSITION(2),
 		PENDOWN(0),
 		PENUP(0),
@@ -72,9 +72,8 @@ public class MovementInstruction extends Instruction {
 			myPolar = new Polar(myDependencies.get(0).execute(), 0);
 			updateView();
 			return 0.0;
-		case "TOWARDS":
-			// need view
-			return 0.0;
+		case "SETTOWARDS":
+			return myView.towards(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "SETPOSITION":
 			myJump = true;
 			return myView.setXY(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());

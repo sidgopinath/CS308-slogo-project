@@ -112,6 +112,7 @@ public class Parser implements Observer{
 		}
 		}
 		catch (Exception e){
+			System.out.println("in parse and execute");
 			mySLogoView.openDialog("Invalid input! Try again.");
 			throw new ModelException();
 		}

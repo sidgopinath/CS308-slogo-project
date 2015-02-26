@@ -36,7 +36,7 @@ public class ControlInstruction extends Instruction{
 			for(int i =0; i<myDependencies.get(0).execute(); i++){
 				myDependencies.get(1).execute();
 			}
-			return myDependencies.get(0).execute();
+			return myDependencies.get(1).execute();
 		case "DOTIMES":
 			//need variable map
 			return 0.0;

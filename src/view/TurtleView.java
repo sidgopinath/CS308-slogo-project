@@ -22,7 +22,13 @@ public class TurtleView extends ImageView {
 		isVisible = true;
 	}
 
+<<<<<<< HEAD
 	//relative movement
+=======
+
+	//relative movement
+
+>>>>>>> 1641265b01a815e27bb627617a5cca5adc4d5251
 	public void move(double moveX, double moveY) {
 		setTranslateX(moveX);
 		setTranslateY(moveY);

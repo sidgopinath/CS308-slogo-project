@@ -8,6 +8,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
@@ -36,12 +38,13 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import model.ExecutionEnvironment;
 import model.Polar;
 import model.turtle.Turtle;
 import model.turtle.TurtleCommand;
 import controller.SLogoController;
 
-public class SLogoView {
+public class SLogoView implements Observer{
 	private Stage myStage;
 	private GridPane myRoot;
 	protected ResourceBundle myResources;
@@ -154,7 +157,7 @@ public class SLogoView {
 	// for testing
 	private void handleKeyInput(KeyEvent e) {
 		KeyCode keyCode = e.getCode();
-		if (keyCode == KeyCode.D) {
+	/*	if (keyCode == KeyCode.D) {
 			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
 			instructions.add(new TurtleCommand(0, new Polar(30, 0), true));
 			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
@@ -171,7 +174,7 @@ public class SLogoView {
 		} else if (keyCode == KeyCode.A) {
 			System.out.print(myTurtles.get(0).getTranslateX() + ","
 					+ myTurtles.get(0).getTranslateY());
-		}
+		}*/
 	}
 
 	public double setXY(int id, double x, double y) {
@@ -334,9 +337,24 @@ public class SLogoView {
 	public double clearScreen(int id) {
 		// these group of lines somehow need to be connected with the turtle
 		lines.getChildren().clear();
-		myWorkspace.getChildren().clear();
+		myWorkspace.getChildren().remove(myTurtles.get(id)); //clear only the current turtle
 
 		return 10; // TODO: calculatedistance()
+	}
+
+	@Override
+	public void update(Observable o, Object arg) {
+		ExecutionEnvironment env = (ExecutionEnvironment) o;
+		for (String s: env.getVariableMap().keySet()){
+			double value =  env.getVariableMap().get(s).execute();
+			System.out.println("s" + s);
+			System.out.println("value" + value);
+			updateVariable(new Variable(s, value));
+			System.out.println("==============updated==========");
+			
+		}
+			
+		
 	}
 
 }

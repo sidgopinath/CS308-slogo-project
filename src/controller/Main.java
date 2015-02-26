@@ -17,3 +17,6 @@ public class Main extends Application {
 		launch(args);
 	}	
 }
+
+
+//Window.onClose(System.exit(0));

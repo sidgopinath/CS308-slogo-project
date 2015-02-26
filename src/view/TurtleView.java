@@ -28,10 +28,12 @@ public class TurtleView extends ImageView {
 		setRotate(angle);
 	}
 
-	public void setXY(double x, double y) {
-		System.out.println("go to " + x + "," + y);
+	public double setXY(double originX, double originY, double x, double y) {
+        double newX=getTranslateX();
+        double newY=getTranslateY();
 		setTranslateX(x);
-		setTranslateY(y);
+		setTranslateY(-y);
+		return Math.sqrt(Math.pow(newX-x,2)+Math.pow(newY-y, 2));
 	}
 
 	public void setHeading(double angle) {

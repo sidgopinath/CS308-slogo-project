@@ -103,9 +103,6 @@ public class SLogoView {
 		return returnString;
 	}
 
-	public void setXY(double x, double y) {
-	}
-
 	// make update from a single command
 	private String updateFromInstruction(TurtleCommand instruction) {
 		return "return value";
@@ -154,18 +151,17 @@ public class SLogoView {
             lines.getChildren().addAll(newlines);
 	    }else if(keyCode == KeyCode.W){
             ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-            instructions.add(new TurtleCommand(0,new Polar(0,10),0,false));
+            instructions.add(new TurtleCommand(0,new Polar(0,15),0,false));
             List<Polyline> newlines=drawer.draw(myTurtles, instructions);
             lines.getChildren().addAll(newlines);
 	    }else if(keyCode == KeyCode.E){
-	        setXY(0,0,0);
+	        setXY(0,-100,100);
         }else if(keyCode == KeyCode.Q){
             setHeading(0,90);
         }
     }
     public void setXY(int id, double x,double y){
-        TurtleView turtle=myTurtles.get(id);
-        myTurtles.get(id).setXY(originX+x-turtle.getLayoutX(),originY+y-turtle.getLayoutY());
+        myTurtles.get(id).setXY(originX,originY,x,y);
     }
     public void setHeading(int id, double angle){
         myTurtles.get(id).setHeading(angle);

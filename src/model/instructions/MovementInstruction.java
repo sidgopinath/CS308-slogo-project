@@ -101,7 +101,7 @@ public class MovementInstruction extends Instruction {
 
 	private void updateView() {
 		List<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
-		commandList.add(new TurtleCommand(0, myPolar, myPenUp, myJump));
+		commandList.add(new TurtleCommand(0, myPolar, myJump));
 		myView.updateWorkspace(commandList);
 	}
 
@@ -112,7 +112,9 @@ public class MovementInstruction extends Instruction {
 
 	@Override
 	public TurtleCommand getTurtleCommand() {
-		myTurtle = new TurtleCommand(0, myPolar, myPenUp, myJump);
+		myTurtle = new TurtleCommand(0, myPolar, myJump);
 		return myTurtle;
 	}
+	
+	//somewhere add something to setpenup in the view
 }

@@ -26,7 +26,7 @@ import model.turtle.TurtleCommand;
 public class Parser {
 	private static List<Entry<String, Pattern>> patterns;
 	private static Map<String,String> commandMap;
-	private static final String[] commandTypes = new String[]{"BooleanInstruction","ControlInstruction","MathInstruction","MovementInstruction"};
+	private static final String[] commandTypes = new String[]{"BooleanInstruction","ControlInstruction","MathInstruction","MovementInstruction","TurtleRequestInstruction"};
 	private int furthestDepth;
 	private SLogoView mySLogoView;
 	private ExecutionEnvironment executionParameters;
@@ -79,7 +79,7 @@ public class Parser {
 	}
 	List<Instruction> outList;
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		input = "[ fd + 200 400 [ fd fd 50 ] rt 90 ] BACK 40";
+		//input = "[ fd + 200 400 [ fd fd 50 ] rt 90 ] BACK 40";
 		furthestDepth = 0;
 		String[] splitCommands = input.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();

@@ -8,8 +8,8 @@ import javafx.scene.image.ImageView;
 public class TurtleView extends ImageView {
 
 	private double myHeading;
-	private boolean penUp;
 	private boolean isVisible;
+	private boolean penUp=false;
 
 	// private int myID;
 
@@ -27,24 +27,18 @@ public class TurtleView extends ImageView {
 		setTranslateY(moveY);
 	}
 
-	public void setXY(double x, double y) {
-		System.out.println("go to " + x + "," + y);
+	public double setXY(double originX, double originY, double x, double y) {
+        double newX=getTranslateX();
+        double newY=getTranslateY();
 		setTranslateX(x);
-		setTranslateY(y);
+		setTranslateY(-y);
+		return Math.sqrt(Math.pow(newX-x,2)+Math.pow(newY-y, 2));
 	}
 
 	public void setRelativeHeading(double angle) {
 		setRotate(myHeading + angle);
-		
-		System.out.println("angle");
-		System.out.println(getRotate());
-		
 		myHeading = myHeading + angle; 
 		myHeading = adjustAngle(myHeading);
-		
-		System.out.println("angle adjusted");
-		System.out.println(myHeading);
-
 	}
 	
 	public void setAbsoluteHeading(double angle){

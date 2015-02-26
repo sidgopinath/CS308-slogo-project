@@ -101,7 +101,6 @@ public class SLogoView {
 		return returnString;
 	}
 
-
 	// make update from a single command
 	private String updateFromInstruction(TurtleCommand instruction) {
 		return "return value";
@@ -138,41 +137,34 @@ public class SLogoView {
 		stage.show();
 	}
 
-	// for testing
-	private void handleKeyInput(KeyEvent e) {
-		KeyCode keyCode = e.getCode();
-		if (keyCode == KeyCode.D) {
-			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-			instructions.add(new TurtleCommand(0, new Polar(30, 0), false));
-			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
-			lines.getChildren().addAll(newlines);
-		} else if (keyCode == KeyCode.W) {
-			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-			instructions.add(new TurtleCommand(0, new Polar(0, 10), false));
-			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
-			lines.getChildren().addAll(newlines);
-		} else if (keyCode == KeyCode.E) {
-			setXY(0, 100, 100);
-		} else if (keyCode == KeyCode.Q) {
-			setHeading(0, 90, true);
-		}
-	}
-
-	public void setXY(int id, double x, double y) {
-		TurtleView turtle = myTurtles.get(id);
-		
-		myTurtles.get(id).setXY(originX + x - turtle.getLayoutX(),
-				-1 * originY - y + turtle.getLayoutY());
-	}
-
-	public void setHeading(int id, double angle, boolean relative) {
-		if (relative)
-			myTurtles.get(id).setRelativeHeading(angle);
-		myTurtles.get(id).setAbsoluteHeading(angle);
-	}
-
-	private void displayPage(String loc) {
-
+	
+	//for testing
+	private void handleKeyInput (KeyEvent e) {
+	    KeyCode keyCode = e.getCode();
+	    if(keyCode == KeyCode.D){
+            ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
+            instructions.add(new TurtleCommand(0,new Polar(30,0),false));
+            List<Polyline> newlines=drawer.draw(myTurtles, instructions);
+            lines.getChildren().addAll(newlines);
+	    }else if(keyCode == KeyCode.W){
+            ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
+            instructions.add(new TurtleCommand(0,new Polar(0,15),false));
+            List<Polyline> newlines=drawer.draw(myTurtles, instructions);
+            lines.getChildren().addAll(newlines);
+	    }else if(keyCode == KeyCode.E){
+	        setXY(0,-100,100);
+        }else if(keyCode == KeyCode.Q){
+            setHeading(0,90);
+        }
+    }
+    public void setXY(int id, double x,double y){
+        myTurtles.get(id).setXY(originX,originY,x,y);
+    }
+    public void setHeading(int id, double angle){
+        myTurtles.get(id).setAbsoluteHeading(angle);
+    }
+    
+    private void displayPage(String loc){
 		WebView browser = new WebView();
 		WebEngine webEngine = browser.getEngine();
 		webEngine.load("file://" + System.getProperty("user.dir") + loc);

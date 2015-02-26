@@ -251,12 +251,27 @@ public class SLogoView {
 	
 	//2. or these can be put back into the turtlecommand object and call setPenUp and showTurtle every time. it will not be very efficient, but may be better in design
 	
+	
+	
+	//these are all methods that could technically be contained within updateworkspace method....or at least conceptually are related enough to be in there
 	public void setPenUp(int id, boolean setPen) {
 		/*
 		 * if (setPen){ myTurtles.get(id).setPenUp(true); //return 0; }
 		 * myTurtles.get(id).setPenUp(false); //return 1;
 		 */
 		myTurtles.get(id).setPenUp(setPen);
+	}
+	
+	public double getPenDown(int id){
+		if (myTurtles.get(id).getPenUp())
+			return 0;
+		return 1;	
+	}
+	
+	public double isShowing(int id){
+		if (myTurtles.get(id).isShowing())
+			return 0;
+		return 1;	
 	}
 
 	public void showTurtle(int id, boolean show) {
@@ -269,11 +284,18 @@ public class SLogoView {
 
 	
 	//LILA TODO THIS
-	
 	//this should be in the workspace, but it would have to be called twice in this class and in that class
 	//but then again maybe not because the group is added on in this class 
-	public void clearScreen(){
+	public double clearScreen(int id){
+		//these group of lines somehow need to be connected with the turtle
 		lines.getChildren().clear();
 		myWorkspace.getChildren().clear();
+		
+		return 10; //TODO: calculatedistance()
+	}
+	
+	public double sendHome(int id){
+		//these group of lines somehow need to be connected with the turtle
+		return 5; //TODO: calculatedistance()
 	}
 }

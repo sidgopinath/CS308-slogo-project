@@ -9,6 +9,7 @@ public class TurtleView extends ImageView {
 
 	private double myHeading;
 	private boolean penUp;
+	private boolean isVisible;
 
 	// private int myID;
 
@@ -18,6 +19,7 @@ public class TurtleView extends ImageView {
 		setFitHeight(30);
 		penUp = false;
 		myHeading = 0;
+		isVisible = true;
 	}
 
 	public void move(double moveX, double moveY) {
@@ -55,7 +57,11 @@ public class TurtleView extends ImageView {
 		return penUp;
 	}
 	
+	public boolean isShowing(){
+		return isVisible;
+	}
 	public void showTurtle(boolean show){
 		setVisible(show);
+		isVisible = show;
 	}
 }

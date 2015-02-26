@@ -41,13 +41,8 @@ public class Parser implements Observer{
 		executionParameters = new ExecutionEnvironment();
 		executionParameters.addObserver(this);
 		executionParameters.addObserver(view);
-		addAllPatterns();
+		addAllPatterns("English");
 		makeCommandMap();
-	}
-	
-	private void addAllPatterns(){
-		makePatterns("resources/languages/English");
-	    makePatterns("resources/languages/Syntax");
 	}
 	
 	private void addAllPatterns(String language){

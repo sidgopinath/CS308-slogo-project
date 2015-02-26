@@ -29,8 +29,6 @@ public class ControlInstruction extends Instruction{
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "MAKEVARIABLE":
-			//return statement is correct
-			//TODO: needs to put variable in map, like the below attempts to do
 			myEnvironment.removeDuplicate(myDependencies.get(0).getName());
 			myEnvironment.addVariable(myDependencies.get(0).getName(), myDependencies.get(1));
 			return myDependencies.get(0).execute();

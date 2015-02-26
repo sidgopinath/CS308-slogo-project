@@ -153,7 +153,7 @@ public class SLogoView {
             List<Polyline> newlines=drawer.draw(myTurtles, instructions);
             lines.getChildren().addAll(newlines);
 	    }else if(keyCode == KeyCode.E){
-	        setXY(0,0,0);
+	        setXY(0,10,0);
         }else if(keyCode == KeyCode.Q){
             setHeading(0,90);
         }else if(keyCode == KeyCode.A){

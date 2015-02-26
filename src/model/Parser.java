@@ -34,17 +34,12 @@ public class Parser {
 		myVariableMap = new HashMap<String, Double>();
 		patterns = new ArrayList<>();
 		commandMap = new HashMap<String, String>();
-		addAllPatterns("English");
+		addAllPatterns();
 		makeCommandMap();
 	}
 	
-	public void setLanguage(String language){
-		patterns = new ArrayList<>();
-		addAllPatterns(language);
-	}
-	
-	private void addAllPatterns(String language){
-		makePatterns("resources/languages/" + language);
+	private void addAllPatterns(){
+		makePatterns("resources/languages/English");
 	    makePatterns("resources/languages/Syntax");
 	}
 	
@@ -71,12 +66,11 @@ public class Parser {
 				commandMap.put(d.toString(), s);
 			}
 			commandMap.put("[", "ListInstruction");
-			commandMap.put("REPEAT", "ControlInstruction");
 		}
 	}
 	List<Instruction> outList;
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		//input = "[ fd + 200 400 ] fd fd 50 rt 90 BACK 40";
+		input = "[ fd + 200 400 ] fd fd 50 rt 90 BACK 40";
 		furthestDepth = 0;
 		String[] splitCommands = input.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
@@ -94,10 +88,10 @@ public class Parser {
 			System.out.println(root.getValue()+" "+root.getInstruction());
 			root.getInstruction().execute();
 			// Call turtlecommand maker
-//			List<TurtleCommand> commandList =new ArrayList();
-//			turtleCommandGetter(commandList, root);
-//			if(!commandList.isEmpty())
-//				mySLogoView.updateWorkspace(commandList);
+			List<TurtleCommand> commandList =new ArrayList();
+			turtleCommandGetter(commandList, root);
+			if(!commandList.isEmpty())
+				mySLogoView.updateWorkspace(commandList);
 			//mySLogoView.updateVariables(myVariableMap);
 		}
 		
@@ -128,8 +122,6 @@ public class Parser {
 		}
 		in.add(root);
 	}
-	
-
 	private void printInOrderTraversal(Node root){
 		for(Node n:inOrderTraverser(root)){
 			System.out.println(n.getValue());
@@ -146,14 +138,14 @@ public class Parser {
 				inOrderInstructionExecuter(children.get(i), depth);
 			}
 		}	
-			System.out.println("model.instructions."+root.getValue()+" "+commandMap.get(root.getValue()));
+			// System.out.println("model.instructions."+root.getValue()+" "+commandMap.get(root.getValue()));
 			List<Instruction> descendantInstructions = getChildInstructions(root);
 			Instruction myInt;
 			try {
 				if(testMatches(root.getValue()).equalsIgnoreCase("Constant"))
 					myInt = new Constant(root.getValue());
 				else
-					myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class, SLogoView.class}).newInstance(new Object[]{descendantInstructions, root.getValue(), mySLogoView});
+					myInt = Class.forName("model.instructions."+commandMap.get(root.getValue())).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class}).newInstance(new Object[]{descendantInstructions, root.getValue(),mySLogoView});
 				System.out.println("made int "+ myInt);
 				root.setInstruction(myInt);
 			} catch (InstantiationException | IllegalAccessException
@@ -177,6 +169,7 @@ public class Parser {
 	}
 
 	// add catch for array out of bounds
+	// BIG TODO: merge instruction tree and this tree to be one and the same
 	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		// base case
 		// System.out.println(furthestDepth);
@@ -218,7 +211,8 @@ public class Parser {
 			//this is either a known command or invalid input.  
 			//instantiate the command, if reflection cannot find the file then must be invalid
 			try{
-				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class, SLogoView.class}).newInstance(new Object[]{null, match, mySLogoView});
+				System.out.println(match);
+				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class}).newInstance(new Object[]{null, match,mySLogoView});
 				furthestDepth++;
 				neededVars = myInt.getNumberOfArguments();
 				myNode = new Node(match);

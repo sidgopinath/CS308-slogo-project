@@ -79,7 +79,7 @@ public class Parser {
 	}
 	List<Instruction> outList;
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		input = "[ fd + 200 400 fd fd 50 ] rt 90 BACK 40";
+		input = "[ fd + 200 400 [ fd fd 50 ] rt 90 ] BACK 40";
 		furthestDepth = 0;
 		String[] splitCommands = input.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
@@ -89,7 +89,9 @@ public class Parser {
 		}
 		for(Node root:nodeList){
 			System.out.println("new tree");
-			printInOrderTraversal(root);
+			System.out.println(root.getInstruction());
+			printTree(root);
+			//printInOrderTraversal(root);
 		}
 		List<TurtleCommand> commandList =new ArrayList();;
 		for(Node root:nodeList){
@@ -130,6 +132,22 @@ public class Parser {
 			System.out.println(n.getInstruction());
 		}
 	}
+	private void printTree(Node root){
+		System.out.println("start line");
+		
+		if(root==null){
+			return;
+		}
+		System.out.println(root+" " +root.getChildren().size()+ " ");
+		for(Node N:root.getChildren()){
+			
+			System.out.print(N.getInstruction()+" "+N+" ");
+		}
+		System.out.println("next line");
+		for(Node N:root.getChildren()){
+			printTree(N);
+		}
+	}
 //	private void inOrderInstructionExecuter(Node root, int depth){
 //		if(root==null){
 //			return;
@@ -163,7 +181,11 @@ public class Parser {
 			List<Instruction> futureInstructions = new ArrayList();
 			myNode = new Node(new ListInstruction(futureInstructions, match,mySLogoView, executionParameters));
 			Node temp;
-			while((temp=makeTree(command))!=null){
+			while(true){
+				temp=makeTree(command);
+				System.out.println("MAKING LIST "+temp);
+				if(temp==null)
+					break;
 				myNode.addChild(temp);
 				futureInstructions.add(temp.getInstruction());
 			}

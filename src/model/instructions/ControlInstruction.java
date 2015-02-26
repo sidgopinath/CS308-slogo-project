@@ -30,7 +30,6 @@ public class ControlInstruction extends Instruction{
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "MAKEVARIABLE":
-			System.out.println(myDependencies.get(0).getName());
 			myEnvironment.addVariable(myDependencies.get(0).getName(), myDependencies.get(1));
 			return myDependencies.get(1).execute();
 		case "REPEAT":

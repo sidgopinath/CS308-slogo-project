@@ -38,6 +38,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import model.ExecutionEnvironment;
 import model.Polar;
 import model.turtle.Turtle;
@@ -66,6 +67,9 @@ public class SLogoView implements Observer{
 	public SLogoView(Stage s) {
 		myController = new SLogoController(this, s);
 		myStage = s;
+		
+		myStage.setOnCloseRequest(new EventHandler<WindowEvent>() { @Override public void handle(WindowEvent t) { System.out.println("CLOSING"); } });
+		
 		myRoot = new GridPane();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 		lines.setManaged(false);
@@ -347,8 +351,8 @@ public class SLogoView implements Observer{
 		ExecutionEnvironment env = (ExecutionEnvironment) o;
 		for (String s: env.getVariableMap().keySet()){
 			double value =  env.getVariableMap().get(s).execute();
-			System.out.println("s" + s);
-			System.out.println("value" + value);
+			System.out.println("======s" + s);
+			System.out.println("======value" + value);
 			updateVariable(new Variable(s, value));
 			System.out.println("==============updated==========");
 			

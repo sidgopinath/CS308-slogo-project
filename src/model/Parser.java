@@ -14,6 +14,7 @@ import java.util.regex.Pattern;
 import view.SLogoView;
 import model.instructions.Constant;
 import model.instructions.Instruction;
+import model.instructions.ListInstruction;
 import model.turtle.TurtleCommand;
 
 /**
@@ -99,7 +100,6 @@ public class Parser {
 				//mySLogoView.updateWorkspace(commandList);
 			  //mySLogoView.updateVariables(myVariableMap);
 		}
-		System.out.println("hi");
 	}
 	private void turtleCommandGetter(List<TurtleCommand> cList, Node root) {
 		for(Node n: inOrderTraverser(root)){
@@ -127,7 +127,7 @@ public class Parser {
 	}
 	private void printInOrderTraversal(Node root){
 		for(Node n:inOrderTraverser(root)){
-			System.out.println(n);
+			System.out.println(n.getInstruction());
 		}
 	}
 //	private void inOrderInstructionExecuter(Node root, int depth){
@@ -151,7 +151,6 @@ public class Parser {
 	// BIG TODO: merge instruction tree and this tree to be one and the same
 	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
 		// base case
-		// System.out.println(furthestDepth);
 		int myVars = 0;
 		int neededVars = -1;
 		Node myNode = null;
@@ -159,14 +158,16 @@ public class Parser {
 		String match = testMatches(command[furthestDepth]).toUpperCase();
 		//this switch will eventually be combined into the map.
 		switch (match){
-//		case "LISTSTART":
-//			furthestDepth++;
-//			myNode = new Node(command[furthestDepth-1]);
-//			Node temp;
-//			while(!(temp=makeTree(command)).getValue().equals("]")){
-//				myNode.addChild(temp);
-//			}
-//			return myNode;
+		case "LISTSTART":
+			furthestDepth++;
+			List<Instruction> futureInstructions = new ArrayList();
+			myNode = new Node(new ListInstruction(futureInstructions, match,mySLogoView, executionParameters));
+			Node temp;
+			while((temp=makeTree(command))!=null){
+				myNode.addChild(temp);
+				futureInstructions.add(temp.getInstruction());
+			}
+			return myNode;
 		case "COMMENT":
 			furthestDepth++;
 			return makeTree(command);
@@ -179,9 +180,9 @@ public class Parser {
 			// check map
 			// return new usercommand using map
 			// user command makes the tree for us, so just return the root node that returns
-//		case "LISTEND":
-//			furthestDepth++;
-//			return new Node(command[furthestDepth-1]);
+		case "LISTEND":
+			furthestDepth++;
+			return null;
 //		case "GROUPSTART":
 //			break;
 		default:

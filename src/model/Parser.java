@@ -79,7 +79,7 @@ public class Parser {
 	}
 	List<Instruction> outList;
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		input = "[ fd + 200 400 [ fd fd 50 ] rt 90 ] BACK 40";
+		//input = "[ fd + 200 400 [ fd fd 50 ] rt 90 ] BACK 40";
 		furthestDepth = 0;
 		String[] splitCommands = input.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();

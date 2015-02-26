@@ -133,17 +133,15 @@ public class Parser {
 		}
 	}
 	private void printTree(Node root){
-		System.out.println("start line");
-		
-		if(root==null){
+		System.out.println();
+		System.out.print("start line ");
+		if(root.getChildren().size()==0){
 			return;
 		}
-		System.out.println(root+" " +root.getChildren().size()+ " ");
 		for(Node N:root.getChildren()){
 			
-			System.out.print(N.getInstruction()+" "+N+" ");
+			System.out.print(N.getInstruction());
 		}
-		System.out.println("next line");
 		for(Node N:root.getChildren()){
 			printTree(N);
 		}

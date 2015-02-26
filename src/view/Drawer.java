@@ -14,8 +14,7 @@ public class Drawer {
 	private Color myColor;
 	private double[] myXBounds = new double[2];
 	private double[] myYBounds = new double[2];
-	private double[] half = new double[2];
-	private Color color;
+	private double[] myHalf = new double[2];
 
 
     public Drawer(double xMax, double yMax) {

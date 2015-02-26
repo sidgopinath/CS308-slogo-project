@@ -72,6 +72,8 @@ public class Parser {
 			}
 			commandMap.put("[", "ListInstruction");
 			commandMap.put("REPEAT", "ControlInstruction");
+			commandMap.put("IF", "ControlInstruction");
+			commandMap.put("IFELSE", "ControlInstruction");
 		}
 	}
 	List<Instruction> outList;

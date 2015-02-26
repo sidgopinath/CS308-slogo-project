@@ -92,21 +92,23 @@ public class SLogoView {
 	}
 
 	// does this do anything?
-	//do we need to return anything
+	// do we need to return anything
 	public void updateWorkspace(List<TurtleCommand> instructionList) {
-	//	String returnString = null;
-	/*	for (TurtleCommand instruction : instructionList) {
-			returnString += updateFromInstruction(instruction) + "\n";
-		}*/
+		// String returnString = null;
+		/*
+		 * for (TurtleCommand instruction : instructionList) { returnString +=
+		 * updateFromInstruction(instruction) + "\n"; }
+		 */
 		List<Polyline> newlines = drawer.draw(myTurtles, instructionList);
 		lines.getChildren().addAll(newlines);
-	//	return returnString;
+		// return returnString;
 	}
 
 	// make update from a single command
-/*	private String updateFromInstruction(TurtleCommand instruction) {
-		return "return value";
-	}*/
+	/*
+	 * private String updateFromInstruction(TurtleCommand instruction) { return
+	 * "return value"; }
+	 */
 
 	public Turtle getTurtleInfo(int index) {
 		ImageView temp = myTurtles.get(index);
@@ -114,7 +116,8 @@ public class SLogoView {
 
 	}
 
-	//TODO: what is being passed in and how to update the tableview? may have to iterate through observablelist
+	// TODO: what is being passed in and how to update the tableview? may have
+	// to iterate through observablelist
 	public void updateVariables(Map<String, Double> variableUpdates) {
 		Iterator<Entry<String, Double>> it = variableUpdates.entrySet().iterator();
 		while (it.hasNext()) {
@@ -122,9 +125,12 @@ public class SLogoView {
 			String name = variable.getKey();
 			double value = variable.getValue();
 			if (variables.get(name) == null) {
-				//TODO: it should be passed in not as a map but as the actual variable object in the parameter
-				//or we can just keep the variables object as just a front end thing for displaying (otherwise both front and back end have access to it which may not be good)
-				mySidebar.addVariable(new Variable(name, value));
+				// TODO: it should be passed in not as a map but as the actual
+				// variable object in the parameter
+				// or we can just keep the variables object as just a front end
+				// thing for displaying (otherwise both front and back end have
+				// access to it which may not be good)
+				mySidebar.updateVariable(new Variable(name, value));
 			} else {
 				// variables.get(name).setText(value);
 			}
@@ -138,48 +144,49 @@ public class SLogoView {
 		scene.setOnKeyPressed(e -> handleKeyInput(e));
 		stage.show();
 	}
-	
-	public double towards(int id, double x, double y){
-		
-		//TODO
+
+	public double towards(int id, double x, double y) {
+
+		// TODO
 		return 10;
 	}
-	
-	
-	//for testing
-	private void handleKeyInput (KeyEvent e) {
-	    KeyCode keyCode = e.getCode();
-	    if(keyCode == KeyCode.D){
-            ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-            instructions.add(new TurtleCommand(0,new Polar(30,0),true));
-            List<Polyline> newlines=drawer.draw(myTurtles, instructions);
-            lines.getChildren().addAll(newlines);
-	    }else if(keyCode == KeyCode.W){
-            ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-            instructions.add(new TurtleCommand(0,new Polar(0,15),false));
-            List<Polyline> newlines=drawer.draw(myTurtles, instructions);
-            lines.getChildren().addAll(newlines);
-	    }else if(keyCode == KeyCode.E){
-	        setXY(0,0,0);
-        }else if(keyCode == KeyCode.Q){
-            setHeading(0,90);
-        }else if(keyCode == KeyCode.A){
-            System.out.print(myTurtles.get(0).getTranslateX()+","+myTurtles.get(0).getTranslateY());
-        }
-    }
-    public double setXY(int id, double x,double y){
-       return myTurtles.get(id).setXY(x,y);
-    }
-    
-    public void setHeading(int id, double angle){
-        myTurtles.get(id).setAbsoluteHeading(angle);
-    }
-    
-//	public double towards(int id, double x, double y){
-//		
-//		
-//		setHeading()
-//	}
+
+	// for testing
+	private void handleKeyInput(KeyEvent e) {
+		KeyCode keyCode = e.getCode();
+		if (keyCode == KeyCode.D) {
+			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
+			instructions.add(new TurtleCommand(0, new Polar(30, 0), true));
+			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
+			lines.getChildren().addAll(newlines);
+		} else if (keyCode == KeyCode.W) {
+			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
+			instructions.add(new TurtleCommand(0, new Polar(0, 15), false));
+			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
+			lines.getChildren().addAll(newlines);
+		} else if (keyCode == KeyCode.E) {
+			setXY(0, 0, 0);
+		} else if (keyCode == KeyCode.Q) {
+			setHeading(0, 90);
+		} else if (keyCode == KeyCode.A) {
+			System.out.print(myTurtles.get(0).getTranslateX() + ","
+					+ myTurtles.get(0).getTranslateY());
+		}
+	}
+
+	public double setXY(int id, double x, double y) {
+		return myTurtles.get(id).setXY(x, y);
+	}
+
+	public void setHeading(int id, double angle) {
+		myTurtles.get(id).setAbsoluteHeading(angle);
+	}
+
+	// public double towards(int id, double x, double y){
+	//
+	//
+	// setHeading()
+	// }
 
 	public void setHeading(int id, double angle, boolean relative) {
 		if (relative)
@@ -208,6 +215,7 @@ public class SLogoView {
 		info.getItems().addAll(help);
 
 		exit.setOnAction(new EventHandler<ActionEvent>() {
+			@Override
 			public void handle(ActionEvent t) {
 				Platform.exit();
 			}
@@ -254,27 +262,22 @@ public class SLogoView {
 		drawer = new Drawer(myWorkspace.getGridWidth(), myWorkspace.getGridHeight());
 	}
 
-	
-	
-	
-	
-	
-	
 	// method implementations. Is this bad design to have so many for each?
 
-	
-	//DESIGN ISSUES:
-	
+	// DESIGN ISSUES:
 
-	// 1. consider moving this to the controller and giving the list of turtles to
+	// 1. consider moving this to the controller and giving the list of turtles
+	// to
 	// the controller?
-	
-	//2. or these can be put back into the turtlecommand object and call setPenUp and showTurtle every time. it will not be very efficient, but may be better in design
-	
-	
-	
-	//here our SLogoView is acting like a controller
-	//these are all methods that could technically be contained within updateworkspace method....or at least conceptually are related enough to be in there
+
+	// 2. or these can be put back into the turtlecommand object and call
+	// setPenUp and showTurtle every time. it will not be very efficient, but
+	// may be better in design
+
+	// here our SLogoView is acting like a controller
+	// these are all methods that could technically be contained within
+	// updateworkspace method....or at least conceptually are related enough to
+	// be in there
 	public void setPenUp(int id, boolean setPen) {
 		/*
 		 * if (setPen){ myTurtles.get(id).setPenUp(true); //return 0; }
@@ -282,37 +285,37 @@ public class SLogoView {
 		 */
 		myTurtles.get(id).setPenUp(setPen);
 	}
-	
-	public double getPenDown(int id){
+
+	public double getPenDown(int id) {
 		if (myTurtles.get(id).getPenUp())
 			return 0;
-		return 1;	
+		return 1;
 	}
-	
-	public double isShowing(int id){
+
+	public double isShowing(int id) {
 		if (myTurtles.get(id).isShowing())
 			return 1;
-		return 0;	
+		return 0;
 	}
 
 	public void showTurtle(int id, boolean show) {
 		myTurtles.get(id).showTurtle(show);
 	}
-	
-	public double getHeading(int id){
+
+	public double getHeading(int id) {
 		return myTurtles.get(id).getRotate();
 	}
 
-	//these definitely methods should not be in SLogoView; 
-	public double getXCor(int id){
-		return myTurtles.get(0).getTranslateX(); 
+	// these definitely methods should not be in SLogoView;
+	public double getXCor(int id) {
+		return myTurtles.get(0).getTranslateX();
 	}
-	
-	public double getYCor(int id){
-		return (-1)*myTurtles.get(0).getTranslateY(); 
+
+	public double getYCor(int id) {
+		return myTurtles.get(0).getYCoord();
 	}
-	
-	public void openDialog(String message){
+
+	public void openDialog(String message) {
 		Stage stage = new Stage();
 		HBox root = new HBox();
 		root.setAlignment(Pos.CENTER);
@@ -323,22 +326,23 @@ public class SLogoView {
 
 		stage.setTitle("Error");
 		stage.setScene(scene);
-		stage.show();	
+		stage.show();
 	}
-	
-	public void updateVariable(Variable variable){
-		mySidebar.addVariable(variable);
+
+	public void updateVariable(Variable variable) {
+		mySidebar.updateVariable(variable);
 	}
-	
-	//LILA TODO THIS
-	//this should be in the workspace, but it would have to be called twice in this class and in that class
-	//but then again maybe not because the group is added on in this class 
-	public double clearScreen(int id){
-		//these group of lines somehow need to be connected with the turtle
+
+	// TODO THIS
+	// this should be in the workspace, but it would have to be called twice in
+	// this class and in that class
+	// but then again maybe not because the group is added on in this class
+	public double clearScreen(int id) {
+		// these group of lines somehow need to be connected with the turtle
 		lines.getChildren().clear();
 		myWorkspace.getChildren().clear();
-		
-		return 10; //TODO: calculatedistance()
+
+		return 10; // TODO: calculatedistance()
 	}
-	
+
 }

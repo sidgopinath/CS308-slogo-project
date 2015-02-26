@@ -42,7 +42,6 @@ public class SideBar extends VBox {
 	ObservableList<Variable> variablesList;
 	SLogoController myController;
 	TableView<Variable> variablesTable;
-	
 
 	// make this into a new class with its own stuff that have variablesView and
 	// commandView and historyView???
@@ -83,6 +82,7 @@ public class SideBar extends VBox {
 
 		languageOptions.getSelectionModel().selectedItemProperty()
 				.addListener(new ChangeListener<String>() {
+					@Override
 					public void changed(ObservableValue<? extends String> ov,
 							String old_val, String new_val) {
 						System.out.println(new_val);
@@ -123,7 +123,8 @@ public class SideBar extends VBox {
 
 		// User can pick color for the stroke
 
-		customizeBackgroundBox.getChildren().addAll(selectBackgroundColor, backgroundChoice);
+		customizeBackgroundBox.getChildren().addAll(selectBackgroundColor,
+				backgroundChoice);
 		getChildren().add(customizeBackgroundBox);
 
 		// variables pane
@@ -133,8 +134,8 @@ public class SideBar extends VBox {
 		variables.setUnderline(true);
 		getChildren().add(variables);
 
-		variablesList = FXCollections.observableArrayList(
-				new Variable("var1", 1.5), new Variable("var2", 2.5));
+		variablesList = FXCollections.observableArrayList(new Variable("var1", 1.5),
+				new Variable("var2", 2.5));
 		variablesList.add(new Variable("Added var2.5", 5));
 
 		variablesTable = new TableView<Variable>();
@@ -157,8 +158,8 @@ public class SideBar extends VBox {
 		variablesCol.setOnEditCommit(new EventHandler<CellEditEvent<Variable, String>>() {
 			@Override
 			public void handle(CellEditEvent<Variable, String> t) {
-				((Variable) t.getTableView().getItems()
-						.get(t.getTablePosition().getRow())).setName(t.getNewValue());
+				t.getTableView().getItems().get(t.getTablePosition().getRow())
+						.setName(t.getNewValue());
 			}
 		});
 
@@ -184,8 +185,8 @@ public class SideBar extends VBox {
 		valuesCol.setOnEditCommit(new EventHandler<CellEditEvent<Variable, Double>>() {
 			@Override
 			public void handle(CellEditEvent<Variable, Double> t) {
-				((Variable) t.getTableView().getItems()
-						.get(t.getTablePosition().getRow())).setValue(t.getNewValue());
+				t.getTableView().getItems().get(t.getTablePosition().getRow())
+						.setValue(t.getNewValue());
 			}
 		});
 
@@ -196,8 +197,6 @@ public class SideBar extends VBox {
 		variablesTable.setPrefHeight(150);
 
 		getChildren().add(variablesTable);
-		
-		
 
 		/*
 		 * When you call Cell.commitEdit(Object) an event is fired to the
@@ -249,6 +248,7 @@ public class SideBar extends VBox {
 		// does not work
 		historyList.getFocusModel().focusedItemProperty()
 				.addListener(new ChangeListener<String>() {
+					@Override
 					public void changed(ObservableValue<? extends String> ov,
 							String old_val, String new_val) {
 						try {
@@ -292,7 +292,7 @@ public class SideBar extends VBox {
 						"*.gif"));
 		return fileChooser.showOpenDialog(myStage);
 	}
-	
+
 	private void changeTurtleImage(TurtleView turtle, Image img) {
 		turtle.setImage(img);
 	}
@@ -304,27 +304,27 @@ public class SideBar extends VBox {
 	public void setHistory(String string) {
 		historyItems.add(string);
 	}
-	
-	public void updateVariable(Variable variable){
-		//variablesTable.getItems().stream().forEach((o) -> 
-		for (Variable o : variablesTable.getItems())
-		{
+
+	public void updateVariable(Variable variable) {
+		// variablesTable.getItems().stream().forEach((o) ->
+		for (Variable o : variablesTable.getItems()) {
 			System.out.println("updatevar");
 			System.out.println(o.getName());
 			System.out.println(variable.getName());
-			if (o.getName().equals(variable.getName())){
+			if (o.getName().equals(variable.getName())) {
 				System.out.println("already exists. let's edit this variable");
 				o.setValue(variable.getValue());
 				return;
 			}
-		};
-			
+		}
+		;
 
 		variablesList.add(variable);
-			
-			
-			/*t.getTableView().getItems()
-						.get(t.getTablePosition().getRow())).setName(t.getNewValue());*/
-		
+
+		/*
+		 * t.getTableView().getItems()
+		 * .get(t.getTablePosition().getRow())).setName(t.getNewValue());
+		 */
+
 	}
 }

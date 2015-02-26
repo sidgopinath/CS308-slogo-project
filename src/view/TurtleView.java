@@ -22,6 +22,7 @@ public class TurtleView extends ImageView {
 		isVisible = true;
 	}
 
+	// relative movement
 	public void move(double moveX, double moveY) {
 		setTranslateX(moveX);
 		setTranslateY(moveY);
@@ -36,15 +37,15 @@ public class TurtleView extends ImageView {
 		return Math.sqrt(Math.pow(newX - x, 2) + Math.pow(newY - y, 2));
 	}
 
-	public void setRelativeHeading(double angle) {
-		myHeading = myHeading + angle;
-		setRotate(myHeading);
-		myHeading = adjustAngle(myHeading);
+	public double setRelativeHeading(double angle) {
+	    setRotate(adjustAngle(getRotate()+angle));
+	    return getRotate();
 	}
 
-	public void setAbsoluteHeading(double angle) {
-		double distanceToMove = myHeading - angle;
-		myHeading = adjustAngle(myHeading - distanceToMove);
+	public double setAbsoluteHeading(double angle) {
+	    double old = getRotate();
+		setRotate(adjustAngle(angle));
+		return getRotate()-old;
 	}
 
 	public void setPenUp(boolean isUp) {

@@ -81,10 +81,14 @@ public class Parser implements Observer{
 			commandMap.put("VARIABLE","Variable");
 		}
 	}
-	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		//input = "MAKE :var 50 MAKE :var 200";
-		System.out.println("NEW RUN");
-		furthestDepth = 0;
+	List<Instruction> outList;
+	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ModelException, NoSuchMethodException, SecurityException{
+		//input = "MAKE :var 50 fd :var";
+
+		try{
+			furthestDepth = 0;
+		
+		System.out.println("parser input" + input);
 		input = input.replaceAll("\\s+", " ");
 		String[] splitCommands = input.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
@@ -105,10 +109,12 @@ public class Parser implements Observer{
 				//mySLogoView.updateWorkspace(commandList);
 			  //mySLogoView.updateVariables(myVariableMap);
 		}
-		for(String i:executionParameters.getVariableMap().keySet()){
-			System.out.println(i+" "+ executionParameters.getVariable(i).execute());
 		}
-		
+		catch (Exception e){
+			System.out.println("in parse and execute");
+			mySLogoView.openDialog("Invalid input! Try again.");
+			throw new ModelException();
+		}
 	}
 	private void turtleCommandGetter(List<TurtleCommand> cList, Node root) {
 		for(Node n: inOrderTraverser(root)){
@@ -172,7 +178,7 @@ public class Parser implements Observer{
 
 	// add catch for array out of bounds
 	// BIG TODO: merge instruction tree and this tree to be one and the same
-	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException {
+	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ModelException {
 		// base case
 		int myVars = 0;
 		int neededVars = -1;
@@ -231,8 +237,11 @@ public class Parser implements Observer{
 				neededVars = myInt.getNumberOfArguments();
 			}
 			catch(ClassNotFoundException e){
-				// Throw input error
-				System.out.println("No such class/function, yet!");
+				throw new ModelException();
+			}
+			catch(ArrayIndexOutOfBoundsException e){
+				mySLogoView.openDialog("Out of bounds error.");
+				throw new ModelException();
 			}
 		
 		while(myVars<neededVars){
@@ -242,7 +251,13 @@ public class Parser implements Observer{
 			myVars++;
 		}
 		for(Node child:myNode.getChildren()){
-			futureInstructions.add(child.getInstruction());
+			try{
+				futureInstructions.add(child.getInstruction());
+			}
+			catch(NullPointerException e){
+				mySLogoView.openDialog("Invalid input!");
+				throw new ModelException();
+			}
 		}
 		return myNode;
 	}

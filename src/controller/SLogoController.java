@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import view.SLogoView;
 import javafx.stage.Stage;
+import model.ModelException;
 import model.Parser;
 
 
@@ -28,7 +29,12 @@ public class SLogoController {
 	 * @param input
 	 */
 	public void parseInput(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		myParser.parseAndExecute(input);
+		try{
+			myParser.parseAndExecute(input);
+		}
+		catch (ModelException e){
+			System.out.println("ModelException thrown");
+		}
 	}
 	
 	public void setLanguage(String language){

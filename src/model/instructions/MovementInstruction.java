@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import view.SLogoView;
+import model.ExecutionEnvironment;
 import model.Polar;
 import model.turtle.TurtleCommand;
 
@@ -34,33 +35,38 @@ public class MovementInstruction extends Instruction {
     }
 	}
 	
-	public MovementInstruction(List<Instruction> dependencies, String instructionType, SLogoView view) {
-		super(dependencies, instructionType, view);
+	public MovementInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, view, environment);
 		myDependencies = dependencies;
 		myInstructionType = instructionType;
 		myTurtle = null;
 		myJump = true;
 	}
 	
+	double returnVal;
 	@Override
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
-			myPolar = new Polar(0, myDependencies.get(0).execute());
-			updateView();
-			return myDependencies.get(0).execute();
+			returnVal = myDependencies.get(0).execute();
+			myPolar = new Polar(0, returnVal);
+			//updateView();
+			return returnVal;
 		case "BACKWARD":
-			myPolar = new Polar(0, -myDependencies.get(0).execute());
+			returnVal = myDependencies.get(0).execute();
+			myPolar = new Polar(0, -returnVal);
 			updateView();
 			return myDependencies.get(0).execute();
 		case "LEFT":
-			myPolar = new Polar(-myDependencies.get(0).execute(), 0);
+			returnVal = myDependencies.get(0).execute();
+			myPolar = new Polar(-returnVal, 0);
 			updateView();
 			return myDependencies.get(0).execute();
 		case "RIGHT":
-			myPolar = new Polar(myDependencies.get(0).execute(), 0);
+			returnVal = myDependencies.get(0).execute();
+			myPolar = new Polar(returnVal, 0);
 			updateView();
-			return myDependencies.get(0).execute();
+			return returnVal;
 		case "SETHEADING":
 			// Need view
 			myJump = false;
@@ -100,7 +106,7 @@ public class MovementInstruction extends Instruction {
 	private void updateView() {
 		List<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
 		commandList.add(new TurtleCommand(0, myPolar, myJump));
-		myView.updateWorkspace(commandList);
+		//myView.updateWorkspace(commandList);
 	}
 
 	@Override

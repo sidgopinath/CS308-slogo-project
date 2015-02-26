@@ -3,13 +3,14 @@ package model.instructions;
 import java.util.List;
 import java.util.Random;
 
+import model.ExecutionEnvironment;
 import view.SLogoView;
 
 public class MathInstruction extends Instruction{
 	
 
-	public MathInstruction(List<Instruction> dependencies, String instructionType, SLogoView view) {
-		super(dependencies, instructionType, view);
+	public MathInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, view, environment);
 	}
 
 	public enum implementers {

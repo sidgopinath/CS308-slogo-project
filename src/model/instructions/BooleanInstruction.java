@@ -2,13 +2,14 @@ package model.instructions;
 
 import java.util.List;
 
+import model.ExecutionEnvironment;
 import view.SLogoView;
 
 
 public class BooleanInstruction extends Instruction {
 
-	public BooleanInstruction(List<Instruction> dependencies, String instructionType, SLogoView view) {
-		super(dependencies, instructionType, view);
+	public BooleanInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, view, environment);
 	}
 
 	public enum implementers {
@@ -58,4 +59,5 @@ public class BooleanInstruction extends Instruction {
 	public int getNumberOfArguments() {
 		return implementers.valueOf(myInstructionType.toUpperCase()).numArgs;
 	}
+
 }

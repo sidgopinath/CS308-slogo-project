@@ -81,6 +81,8 @@ public class Parser {
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		//input = "[ fd + 200 400 [ fd fd 50 ] rt 90 ] BACK 40";
 		furthestDepth = 0;
+		
+			input = input.replaceAll("\\s+", " ");
 		String[] splitCommands = input.split(" ");
 		List<Node> nodeList = new ArrayList<Node>();
 		while(furthestDepth<splitCommands.length){

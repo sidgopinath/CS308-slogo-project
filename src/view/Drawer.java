@@ -11,28 +11,28 @@ import model.Polar;
 import model.turtle.TurtleCommand;
 
 public class Drawer {
-    private Color color;
-    private double[] myXBounds = new double[2];
-    private double[] myYBounds = new double[2];
-    private double[] half=new double[2];
-    
-    public Drawer(double xMax, double yMax){
-    	myXBounds[0] = 20;
-    	myXBounds[1] = xMax+20;
-    	myYBounds[0] = 15;
-    	myYBounds[1] = yMax+15;
-    	half[0]=0.5*(myXBounds[1]-myXBounds[0]);
-    	half[1]=0.5*(myYBounds[1]-myYBounds[0]);
-    	color = Color.BLACK;
-    }
-    
-   //may have to remove list from turtlecommand
-   public List<Polyline> draw(Map<Integer, TurtleView> turtles, List<TurtleCommand> instructions){
-	   ArrayList<Polyline> lines= new ArrayList<Polyline>();
-       Iterator<TurtleCommand> it = instructions.iterator();
-       while(it.hasNext()){
-           TurtleCommand command = it.next();
+	private Color color;
+	private double[] myXBounds = new double[2];
+	private double[] myYBounds = new double[2];
+	private double[] half = new double[2];
 
+    public Drawer(double xMax, double yMax) {
+        myXBounds[0] = 20;
+        myXBounds[1] = xMax + 20;
+        myYBounds[0] = 15;
+        myYBounds[1] = yMax + 15;
+        half[0] = 0.5 * (myXBounds[1] - myXBounds[0]);
+        half[1] = 0.5 * (myYBounds[1] - myYBounds[0]);
+        color = Color.BLACK;
+    }
+
+    // may have to remove list from turtlecommand
+    public List<Polyline> draw(Map<Integer, TurtleView> turtles,
+            List<TurtleCommand> instructions) {
+        ArrayList<Polyline> lines = new ArrayList<Polyline>();
+        Iterator<TurtleCommand> it = instructions.iterator();
+        while (it.hasNext()) {
+            TurtleCommand command = it.next();
            TurtleView turtle = turtles.get(command.getTurtleId());
            Polar polar = command.getPolar();
           
@@ -81,8 +81,10 @@ public class Drawer {
    }
 
     private void wrapY (int dir,TurtleView turtle,Polar polar, ArrayList<Polyline> lines, int i, double newY, double startX, double moveX, double moveY, double turtleY, double startY) {
-        double endX1=startX+moveX*Math.abs((myYBounds[i]+Math.pow(-1, i)*(-newY+moveY))/moveY);
+        double endX1=startX+moveX*Math.abs((Math.pow(-1, i)*(myYBounds[i]-newY+moveY))/moveY);
         double endX2=startX+moveX;
+        System.out.println(startX);
+        System.out.println(moveX);
         turtle.move(turtle.getTranslateX()+moveX,Math.pow(-1,i)*half[dir]-myYBounds[i]+newY);
         if(!turtle.getPenUp()){
             double endY=turtle.getTranslateY()+turtleY+turtle.getFitHeight()/2;
@@ -107,13 +109,13 @@ public class Drawer {
         return polyline;
     }
 
-    public void changeColor(Color c) {
-        System.out.println("color" + color.toString());
+	public void changeColor(Color c) {
+		System.out.println("color" + color.toString());
 
-        color=c;
-    }
-    
-   /* public void setPenUp(boolean isUp){
-    	penUp = isUp;
-    } */
+		color = c;
+	}
+
+	/*
+	 * public void setPenUp(boolean isUp){ penUp = isUp; }
+	 */
 }

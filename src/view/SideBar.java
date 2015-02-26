@@ -41,6 +41,7 @@ public class SideBar extends VBox {
 	ObservableList<String> historyItems;
 	ObservableList<Variable> variablesList;
 	SLogoController myController;
+	TableView<Variable> variablesTable;
 
 	// make this into a new class with its own stuff that have variablesView and
 	// commandView and historyView???
@@ -81,6 +82,7 @@ public class SideBar extends VBox {
 
 		languageOptions.getSelectionModel().selectedItemProperty()
 				.addListener(new ChangeListener<String>() {
+					@Override
 					public void changed(ObservableValue<? extends String> ov,
 							String old_val, String new_val) {
 						System.out.println(new_val);
@@ -90,29 +92,29 @@ public class SideBar extends VBox {
 				});
 
 		// select turtle image
-		HBox hbox = new HBox(10);
+		HBox customizeTurtleBox = new HBox(10);
 		Text selectTurtle = new Text("Select Turtle");
 		Button uploadImg = new Button("Upload");
 		uploadImg.setPrefSize(100, 20);
 		uploadImg.setPadding(new Insets(0, 0, 0, 3));
 		uploadImg.setOnAction(e -> uploadTurtleFile(myTurtles.get(0)));
 
-		hbox.getChildren().addAll(selectTurtle, uploadImg);
-		getChildren().add(hbox);
+		customizeTurtleBox.getChildren().addAll(selectTurtle, uploadImg);
+		getChildren().add(customizeTurtleBox);
 
 		// select pen color
-		HBox hbox2 = new HBox(10);
+		HBox customizePenBox = new HBox(10);
 
 		Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);
 		ColorPicker penColorChoice = new ColorPicker(Color.BLACK);
 		penColorChoice.setOnAction(e -> drawer.changeColor(penColorChoice.getValue()));
 
-		hbox2.getChildren().addAll(selectPenColor, penColorChoice);
+		customizePenBox.getChildren().addAll(selectPenColor, penColorChoice);
 		// sidePane.getChildren().addAll(hbox2, strokeColorChoice);
-		getChildren().add(hbox2);
+		getChildren().add(customizePenBox);
 
 		// select background color
-		HBox hbox3 = new HBox(10);
+		HBox customizeBackgroundBox = new HBox(10);
 		Text selectBackgroundColor = new Text(Strings.SELECT_BACKGROUND_COLOR);
 
 		ColorPicker backgroundChoice = new ColorPicker(Color.WHITE);
@@ -121,8 +123,9 @@ public class SideBar extends VBox {
 
 		// User can pick color for the stroke
 
-		hbox3.getChildren().addAll(selectBackgroundColor, backgroundChoice);
-		getChildren().add(hbox3);
+		customizeBackgroundBox.getChildren().addAll(selectBackgroundColor,
+				backgroundChoice);
+		getChildren().add(customizeBackgroundBox);
 
 		// variables pane
 		Text variables = new Text(Strings.VARIABLES_HEADER);
@@ -131,11 +134,11 @@ public class SideBar extends VBox {
 		variables.setUnderline(true);
 		getChildren().add(variables);
 
-		variablesList = FXCollections.observableArrayList(
-				new Variable("var1", 1.5), new Variable("var2", 2.5));
+		variablesList = FXCollections.observableArrayList(new Variable("var1", 1.5),
+				new Variable("var2", 2.5));
 		variablesList.add(new Variable("Added var2.5", 5));
 
-		TableView<Variable> variablesTable = new TableView<Variable>();
+		variablesTable = new TableView<Variable>();
 		TableColumn<Variable, String> variablesCol = new TableColumn<Variable, String>(
 				"Variables");
 		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
@@ -155,8 +158,8 @@ public class SideBar extends VBox {
 		variablesCol.setOnEditCommit(new EventHandler<CellEditEvent<Variable, String>>() {
 			@Override
 			public void handle(CellEditEvent<Variable, String> t) {
-				((Variable) t.getTableView().getItems()
-						.get(t.getTablePosition().getRow())).setName(t.getNewValue());
+				t.getTableView().getItems().get(t.getTablePosition().getRow())
+						.setName(t.getNewValue());
 			}
 		});
 
@@ -182,8 +185,8 @@ public class SideBar extends VBox {
 		valuesCol.setOnEditCommit(new EventHandler<CellEditEvent<Variable, Double>>() {
 			@Override
 			public void handle(CellEditEvent<Variable, Double> t) {
-				((Variable) t.getTableView().getItems()
-						.get(t.getTablePosition().getRow())).setValue(t.getNewValue());
+				t.getTableView().getItems().get(t.getTablePosition().getRow())
+						.setValue(t.getNewValue());
 			}
 		});
 
@@ -206,6 +209,10 @@ public class SideBar extends VBox {
 		// example of how to set new elements to the observablelist
 		variablesList.add(new Variable("Added var3", 3));
 		variablesTable.setItems(variablesList);
+
+		System.out.println("beforeupdatevar");
+		updateVariable(new Variable("Added var3", 4));
+		System.out.println("afterupdatevar");
 
 		// user-defined commands
 		Text userCommands = new Text(Strings.USER_DEFINED_COMMANDS_HEADER);
@@ -241,6 +248,7 @@ public class SideBar extends VBox {
 		// does not work
 		historyList.getFocusModel().focusedItemProperty()
 				.addListener(new ChangeListener<String>() {
+					@Override
 					public void changed(ObservableValue<? extends String> ov,
 							String old_val, String new_val) {
 						try {
@@ -284,7 +292,7 @@ public class SideBar extends VBox {
 						"*.gif"));
 		return fileChooser.showOpenDialog(myStage);
 	}
-	
+
 	private void changeTurtleImage(TurtleView turtle, Image img) {
 		turtle.setImage(img);
 	}
@@ -296,8 +304,27 @@ public class SideBar extends VBox {
 	public void setHistory(String string) {
 		historyItems.add(string);
 	}
-	
-	public void addVariable(Variable variable){
+
+	public void updateVariable(Variable variable) {
+		// variablesTable.getItems().stream().forEach((o) ->
+		for (Variable o : variablesTable.getItems()) {
+			System.out.println("updatevar");
+			System.out.println(o.getName());
+			System.out.println(variable.getName());
+			if (o.getName().equals(variable.getName())) {
+				System.out.println("already exists. let's edit this variable");
+				o.setValue(variable.getValue());
+				return;
+			}
+		}
+		;
+
 		variablesList.add(variable);
+
+		/*
+		 * t.getTableView().getItems()
+		 * .get(t.getTablePosition().getRow())).setName(t.getNewValue());
+		 */
+
 	}
 }

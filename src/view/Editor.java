@@ -9,15 +9,16 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 
 public class Editor extends HBox {
-	
+
 	private Button runButton;
 	private TextArea textEditor;
 	private SLogoController myController;
 	private SideBar mySidebar;
+
 	// ^^ why do i have so many of these here that are passed back and forth?
-	
-	public Editor(SLogoController controller, SideBar sidebar){
-		//HBox bottomRow = new HBox();
+
+	public Editor(SLogoController controller, SideBar sidebar) {
+		// HBox bottomRow = new HBox();
 		mySidebar = sidebar;
 		myController = controller;
 		setPadding(new Insets(15));
@@ -28,9 +29,10 @@ public class Editor extends HBox {
 		textEditor.setMaxHeight(Double.MAX_VALUE);
 		textEditor.setPrefSize(750, 120); // this should be dynamically
 											// alterable?
-		
-		//textEditor.clear();
-		//TODO: fix the textEditor clear. It does not udate directly to the group
+
+		// textEditor.clear();
+		// TODO: fix the textEditor clear. It does not udate directly to the
+		// group
 		getChildren().add(textEditor);
 
 		// run button
@@ -42,16 +44,16 @@ public class Editor extends HBox {
 		getChildren().add(runButton);
 		runButton.setOnMouseClicked(e -> parse());
 	}
-	
-	private void parse(){
+
+	private void parse() {
 		String userText = textEditor.getText();
 		textEditor.clear();
 		System.out.println(userText);
 		mySidebar.setHistory(userText);
 		try {
 			myController.parseInput(userText);
-			
-			//getChildren().add(textEditor);
+
+			// getChildren().add(textEditor);
 
 		} catch (InstantiationException e) {
 			// TODO Auto-generated catch block
@@ -73,13 +75,9 @@ public class Editor extends HBox {
 			e.printStackTrace();
 		}
 	}
-	
-	/*public Button getRunButton(){
-		return runButton;
-	}*/
-	
-	
-	
-	
+
+	/*
+	 * public Button getRunButton(){ return runButton; }
+	 */
 
 }

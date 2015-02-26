@@ -13,11 +13,11 @@ public class TurtleRequestInstruction extends Instruction {
 	}
 	
 	public enum implementers {
-		FORWARD(0),
-		BACKWARD(0),
-		LEFT(0),
-		RIGHT(0),
-		SETHEADING(0);
+		XCOR(0),
+		YCOR(0),
+		HEADING(0),
+		PENDOWN(0),
+		SHOWING(0);
 		private int numArgs;
 	implementers(int args){
     	this.numArgs=args;

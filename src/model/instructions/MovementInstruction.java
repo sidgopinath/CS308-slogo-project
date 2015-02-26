@@ -94,7 +94,6 @@ public class MovementInstruction extends Instruction {
 			return myView.clearScreen(0);
 		case "HOME":
 			myJump = true;
-			System.out.println(myView.setXY(0,0,0));
 			return myView.setXY(0,0,0);
 		default: 
 			return 0;

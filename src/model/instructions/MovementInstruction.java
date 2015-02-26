@@ -26,8 +26,7 @@ public class MovementInstruction extends Instruction {
 		PENUP(0),
 		SHOWTURTLE(0),
 		HIDETURTLE(0),
-		NATURALLOG(1),
-		CLEARSCREEN(2),
+		CLEARSCREEN(0),
 		HOME(0);
 		private int numArgs;
 	implementers(int args){
@@ -90,6 +89,7 @@ public class MovementInstruction extends Instruction {
 			myView.showTurtle(0, false);
 			return 0.0;
 		case "CLEARSCREEN":
+			System.out.println(myView.clearScreen(0));
 			return myView.clearScreen(0);
 		case "HOME":
 			myJump = true;

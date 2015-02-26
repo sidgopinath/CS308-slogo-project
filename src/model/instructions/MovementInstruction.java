@@ -11,7 +11,6 @@ import model.turtle.TurtleCommand;
 
 public class MovementInstruction extends Instruction {
 	private TurtleCommand myTurtle;
-	private boolean myPenUp;
 	private boolean myJump;
 	private Polar myPolar;
 	
@@ -41,33 +40,36 @@ public class MovementInstruction extends Instruction {
 		myDependencies = dependencies;
 		myInstructionType = instructionType;
 		myTurtle = null;
-		myPenUp = false;
 		myJump = false;
 	}
 	
+	double returnVal;
 	@Override
 	public double execute() {
-		double inputDouble = myDependencies.get(0).execute();
 		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
-			myPolar = new Polar(0, inputDouble);
-			//updateView();
-			return inputDouble;
+			returnVal = myDependencies.get(0).execute();
+			myPolar = new Polar(0, returnVal);
+			updateView();
+			return returnVal;
 		case "BACKWARD":
-			myPolar = new Polar(0, -inputDouble);
-			//updateView();
+			returnVal = myDependencies.get(0).execute();
+			myPolar = new Polar(0, -returnVal);
+			updateView();
 			return myDependencies.get(0).execute();
 		case "LEFT":
-			myPolar = new Polar(-inputDouble, 0);
-			//updateView();
+			returnVal = myDependencies.get(0).execute();
+			myPolar = new Polar(-returnVal, 0);
+			updateView();
 			return myDependencies.get(0).execute();
 		case "RIGHT":
-			myPolar = new Polar(inputDouble, 0);
-			//updateView();
-			return myDependencies.get(0).execute();
+			returnVal = myDependencies.get(0).execute();
+			myPolar = new Polar(returnVal, 0);
+			updateView();
+			return returnVal;
 		case "SETHEADING":
 			// Need view
-			myPolar = new Polar(inputDouble, 0);
+			myPolar = new Polar(myDependencies.get(0).execute(), 0);
 			return 0.0;
 		case "TOWARDS":
 			// need view
@@ -78,16 +80,16 @@ public class MovementInstruction extends Instruction {
 			myPolar = new Polar(myDependencies.get(0).execute(), myDependencies.get(1).execute());
 			return 0.0;
 		case "PENDOWN":
-			myPenUp = false;
+			myView.setPenUp(0, false);
 			return 1.0;
 		case "PENUP":
-			myPenUp = true;
+			myView.setPenUp(0, true);
 			return 0.0;
 		case "SHOWTURTLE":
-			//need view
+			myView.showTurtle(0, true);
 			return 1.0;
 		case "HIDETURTLE":
-			//need view
+			myView.showTurtle(0, false);
 			return 0.0;
 		case "CLEARSCREEN":
 			//need view
@@ -102,7 +104,7 @@ public class MovementInstruction extends Instruction {
 
 	private void updateView() {
 		List<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
-		commandList.add(new TurtleCommand(0, myPolar, myPenUp, myJump));
+		commandList.add(new TurtleCommand(0, myPolar, myJump));
 		myView.updateWorkspace(commandList);
 	}
 
@@ -113,7 +115,9 @@ public class MovementInstruction extends Instruction {
 
 	@Override
 	public TurtleCommand getTurtleCommand() {
-		myTurtle = new TurtleCommand(0, myPolar, myPenUp, myJump);
+		myTurtle = new TurtleCommand(0, myPolar, myJump);
 		return myTurtle;
 	}
+	
+	//somewhere add something to setpenup in the view
 }

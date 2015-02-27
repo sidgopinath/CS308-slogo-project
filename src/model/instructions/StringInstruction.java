@@ -6,20 +6,21 @@ import model.ExecutionEnvironment;
 import model.ModelException;
 import view.SLogoView;
 
+public class StringInstruction extends Instruction{
 
-public class Variable extends Instruction{
-	public Variable(String instructionType, ExecutionEnvironment environment) {
+	public StringInstruction(String instructionType,ExecutionEnvironment environment) {
 		super(instructionType, environment);
 	}
 
 	@Override
 	public double execute(){
-		return myEnvironment.getVariable(myInstructionType).execute();
+		// TODO Auto-generated method stub
+		return 0;
 	}
+
 	@Override
 	public int getNumberOfArguments() {
 		return 0;
 	}
-	
 
 }

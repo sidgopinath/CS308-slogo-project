@@ -2,7 +2,10 @@ package model.instructions;
 
 import java.util.List;
 
+import com.sun.tracing.dtrace.DependencyClass;
+
 import model.ExecutionEnvironment;
+import model.ModelException;
 import view.SLogoView;
 
 public class ControlInstruction extends Instruction{
@@ -26,46 +29,41 @@ public class ControlInstruction extends Instruction{
 }
 
 	@Override
-	public double execute() {
+	public double execute(){
+		double returnVal=0;
+		int endRange = 0;
+		int startRange = 0;
+		int increment = 0;
 		switch(myInstructionType.toUpperCase()){
 		case "MAKEVARIABLE":
-			myEnvironment.removeDuplicate(myDependencies.get(0).getName());
-			myEnvironment.addVariable(myDependencies.get(0).getName(), myDependencies.get(1));
-			return myDependencies.get(0).execute();
+			return makeVariable(myDependencies.get(0), myDependencies.get(1));
 		case "REPEAT":
-			for(int i =0; i<myDependencies.get(0).execute(); i++){
-				myDependencies.get(1).execute();
+			for(int i =1; i<=myDependencies.get(0).execute(); i++){
+				makeVariable(new Variable(":repcount", myEnvironment), new Constant(Integer.toString(i), myEnvironment));
+				for(Instruction instruct:myDependencies.get(1).myDependencies){
+					returnVal = instruct.execute();
+				}
 			}
-			return myDependencies.get(1).execute();
+			return returnVal;
 		case "DOTIMES":
-			//for loop from 1 to limit
-			//the limit is within a list though
-			//the list is [ variable limit ]
-			//so run the for loop till then
-			//then for every command, run it using the current "i"
-			//need variable map to store i so command(s) can be called with it
-			//return value of last expression
-			return 0.0;
+			endRange = (int) Math.round(myDependencies.get(0).myDependencies.get(0).execute());
+			return forLoop(myDependencies.get(0), myDependencies.get(1), 1, endRange, 1);
 		case "FOR":
-			//similar to DoTimes
-			//for loop from "start" to "end"
-			//goes up by increment
-			//all values are in a list which makes it harder
-			//variable assigned to current "i" every time
-			//command(s) run on that variable
-			//return value of last expression
-			return 0.0;
+			startRange = (int) Math.round(myDependencies.get(0).myDependencies.get(1).execute());
+			endRange = (int) Math.round(myDependencies.get(0).myDependencies.get(2).execute());
+			increment = (int) Math.round(myDependencies.get(0).myDependencies.get(3).execute());
+			return forLoop(myDependencies.get(0), myDependencies.get(1), startRange, endRange, increment);
 		case "IF":
 			if(myDependencies.get(0).execute() != 0){
-				return myDependencies.get(1).execute(); 
+				executeList(myDependencies.get(1));
 			}
-			return 0.0;
+			return returnVal;
 		case "IFELSE":
 			if(myDependencies.get(0).execute() != 0){
-				return myDependencies.get(1).execute();
+				return executeList(myDependencies.get(1));
 			}
 			else{
-				return myDependencies.get(2).execute();
+				return executeList(myDependencies.get(2));
 			}
 		case "MAKEUSERINSTRUCTION":
 			//needs user commands map AND variables map
@@ -74,13 +72,35 @@ public class ControlInstruction extends Instruction{
 			//run each command with its corresponding variable
 			//store that entire string of instructions in the user command map
 			//variables are all stored in the variablesMap
-			//returns 1 if it works, otherwise 0
-			return 0.0;
+			// add variables to map, only when run though
+			String commandName = myDependencies.get(0).getName();
+			myEnvironment.addCommand(commandName, this);
+			return 1.0;
 		default:
-			return -1;
+			return 0.0;
 		}
 	}
-
+	public double forLoop(Instruction varHead, Instruction listHead, int startIndex, int endIndex, int increment){
+		double returnVal = 0;
+		for(int i =startIndex; i<=endIndex; i+=increment){
+			makeVariable(new Variable(varHead.myDependencies.get(0).getName(), myEnvironment), new Constant(Integer.toString(i), myEnvironment));
+			for(Instruction instruct:listHead.myDependencies){
+				returnVal = instruct.execute();
+			}
+		}
+		return returnVal;
+	}
+	public double executeList(Instruction listHead){
+		double returnVal = 0;
+		for(Instruction myInt : listHead.myDependencies){
+			returnVal =  myInt.execute();
+		}
+		return returnVal;
+	}
+	public double makeVariable(Instruction input, Instruction value){
+		myEnvironment.addVariable(input.getName(), value);
+		return value.execute();
+	}
 	@Override
 	public int getNumberOfArguments() {
 		return implementers.valueOf(myInstructionType.toUpperCase()).numArgs;

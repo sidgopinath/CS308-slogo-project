@@ -17,6 +17,8 @@ import view.SLogoView;
 import model.instructions.Constant;
 import model.instructions.Instruction;
 import model.instructions.ListInstruction;
+import model.instructions.StringInstruction;
+import model.instructions.UserRunningInstruction;
 import model.instructions.Variable;
 import model.turtle.TurtleCommand;
 
@@ -76,13 +78,10 @@ public class Parser implements Observer{
 			commandMap.put("VARIABLE","Variable");
 		}
 	}
-	List<Instruction> outList;
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ModelException, NoSuchMethodException, SecurityException{
 		//input = "MAKE :var 50 fd :var";
-
 		try{
-			furthestDepth = 0;
-		
+		furthestDepth = 0;
 		System.out.println("parser input" + input);
 		input = input.replaceAll("\\s+", " ");
 		String[] splitCommands = input.split(" ");
@@ -94,7 +93,7 @@ public class Parser implements Observer{
 		for(Node root:nodeList){
 			System.out.println("new tree");
 			System.out.println(root.getInstruction());
-			printTree(root);
+			//printTree(root);
 			printInOrderTraversal(root);
 		}
 		List<TurtleCommand> commandList =new ArrayList();
@@ -107,8 +106,10 @@ public class Parser implements Observer{
 		}
 		catch (Exception e){
 			System.out.println("in parse and execute");
+			System.out.println(e +" "+e.getMessage());
+			e.printStackTrace();
 			mySLogoView.openDialog("Invalid input! Try again.");
-			throw new ModelException();
+			throw new ModelException(e.toString());
 		}
 	}
 	private void turtleCommandGetter(List<TurtleCommand> cList, Node root) {
@@ -174,17 +175,17 @@ public class Parser implements Observer{
 	// add catch for array out of bounds
 	// BIG TODO: merge instruction tree and this tree to be one and the same
 	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ModelException {
-		// base case
 		int myVars = 0;
 		int neededVars = -1;
 		Node myNode = null;
+		List<Instruction> futureInstructions = new ArrayList();
 		// go through and determine what type of node we are adding
 		String match = testMatches(command[furthestDepth]).toUpperCase();
 		//this switch will eventually be combined into the map.
 		switch (match){
 		case "LISTSTART":
+			// count number of strings til you reach a ], thats number of dependencies
 			furthestDepth++;
-			List<Instruction> futureInstructions = new ArrayList();
 			myNode = new Node(new ListInstruction(futureInstructions, match,mySLogoView, executionParameters));
 			Node temp;
 			while(true){
@@ -200,19 +201,29 @@ public class Parser implements Observer{
 			furthestDepth++;
 			return makeTree(command);
 		case "CONSTANT":
-			// make node with string
 			furthestDepth++;
-			return new Node(new Constant(command[furthestDepth-1]));
+			return new Node(new Constant(command[furthestDepth-1], executionParameters));
 		case "VARIABLE":
 			furthestDepth++;
-				Instruction tempInt=new Variable(command[furthestDepth-1]);
-				executionParameters.addObserver(tempInt);
-				return new Node(tempInt);
+			Instruction tempInt=new Variable(command[furthestDepth-1], executionParameters);
+			executionParameters.addObserver(tempInt);
+			return new Node(tempInt);
 		case "COMMAND":
 			// make node with command, if found
+			//if(executionParameters.get)
 			// check map
 			// return new usercommand using map
 			// user command makes the tree for us, so just return the root node that returns
+			furthestDepth++;
+			if(executionParameters.getCommand(command[furthestDepth-1])!=null){
+				myNode = new Node(new UserRunningInstruction(futureInstructions, command[furthestDepth-1], mySLogoView, executionParameters));
+				System.out.println(" Node "+ myNode);
+				neededVars = 1;
+			}
+			else{
+				return new Node(new StringInstruction(command[furthestDepth-1], executionParameters));
+			}
+			break;
 		case "LISTEND":
 			furthestDepth++;
 			return null;
@@ -222,7 +233,7 @@ public class Parser implements Observer{
 		}
 			//this is either a known command or invalid input.  
 			//instantiate the command, if reflection cannot find the file then must be invalid
-			List<Instruction> futureInstructions= new ArrayList<Instruction>();
+		if(myNode==null){
 			System.out.println("match" + match);
 			try{
 				Instruction myInt = Class.forName("model.instructions."+commandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,mySLogoView, executionParameters});
@@ -232,13 +243,13 @@ public class Parser implements Observer{
 				neededVars = myInt.getNumberOfArguments();
 			}
 			catch(ClassNotFoundException e){
-				throw new ModelException();
+				throw new ModelException(e.toString());
 			}
 			catch(ArrayIndexOutOfBoundsException e){
 				mySLogoView.openDialog("Out of bounds error.");
-				throw new ModelException();
+				throw new ModelException(e.toString());
 			}
-		
+		}
 		while(myVars<neededVars){
 			Node level = makeTree(command);
 			System.out.println("got kid "+ level.getInstruction()+" for "+myNode.getInstruction()+" "+ myVars+ " "+ neededVars);
@@ -251,7 +262,7 @@ public class Parser implements Observer{
 			}
 			catch(NullPointerException e){
 				mySLogoView.openDialog("Invalid input!");
-				throw new ModelException();
+				throw new ModelException(e.toString());
 			}
 		}
 		return myNode;

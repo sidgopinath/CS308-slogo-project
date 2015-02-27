@@ -54,15 +54,15 @@ public class ControlInstruction extends Instruction{
 			return forLoop(myDependencies.get(0), myDependencies.get(1), startRange, endRange, increment);
 		case "IF":
 			if(myDependencies.get(0).execute() != 0){
-				return myDependencies.get(1).execute(); 
+				executeList(myDependencies.get(1));
 			}
-			return 0.0;
+			return returnVal;
 		case "IFELSE":
 			if(myDependencies.get(0).execute() != 0){
-				return myDependencies.get(1).execute();
+				return executeList(myDependencies.get(1));
 			}
 			else{
-				return myDependencies.get(2).execute();
+				return executeList(myDependencies.get(2));
 			}
 		case "MAKEUSERINSTRUCTION":
 			//needs user commands map AND variables map
@@ -84,6 +84,13 @@ public class ControlInstruction extends Instruction{
 			for(Instruction instruct:listHead.myDependencies){
 				returnVal = instruct.execute();
 			}
+		}
+		return returnVal;
+	}
+	public double executeList(Instruction listHead){
+		double returnVal = 0;
+		for(Instruction myInt : listHead.myDependencies){
+			returnVal =  myInt.execute();
 		}
 		return returnVal;
 	}

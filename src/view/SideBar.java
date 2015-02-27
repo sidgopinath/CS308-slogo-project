@@ -37,7 +37,6 @@ import javafx.util.StringConverter;
 
 public class SideBar extends VBox {
 
-//	Workspace myWorkspace;
 	private Map<Integer, TurtleView> myTurtles;
 	private ListView<String> historyList;
 	private ObservableList<String> historyItems;
@@ -45,8 +44,6 @@ public class SideBar extends VBox {
 	private SLogoController myController;
 	private TableView<VariableView> variablesTable;
 	private ObservableList<String> commandItems;
-//	private ListView<String> commandList;
-
 
 	// make this into a new class with its own stuff that have variablesView and
 	// commandView and historyView???
@@ -245,5 +242,11 @@ public class SideBar extends VBox {
 	
 	public void updateCommand(String s){
 		commandItems.add(s);
+	}
+	
+	private void updateTurtleProperties (int ID){
+		//TODO: kjsdlkfajilwjfakjd
+		//remove all current
+		
 	}
 }

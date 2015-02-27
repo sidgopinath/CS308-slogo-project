@@ -2,6 +2,8 @@ package model.instructions;
 
 import java.util.List;
 
+import com.sun.tracing.dtrace.DependencyClass;
+
 import model.ExecutionEnvironment;
 import view.SLogoView;
 
@@ -27,27 +29,28 @@ public class ControlInstruction extends Instruction{
 
 	@Override
 	public double execute() {
+		double returnVal=0;
 		switch(myInstructionType.toUpperCase()){
 		case "MAKEVARIABLE":
 			return makeVariable(myDependencies.get(0), myDependencies.get(1));
 		case "REPEAT":
-			double returnVal = 0;
 			for(int i =1; i<=myDependencies.get(0).execute(); i++){
-				makeVariable(new Variable(":repcount"), new Constant(Integer.toString(i)));
+				makeVariable(new Variable(":repcount", myEnvironment), new Constant(Integer.toString(i), myEnvironment));
 				for(Instruction instruct:myDependencies.get(1).myDependencies){
 					returnVal = instruct.execute();
 				}
 			}
 			return returnVal;
 		case "DOTIMES":
-			//for loop from 1 to limit
-			//the limit is within a list though
-			//the list is [ variable limit ]
-			//so run the for loop till then
-			//then for every command, run it using the current "i"
-			//need variable map to store i so command(s) can be called with it
-			//return value of last expression
-			return 0.0;
+			int endRange = (int) Math.round(myDependencies.get(0).myDependencies.get(0).execute());
+			for(int i =1; i<=endRange; i++){
+				makeVariable(new Variable(myDependencies.get(0).myDependencies.get(0).getName(), myEnvironment), new Constant(Integer.toString(i), myEnvironment));
+				for(Instruction instruct:myDependencies.get(1).myDependencies){
+					System.out.println(":var is "+myEnvironment.getVariable(":var").execute());
+					returnVal = instruct.execute();
+				}
+			}
+			return returnVal;
 		case "FOR":
 			//similar to DoTimes
 			//for loop from "start" to "end"

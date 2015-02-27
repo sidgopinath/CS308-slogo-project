@@ -1,9 +1,14 @@
 package model.instructions;
 
+import java.util.List;
+
+import model.ExecutionEnvironment;
+import view.SLogoView;
+
 
 public class Variable extends Instruction{
-	public Variable(String myName) {
-		super(myName);
+	public Variable(String instructionType, ExecutionEnvironment environment) {
+		super(instructionType, environment);
 	}
 
 	@Override

@@ -76,13 +76,10 @@ public class Parser implements Observer{
 			commandMap.put("VARIABLE","Variable");
 		}
 	}
-	List<Instruction> outList;
 	public void parseAndExecute(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, ModelException, NoSuchMethodException, SecurityException{
 		//input = "MAKE :var 50 fd :var";
-
 		try{
-			furthestDepth = 0;
-		
+		furthestDepth = 0;
 		System.out.println("parser input" + input);
 		input = input.replaceAll("\\s+", " ");
 		String[] splitCommands = input.split(" ");
@@ -94,7 +91,7 @@ public class Parser implements Observer{
 		for(Node root:nodeList){
 			System.out.println("new tree");
 			System.out.println(root.getInstruction());
-			printTree(root);
+			//printTree(root);
 			printInOrderTraversal(root);
 		}
 		List<TurtleCommand> commandList =new ArrayList();
@@ -107,8 +104,9 @@ public class Parser implements Observer{
 		}
 		catch (Exception e){
 			System.out.println("in parse and execute");
+			System.out.println(e.getMessage());
 			mySLogoView.openDialog("Invalid input! Try again.");
-			throw new ModelException();
+			throw new ModelException(e.toString());
 		}
 	}
 	private void turtleCommandGetter(List<TurtleCommand> cList, Node root) {
@@ -202,10 +200,10 @@ public class Parser implements Observer{
 		case "CONSTANT":
 			// make node with string
 			furthestDepth++;
-			return new Node(new Constant(command[furthestDepth-1]));
+			return new Node(new Constant(command[furthestDepth-1], executionParameters));
 		case "VARIABLE":
 			furthestDepth++;
-				Instruction tempInt=new Variable(command[furthestDepth-1]);
+				Instruction tempInt=new Variable(command[furthestDepth-1], executionParameters);
 				executionParameters.addObserver(tempInt);
 				return new Node(tempInt);
 		case "COMMAND":
@@ -232,11 +230,11 @@ public class Parser implements Observer{
 				neededVars = myInt.getNumberOfArguments();
 			}
 			catch(ClassNotFoundException e){
-				throw new ModelException();
+				throw new ModelException(e.toString());
 			}
 			catch(ArrayIndexOutOfBoundsException e){
 				mySLogoView.openDialog("Out of bounds error.");
-				throw new ModelException();
+				throw new ModelException(e.toString());
 			}
 		
 		while(myVars<neededVars){
@@ -251,7 +249,7 @@ public class Parser implements Observer{
 			}
 			catch(NullPointerException e){
 				mySLogoView.openDialog("Invalid input!");
-				throw new ModelException();
+				throw new ModelException(e.toString());
 			}
 		}
 		return myNode;

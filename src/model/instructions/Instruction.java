@@ -21,8 +21,9 @@ public abstract class Instruction implements Observer{
 		myView = view;
 		myEnvironment=environment;
 	}
-	public Instruction(String constantInput){
+	public Instruction(String constantInput, ExecutionEnvironment environment){
 		myInstructionType=constantInput;
+		myEnvironment = environment;
 	}
 	
     public abstract double execute();

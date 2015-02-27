@@ -5,6 +5,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import model.ExecutionEnvironment;
+import model.ModelException;
 import model.turtle.TurtleCommand;
 import view.SLogoView;
 

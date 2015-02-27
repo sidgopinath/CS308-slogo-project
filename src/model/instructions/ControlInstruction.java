@@ -5,6 +5,7 @@ import java.util.List;
 import com.sun.tracing.dtrace.DependencyClass;
 
 import model.ExecutionEnvironment;
+import model.ModelException;
 import view.SLogoView;
 
 public class ControlInstruction extends Instruction{
@@ -28,7 +29,7 @@ public class ControlInstruction extends Instruction{
 }
 
 	@Override
-	public double execute() {
+	public double execute(){
 		double returnVal=0;
 		int endRange = 0;
 		int startRange = 0;
@@ -71,10 +72,12 @@ public class ControlInstruction extends Instruction{
 			//run each command with its corresponding variable
 			//store that entire string of instructions in the user command map
 			//variables are all stored in the variablesMap
-			//returns 1 if it works, otherwise 0
-			return 0.0;
+			// add variables to map, only when run though
+			String commandName = myDependencies.get(0).getName();
+			myEnvironment.addCommand(commandName, this);
+			return 1.0;
 		default:
-			return -1;
+			return 0.0;
 		}
 	}
 	public double forLoop(Instruction varHead, Instruction listHead, int startIndex, int endIndex, int increment){
@@ -95,7 +98,6 @@ public class ControlInstruction extends Instruction{
 		return returnVal;
 	}
 	public double makeVariable(Instruction input, Instruction value){
-		myEnvironment.removeDuplicate(input.getName());
 		myEnvironment.addVariable(input.getName(), value);
 		return value.execute();
 	}

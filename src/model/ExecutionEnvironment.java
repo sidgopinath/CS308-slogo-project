@@ -7,40 +7,39 @@ import java.util.Observer;
 import model.instructions.Instruction;
 
 public class ExecutionEnvironment extends Observable{
-	private Map<String,Instruction> userInstructionMap;
+	private Map<String,Instruction> userCommandMap;
 	private Map<String, Instruction> variableMap;
 	public ExecutionEnvironment(){
 		clear();
 	}
-	public void addInstruction(String commandName, Instruction inInstruction){
-		userInstructionMap.put(commandName, inInstruction);
+	public void addCommand(String commandName, Instruction inInstruction){
+		if(userCommandMap.containsKey(commandName))
+			userCommandMap.remove(commandName);
+		userCommandMap.put(commandName, inInstruction);
 		setChanged();
 		notifyObservers();
 		clearChanged();
 	}
 	public void addVariable(String variableName, Instruction value){
+		if(variableMap.containsKey(variableName))
+			variableMap.remove(variableName);
 		variableMap.put(variableName, value);
 		setChanged();
 		notifyObservers();
-		clearChanged();
-	}
+		}
 	public Instruction getVariable(String key){
 		return variableMap.get(key);
 	}
-	public Instruction getInstruction(String key){
-		return userInstructionMap.get(key);
-	}
-	public void removeDuplicate(String s){
-		if(variableMap.containsKey(s))
-			variableMap.remove(s);
+	public Instruction getCommand(String key){
+		return userCommandMap.get(key);
 	}
 	public void clear(){
-		userInstructionMap=new HashMap();
+		userCommandMap=new HashMap();
 		variableMap = new HashMap();
 	}
 	
-	public Map<String, Instruction> getUserInstructionMap(){
-		return userInstructionMap;
+	public Map<String, Instruction> getUserCommandMap(){
+		return userCommandMap;
 	}
 	
 	public Map<String, Instruction> getVariableMap(){

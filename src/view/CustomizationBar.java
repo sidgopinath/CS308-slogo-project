@@ -11,11 +11,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -99,7 +102,24 @@ public class CustomizationBar extends HBox {
 
 				customizeBackgroundBox.getChildren().addAll(selectBackgroundColor,
 						backgroundChoice);
-				getChildren().add(customizeBackgroundBox);
+				HBox spaceHolder = new HBox();
+				spaceHolder.setPrefWidth(dimensions.getWidth()/40);
+				
+				getChildren().addAll(customizeBackgroundBox,spaceHolder);
+				
+
+				// Add turtle button
+				Button newTurtleButton = new Button("Add a turtle");
+				newTurtleButton.setStyle("-fx-base: #b6e7c9;");
+				newTurtleButton.setAlignment(Pos.CENTER_RIGHT);
+				newTurtleButton.setOnAction(e -> myWorkspace.addTurtle());
+
+			/*	TextField textbox = new TextField("" + turtleList.size());
+				textbox.setEditable(false);
+				textbox.setPrefWidth(dimensions.getWidth()/100);*/
+				getChildren().addAll(newTurtleButton);		
+				
+
 	}
 	
 	private void uploadTurtleFile(TurtleView turtle) {
@@ -124,6 +144,6 @@ public class CustomizationBar extends HBox {
 		myWorkspace.setBackground(color);
 	}
 
-	
+
 
 }

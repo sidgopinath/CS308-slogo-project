@@ -11,15 +11,16 @@ public class TurtleView extends ImageView {
 	private boolean isVisible;
 	private boolean penUp = false;
 
-	// private int myID;
+	private int myID;
 
-	public TurtleView(Image img) {
+	public TurtleView(int id, Image img) {
 		super(img);
 		setFitWidth(30);
 		setFitHeight(30);
 		penUp = false;
 		myHeading = 0;
 		isVisible = true;
+		myID = id;
 	}
 
 	// relative movement

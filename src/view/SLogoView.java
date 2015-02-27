@@ -271,7 +271,7 @@ public class SLogoView implements Observer{
 	}
 
 	private void setDefaultWorkspace() {
-		TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
+		TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
 		myTurtles.put(0, turtle);
 		myWorkspace = new Workspace(myTurtles, lines, myDimensions);
 		drawer = new Drawer(myWorkspace.getGridWidth(), myWorkspace.getGridHeight());

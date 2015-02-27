@@ -345,6 +345,9 @@ public class SLogoView implements Observer{
 			double value =  env.getVariableMap().get(s).execute();
 			mySidebar.updateVariable(new VariableView(s, value));
 		}
+		for (String s: env.getUserCommandMap().keySet()){
+			updateCommand(s);
+		}
 			
 		
 	}

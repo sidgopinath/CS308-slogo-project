@@ -368,4 +368,7 @@ public class SLogoView implements Observer{
 		return newTurtleButton;
 	}
 
+	private void updateCommand(String s){
+		mySidebar.updateCommand(s);
+	}
 }

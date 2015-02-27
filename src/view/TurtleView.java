@@ -90,9 +90,8 @@ public class TurtleView extends ImageView {
 	}
 	
 	//for displaying in a table
-	public TurtleProperty createTurtleProperty(){
+//	public TurtleProperty createTurtleProperty(){
 		
-	}
+//	}
 	
-	public 
 }

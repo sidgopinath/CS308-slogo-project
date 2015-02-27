@@ -38,12 +38,15 @@ import javafx.util.StringConverter;
 public class SideBar extends VBox {
 
 //	Workspace myWorkspace;
-	Map<Integer, TurtleView> myTurtles;
-	ListView<String> historyList;
-	ObservableList<String> historyItems;
-	ObservableList<VariableView> variablesList;
-	SLogoController myController;
-	TableView<VariableView> variablesTable;
+	private Map<Integer, TurtleView> myTurtles;
+	private ListView<String> historyList;
+	private ObservableList<String> historyItems;
+	private ObservableList<VariableView> variablesList;
+	private SLogoController myController;
+	private TableView<VariableView> variablesTable;
+	private ObservableList<String> commandItems;
+//	private ListView<String> commandList;
+
 
 	// make this into a new class with its own stuff that have variablesView and
 	// commandView and historyView???
@@ -153,10 +156,10 @@ public class SideBar extends VBox {
 		getChildren().add(userCommands);
 
 		ListView<String> userCommandsList = new ListView<String>();
-		ObservableList<String> commandsItems = FXCollections.observableArrayList(
+		commandItems = FXCollections.observableArrayList(
 				"String1", "String2", "String3");
 		//create an object instead
-		userCommandsList.setItems(commandsItems);
+		userCommandsList.setItems(commandItems);
 		userCommandsList.setMaxWidth(Double.MAX_VALUE);
 		userCommandsList.setPrefHeight(150);
 		getChildren().add(userCommandsList);
@@ -238,5 +241,9 @@ public class SideBar extends VBox {
 		 * .get(t.getTablePosition().getRow())).setName(t.getNewValue());
 		 */
 
+	}
+	
+	public void updateCommand(String s){
+		commandItems.add(s);
 	}
 }

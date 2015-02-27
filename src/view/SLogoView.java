@@ -15,7 +15,9 @@ import java.util.ResourceBundle;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -37,6 +39,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.ExecutionEnvironment;
@@ -54,6 +57,7 @@ public class SLogoView implements Observer{
 	private Workspace myWorkspace;
 	private Group lines = new Group();
 	private SLogoController myController;
+	private Dimension2D myDimensions;
 
 	private SideBar mySidebar;
 	private Editor myEditor;
@@ -67,17 +71,22 @@ public class SLogoView implements Observer{
 		myStage.setOnCloseRequest(new EventHandler<WindowEvent>() { @Override public void handle(WindowEvent t) { System.out.println("CLOSING"); } });
 		
 		myRoot = new GridPane();
+	//	myRoot.setHgap(arg0);
+	//	myRoot.setVgap();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 		lines.setManaged(false);
-		configureUI();
+		
+		
+		
 
-		// TODO: dynamically set screen size using percents:
-		/*
-		 * Screen screen = Screen.getPrimary(); Rectangle2D bounds =
-		 * screen.getVisualBounds(); myWidth = bounds.getWidth(); myHeight =
-		 * bounds.getHeight();
-		 */
-		setupScene(myStage, myRoot, 1200, 750);
+
+		  Screen screen = Screen.getPrimary(); 
+		  Rectangle2D bounds = screen.getVisualBounds(); 
+		  myDimensions = new Dimension2D(bounds.getWidth(),bounds.getHeight());
+		  myStage.setResizable(false);
+		
+		  configureUI();  
+		setupScene(myStage, myRoot, myDimensions.getWidth(), myDimensions.getHeight());
 	}
 
 	private void configureUI() {
@@ -85,15 +94,18 @@ public class SLogoView implements Observer{
 		setDefaultWorkspace();
 		myRoot.add(configureTopMenu(), 0, 0, 2, 1);
 		myRoot.add(configureTopRow(), 0, 1, 2, 1);
-		myRoot.add(myWorkspace, 0, 2);
-		mySidebar = new SideBar(myTurtles, myStage, myWorkspace, drawer, myController);
-		myRoot.add(mySidebar, 1, 2, 1, 2); // col,
-		myEditor = new Editor(myController, mySidebar); // row,
-		myRoot.add(myEditor, 0, 3);
+		myRoot.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace, myStage, myDimensions), 0, 2, 2, 1);
+		myRoot.add(myWorkspace, 0, 3);
+		mySidebar = new SideBar(myTurtles, myController);
+		myRoot.add(mySidebar, 1, 3, 1, 2); 
+		myEditor = new Editor(myController, mySidebar, myDimensions);
+		myRoot.add(myEditor, 0, 4);
 	}
 
 	// does this do anything?
 	// do we need to return anything
+	
+	//do we still need an entire list for this?
 	public void updateWorkspace(List<TurtleCommand> instructionList) {
 		// String returnString = null;
 		/*
@@ -117,6 +129,7 @@ public class SLogoView implements Observer{
 
 	}
 
+	//this one is not actually used
 	// TODO: what is being passed in and how to update the tableview? may have
 	// to iterate through observablelist
 	public void updateVariables(Map<String, Double> variableUpdates) {
@@ -131,7 +144,7 @@ public class SLogoView implements Observer{
 				// or we can just keep the variables object as just a front end
 				// thing for displaying (otherwise both front and back end have
 				// access to it which may not be good)
-				mySidebar.updateVariable(new Variable(name, value));
+				mySidebar.updateVariable(new VariableView(name, value));
 			} else {
 				// variables.get(name).setText(value);
 			}
@@ -218,6 +231,7 @@ public class SLogoView implements Observer{
 		return menuBar;
 	}
 
+	//TODO: make into a tab pane
 	private Text configureTopRow() {
 		Text title = new Text("SLogo");
 		title.setFont(new Font(30));
@@ -226,23 +240,32 @@ public class SLogoView implements Observer{
 	}
 
 	private void setGridPaneConstraints() {
+		//menu bar
+		RowConstraints row0 = new RowConstraints();
+		row0.setPercentHeight(2);
+		//tabs
 		RowConstraints row1 = new RowConstraints();
-		row1.setPercentHeight(2);
+		row1.setPercentHeight(5);
+		//customization bar
 		RowConstraints row2 = new RowConstraints();
-		row2.setPercentHeight(5);
+		row2.setPercentHeight(8);
+		//workspace
 		RowConstraints row3 = new RowConstraints();
-		row3.setPercentHeight(73);
+		row3.setPercentHeight(65);
+		//editor
 		RowConstraints row4 = new RowConstraints();
 		row4.setPercentHeight(20);
+		
+		myRoot.getRowConstraints().add(row0);
 		myRoot.getRowConstraints().add(row1);
 		myRoot.getRowConstraints().add(row2);
 		myRoot.getRowConstraints().add(row3);
 		myRoot.getRowConstraints().add(row4);
 
 		ColumnConstraints col1 = new ColumnConstraints();
-		col1.setPercentWidth(70);
+		col1.setPercentWidth(75);
 		ColumnConstraints col2 = new ColumnConstraints();
-		col2.setPercentWidth(30);
+		col2.setPercentWidth(25);
 		myRoot.getColumnConstraints().add(col1);
 		myRoot.getColumnConstraints().add(col2);
 	}
@@ -250,7 +273,7 @@ public class SLogoView implements Observer{
 	private void setDefaultWorkspace() {
 		TurtleView turtle = new TurtleView(new Image(Strings.DEFAULT_TURTLE_IMG));
 		myTurtles.put(0, turtle);
-		myWorkspace = new Workspace(myTurtles, lines);
+		myWorkspace = new Workspace(myTurtles, lines, myDimensions);
 		drawer = new Drawer(myWorkspace.getGridWidth(), myWorkspace.getGridHeight());
 	}
 
@@ -259,6 +282,7 @@ public class SLogoView implements Observer{
 		 * if (setPen){ myTurtles.get(id).setPenUp(true); //return 0; }
 		 * myTurtles.get(id).setPenUp(false); //return 1;
 		 */
+		
 		myTurtles.get(id).setPenUp(setPen);
 	}
 
@@ -298,17 +322,16 @@ public class SLogoView implements Observer{
 		Text text = new Text(message);
 		root.getChildren().add(text);
 
-		Scene scene = new Scene(root, 300, 100);
+		Scene scene = new Scene(root, myDimensions.getWidth()/4, myDimensions.getHeight()/6);
 
 		stage.setTitle("Error");
 		stage.setScene(scene);
 		stage.show();
 	}
 
-	public void updateVariable(VariableView variable) {
-		System.out.println("updateVariable " + variable.getName() + variable.getValue());
+	/*public void updateVariable(VariableView variable) {
 		mySidebar.updateVariable(variable);
-	}
+	}*/
 
 	// TODO THIS
 	// this should be in the workspace, but it would have to be called twice in
@@ -323,14 +346,10 @@ public class SLogoView implements Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
-		System.out.println("hi");
 		ExecutionEnvironment env = (ExecutionEnvironment) o;
 		for (String s: env.getVariableMap().keySet()){
 			double value =  env.getVariableMap().get(s).execute();
-			System.out.println("======s" + s);
-			System.out.println("======value" + value);
-			updateVariable(new VariableView(s, value));
-			System.out.println("==============updated==========");
+			mySidebar.updateVariable(new VariableView(s, value));
 		}
 			
 		

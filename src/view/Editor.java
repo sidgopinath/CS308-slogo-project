@@ -4,6 +4,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import model.ModelException;
 import controller.SLogoController;
+import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -18,17 +19,18 @@ public class Editor extends HBox {
 
 	// ^^ why do i have so many of these here that are passed back and forth?
 
-	public Editor(SLogoController controller, SideBar sidebar) {
+	public Editor(SLogoController controller, SideBar sidebar, Dimension2D dimensions) {
 		// HBox bottomRow = new HBox();
 		mySidebar = sidebar;
 		myController = controller;
-		setPadding(new Insets(15));
+		setPadding(new Insets(0, dimensions.getWidth()/85, dimensions.getWidth()/85, dimensions.getWidth()/85));
 		setSpacing(15);
 
 		// text area
 		textEditor = new TextArea();
-		textEditor.setMaxHeight(Double.MAX_VALUE);
-		textEditor.setPrefSize(750, 120); // this should be dynamically
+	//	textEditor.setMaxHeight(Double.MAX_VALUE);
+	//	textEditor.setMaxWidth(dimensions.getWidth());
+		textEditor.setPrefSize(dimensions.getWidth()*7/12, dimensions.getHeight()/10); // this should be dynamically
 											// alterable?
 
 		// textEditor.clear();

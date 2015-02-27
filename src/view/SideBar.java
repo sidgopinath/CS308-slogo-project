@@ -34,8 +34,7 @@ import javafx.util.StringConverter;
 
 public class SideBar extends VBox {
 
-	Workspace myWorkspace;
-	Stage myStage;
+//	Workspace myWorkspace;
 	Map<Integer, TurtleView> myTurtles;
 	ListView<String> historyList;
 	ObservableList<String> historyItems;
@@ -48,84 +47,25 @@ public class SideBar extends VBox {
 	// sidebarPane class with parameters that specify column constraints /
 	// location
 
-	public SideBar(Map<Integer, TurtleView> turtleList, Stage mainStage,
-			Workspace workspace, Drawer drawer, SLogoController controller) {
-		myStage = mainStage;
-		myWorkspace = workspace;
+	public SideBar(Map<Integer, TurtleView> turtleList, SLogoController controller) {
+	//	myStage = mainStage;
 		myTurtles = turtleList;
+	//	myTurtles = turtleList;
 		myController = controller;
 
-		setPadding(new Insets(0, 15, 0, 15));
+		setPadding(new Insets(0, 15, 0, 0));
 		setSpacing(5);
 		setMaxWidth(Double.MAX_VALUE);
 
 		// customization
-		Text title = new Text("Customization");
+		Text title = new Text("Turtle Properties");
 		title.setFont(new Font(15));
 		title.setUnderline(true);
 		title.setTextAlignment(TextAlignment.CENTER);
 		getChildren().add(title);
 
-		// select language
-		HBox selectLanguage = new HBox(10);
-		Text select = new Text("Select Language");
-		ComboBox<String> languageOptions = new ComboBox<String>();
-		ObservableList<String> languages = FXCollections.observableArrayList("English",
-				"Chinese", "French", "German", "Italian", "Japanese", "Korean",
-				"Portugese", "Russian", "Spanish");
-
-		languageOptions.setItems(languages);
-		languageOptions.setValue(languages.get(0));
-
-		selectLanguage.getChildren().addAll(select, languageOptions);
-		getChildren().add(selectLanguage);
-
-		languageOptions.getSelectionModel().selectedItemProperty()
-				.addListener(new ChangeListener<String>() {
-					@Override
-					public void changed(ObservableValue<? extends String> ov,
-							String old_val, String new_val) {
-						System.out.println(new_val);
-						myController.setLanguage(new_val);
-
-					}
-				});
-
-		// select turtle image
-		HBox customizeTurtleBox = new HBox(10);
-		Text selectTurtle = new Text("Select Turtle");
-		Button uploadImg = new Button("Upload");
-		uploadImg.setPrefSize(100, 20);
-		uploadImg.setPadding(new Insets(0, 0, 0, 3));
-		uploadImg.setOnAction(e -> uploadTurtleFile(myTurtles.get(0)));
-
-		customizeTurtleBox.getChildren().addAll(selectTurtle, uploadImg);
-		getChildren().add(customizeTurtleBox);
-
-		// select pen color
-		HBox customizePenBox = new HBox(10);
-
-		Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);
-		ColorPicker penColorChoice = new ColorPicker(Color.BLACK);
-		penColorChoice.setOnAction(e -> drawer.changeColor(penColorChoice.getValue()));
-
-		customizePenBox.getChildren().addAll(selectPenColor, penColorChoice);
-		// sidePane.getChildren().addAll(hbox2, strokeColorChoice);
-		getChildren().add(customizePenBox);
-
-		// select background color
-		HBox customizeBackgroundBox = new HBox(10);
-		Text selectBackgroundColor = new Text(Strings.SELECT_BACKGROUND_COLOR);
-
-		ColorPicker backgroundChoice = new ColorPicker(Color.WHITE);
-		backgroundChoice.setOnAction(e -> changeBackgroundColor(backgroundChoice
-				.getValue()));
-
-		// User can pick color for the stroke
-
-		customizeBackgroundBox.getChildren().addAll(selectBackgroundColor,
-				backgroundChoice);
-		getChildren().add(customizeBackgroundBox);
+		System.out.println("placeholder -- get turtle info somewhere here");
+		
 
 		// variables pane
 		Text variables = new Text(Strings.VARIABLES_HEADER);
@@ -134,7 +74,7 @@ public class SideBar extends VBox {
 		variables.setUnderline(true);
 		getChildren().add(variables);
 
-		variablesList = FXCollections.observableArrayList(new VariableView("var2.5", 5));
+		variablesList = FXCollections.observableArrayList();
 		//variablesList.add(new Variable("Added var2.5", 5));
 
 		variablesTable = new TableView<VariableView>();
@@ -151,7 +91,8 @@ public class SideBar extends VBox {
 
 		variablesCol.setPrefWidth(164); // TODO: set dynamically
 		valuesCol.setPrefWidth(164);
-		valuesCol.setEditable(true);
+		//TODO:
+		//valuesCol.setEditable(true);
 
 		variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		variablesCol.setOnEditCommit(new EventHandler<CellEditEvent<VariableView, String>>() {
@@ -159,6 +100,7 @@ public class SideBar extends VBox {
 			public void handle(CellEditEvent<VariableView, String> t) {
 				t.getTableView().getItems().get(t.getTablePosition().getRow())
 						.setName(t.getNewValue());
+				System.out.println("newvalue: " + t.getNewValue());
 			}
 		});
 
@@ -196,22 +138,7 @@ public class SideBar extends VBox {
 		variablesTable.setPrefHeight(150);
 
 		getChildren().add(variablesTable);
-
-		/*
-		 * When you call Cell.commitEdit(Object) an event is fired to the
-		 * TableView, which you can observe by adding an EventHandler via
-		 * TableColumn.setOnEditCommit(javafx.event.EventHandler). Similarly,
-		 * you can also observe edit events for edit start and edit cancel.
-		 */
-		// how to remove the extra column?
-
-		// example of how to set new elements to the observablelist
-		//variablesList.add(new Variable("Added var3", 3));
 		variablesTable.setItems(variablesList);
-
-		//System.out.println("beforeupdatevar");
-		updateVariable(new VariableView("Added var3", 4));
-		//System.out.println("afterupdatevar");
 
 		// user-defined commands
 		Text userCommands = new Text(Strings.USER_DEFINED_COMMANDS_HEADER);
@@ -279,28 +206,7 @@ public class SideBar extends VBox {
 		// return sidePane;
 	}
 
-	private void uploadTurtleFile(TurtleView turtle) {
-		File file = displayFileChooser();
-		changeTurtleImage(turtle, new Image(file.toURI().toString()));
-	}
-
-	private File displayFileChooser() {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Open Image File");
-		fileChooser.getExtensionFilters()
-				.add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg",
-						"*.gif"));
-		return fileChooser.showOpenDialog(myStage);
-	}
-
-	private void changeTurtleImage(TurtleView turtle, Image img) {
-		turtle.setImage(img);
-	}
-
-	private void changeBackgroundColor(Color color) {
-		myWorkspace.setBackground(color);
-	}
-
+	
 	public void setHistory(String string) {
 		historyItems.add(string);
 	}

@@ -219,13 +219,8 @@ public class SLogoView implements Observer{
 		file.getItems().addAll(exit);
 		info.getItems().addAll(help);
 
-		exit.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent t) {
-				Platform.exit();
-			}
-		});
-
+		exit.setOnAction(e -> Platform.exit());
+		
 		MenuBar menuBar = new MenuBar();
 		menuBar.getMenus().addAll(file, info);
 		return menuBar;
@@ -329,9 +324,9 @@ public class SLogoView implements Observer{
 		stage.show();
 	}
 
-	/*public void updateVariable(VariableView variable) {
+	public void updateVariable(VariableView variable) {
 		mySidebar.updateVariable(variable);
-	}*/
+	}
 
 	// TODO THIS
 	// this should be in the workspace, but it would have to be called twice in

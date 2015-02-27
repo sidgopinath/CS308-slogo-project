@@ -29,14 +29,16 @@ public class ControlInstruction extends Instruction{
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "MAKEVARIABLE":
-			myEnvironment.removeDuplicate(myDependencies.get(0).getName());
-			myEnvironment.addVariable(myDependencies.get(0).getName(), myDependencies.get(1));
-			return myDependencies.get(0).execute();
+			return makeVariable(myDependencies.get(0), myDependencies.get(1));
 		case "REPEAT":
-			for(int i =0; i<myDependencies.get(0).execute(); i++){
-				myDependencies.get(1).execute();
+			double returnVal = 0;
+			for(int i =1; i<=myDependencies.get(0).execute(); i++){
+				makeVariable(new Variable(":repcount"), new Constant(Integer.toString(i)));
+				for(Instruction instruct:myDependencies.get(1).myDependencies){
+					returnVal = instruct.execute();
+				}
 			}
-			return myDependencies.get(1).execute();
+			return returnVal;
 		case "DOTIMES":
 			//for loop from 1 to limit
 			//the limit is within a list though
@@ -80,7 +82,11 @@ public class ControlInstruction extends Instruction{
 			return -1;
 		}
 	}
-
+	public double makeVariable(Instruction input, Instruction value){
+		myEnvironment.removeDuplicate(input.getName());
+		myEnvironment.addVariable(input.getName(), value);
+		return value.execute();
+	}
 	@Override
 	public int getNumberOfArguments() {
 		return implementers.valueOf(myInstructionType.toUpperCase()).numArgs;

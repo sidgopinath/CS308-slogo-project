@@ -17,10 +17,6 @@ public class ListInstruction extends Instruction {
 		// Does nothing, since lists cant be executed
 		return 0;
 	}
-	public List<Instruction> getDependencies(){
-		// Returns the list back to the caller
-		return myDependencies;
-	}
 	@Override
 	public int getNumberOfArguments() {
 		return 1;

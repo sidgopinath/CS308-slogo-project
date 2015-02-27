@@ -16,12 +16,14 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -65,9 +67,8 @@ public class SLogoView implements Observer{
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
 	public SLogoView(Stage s) {
-		myController = new SLogoController(this, s);
 		myStage = s;
-		
+		createNewController(this);
 		myStage.setOnCloseRequest(new EventHandler<WindowEvent>() { @Override public void handle(WindowEvent t) { System.out.println("CLOSING"); } });
 		
 		myRoot = new GridPane();
@@ -75,11 +76,8 @@ public class SLogoView implements Observer{
 	//	myRoot.setVgap();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 		lines.setManaged(false);
+	//	myRoot.setGridLinesVisible(true);
 		
-		
-		
-
-
 		  Screen screen = Screen.getPrimary(); 
 		  Rectangle2D bounds = screen.getVisualBounds(); 
 		  myDimensions = new Dimension2D(bounds.getWidth(),bounds.getHeight());
@@ -94,7 +92,8 @@ public class SLogoView implements Observer{
 		setDefaultWorkspace();
 		myRoot.add(configureTopMenu(), 0, 0, 2, 1);
 		myRoot.add(configureTopRow(), 0, 1, 2, 1);
-		myRoot.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace, myStage, myDimensions), 0, 2, 2, 1);
+		myRoot.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace, myStage, myDimensions), 0, 2);
+		myRoot.add(configureAddTurtlesButton(), 1, 2);
 		myRoot.add(myWorkspace, 0, 3);
 		mySidebar = new SideBar(myTurtles, myController);
 		myRoot.add(mySidebar, 1, 3, 1, 2); 
@@ -245,13 +244,13 @@ public class SLogoView implements Observer{
 		row0.setPercentHeight(2);
 		//tabs
 		RowConstraints row1 = new RowConstraints();
-		row1.setPercentHeight(5);
+		row1.setPercentHeight(7);
 		//customization bar
 		RowConstraints row2 = new RowConstraints();
-		row2.setPercentHeight(8);
+		row2.setPercentHeight(4);
 		//workspace
 		RowConstraints row3 = new RowConstraints();
-		row3.setPercentHeight(65);
+		row3.setPercentHeight(67);
 		//editor
 		RowConstraints row4 = new RowConstraints();
 		row4.setPercentHeight(20);
@@ -353,6 +352,25 @@ public class SLogoView implements Observer{
 		}
 			
 		
+	}
+	
+	public void createNewController(SLogoView view){
+		myController = new SLogoController(view);
+
+	}
+	
+	private Button configureAddTurtlesButton(){
+		// Add turtle button
+		Button newTurtleButton = new Button("Add a turtle");
+		newTurtleButton.setStyle("-fx-base: #b6e7c9;");
+		newTurtleButton.setAlignment(Pos.CENTER_RIGHT);
+		newTurtleButton.setOnAction(e -> myWorkspace.addTurtle());
+		GridPane.setHalignment(newTurtleButton, HPos.CENTER);
+	/*	TextField textbox = new TextField("" + turtleList.size());
+		textbox.setEditable(false);
+		textbox.setPrefWidth(dimensions.getWidth()/100);*/
+	//	getChildren().addAll(newTurtleButton);		
+		return newTurtleButton;
 	}
 
 }

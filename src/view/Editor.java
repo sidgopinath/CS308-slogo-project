@@ -23,14 +23,14 @@ public class Editor extends HBox {
 		// HBox bottomRow = new HBox();
 		mySidebar = sidebar;
 		myController = controller;
-		setPadding(new Insets(0, dimensions.getWidth()/85, dimensions.getWidth()/85, dimensions.getWidth()/85));
+		setPadding(new Insets(0, 0, dimensions.getWidth()/85, dimensions.getWidth()/89));
 		setSpacing(15);
 
 		// text area
 		textEditor = new TextArea();
 	//	textEditor.setMaxHeight(Double.MAX_VALUE);
 	//	textEditor.setMaxWidth(dimensions.getWidth());
-		textEditor.setPrefSize(dimensions.getWidth()*7/12, dimensions.getHeight()/10); // this should be dynamically
+		textEditor.setPrefSize(dimensions.getWidth()*.685, dimensions.getHeight()*.095); // this should be dynamically
 											// alterable?
 
 		// textEditor.clear();

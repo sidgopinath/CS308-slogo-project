@@ -88,5 +88,11 @@ public class TurtleView extends ImageView {
 		}
 		return angle;
 	}
-
+	
+	//for displaying in a table
+	public TurtleProperty createTurtleProperty(){
+		
+	}
+	
+	public 
 }

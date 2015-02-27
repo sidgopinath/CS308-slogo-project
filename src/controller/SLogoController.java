@@ -19,7 +19,7 @@ public class SLogoController {
 	 * @param width
 	 * @param stage
 	 */
-	public SLogoController(SLogoView view, Stage stage) {
+	public SLogoController(SLogoView view) {
 		myParser = new Parser(view);
 	}
 	

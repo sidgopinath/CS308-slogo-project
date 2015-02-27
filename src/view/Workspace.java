@@ -25,10 +25,10 @@ public class Workspace extends StackPane {
 	
 	//TODO: associate a Group of lines with the TurtleView object (maybe as a myDrawing variable, so that way it can be moved easily and associated with the correct turtle)
 	public Workspace(Map<Integer, TurtleView> turtleList, Group lines, Dimension2D dimensions) {
-		setPadding(new Insets(0, dimensions.getWidth()/85, dimensions.getWidth()/85, dimensions.getWidth()/85));
+	//	setPadding(new Insets(0, dimensions.getWidth()/85, dimensions.getWidth()/85, dimensions.getWidth()/85));
 
 		// TODO: dynamically set grid size
-		myBackground = new Rectangle(dimensions.getWidth()*11/16, dimensions.getHeight()*10/16);
+		myBackground = new Rectangle(dimensions.getWidth()*11.7/16, dimensions.getHeight()*10/16);
 		myBackground.setFill(Color.WHITE);
 		myTurtles = turtleList;
 		TurtleView turtle = turtleList.get(0);

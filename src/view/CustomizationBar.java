@@ -72,8 +72,8 @@ public class CustomizationBar extends HBox {
 				HBox customizeTurtleBox = new HBox(10);
 				Text selectTurtle = new Text("Select Turtle");
 				Button uploadImg = new Button("Upload");
-				uploadImg.setPrefSize(dimensions.getWidth()/12, dimensions.getHeight()/27);
-				uploadImg.setPadding(new Insets(0, 0, 0, 3));
+				uploadImg.setPrefSize(dimensions.getWidth()/12, dimensions.getHeight()/29);
+				//uploadImg.setPadding(new Insets(0, 0, 0, 3));
 				uploadImg.setOnAction(e -> uploadTurtleFile(turtleList.get(0)));
 
 				customizeTurtleBox.getChildren().addAll(selectTurtle, uploadImg);
@@ -108,16 +108,7 @@ public class CustomizationBar extends HBox {
 				getChildren().addAll(customizeBackgroundBox,spaceHolder);
 				
 
-				// Add turtle button
-				Button newTurtleButton = new Button("Add a turtle");
-				newTurtleButton.setStyle("-fx-base: #b6e7c9;");
-				newTurtleButton.setAlignment(Pos.CENTER_RIGHT);
-				newTurtleButton.setOnAction(e -> myWorkspace.addTurtle());
-
-			/*	TextField textbox = new TextField("" + turtleList.size());
-				textbox.setEditable(false);
-				textbox.setPrefWidth(dimensions.getWidth()/100);*/
-				getChildren().addAll(newTurtleButton);		
+				
 				
 
 	}

@@ -30,6 +30,9 @@ public class ControlInstruction extends Instruction{
 	@Override
 	public double execute() {
 		double returnVal=0;
+		int endRange = 0;
+		int startRange = 0;
+		int increment = 0;
 		switch(myInstructionType.toUpperCase()){
 		case "MAKEVARIABLE":
 			return makeVariable(myDependencies.get(0), myDependencies.get(1));
@@ -42,24 +45,13 @@ public class ControlInstruction extends Instruction{
 			}
 			return returnVal;
 		case "DOTIMES":
-			int endRange = (int) Math.round(myDependencies.get(0).myDependencies.get(0).execute());
-			for(int i =1; i<=endRange; i++){
-				makeVariable(new Variable(myDependencies.get(0).myDependencies.get(0).getName(), myEnvironment), new Constant(Integer.toString(i), myEnvironment));
-				for(Instruction instruct:myDependencies.get(1).myDependencies){
-					System.out.println(":var is "+myEnvironment.getVariable(":var").execute());
-					returnVal = instruct.execute();
-				}
-			}
-			return returnVal;
+			endRange = (int) Math.round(myDependencies.get(0).myDependencies.get(0).execute());
+			return forLoop(myDependencies.get(0), myDependencies.get(1), 1, endRange, 1);
 		case "FOR":
-			//similar to DoTimes
-			//for loop from "start" to "end"
-			//goes up by increment
-			//all values are in a list which makes it harder
-			//variable assigned to current "i" every time
-			//command(s) run on that variable
-			//return value of last expression
-			return 0.0;
+			startRange = (int) Math.round(myDependencies.get(0).myDependencies.get(1).execute());
+			endRange = (int) Math.round(myDependencies.get(0).myDependencies.get(2).execute());
+			increment = (int) Math.round(myDependencies.get(0).myDependencies.get(3).execute());
+			return forLoop(myDependencies.get(0), myDependencies.get(1), startRange, endRange, increment);
 		case "IF":
 			if(myDependencies.get(0).execute() != 0){
 				return myDependencies.get(1).execute(); 
@@ -84,6 +76,16 @@ public class ControlInstruction extends Instruction{
 		default:
 			return -1;
 		}
+	}
+	public double forLoop(Instruction varHead, Instruction listHead, int startIndex, int endIndex, int increment){
+		double returnVal = 0;
+		for(int i =startIndex; i<=endIndex; i+=increment){
+			makeVariable(new Variable(varHead.myDependencies.get(0).getName(), myEnvironment), new Constant(Integer.toString(i), myEnvironment));
+			for(Instruction instruct:listHead.myDependencies){
+				returnVal = instruct.execute();
+			}
+		}
+		return returnVal;
 	}
 	public double makeVariable(Instruction input, Instruction value){
 		myEnvironment.removeDuplicate(input.getName());

@@ -351,6 +351,11 @@ public class SLogoView implements Observer {
 			mySidebar.updateVariable(new VariableView(s, value));
 		}
 
+		for (String s: env.getUserCommandMap().keySet()){
+			updateCommand(s);
+		}
+			
+		
 	}
 
 	public void createNewController(SLogoView view) {

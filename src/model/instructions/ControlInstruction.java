@@ -66,13 +66,6 @@ public class ControlInstruction extends Instruction{
 				return executeList(myDependencies.get(2));
 			}
 		case "MAKEUSERINSTRUCTION":
-			//needs user commands map AND variables map
-			//saves commandName as a key in userCommandsMap
-			//not positive, but think each variable in list correspods to one command
-			//run each command with its corresponding variable
-			//store that entire string of instructions in the user command map
-			//variables are all stored in the variablesMap
-			// add variables to map, only when run though
 			String commandName = myDependencies.get(0).getName();
 			myEnvironment.addCommand(commandName, this);
 			return 1.0;

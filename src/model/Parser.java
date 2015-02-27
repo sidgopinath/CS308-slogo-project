@@ -155,22 +155,6 @@ public class Parser implements Observer{
 			printTree(N);
 		}
 	}
-//	private void inOrderInstructionExecuter(Node root, int depth){
-//		if(root==null){
-//			return;
-//		}
-//		if(root.getChildren()!=null){
-//			List<Node> children = root.getChildren();
-//			depth++;
-//			for(int i =0; i<children.size();i++){
-//				inOrderInstructionExecuter(children.get(i), depth);
-//			}
-//		}	
-//			// System.out.println("model.instructions."+root.getValue()+" "+commandMap.get(root.getValue()));
-//			Instruction myInt = root.getInstruction();
-//				//System.out.println("made int "+ myInt);
-//				root.setInstruction(myInt);
-//	}
 
 	// add catch for array out of bounds
 	// BIG TODO: merge instruction tree and this tree to be one and the same
@@ -183,6 +167,9 @@ public class Parser implements Observer{
 		String match = testMatches(command[furthestDepth]).toUpperCase();
 		//this switch will eventually be combined into the map.
 		switch (match){
+		//instead of while loop, find where closing bracket is
+		//run until you hit that
+		//have some way to account for nested loops
 		case "LISTSTART":
 			// count number of strings til you reach a ], thats number of dependencies
 			furthestDepth++;
@@ -209,11 +196,6 @@ public class Parser implements Observer{
 			executionParameters.addObserver(tempInt);
 			return new Node(tempInt);
 		case "COMMAND":
-			// make node with command, if found
-			//if(executionParameters.get)
-			// check map
-			// return new usercommand using map
-			// user command makes the tree for us, so just return the root node that returns
 			furthestDepth++;
 			if(executionParameters.getCommand(command[furthestDepth-1])!=null){
 				myNode = new Node(new UserRunningInstruction(futureInstructions, command[furthestDepth-1], mySLogoView, executionParameters));
@@ -227,8 +209,6 @@ public class Parser implements Observer{
 		case "LISTEND":
 			furthestDepth++;
 			return null;
-//		case "GROUPSTART":
-//			break;
 		default:
 		}
 			//this is either a known command or invalid input.  

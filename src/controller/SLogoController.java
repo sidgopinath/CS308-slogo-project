@@ -37,8 +37,11 @@ public class SLogoController {
 		}
 	}
 	
+	/**
+	 * Called from view to change the input language
+	 * @param language
+	 */
 	public void setLanguage(String language){
 		myParser.setLanguage(language);
 	}
-
 }

@@ -3,6 +3,7 @@ package controller;
 public class Converter {
 	
 	/**
+	 * Currently Unused
 	 * Takes in polar coordinates and converts them into Cartesian coordinates
 	 * @param degrees 
 	 * @param r (distance)

@@ -12,7 +12,6 @@ public class Regexer {
 	List<Entry<String, Pattern>> patterns;
 	public static boolean match (String input, Pattern regex) {
 	        return regex.matcher(input).matches();
-	        // return input.matches(regex);
 	    }
 	    public static List<Entry<String, Pattern>> makePatterns (String syntax) {
 	        ResourceBundle resources = ResourceBundle.getBundle(syntax);

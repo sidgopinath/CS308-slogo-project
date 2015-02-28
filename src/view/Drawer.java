@@ -37,12 +37,12 @@ public class Drawer {
            TurtleView turtle = turtles.get(command.getTurtleId());
            Polar polar = command.getPolar();
            //move turtle and draw line
-           if(polar.distance!=0){
+           if(polar.myDistance!=0){
                double angle=turtle.getRotate();
                double turtleX=turtle.getLayoutX();
                double turtleY=turtle.getLayoutY();
-               double moveX=Math.sin(Math.toRadians(polar.angle+180-angle))*polar.distance;
-               double moveY=Math.cos(Math.toRadians(polar.angle+180-angle))*polar.distance;
+               double moveX=Math.sin(Math.toRadians(polar.myAngle+180-angle))*polar.myDistance;
+               double moveY=Math.cos(Math.toRadians(polar.myAngle+180-angle))*polar.myDistance;
                double startX=turtleX+turtle.getTranslateX()+turtle.getFitWidth()/2;
                double startY=turtleY+turtle.getTranslateY()+turtle.getFitHeight()/2;
                double newX=turtleX+moveX+turtle.getTranslateX()+15;
@@ -69,10 +69,10 @@ public class Drawer {
                }
            }else{
         	   if (command.isRelative()){
-        		   turtle.setRelativeHeading(polar.angle);
+        		   turtle.setRelativeHeading(polar.myAngle);
         	   }
         	   else{
-        		   turtle.setAbsoluteHeading(polar.angle);
+        		   turtle.setAbsoluteHeading(polar.myAngle);
         	   }
            }
        }

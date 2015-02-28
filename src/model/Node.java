@@ -7,23 +7,28 @@ import model.instructions.Instruction;
 
 public class Node{
 		
-		private List<Node> myChildren;
-		private Instruction myInstruction;
-		public Node(Instruction me){
-			myInstruction = me;
-			myChildren = new ArrayList<Node>();
-		}
+	private List<Node> myChildren;
+	private Instruction myInstruction;
+	
+	public Node(Instruction instruction){
+		myInstruction = instruction;
+		myChildren = new ArrayList<Node>();
+	}
+	
 	public Node addChild(Node n){
 		myChildren.add(n);
 		return n;
 	}
+	
 	public List<Node> getChildren(){
 		return myChildren;
 	}
+	
 	public Instruction getInstruction(){
 		return myInstruction;
 	}
-	public void setInstruction(Instruction inInstruction){
-		myInstruction = inInstruction;
+	
+	public void setInstruction(Instruction instruction){
+		myInstruction = instruction;
 	}
 }

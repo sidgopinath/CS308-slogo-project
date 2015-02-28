@@ -16,12 +16,14 @@ import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
+import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -48,7 +50,7 @@ import model.turtle.Turtle;
 import model.turtle.TurtleCommand;
 import controller.SLogoController;
 
-public class SLogoView implements Observer{
+public class SLogoView implements Observer {
 	private Stage myStage;
 	private GridPane myRoot;
 	protected ResourceBundle myResources;
@@ -65,27 +67,26 @@ public class SLogoView implements Observer{
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
 	public SLogoView(Stage s) {
-		myController = new SLogoController(this, s);
 		myStage = s;
-		
-		myStage.setOnCloseRequest(new EventHandler<WindowEvent>() { @Override public void handle(WindowEvent t) { System.out.println("CLOSING"); } });
-		
+		createNewController(this);
+		myStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+			@Override
+			public void handle(WindowEvent t) {
+				System.out.println("CLOSING");
+			}
+		});
+
 		myRoot = new GridPane();
-	//	myRoot.setHgap(arg0);
-	//	myRoot.setVgap();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 		lines.setManaged(false);
-		
-		
-		
+		// myRoot.setGridLinesVisible(true);
 
+		Screen screen = Screen.getPrimary();
+		Rectangle2D bounds = screen.getVisualBounds();
+		myDimensions = new Dimension2D(bounds.getWidth(), bounds.getHeight());
+		myStage.setResizable(false);
 
-		  Screen screen = Screen.getPrimary(); 
-		  Rectangle2D bounds = screen.getVisualBounds(); 
-		  myDimensions = new Dimension2D(bounds.getWidth(),bounds.getHeight());
-		  myStage.setResizable(false);
-		
-		  configureUI();  
+		configureUI();
 		setupScene(myStage, myRoot, myDimensions.getWidth(), myDimensions.getHeight());
 	}
 
@@ -94,18 +95,20 @@ public class SLogoView implements Observer{
 		setDefaultWorkspace();
 		myRoot.add(configureTopMenu(), 0, 0, 2, 1);
 		myRoot.add(configureTopRow(), 0, 1, 2, 1);
-		myRoot.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace, myStage, myDimensions), 0, 2, 2, 1);
+		myRoot.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace,
+				myStage, myDimensions), 0, 2);
+		myRoot.add(configureAddTurtlesButton(), 1, 2);
 		myRoot.add(myWorkspace, 0, 3);
 		mySidebar = new SideBar(myTurtles, myController);
-		myRoot.add(mySidebar, 1, 3, 1, 2); 
+		myRoot.add(mySidebar, 1, 3, 1, 2);
 		myEditor = new Editor(myController, mySidebar, myDimensions);
 		myRoot.add(myEditor, 0, 4);
 	}
 
 	// does this do anything?
 	// do we need to return anything
-	
-	//do we still need an entire list for this?
+
+	// do we still need an entire list for this?
 	public void updateWorkspace(List<TurtleCommand> instructionList) {
 		// String returnString = null;
 		/*
@@ -129,7 +132,7 @@ public class SLogoView implements Observer{
 
 	}
 
-	//this one is not actually used
+	// this one is not actually used
 	// TODO: what is being passed in and how to update the tableview? may have
 	// to iterate through observablelist
 	public void updateVariables(Map<String, Double> variableUpdates) {
@@ -160,8 +163,8 @@ public class SLogoView implements Observer{
 	}
 
 	public double towards(int id, double x, double y) {
-	    double angle = Math.toDegrees(Math.atan2(x, y));
-	    return setHeading(id, angle, false);
+		double angle = Math.toDegrees(Math.atan2(x, y));
+		return setHeading(id, angle, false);
 	}
 
 	// for testing
@@ -178,9 +181,9 @@ public class SLogoView implements Observer{
 			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
 			lines.getChildren().addAll(newlines);
 		} else if (keyCode == KeyCode.E) {
-		    System.out.print(towards(0,-10,10));
+			System.out.print(towards(0, -10, 10));
 		} else if (keyCode == KeyCode.Q) {
-		    System.out.print(clearScreen(0));
+			System.out.print(clearScreen(0));
 		} else if (keyCode == KeyCode.A) {
 			System.out.print(myTurtles.get(0).getTranslateX() + ","
 					+ myTurtles.get(0).getTranslateY());
@@ -192,10 +195,10 @@ public class SLogoView implements Observer{
 	}
 
 	public double setHeading(int id, double angle, boolean relative) {
-		if (relative){
-		    return myTurtles.get(id).setRelativeHeading(angle);
-		}else{
-		    return myTurtles.get(id).setAbsoluteHeading(angle);
+		if (relative) {
+			return myTurtles.get(id).setRelativeHeading(angle);
+		} else {
+			return myTurtles.get(id).setAbsoluteHeading(angle);
 		}
 	}
 
@@ -219,19 +222,14 @@ public class SLogoView implements Observer{
 		file.getItems().addAll(exit);
 		info.getItems().addAll(help);
 
-		exit.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent t) {
-				Platform.exit();
-			}
-		});
+		exit.setOnAction(e -> Platform.exit());
 
 		MenuBar menuBar = new MenuBar();
 		menuBar.getMenus().addAll(file, info);
 		return menuBar;
 	}
 
-	//TODO: make into a tab pane
+	// TODO: make into a tab pane
 	private Text configureTopRow() {
 		Text title = new Text("SLogo");
 		title.setFont(new Font(30));
@@ -240,22 +238,22 @@ public class SLogoView implements Observer{
 	}
 
 	private void setGridPaneConstraints() {
-		//menu bar
+		// menu bar
 		RowConstraints row0 = new RowConstraints();
 		row0.setPercentHeight(2);
-		//tabs
+		// tabs
 		RowConstraints row1 = new RowConstraints();
-		row1.setPercentHeight(5);
-		//customization bar
+		row1.setPercentHeight(7);
+		// customization bar
 		RowConstraints row2 = new RowConstraints();
-		row2.setPercentHeight(8);
-		//workspace
+		row2.setPercentHeight(4);
+		// workspace
 		RowConstraints row3 = new RowConstraints();
-		row3.setPercentHeight(65);
-		//editor
+		row3.setPercentHeight(67);
+		// editor
 		RowConstraints row4 = new RowConstraints();
 		row4.setPercentHeight(20);
-		
+
 		myRoot.getRowConstraints().add(row0);
 		myRoot.getRowConstraints().add(row1);
 		myRoot.getRowConstraints().add(row2);
@@ -282,7 +280,7 @@ public class SLogoView implements Observer{
 		 * if (setPen){ myTurtles.get(id).setPenUp(true); //return 0; }
 		 * myTurtles.get(id).setPenUp(false); //return 1;
 		 */
-		
+
 		myTurtles.get(id).setPenUp(setPen);
 	}
 
@@ -322,16 +320,17 @@ public class SLogoView implements Observer{
 		Text text = new Text(message);
 		root.getChildren().add(text);
 
-		Scene scene = new Scene(root, myDimensions.getWidth()/4, myDimensions.getHeight()/6);
+		Scene scene = new Scene(root, myDimensions.getWidth() / 4,
+				myDimensions.getHeight() / 6);
 
 		stage.setTitle("Error");
 		stage.setScene(scene);
 		stage.show();
 	}
 
-	/*public void updateVariable(VariableView variable) {
+	public void updateVariable(VariableView variable) {
 		mySidebar.updateVariable(variable);
-	}*/
+	}
 
 	// TODO THIS
 	// this should be in the workspace, but it would have to be called twice in
@@ -341,18 +340,45 @@ public class SLogoView implements Observer{
 		// these group of lines somehow need to be connected with the turtle
 		lines.getChildren().clear();
 		myTurtles.get(id).setAbsoluteHeading(0);
-        return myTurtles.get(id).setXY(0, 0);
+		return myTurtles.get(id).setXY(0, 0);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
 		ExecutionEnvironment env = (ExecutionEnvironment) o;
-		for (String s: env.getVariableMap().keySet()){
-			double value =  env.getVariableMap().get(s).execute();
+		for (String s : env.getVariableMap().keySet()) {
+			double value = env.getVariableMap().get(s).execute();
 			mySidebar.updateVariable(new VariableView(s, value));
+		}
+
+		for (String s: env.getUserCommandMap().keySet()){
+			updateCommand(s);
 		}
 			
 		
 	}
 
+	public void createNewController(SLogoView view) {
+		myController = new SLogoController(view);
+	}
+
+	private Button configureAddTurtlesButton() {
+		// Add turtle button
+		Button newTurtleButton = new Button("Add a turtle");
+		newTurtleButton.setStyle("-fx-base: #b6e7c9;");
+		newTurtleButton.setAlignment(Pos.CENTER_RIGHT);
+		newTurtleButton.setOnAction(e -> myWorkspace.addTurtle());
+		GridPane.setHalignment(newTurtleButton, HPos.CENTER);
+		/*
+		 * TextField textbox = new TextField("" + turtleList.size());
+		 * textbox.setEditable(false);
+		 * textbox.setPrefWidth(dimensions.getWidth()/100);
+		 */
+		// getChildren().addAll(newTurtleButton);
+		return newTurtleButton;
+	}
+
+	private void updateCommand(String s) {
+		mySidebar.updateCommand(s);
+	}
 }

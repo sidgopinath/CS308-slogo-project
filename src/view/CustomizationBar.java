@@ -27,101 +27,74 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class CustomizationBar extends HBox {
-	
+
 	Map<Integer, TurtleView> myTurtles;
 	SLogoController myController;
 	Drawer myDrawer;
 	Workspace myWorkspace;
 	Stage myStage;
-	
-	public CustomizationBar(SLogoController controller, Map<Integer, TurtleView> turtleList, Drawer drawer, Workspace workspace, Stage stage, Dimension2D dimensions){
+
+	public CustomizationBar(SLogoController controller,
+			Map<Integer, TurtleView> turtleList, Drawer drawer, Workspace workspace,
+			Stage stage, Dimension2D dimensions) {
 		// select language
-		setPadding(new Insets(0,dimensions.getWidth()/120,0,dimensions.getWidth()/120));
-		setSpacing(dimensions.getWidth()/120);
-		
+		setPadding(new Insets(0, dimensions.getWidth() / 120, 0,
+				dimensions.getWidth() / 120));
+		setSpacing(dimensions.getWidth() / 120);
+
 		myController = controller;
 		myTurtles = turtleList;
 		myDrawer = drawer;
 		myWorkspace = workspace;
 		myStage = stage;
-				HBox selectLanguage = new HBox(10);
-				Text select = new Text("Select Language");
-				ComboBox<String> languageOptions = new ComboBox<String>();
-				ObservableList<String> languages = FXCollections.observableArrayList("English",
-						"Chinese", "French", "German", "Italian", "Japanese", "Korean",
-						"Portugese", "Russian", "Spanish");
+		
+		
+		getChildren().add(configureLanguageOptions());
+		
+		
+		
 
-				languageOptions.setItems(languages);
-				languageOptions.setValue(languages.get(0));
+		// select turtle image
+		HBox customizeTurtleBox = new HBox(10);
+		Text selectTurtle = new Text("Select Turtle");
+		Button uploadImg = new Button("Upload");
+		uploadImg.setPrefSize(dimensions.getWidth() / 12, dimensions.getHeight() / 29);
+		// uploadImg.setPadding(new Insets(0, 0, 0, 3));
+		uploadImg.setOnAction(e -> uploadTurtleFile(turtleList.get(0)));
 
-				selectLanguage.getChildren().addAll(select, languageOptions);
-				getChildren().add(selectLanguage);
+		customizeTurtleBox.getChildren().addAll(selectTurtle, uploadImg);
+		getChildren().add(customizeTurtleBox);
 
-				languageOptions.getSelectionModel().selectedItemProperty()
-						.addListener(new ChangeListener<String>() {
-							@Override
-							public void changed(ObservableValue<? extends String> ov,
-									String old_val, String new_val) {
-								System.out.println(new_val);
-								controller.setLanguage(new_val);
+		// select pen color
+		HBox customizePenBox = new HBox(10);
 
-							}
-						});
+		Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);
+		ColorPicker penColorChoice = new ColorPicker(Color.BLACK);
+		penColorChoice.setOnAction(e -> drawer.changeColor(penColorChoice.getValue()));
 
-				// select turtle image
-				HBox customizeTurtleBox = new HBox(10);
-				Text selectTurtle = new Text("Select Turtle");
-				Button uploadImg = new Button("Upload");
-				uploadImg.setPrefSize(dimensions.getWidth()/12, dimensions.getHeight()/27);
-				uploadImg.setPadding(new Insets(0, 0, 0, 3));
-				uploadImg.setOnAction(e -> uploadTurtleFile(turtleList.get(0)));
+		customizePenBox.getChildren().addAll(selectPenColor, penColorChoice);
+		// sidePane.getChildren().addAll(hbox2, strokeColorChoice);
+		getChildren().add(customizePenBox);
 
-				customizeTurtleBox.getChildren().addAll(selectTurtle, uploadImg);
-				getChildren().add(customizeTurtleBox);
+		// select background color
+		HBox customizeBackgroundBox = new HBox(10);
+		Text selectBackgroundColor = new Text(Strings.SELECT_BACKGROUND_COLOR);
 
-				// select pen color
-				HBox customizePenBox = new HBox(10);
+		ColorPicker backgroundChoice = new ColorPicker(Color.WHITE);
+		backgroundChoice.setOnAction(e -> changeBackgroundColor(backgroundChoice
+				.getValue()));
 
-				Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);
-				ColorPicker penColorChoice = new ColorPicker(Color.BLACK);
-				penColorChoice.setOnAction(e -> drawer.changeColor(penColorChoice.getValue()));
+		// User can pick color for the stroke
 
-				customizePenBox.getChildren().addAll(selectPenColor, penColorChoice);
-				// sidePane.getChildren().addAll(hbox2, strokeColorChoice);
-				getChildren().add(customizePenBox);
+		customizeBackgroundBox.getChildren().addAll(selectBackgroundColor,
+				backgroundChoice);
+		HBox spaceHolder = new HBox();
+		spaceHolder.setPrefWidth(dimensions.getWidth() / 40);
 
-				// select background color
-				HBox customizeBackgroundBox = new HBox(10);
-				Text selectBackgroundColor = new Text(Strings.SELECT_BACKGROUND_COLOR);
-
-				ColorPicker backgroundChoice = new ColorPicker(Color.WHITE);
-				backgroundChoice.setOnAction(e -> changeBackgroundColor(backgroundChoice
-						.getValue()));
-
-				// User can pick color for the stroke
-
-				customizeBackgroundBox.getChildren().addAll(selectBackgroundColor,
-						backgroundChoice);
-				HBox spaceHolder = new HBox();
-				spaceHolder.setPrefWidth(dimensions.getWidth()/40);
-				
-				getChildren().addAll(customizeBackgroundBox,spaceHolder);
-				
-
-				// Add turtle button
-				Button newTurtleButton = new Button("Add a turtle");
-				newTurtleButton.setStyle("-fx-base: #b6e7c9;");
-				newTurtleButton.setAlignment(Pos.CENTER_RIGHT);
-				newTurtleButton.setOnAction(e -> myWorkspace.addTurtle());
-
-			/*	TextField textbox = new TextField("" + turtleList.size());
-				textbox.setEditable(false);
-				textbox.setPrefWidth(dimensions.getWidth()/100);*/
-				getChildren().addAll(newTurtleButton);		
-				
+		getChildren().addAll(customizeBackgroundBox, spaceHolder);
 
 	}
-	
+
 	private void uploadTurtleFile(TurtleView turtle) {
 		File file = displayFileChooser();
 		changeTurtleImage(turtle, new Image(file.toURI().toString()));
@@ -143,7 +116,30 @@ public class CustomizationBar extends HBox {
 	private void changeBackgroundColor(Color color) {
 		myWorkspace.setBackground(color);
 	}
+	
+	private HBox configureLanguageOptions(){
+		HBox selectLanguage = new HBox(10);
+		Text select = new Text("Select Language");
+		ComboBox<String> languageOptions = new ComboBox<String>();
+		ObservableList<String> languages = FXCollections.observableArrayList("English",
+				"Chinese", "French", "German", "Italian", "Japanese", "Korean",
+				"Portugese", "Russian", "Spanish");
 
+		languageOptions.setItems(languages);
+		languageOptions.setValue(languages.get(0));
 
+		selectLanguage.getChildren().addAll(select, languageOptions);
 
+		languageOptions.getSelectionModel().selectedItemProperty()
+				.addListener(new ChangeListener<String>() {
+					@Override
+					public void changed(ObservableValue<? extends String> ov,
+							String old_val, String new_val) {
+						System.out.println(new_val);
+						myController.setLanguage(new_val);
+
+					}
+				});
+		return selectLanguage;
+	}
 }

@@ -5,12 +5,14 @@ package view;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+
 import controller.SLogoController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
@@ -22,6 +24,7 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -34,13 +37,13 @@ import javafx.util.StringConverter;
 
 public class SideBar extends VBox {
 
-//	Workspace myWorkspace;
-	Map<Integer, TurtleView> myTurtles;
-	ListView<String> historyList;
-	ObservableList<String> historyItems;
-	ObservableList<VariableView> variablesList;
-	SLogoController myController;
-	TableView<VariableView> variablesTable;
+	private Map<Integer, TurtleView> myTurtles;
+	private ListView<String> historyList;
+	private ObservableList<String> historyItems;
+	private ObservableList<VariableView> variablesList;
+	private SLogoController myController;
+	private TableView<VariableView> variablesTable;
+	private ObservableList<String> commandItems;
 
 	// make this into a new class with its own stuff that have variablesView and
 	// commandView and historyView???
@@ -48,21 +51,24 @@ public class SideBar extends VBox {
 	// location
 
 	public SideBar(Map<Integer, TurtleView> turtleList, SLogoController controller) {
-	//	myStage = mainStage;
 		myTurtles = turtleList;
-	//	myTurtles = turtleList;
 		myController = controller;
 
-		setPadding(new Insets(0, 15, 0, 0));
+		setPadding(new Insets(5, 15, 0, 0));
 		setSpacing(5);
 		setMaxWidth(Double.MAX_VALUE);
+		
+		
+		
 
-		// customization
+		// turtle properties
 		Text title = new Text("Turtle Properties");
 		title.setFont(new Font(15));
 		title.setUnderline(true);
-		title.setTextAlignment(TextAlignment.CENTER);
+		//title.setTextAlignment(TextAlignment.CENTER);
 		getChildren().add(title);
+		
+		
 
 		System.out.println("placeholder -- get turtle info somewhere here");
 		
@@ -147,10 +153,10 @@ public class SideBar extends VBox {
 		getChildren().add(userCommands);
 
 		ListView<String> userCommandsList = new ListView<String>();
-		ObservableList<String> commandsItems = FXCollections.observableArrayList(
+		commandItems = FXCollections.observableArrayList(
 				"String1", "String2", "String3");
 		//create an object instead
-		userCommandsList.setItems(commandsItems);
+		userCommandsList.setItems(commandItems);
 		userCommandsList.setMaxWidth(Double.MAX_VALUE);
 		userCommandsList.setPrefHeight(150);
 		getChildren().add(userCommandsList);
@@ -232,5 +238,15 @@ public class SideBar extends VBox {
 		 * .get(t.getTablePosition().getRow())).setName(t.getNewValue());
 		 */
 
+	}
+	
+	public void updateCommand(String s){
+		commandItems.add(s);
+	}
+	
+	private void updateTurtleProperties (int ID){
+		//TODO: kjsdlkfajilwjfakjd
+		//remove all current
+		
 	}
 }

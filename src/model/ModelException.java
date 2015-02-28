@@ -8,7 +8,6 @@ public class ModelException extends Exception {
 	 * Fixed by adding the below long
 	 */
 	private static final long serialVersionUID = -7694548898164928953L;
-
-	public ModelException(){};
-	
+	public ModelException(){};	
 }
+

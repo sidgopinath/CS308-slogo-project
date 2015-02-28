@@ -5,6 +5,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import model.ExecutionEnvironment;
+import model.ModelException;
 import model.turtle.TurtleCommand;
 import view.SLogoView;
 
@@ -21,8 +22,9 @@ public abstract class Instruction implements Observer{
 		myView = view;
 		myEnvironment=environment;
 	}
-	public Instruction(String constantInput){
+	public Instruction(String constantInput, ExecutionEnvironment environment){
 		myInstructionType=constantInput;
+		myEnvironment = environment;
 	}
 	
     public abstract double execute();

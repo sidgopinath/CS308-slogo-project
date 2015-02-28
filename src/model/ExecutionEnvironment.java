@@ -15,12 +15,16 @@ public class ExecutionEnvironment extends Observable{
 		clear();
 	}
 	
-	public void addInstruction(String commandName, Instruction inInstruction){
+	public void addCommand(String commandName, Instruction inInstruction){
+		if(myUserInstructionMap.containsKey(commandName))
+			myUserInstructionMap.remove(commandName);
 		myUserInstructionMap.put(commandName, inInstruction);
 		updateObserver();
 	}
 	
 	public void addVariable(String variableName, Instruction value){
+		if(myVariableMap.containsKey(variableName))
+			myVariableMap.remove(variableName);
 		myVariableMap.put(variableName, value);
 		updateObserver();
 	}
@@ -30,18 +34,19 @@ public class ExecutionEnvironment extends Observable{
 		notifyObservers();
 		clearChanged();
 	}
-	
+
 	public Instruction getVariable(String key){
 		return myVariableMap.get(key);
-	}
-	
-	public Instruction getInstruction(String key){
-		return myUserInstructionMap.get(key);
 	}
 	
 	public void removeDuplicate(String s){
 		if(myVariableMap.containsKey(s))
 			myVariableMap.remove(s);
+	}
+		
+	public Instruction getCommand(String key){
+		return myUserInstructionMap.get(key);
+
 	}
 	
 	public void clear(){
@@ -49,7 +54,7 @@ public class ExecutionEnvironment extends Observable{
 		myVariableMap = new HashMap<String, Instruction>();
 	}
 	
-	public Map<String, Instruction> getUserInstructionMap(){
+	public Map<String, Instruction> getUserCommandMap(){
 		return myUserInstructionMap;
 	}
 	

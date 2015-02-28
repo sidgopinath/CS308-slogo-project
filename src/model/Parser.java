@@ -19,7 +19,7 @@ import model.instructions.ListInstruction;
 import model.instructions.StringInstruction;
 import model.instructions.UserRunningInstruction;
 import model.instructions.Variable;
-import model.turtle.TurtleCommand;
+//import model.turtle.TurtleCommand;
 import view.SLogoView;
 
 /**
@@ -90,6 +90,7 @@ public class Parser implements Observer{
 				nodeList.add(makeTree(splitCommands));
 				// System.out.println("tree done");
 			}
+			
 //			for (Node root : nodeList) {
 //				System.out.println("new tree");
 //				System.out.println(root.getInstruction());
@@ -109,30 +110,30 @@ public class Parser implements Observer{
 		}
 	}
 		
-	private void turtleCommandGetter(List<TurtleCommand> cList, Node root) {
-		for(Node n: inOrderTraverser(root)){
-			//System.out.println(n.getValue());
-			TurtleCommand t = n.getInstruction().getTurtleCommand();
-			//System.out.println(t);
-			if(t!=null)
-				cList.add(t);
-		}
-	}
+//	private void turtleCommandGetter(List<TurtleCommand> cList, Node root) {
+//		for(Node n: inOrderTraverser(root)){
+//			//System.out.println(n.getValue());
+//			TurtleCommand t = n.getInstruction().getTurtleCommand();
+//			//System.out.println(t);
+//			if(t!=null)
+//				cList.add(t);
+//		}
+//	}
 
-	private List<Node> inOrderTraverser(Node root) {
-		List<Node> output = new ArrayList();
-		inOrderTraverserHelper(output,root);
-		return output;
-	}
+//	private List<Node> inOrderTraverser(Node root) {
+//		List<Node> output = new ArrayList();
+//		inOrderTraverserHelper(output,root);
+//		return output;
+//	}
 	
-	private void inOrderTraverserHelper(List<Node> in,Node root) {
-		if(root.getChildren()!=null){
-			List<Node> children = root.getChildren();
-			for(int i =0; i<children.size();i++){
-				inOrderTraverserHelper(in,children.get(i));
-			}
-		}
-	}
+//	private void inOrderTraverserHelper(List<Node> in,Node root) {
+//		if(root.getChildren()!=null){
+//			List<Node> children = root.getChildren();
+//			for(int i =0; i<children.size();i++){
+//				inOrderTraverserHelper(in,children.get(i));
+//			}
+//		}
+//	}
 
 
 	// BIG TODO: merge instruction tree and this tree to be one and the same
@@ -140,8 +141,7 @@ public class Parser implements Observer{
 		int myVars = 0;
 		int neededVars = -1;
 		Node myNode = null;
-
-		List<Instruction> futureInstructions = new ArrayList();
+		List<Instruction> futureInstructions = new ArrayList<Instruction>();
 		// go through and determine what type of node we are adding
 		String match = testMatches(command[myFurthestDepth]).toUpperCase();
 		//this switch will eventually be combined into the map.

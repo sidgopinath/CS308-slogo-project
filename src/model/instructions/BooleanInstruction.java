@@ -59,5 +59,4 @@ public class BooleanInstruction extends Instruction {
 	public int getNumberOfArguments() {
 		return implementers.valueOf(myInstructionType.toUpperCase()).numArgs;
 	}
-
 }

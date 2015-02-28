@@ -1,13 +1,13 @@
 package model.turtle;
 
 public class Turtle {
-    public double x;
-    public double y;
-    public double heading;
+    public double myX;
+    public double myY;
+    public double myHeading;
 
-    public Turtle (double x, double y, double rotate) {
-        this.x=x;
-        this.y=y;
-        this.heading=rotate;
+    public Turtle (double x, double y, double heading) {
+        myX=x;
+        myY=y;
+        myHeading = heading;
     }
 }

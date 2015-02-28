@@ -135,18 +135,17 @@ public class Parser implements Observer{
 //		}
 //	}
 
-
-	// BIG TODO: merge instruction tree and this tree to be one and the same
 	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ModelException {
 		int myVars = 0;
 		int neededVars = -1;
 		Node myNode = null;
 		List<Instruction> futureInstructions = new ArrayList<Instruction>();
+		
 		// go through and determine what type of node we are adding
 		String match = testMatches(command[myFurthestDepth]).toUpperCase();
-		//this switch will eventually be combined into the map.
+		
 		switch (match){
-		//instead of while loop, find where closing bracket is
+		//TODO: instead of while loop, find where closing bracket is
 		//run until you hit that
 		//have some way to account for nested loops
 		case "LISTSTART":
@@ -211,10 +210,9 @@ public class Parser implements Observer{
 		}
 		while(myVars<neededVars){
 			Node level = makeTree(command);
-			System.out
-					.println("got kid " + level.getInstruction() + " for "
-							+ myNode.getInstruction() + " " + myVars + " "
-							+ neededVars);
+//			System.out.println("got kid " + level.getInstruction() + " for "
+//							+ myNode.getInstruction() + " " + myVars + " "
+//							+ neededVars);
 			myNode.addChild(level);
 			myVars++;
 		}

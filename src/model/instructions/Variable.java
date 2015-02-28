@@ -1,13 +1,9 @@
 package model.instructions;
 
-import java.util.List;
-
 import model.ExecutionEnvironment;
-import model.ModelException;
-import view.SLogoView;
-
 
 public class Variable extends Instruction{
+	
 	public Variable(String instructionType, ExecutionEnvironment environment) {
 		super(instructionType, environment);
 	}
@@ -20,6 +16,4 @@ public class Variable extends Instruction{
 	public int getNumberOfArguments() {
 		return 0;
 	}
-	
-
 }

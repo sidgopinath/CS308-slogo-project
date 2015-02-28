@@ -15,7 +15,6 @@ public class UserRunningInstruction extends Instruction{
 
 	@Override
 	public double execute() {
-		// TODO Auto-generated method stub
 		double returnVal = 0;
 		Instruction userCommand = myEnvironment.getCommand(myInstructionType);
 		// add all variables given, assigned to proper names
@@ -33,6 +32,4 @@ public class UserRunningInstruction extends Instruction{
 	public int getNumberOfArguments() {
 		return 1;
 	}
-
-
 }

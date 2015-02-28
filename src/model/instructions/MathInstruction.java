@@ -8,7 +8,6 @@ import view.SLogoView;
 
 public class MathInstruction extends Instruction{
 	
-
 	public MathInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
 		super(dependencies, instructionType, view, environment);
 	}
@@ -36,40 +35,37 @@ public class MathInstruction extends Instruction{
 
 	@Override
 	public double execute() {
-		double firstDependency = myDependencies.get(0).execute();
-		double secondDependency = myDependencies.get(1).execute();
 		switch(myInstructionType.toUpperCase()){
 		case "SUM":
-			return firstDependency+secondDependency;
+			return myDependencies.get(0).execute()+myDependencies.get(1).execute();
 		case "DIFFERENCE":
-			return firstDependency-secondDependency;
+			return myDependencies.get(0).execute()-myDependencies.get(1).execute();
 		case "PRODUCT":
-			return firstDependency*secondDependency;
+			return myDependencies.get(0).execute()*myDependencies.get(1).execute();
 		case "QUOTIENT":
-			return divByZeroCheck(firstDependency/secondDependency);
+			return divByZeroCheck(myDependencies.get(0).execute()/myDependencies.get(1).execute());
 		case "REMAINDER":
-			return firstDependency%secondDependency;
+			return myDependencies.get(0).execute()%myDependencies.get(1).execute();
 		case "MINUS":
-			return -firstDependency;
+			return -myDependencies.get(0).execute();
 		case "RANDOM":
 			Random randomNum = new Random();
-			return randomNum.nextInt((int)firstDependency);
+			return randomNum.nextInt((int)myDependencies.get(0).execute());
 		case "SIN":
-			return Math.toDegrees(Math.sin(firstDependency));
+			return Math.toDegrees(Math.sin(myDependencies.get(0).execute()));
 		case "COS":
-			return Math.toDegrees(Math.cos(secondDependency));
+			return Math.toDegrees(Math.cos(myDependencies.get(1).execute()));
 		case "TAN":
-			return Math.toDegrees(divByZeroCheck((Math.tan(secondDependency))));
+			return Math.toDegrees(divByZeroCheck((Math.tan(myDependencies.get(1).execute()))));
 		case "ATAN":
-			return Math.toDegrees(divByZeroCheck((Math.atan(secondDependency))));
+			return Math.toDegrees(divByZeroCheck((Math.atan(myDependencies.get(1).execute()))));
 		case "LOG":
-			return Math.log(firstDependency);
+			return Math.log(myDependencies.get(0).execute());
 		case "POW":
-			return Math.pow(firstDependency, secondDependency);
+			return Math.pow(myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "PI":
 			return Math.PI;
 		default: 
-			// view.displayException(new Exception());
 			return 0;
 		}
 	}

@@ -2,10 +2,7 @@ package model.instructions;
 
 import java.util.List;
 
-import com.sun.tracing.dtrace.DependencyClass;
-
 import model.ExecutionEnvironment;
-import model.ModelException;
 import view.SLogoView;
 
 public class ControlInstruction extends Instruction{
@@ -26,7 +23,7 @@ public class ControlInstruction extends Instruction{
 	implementers(int args){
     	this.numArgs=args;
     }
-}
+	}
 
 	@Override
 	public double execute(){
@@ -62,9 +59,7 @@ public class ControlInstruction extends Instruction{
 			if(myDependencies.get(0).execute() != 0){
 				return executeList(myDependencies.get(1));
 			}
-			else{
-				return executeList(myDependencies.get(2));
-			}
+			return executeList(myDependencies.get(2));
 		case "MAKEUSERINSTRUCTION":
 			String commandName = myDependencies.get(0).getName();
 			myEnvironment.addCommand(commandName, this);
@@ -73,6 +68,7 @@ public class ControlInstruction extends Instruction{
 			return 0.0;
 		}
 	}
+	
 	public double forLoop(Instruction varHead, Instruction listHead, int startIndex, int endIndex, int increment){
 		double returnVal = 0;
 		for(int i =startIndex; i<=endIndex; i+=increment){
@@ -83,6 +79,7 @@ public class ControlInstruction extends Instruction{
 		}
 		return returnVal;
 	}
+	
 	public double executeList(Instruction listHead){
 		double returnVal = 0;
 		for(Instruction myInt : listHead.myDependencies){
@@ -90,10 +87,12 @@ public class ControlInstruction extends Instruction{
 		}
 		return returnVal;
 	}
+	
 	public double makeVariable(Instruction input, Instruction value){
 		myEnvironment.addVariable(input.getName(), value);
 		return value.execute();
 	}
+	
 	@Override
 	public int getNumberOfArguments() {
 		return implementers.valueOf(myInstructionType.toUpperCase()).numArgs;

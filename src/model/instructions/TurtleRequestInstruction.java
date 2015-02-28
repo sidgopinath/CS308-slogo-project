@@ -5,7 +5,6 @@ import java.util.List;
 import model.ExecutionEnvironment;
 import view.SLogoView;
 
-
 public class TurtleRequestInstruction extends Instruction {
 	
 	public TurtleRequestInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
@@ -34,7 +33,6 @@ public class TurtleRequestInstruction extends Instruction {
 		case "HEADING":
 			return myView.getHeading(0);
 		case "ISPENDOWN":
-			System.out.println("PEN DOWN" + myView.getPenDown(0));
 			return myView.getPenDown(0);
 		case "ISSHOWING":
 			return myView.isShowing(0);

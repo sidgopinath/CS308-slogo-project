@@ -8,11 +8,11 @@ import model.ExecutionEnvironment;
 import model.Polar;
 import model.turtle.TurtleCommand;
 
-
 public class MovementInstruction extends Instruction {
 	private TurtleCommand myTurtle;
 	private boolean myJump;
 	private Polar myPolar;
+	private double myReturnVal;
 	
 	public enum implementers {
 		FORWARD(1),
@@ -42,30 +42,29 @@ public class MovementInstruction extends Instruction {
 		myJump = true;
 	}
 	
-	double returnVal;
 	@Override
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
-			returnVal = myDependencies.get(0).execute();
-			myPolar = new Polar(0, returnVal);
+			myReturnVal = myDependencies.get(0).execute();
+			myPolar = new Polar(0, myReturnVal);
 			updateView();
-			return returnVal;
+			return myReturnVal;
 		case "BACKWARD":
-			returnVal = myDependencies.get(0).execute();
-			myPolar = new Polar(0, -returnVal);
+			myReturnVal = myDependencies.get(0).execute();
+			myPolar = new Polar(0, -myReturnVal);
 			updateView();
 			return myDependencies.get(0).execute();
 		case "LEFT":
-			returnVal = myDependencies.get(0).execute();
-			myPolar = new Polar(-returnVal, 0);
+			myReturnVal = myDependencies.get(0).execute();
+			myPolar = new Polar(-myReturnVal, 0);
 			updateView();
 			return myDependencies.get(0).execute();
 		case "RIGHT":
-			returnVal = myDependencies.get(0).execute();
-			myPolar = new Polar(returnVal, 0);
+			myReturnVal = myDependencies.get(0).execute();
+			myPolar = new Polar(myReturnVal, 0);
 			updateView();
-			return returnVal;
+			return myReturnVal;
 		case "SETHEADING":
 			myJump = false;
 			myPolar = new Polar(myDependencies.get(0).execute(), 0);
@@ -89,7 +88,6 @@ public class MovementInstruction extends Instruction {
 			myView.showTurtle(0, false);
 			return 0.0;
 		case "CLEARSCREEN":
-			System.out.println(myView.clearScreen(0));
 			return myView.clearScreen(0);
 		case "HOME":
 			myJump = true;

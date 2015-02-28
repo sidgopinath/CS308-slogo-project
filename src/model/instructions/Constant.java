@@ -2,7 +2,6 @@ package model.instructions;
 
 import model.ExecutionEnvironment;
 
-
 public class Constant extends Instruction{
 
 	private double myValue;

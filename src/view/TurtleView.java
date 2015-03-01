@@ -60,6 +60,13 @@ public class TurtleView extends ImageView {
 	public boolean getPenUp() {
 		return penUp;
 	}
+	
+	public String getPenPosition(){
+		if (penUp == true)
+			return "Up";
+		return "Down";
+		
+	}
 
 	public boolean isShowing() {
 		return isVisible;

@@ -18,8 +18,10 @@ public class Workspace extends StackPane {
 	// private StackPane myDisplay;
 	private Rectangle myBackground;
 	private Map<Integer, TurtleView> myTurtles;
-	private int myActiveTurtleID;
-
+	// TODO: move myTUrtles to this class
+	
+	private TurtleView myActiveTurtle; 
+	//
 
 	// public static final double X_ADJUSTMENT = GRID_WIDTH / 2;
 	// public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2;
@@ -27,11 +29,13 @@ public class Workspace extends StackPane {
 	//TODO: associate a Group of lines with the TurtleView object (maybe as a myDrawing variable, so that way it can be moved easily and associated with the correct turtle)
 	public Workspace(Map<Integer, TurtleView> turtleList, Group lines, Dimension2D dimensions) {
 	//	setPadding(new Insets(0, dimensions.getWidth()/85, dimensions.getWidth()/85, dimensions.getWidth()/85));
-		// TODO: dynamically set grid size
 		myBackground = new Rectangle(dimensions.getWidth()*11.7/16, dimensions.getHeight()*10/16);
 		myBackground.setFill(Color.WHITE);
 		myTurtles = turtleList;
-		configureTurtleEventHandlers(); //TODO: this needs to be called every time you make a new one
+		
+		myActiveTurtle = myTurtles.get(0);
+		configureTurtleEventHandler(0); //TODO: this needs to be called every time you make a new one
+		//TODO: the first turtle's id needs to be made into 1
 
 		//TODO: make the turtles list here and have the view simply "get" it
 		TurtleView turtle = turtleList.get(0);
@@ -48,7 +52,6 @@ public class Workspace extends StackPane {
 		myTurtles.put(newID, newTurtle); //TODO: newId's are utilized twice. is that okay?
 		configureTurtleEventHandler(newID);
 		getChildren().add(newTurtle);
-		
 	}
 
 	public void setBackground(Color color) {
@@ -63,21 +66,25 @@ public class Workspace extends StackPane {
 		return myBackground.getHeight();
 	}
 	
-	public void setActiveTurtleID(int ID){
-		myActiveTurtleID = ID;
+	public void setActiveTurtle(int ID){
+		myActiveTurtle = myTurtles.get(ID);
 		System.out.println("newID" + ID);
 	}
 	
-	//this may not be necessary
+/*	//this may not be necessary
 	private void configureTurtleEventHandlers(){
 		for (Integer i: myTurtles.keySet()){
 			TurtleView activeTurtle = myTurtles.get(i);
 			activeTurtle.setOnMouseClicked(e -> setActiveTurtleID(activeTurtle.getID()));
 		}
-	}
+	}*/
 	
 	private void configureTurtleEventHandler(int ID){
-		TurtleView activeTurtle = myTurtles.get(ID);
-		activeTurtle.setOnMouseClicked(e -> setActiveTurtleID(activeTurtle.getID()));
+		TurtleView selectedTurtle = myTurtles.get(ID);
+		selectedTurtle.setOnMouseClicked(e -> setActiveTurtle(selectedTurtle.getID()));
+	}
+	
+	public TurtleView getActiveTurtle(){
+		return myActiveTurtle;
 	}
 }

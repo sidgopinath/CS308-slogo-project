@@ -62,10 +62,13 @@ public class SLogoView implements Observer {
 	private Group lines = new Group();
 	private SLogoController myController;
 	private Dimension2D myDimensions;
-	//private int activeTurtleID; //TODO: update this
+	// private int activeTurtleID; //TODO: update this
 
 	private SideBar mySidebar;
 	private Editor myEditor;
+
+	// TODO: move myTUrtles to relavant class (Workspace). Maybe drawer too? But
+	// there is no functionality after moving it
 	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>();
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
@@ -78,7 +81,7 @@ public class SLogoView implements Observer {
 				System.out.println("CLOSING");
 			}
 		});
-	//	activeTurtleID = 1;
+		// activeTurtleID = 1;
 
 		myRoot = new GridPane();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
@@ -103,7 +106,7 @@ public class SLogoView implements Observer {
 				myStage, myDimensions), 0, 2);
 		myRoot.add(configureAddTurtlesButton(), 1, 2);
 		myRoot.add(myWorkspace, 0, 3);
-		mySidebar = new SideBar(myTurtles, myController);
+		mySidebar = new SideBar(myTurtles, myController, myWorkspace);
 		myRoot.add(mySidebar, 1, 3, 1, 2);
 		myEditor = new Editor(myController, mySidebar, myDimensions);
 		myRoot.add(myEditor, 0, 4);
@@ -194,18 +197,6 @@ public class SLogoView implements Observer {
 		}
 	}
 
-	public double setXY(int id, double x, double y) {
-		return myTurtles.get(id).setXY(x, y);
-	}
-
-	public double setHeading(int id, double angle, boolean relative) {
-		if (relative) {
-			return myTurtles.get(id).setRelativeHeading(angle);
-		} else {
-			return myTurtles.get(id).setAbsoluteHeading(angle);
-		}
-	}
-
 	private void displayPage(String loc) {
 		WebView browser = new WebView();
 		WebEngine webEngine = browser.getEngine();
@@ -277,6 +268,22 @@ public class SLogoView implements Observer {
 		myTurtles.put(0, turtle);
 		myWorkspace = new Workspace(myTurtles, lines, myDimensions);
 		drawer = new Drawer(myWorkspace.getGridWidth(), myWorkspace.getGridHeight());
+	}
+
+	// ---------
+
+	// methods for the backend to call. TODO: organize better
+
+	public double setXY(int id, double x, double y) {
+		return myTurtles.get(id).setXY(x, y);
+	}
+
+	public double setHeading(int id, double angle, boolean relative) {
+		if (relative) {
+			return myTurtles.get(id).setRelativeHeading(angle);
+		} else {
+			return myTurtles.get(id).setAbsoluteHeading(angle);
+		}
 	}
 
 	public void setPenUp(int id, boolean setPen) {
@@ -355,11 +362,10 @@ public class SLogoView implements Observer {
 			mySidebar.updateVariable(new VariableView(s, value));
 		}
 
-		for (String s: env.getUserCommandMap().keySet()){
+		for (String s : env.getUserCommandMap().keySet()) {
 			updateCommand(s);
 		}
-			
-		
+
 	}
 
 	public void createNewController(SLogoView view) {

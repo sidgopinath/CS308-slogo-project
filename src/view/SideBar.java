@@ -44,9 +44,9 @@ public class SideBar extends VBox {
 	private ObservableList<VariableView> variablesList;
 	private SLogoController myController;
 	private TableView<VariableView> variablesTable;
-	private TurtleView myActiveTurtle; //TODO: get this from the workspace
+	private Workspace myWorkspace;
 	
-	private ObservableList<VariableView> turtlePropertiesList;
+	//private ObservableList<VariableView> turtlePropertiesList;
 	private TableView<VariableView> turtlePropertiesTable;
 	// variablesList.add(new Variable("Added var2.5", 5));
 
@@ -58,9 +58,10 @@ public class SideBar extends VBox {
 	// sidebarPane class with parameters that specify column constraints /
 	// location
 
-	public SideBar(Map<Integer, TurtleView> turtleList, SLogoController controller) {
+	public SideBar(Map<Integer, TurtleView> turtleList, SLogoController controller, Workspace workspace) {
 		myTurtles = turtleList;
 		myController = controller;
+		myWorkspace = workspace;
 
 		setPadding(new Insets(5, 15, 0, 0));
 		setSpacing(5);
@@ -261,7 +262,7 @@ public class SideBar extends VBox {
 	
 	private void createTurtlePropertiesTable(){
 		
-		turtlePropertiesList = FXCollections.observableArrayList(new VariableView("ID", myActiveTurtle.getID()), new VariableView("Pen Position", "Down"));
+	//	turtlePropertiesList = FXCollections.observableArrayList(new VariableView("ID", myWorkspace.getActiveTurtle().getID()), new VariableView("Pen Position", "Down"));
 		// variablesList.add(new Variable("Added var2.5", 5));
 
 		turtlePropertiesTable = new TableView<VariableView>();
@@ -285,14 +286,25 @@ public class SideBar extends VBox {
 
 		turtlePropertiesTable.setMaxWidth(Double.MAX_VALUE);
 		turtlePropertiesTable.setPrefHeight(150);
+		updateTurtleProperties(0); //TODO: change ID to 1
+
 
 		getChildren().add(turtlePropertiesTable);
-		turtlePropertiesTable.setItems(turtlePropertiesList);
+	//	turtlePropertiesTable.setItems(turtlePropertiesList);
 	}
 
 	private void updateTurtleProperties(int ID) {
-		// TODO: kjsdlkfajilwjfakjd
-		
+		//myWorkspace.getActiveTurtle();		
+		TurtleView updatedTurtle = myTurtles.get(ID);
+	//	for (String property : turtlePropertiesList) {
+		ObservableList<VariableView> turtlePropertiesList = FXCollections.observableArrayList(
+				new VariableView("ID", String.valueOf(myWorkspace.getActiveTurtle().getID())), 
+				new VariableView("X-position",String.valueOf(updatedTurtle.getX())),
+				new VariableView("Y-position",String.valueOf(updatedTurtle.getY())),
+				new VariableView("Heading", String.valueOf(updatedTurtle.getHeading())),
+				new VariableView("Pen Position", updatedTurtle.getPenPosition())
+				);		
+		turtlePropertiesTable.setItems(turtlePropertiesList);		
 		
 		
 		// remove all current
@@ -316,10 +328,6 @@ public class SideBar extends VBox {
 			
 			getChildren().add(turtleIDBox);*/
 
-	}
-	
-	private void updateTurtleProperties(){
-		
 	}
 	
 	

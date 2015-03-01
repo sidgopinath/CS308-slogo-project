@@ -5,7 +5,6 @@
 
 package view;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -31,8 +30,6 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -47,7 +44,6 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import model.ExecutionEnvironment;
-import model.Polar;
 import model.turtle.Turtle;
 import model.turtle.TurtleCommand;
 import controller.SLogoController;
@@ -99,6 +95,12 @@ public class SLogoView implements Observer {
 
 	private void configureUI() {
 		setGridPaneConstraints();
+
+		// set initial turtle
+		TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
+		myTurtles.put(0, turtle);
+
+		mySidebar = new SideBar(myTurtles, myController);
 		setDefaultWorkspace();
 		myRoot.add(configureTopMenu(), 0, 0, 2, 1);
 		myRoot.add(configureTopRow(), 0, 1, 2, 1);
@@ -106,7 +108,6 @@ public class SLogoView implements Observer {
 				myStage, myDimensions), 0, 2);
 		myRoot.add(configureAddTurtlesButton(), 1, 2);
 		myRoot.add(myWorkspace, 0, 3);
-		mySidebar = new SideBar(myTurtles, myController, myWorkspace);
 		myRoot.add(mySidebar, 1, 3, 1, 2);
 		myEditor = new Editor(myController, mySidebar, myDimensions);
 		myRoot.add(myEditor, 0, 4);
@@ -122,8 +123,9 @@ public class SLogoView implements Observer {
 		 * for (TurtleCommand instruction : instructionList) { returnString +=
 		 * updateFromInstruction(instruction) + "\n"; }
 		 */
-		List<Polyline> newlines = drawer.draw(myTurtles, instructionList);
+		List<Polyline> newlines = drawer.draw(myTurtles, instructionList, mySidebar);
 		lines.getChildren().addAll(newlines);
+
 		// return returnString;
 	}
 
@@ -165,7 +167,7 @@ public class SLogoView implements Observer {
 		Scene scene = new Scene(root, xSize, ySize);
 		stage.setTitle(myResources.getString("Title"));
 		stage.setScene(scene);
-		scene.setOnKeyPressed(e -> handleKeyInput(e));
+		// scene.setOnKeyPressed(e -> handleKeyInput(e));
 		stage.show();
 	}
 
@@ -175,27 +177,21 @@ public class SLogoView implements Observer {
 	}
 
 	// for testing
-	private void handleKeyInput(KeyEvent e) {
-		KeyCode keyCode = e.getCode();
-		if (keyCode == KeyCode.D) {
-			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-			instructions.add(new TurtleCommand(0, new Polar(30, 0), true));
-			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
-			lines.getChildren().addAll(newlines);
-		} else if (keyCode == KeyCode.W) {
-			ArrayList<TurtleCommand> instructions = new ArrayList<TurtleCommand>();
-			instructions.add(new TurtleCommand(0, new Polar(0, 15), false));
-			List<Polyline> newlines = drawer.draw(myTurtles, instructions);
-			lines.getChildren().addAll(newlines);
-		} else if (keyCode == KeyCode.E) {
-			System.out.print(towards(0, -10, 10));
-		} else if (keyCode == KeyCode.Q) {
-			System.out.print(clearScreen(0));
-		} else if (keyCode == KeyCode.A) {
-			System.out.print(myTurtles.get(0).getTranslateX() + ","
-					+ myTurtles.get(0).getTranslateY());
-		}
-	}
+	/*
+	 * private void handleKeyInput(KeyEvent e) { KeyCode keyCode = e.getCode();
+	 * if (keyCode == KeyCode.D) { ArrayList<TurtleCommand> instructions = new
+	 * ArrayList<TurtleCommand>(); instructions.add(new TurtleCommand(0, new
+	 * Polar(30, 0), true)); List<Polyline> newlines = drawer.draw(myTurtles,
+	 * instructions, mySidebar); lines.getChildren().addAll(newlines); } else if
+	 * (keyCode == KeyCode.W) { ArrayList<TurtleCommand> instructions = new
+	 * ArrayList<TurtleCommand>(); instructions.add(new TurtleCommand(0, new
+	 * Polar(0, 15), false)); List<Polyline> newlines = drawer.draw(myTurtles,
+	 * instructions); lines.getChildren().addAll(newlines); } else if (keyCode
+	 * == KeyCode.E) { System.out.print(towards(0, -10, 10)); } else if (keyCode
+	 * == KeyCode.Q) { System.out.print(clearScreen(0)); } else if (keyCode ==
+	 * KeyCode.A) { System.out.print(myTurtles.get(0).getTranslateX() + "," +
+	 * myTurtles.get(0).getTranslateY()); } }
+	 */
 
 	private void displayPage(String loc) {
 		WebView browser = new WebView();
@@ -264,9 +260,7 @@ public class SLogoView implements Observer {
 	}
 
 	private void setDefaultWorkspace() {
-		TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
-		myTurtles.put(0, turtle);
-		myWorkspace = new Workspace(myTurtles, lines, myDimensions);
+		myWorkspace = new Workspace(myTurtles, lines, myDimensions, mySidebar);
 		drawer = new Drawer(myWorkspace.getGridWidth(), myWorkspace.getGridHeight());
 	}
 
@@ -275,15 +269,24 @@ public class SLogoView implements Observer {
 	// methods for the backend to call. TODO: organize better
 
 	public double setXY(int id, double x, double y) {
-		return myTurtles.get(id).setXY(x, y);
+		double xy = myTurtles.get(id).setXY(x, y);
+		mySidebar.updateTurtleProperties(id); // are these methods duplicated
+												// code since they are all the
+												// same thing with just one
+												// added line in them?
+		return xy;
 	}
 
 	public double setHeading(int id, double angle, boolean relative) {
+		double heading;
 		if (relative) {
-			return myTurtles.get(id).setRelativeHeading(angle);
+			heading = myTurtles.get(id).setRelativeHeading(angle);
+
 		} else {
-			return myTurtles.get(id).setAbsoluteHeading(angle);
+			heading = myTurtles.get(id).setAbsoluteHeading(angle);
 		}
+		mySidebar.updateTurtleProperties(id);
+		return heading;
 	}
 
 	public void setPenUp(int id, boolean setPen) {
@@ -293,6 +296,7 @@ public class SLogoView implements Observer {
 		 */
 
 		myTurtles.get(id).setPenUp(setPen);
+		mySidebar.updateTurtleProperties(id);
 	}
 
 	public double getPenDown(int id) {
@@ -302,13 +306,14 @@ public class SLogoView implements Observer {
 	}
 
 	public double isShowing(int id) {
-		if (myTurtles.get(id).isShowing())
+		if (myTurtles.get(id).isVisible())
 			return 1;
 		return 0;
 	}
 
 	public void showTurtle(int id, boolean show) {
 		myTurtles.get(id).showTurtle(show);
+		mySidebar.updateTurtleProperties(id);
 	}
 
 	public double getHeading(int id) {
@@ -351,7 +356,13 @@ public class SLogoView implements Observer {
 		// these group of lines somehow need to be connected with the turtle
 		lines.getChildren().clear();
 		myTurtles.get(id).setAbsoluteHeading(0);
-		return myTurtles.get(id).setXY(0, 0);
+		// update with clearscreen
+		double dist = myTurtles.get(id).setXY(0, 0);
+		mySidebar.updateTurtleProperties(id); // dist is used twice so that
+												// turtle properties can be
+												// updated before returning the
+												// value
+		return dist;
 	}
 
 	@Override
@@ -365,7 +376,6 @@ public class SLogoView implements Observer {
 		for (String s : env.getUserCommandMap().keySet()) {
 			updateCommand(s);
 		}
-
 	}
 
 	public void createNewController(SLogoView view) {

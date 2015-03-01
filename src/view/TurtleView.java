@@ -8,9 +8,8 @@ import javafx.scene.image.ImageView;
 public class TurtleView extends ImageView {
 
 	private double myHeading;
-	private boolean isVisible;
+	// private boolean isVisible;
 	private boolean penUp = false;
-
 	private int myID;
 
 	public TurtleView(int id, Image img) {
@@ -19,7 +18,7 @@ public class TurtleView extends ImageView {
 		setFitHeight(30);
 		penUp = false;
 		myHeading = 0;
-		isVisible = true;
+		// isVisible = true;
 		myID = id;
 	}
 
@@ -39,14 +38,17 @@ public class TurtleView extends ImageView {
 	}
 
 	public double setRelativeHeading(double angle) {
-	    setRotate(adjustAngle(getRotate()+angle));
-	    return getRotate();
+		setRotate(adjustAngle(getRotate() + angle));
+		myHeading = getRotate(); // need to use myHeading twice in order to
+									// update it the first time.
+		return myHeading;
 	}
 
 	public double setAbsoluteHeading(double angle) {
-	    double old = getRotate();
+		double old = getRotate();
 		setRotate(adjustAngle(angle));
-		return getRotate()-old;
+		myHeading = getRotate() - old;
+		return myHeading;
 	}
 
 	public void setPenUp(boolean isUp) {
@@ -60,25 +62,39 @@ public class TurtleView extends ImageView {
 	public boolean getPenUp() {
 		return penUp;
 	}
-	
-	public String getPenPosition(){
+
+	public String getPenPosition() {
 		if (penUp == true)
 			return "Up";
 		return "Down";
-		
+
 	}
 
-	public boolean isShowing() {
-		return isVisible;
+	/*
+	 * public boolean isShowing() { return isVisible; }
+	 */
+
+	public String isShowing() {
+		if (isVisible())
+			return "Visible";
+		return "Hidden";
 	}
 
 	public void showTurtle(boolean show) {
 		setVisible(show);
-		isVisible = show;
+		// isVisible = show;
 	}
 
 	public double getYCoord() {
-		return -1 * getTranslateY();
+		double yCoord = getTranslateY();
+		if (yCoord == 0)
+			return yCoord;
+		return -1 * yCoord;
+	}
+
+	// for consistency
+	public double getXCoord() {
+		return getTranslateX();
 	}
 
 	/**
@@ -95,14 +111,14 @@ public class TurtleView extends ImageView {
 		}
 		return angle;
 	}
-	
-	public int getID(){
+
+	public int getID() {
 		return myID;
 	}
-	
-	//for displaying in a table
-//	public TurtleProperty createTurtleProperty(){
-		
-//	}
-	
+
+	// for displaying in a table
+	// public TurtleProperty createTurtleProperty(){
+
+	// }
+
 }

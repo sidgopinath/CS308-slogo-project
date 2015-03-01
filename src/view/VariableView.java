@@ -15,7 +15,7 @@ public class VariableView {
 		this.myName = new SimpleStringProperty(varName);
 		this.myVar = new SimpleDoubleProperty(varValue);
 	}
-	
+
 	public VariableView(String varName, String property) {
 		this.myName = new SimpleStringProperty(varName);
 		this.myProperty = new SimpleStringProperty(property);
@@ -28,8 +28,8 @@ public class VariableView {
 	public String getName() {
 		return myName.get();
 	}
-	
-	//is this below method necessary?
+
+	// is this below method necessary?
 	public String getProperty() {
 		return myProperty.get();
 	}
@@ -53,7 +53,7 @@ public class VariableView {
 	public DoubleProperty myVarProperty() {
 		return myVar;
 	}
-	
+
 	public StringProperty myPropertyProperty() {
 		return myProperty;
 	}

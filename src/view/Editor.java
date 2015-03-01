@@ -2,7 +2,6 @@ package view;
 
 import java.lang.reflect.InvocationTargetException;
 
-import model.ModelException;
 import controller.SLogoController;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
@@ -23,15 +22,17 @@ public class Editor extends HBox {
 		// HBox bottomRow = new HBox();
 		mySidebar = sidebar;
 		myController = controller;
-		setPadding(new Insets(0, 0, dimensions.getWidth()/85, dimensions.getWidth()/89));
+		setPadding(new Insets(0, 0, dimensions.getWidth() / 85,
+				dimensions.getWidth() / 89));
 		setSpacing(15);
 
 		// text area
 		textEditor = new TextArea();
-	//	textEditor.setMaxHeight(Double.MAX_VALUE);
-	//	textEditor.setMaxWidth(dimensions.getWidth());
-		textEditor.setPrefSize(dimensions.getWidth()*.685, dimensions.getHeight()*.095); // this should be dynamically
-											// alterable?
+		// textEditor.setMaxHeight(Double.MAX_VALUE);
+		// textEditor.setMaxWidth(dimensions.getWidth());
+		textEditor.setPrefSize(dimensions.getWidth() * .685,
+				dimensions.getHeight() * .095); // this should be dynamically
+		// alterable?
 
 		// textEditor.clear();
 		// TODO: fix the textEditor clear. It does not udate directly to the

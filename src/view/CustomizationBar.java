@@ -1,7 +1,6 @@
 package view;
 
 import java.io.File;
-import java.util.List;
 import java.util.Map;
 
 import controller.SLogoController;
@@ -11,14 +10,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -38,7 +32,6 @@ public class CustomizationBar extends HBox {
 			Map<Integer, TurtleView> turtleList, Drawer drawer, Workspace workspace,
 			Stage stage, Dimension2D dimensions) {
 
-	
 		setPadding(new Insets(0, dimensions.getWidth() / 120, 0,
 				dimensions.getWidth() / 120));
 		setSpacing(dimensions.getWidth() / 120);
@@ -48,12 +41,8 @@ public class CustomizationBar extends HBox {
 		myDrawer = drawer;
 		myWorkspace = workspace;
 		myStage = stage;
-		
-		
+
 		getChildren().add(configureLanguageOptions());
-		
-		
-		
 
 		// select turtle image
 		HBox customizeTurtleBox = new HBox(10);
@@ -117,8 +106,8 @@ public class CustomizationBar extends HBox {
 	private void changeBackgroundColor(Color color) {
 		myWorkspace.setBackground(color);
 	}
-	
-	private HBox configureLanguageOptions(){
+
+	private HBox configureLanguageOptions() {
 		HBox selectLanguage = new HBox(10);
 		Text select = new Text("Select Language");
 		ComboBox<String> languageOptions = new ComboBox<String>();

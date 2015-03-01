@@ -2,7 +2,6 @@ package view;
 
 //move lambda function into the main UI? 
 
-import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
@@ -12,28 +11,16 @@ import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
-import javafx.geometry.HPos;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.image.Image;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import javafx.util.StringConverter;
 
 public class SideBar extends VBox {
@@ -44,13 +31,15 @@ public class SideBar extends VBox {
 	private ObservableList<VariableView> variablesList;
 	private SLogoController myController;
 	private TableView<VariableView> variablesTable;
-	private Workspace myWorkspace;
-	
-	//private ObservableList<VariableView> turtlePropertiesList;
+	// private Workspace myWorkspace;
+
+	// when do you ever use getActiveTurtle???? If it is never used, remove
+	// myWorkspace completely and the method from the workspace class
+
+	// private ObservableList<VariableView> turtlePropertiesList;
 	private TableView<VariableView> turtlePropertiesTable;
 	// variablesList.add(new Variable("Added var2.5", 5));
 
-	
 	private ObservableList<String> commandItems;
 
 	// make this into a new class with its own stuff that have variablesView and
@@ -58,10 +47,10 @@ public class SideBar extends VBox {
 	// sidebarPane class with parameters that specify column constraints /
 	// location
 
-	public SideBar(Map<Integer, TurtleView> turtleList, SLogoController controller, Workspace workspace) {
+	public SideBar(Map<Integer, TurtleView> turtleList, SLogoController controller) {
 		myTurtles = turtleList;
 		myController = controller;
-		myWorkspace = workspace;
+		// myWorkspace = workspace;
 
 		setPadding(new Insets(5, 15, 0, 0));
 		setSpacing(5);
@@ -73,19 +62,9 @@ public class SideBar extends VBox {
 		title.setUnderline(true);
 		// title.setTextAlignment(TextAlignment.CENTER);
 		getChildren().add(title);
-		
-		createTurtlePropertiesTable();
-		//updateTurtleProperties();
 
-		
-		
-		
-		System.out.println("placeholder -- get turtle info somewhere here");
-		
-		
-		
-		
-		
+		createTurtlePropertiesTable();
+		// updateTurtleProperties();
 
 		// variables pane
 		Text variables = new Text(Strings.VARIABLES_HEADER);
@@ -127,23 +106,23 @@ public class SideBar extends VBox {
 
 		// some issue with strings and ints
 		valuesCol.setCellFactory(TextFieldTableCell
-			.forTableColumn(new StringConverter<Double>() {
+				.forTableColumn(new StringConverter<Double>() {
 
-				@Override
-				public Double fromString(String userInput) {
-					// try{
-					return Double.valueOf(userInput);
-					/*
-					 * } catch(NumberFormatException e){
-					 * System.out.println("Number Format Exception"); }
-					 */
-				}
+					@Override
+					public Double fromString(String userInput) {
+						// try{
+						return Double.valueOf(userInput);
+						/*
+						 * } catch(NumberFormatException e){
+						 * System.out.println("Number Format Exception"); }
+						 */
+					}
 
-				@Override
-				public String toString(Double t) {
-					return t.toString();
-				}
-			}));
+					@Override
+					public String toString(Double t) {
+						return t.toString();
+					}
+				}));
 		valuesCol
 				.setOnEditCommit(new EventHandler<CellEditEvent<VariableView, Double>>() {
 					@Override
@@ -259,14 +238,16 @@ public class SideBar extends VBox {
 		}
 		commandItems.add(newCommand);
 	}
-	
-	private void createTurtlePropertiesTable(){
-		
-	//	turtlePropertiesList = FXCollections.observableArrayList(new VariableView("ID", myWorkspace.getActiveTurtle().getID()), new VariableView("Pen Position", "Down"));
+
+	private void createTurtlePropertiesTable() {
+
+		// turtlePropertiesList = FXCollections.observableArrayList(new
+		// VariableView("ID", myWorkspace.getActiveTurtle().getID()), new
+		// VariableView("Pen Position", "Down"));
 		// variablesList.add(new Variable("Added var2.5", 5));
 
 		turtlePropertiesTable = new TableView<VariableView>();
-		
+
 		TableColumn<VariableView, String> propertiesCol = new TableColumn<VariableView, String>(
 				"Properties");
 		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
@@ -286,49 +267,51 @@ public class SideBar extends VBox {
 
 		turtlePropertiesTable.setMaxWidth(Double.MAX_VALUE);
 		turtlePropertiesTable.setPrefHeight(150);
-		updateTurtleProperties(0); //TODO: change ID to 1
-
+		updateTurtleProperties(0); // TODO: change ID to 1
 
 		getChildren().add(turtlePropertiesTable);
-	//	turtlePropertiesTable.setItems(turtlePropertiesList);
+		// turtlePropertiesTable.setItems(turtlePropertiesList);
 	}
 
-	private void updateTurtleProperties(int ID) {
-		//myWorkspace.getActiveTurtle();		
+	// if we use an observer this does not have to be updated every time
+	protected void updateTurtleProperties(int ID) {
+		// myWorkspace.getActiveTurtle();
+
 		TurtleView updatedTurtle = myTurtles.get(ID);
-	//	for (String property : turtlePropertiesList) {
-		ObservableList<VariableView> turtlePropertiesList = FXCollections.observableArrayList(
-				new VariableView("ID", String.valueOf(myWorkspace.getActiveTurtle().getID())), 
-				new VariableView("X-position",String.valueOf(updatedTurtle.getX())),
-				new VariableView("Y-position",String.valueOf(updatedTurtle.getY())),
-				new VariableView("Heading", String.valueOf(updatedTurtle.getHeading())),
-				new VariableView("Pen Position", updatedTurtle.getPenPosition())
-				);		
-		turtlePropertiesTable.setItems(turtlePropertiesList);		
-		
-		
+		// for (String property : turtlePropertiesList) {
+		ObservableList<VariableView> turtlePropertiesList = FXCollections
+				.observableArrayList(
+						new VariableView("ID", String.valueOf(updatedTurtle.getID())),
+						new VariableView("X-position", String.valueOf(updatedTurtle
+								.getTranslateX())),
+						new VariableView("Y-position", String.valueOf(updatedTurtle
+								.getYCoord())),
+						new VariableView("Heading", String.valueOf(updatedTurtle
+								.getHeading())), new VariableView("Pen Position",
+								updatedTurtle.getPenPosition()), new VariableView(
+								"Turtle Image", updatedTurtle.isShowing()));
+		turtlePropertiesTable.setItems(turtlePropertiesList);
+
 		// remove all current
-		//turtle ID
-/*			HBox turtleIDBox = new HBox();
-			Text turtleIDText = new Text("Turtle ID");
-			turtleIDBox.getChildren().add(turtleIDText);
-			
-			TextField turtleIDField = new TextField();
-			turtleIDBox.getChildren().add(turtleIDField);
-			
-			getChildren().add(turtleIDBox);
-			
-			//pen up?
-			HBox penUpBox = new HBox();
-			Text penUpText = new Text("Pen");
-			turtleIDBox.getChildren().add(penUpText);
-			
-			TextField turtleIDField = new TextField();
-			turtleIDBox.getChildren().add(turtleIDField);
-			
-			getChildren().add(turtleIDBox);*/
+		// turtle ID
+		/*
+		 * HBox turtleIDBox = new HBox(); Text turtleIDText = new
+		 * Text("Turtle ID"); turtleIDBox.getChildren().add(turtleIDText);
+		 * 
+		 * TextField turtleIDField = new TextField();
+		 * turtleIDBox.getChildren().add(turtleIDField);
+		 * 
+		 * getChildren().add(turtleIDBox);
+		 * 
+		 * //pen up? HBox penUpBox = new HBox(); Text penUpText = new
+		 * Text("Pen"); turtleIDBox.getChildren().add(penUpText);
+		 * 
+		 * TextField turtleIDField = new TextField();
+		 * turtleIDBox.getChildren().add(turtleIDField);
+		 * 
+		 * getChildren().add(turtleIDBox);
+		 */
 
 	}
-	
-	
+
 }

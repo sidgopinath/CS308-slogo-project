@@ -12,12 +12,11 @@ public class TableProperty {
 		this.myName = new SimpleStringProperty(varName);
 		this.myVar = new SimpleStringProperty(varValue);
 	}
-	
-	public TableProperty(String varName, double varValue){
+
+	public TableProperty(String varName, double varValue) {
 		this.myName = new SimpleStringProperty(varName);
 		this.myVar = new SimpleStringProperty(Double.toString(varValue));
 	}
-	
 
 	public void setName(String name) {
 		myName.set(name);

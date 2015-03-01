@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
-
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
@@ -58,10 +57,9 @@ public class SLogoView implements Observer {
 	private Group lines = new Group();
 	private SLogoController myController;
 	private Dimension2D myDimensions;
-	// private int activeTurtleID; //TODO: update this
-
 	private SideBar mySidebar;
 	private Editor myEditor;
+	private Scene myScene;
 
 	// TODO: move myTUrtles to relavant class (Workspace). Maybe drawer too? But
 	// there is no functionality after moving it
@@ -69,38 +67,31 @@ public class SLogoView implements Observer {
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
 	public SLogoView(Stage s) {
-		myStage = s;
-		createNewController(this);
-		myStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			@Override
-			public void handle(WindowEvent t) {
-				System.out.println("CLOSING");
-			}
-		});
-		// activeTurtleID = 1;
-
-		myRoot = new GridPane();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
-		lines.setManaged(false);
-		// myRoot.setGridLinesVisible(true);
-
+		myRoot = new GridPane();
+		myStage = s;
 		Screen screen = Screen.getPrimary();
 		Rectangle2D bounds = screen.getVisualBounds();
-		myDimensions = new Dimension2D(bounds.getWidth(), bounds.getHeight());
-		myStage.setResizable(false);
+		myDimensions = new Dimension2D(bounds.getWidth(), bounds.getHeight()); //this may be incorrect
 
+		
+		myScene = setupScene(myStage, myRoot, myDimensions.getWidth(), myDimensions.getHeight());
+		createNewController(this);
+		lines.setManaged(false);
+
+		myStage.setResizable(true);
+
+		
 		configureUI();
-		setupScene(myStage, myRoot, myDimensions.getWidth(), myDimensions.getHeight());
 	}
 
 	private void configureUI() {
 		setGridPaneConstraints();
 
-		// set initial turtle
-		TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
-		myTurtles.put(0, turtle);
-
-		mySidebar = new SideBar(myTurtles, myController);
+		createInitialTurtle();
+		
+		
+		mySidebar = new SideBar(myTurtles, myController, myResources);
 		setDefaultWorkspace();
 		myRoot.add(configureTopMenu(), 0, 0, 2, 1);
 		myRoot.add(configureTopRow(), 0, 1, 2, 1);
@@ -128,12 +119,6 @@ public class SLogoView implements Observer {
 
 		// return returnString;
 	}
-
-	// make update from a single command
-	/*
-	 * private String updateFromInstruction(TurtleCommand instruction) { return
-	 * "return value"; }
-	 */
 
 	public Turtle getTurtleInfo(int index) {
 		ImageView temp = myTurtles.get(index);
@@ -163,12 +148,13 @@ public class SLogoView implements Observer {
 		}
 	}
 
-	private void setupScene(Stage stage, Parent root, double xSize, double ySize) {
+	private Scene setupScene(Stage stage, Parent root, double xSize, double ySize) {
 		Scene scene = new Scene(root, xSize, ySize);
 		stage.setTitle(myResources.getString("Title"));
 		stage.setScene(scene);
 		// scene.setOnKeyPressed(e -> handleKeyInput(e));
 		stage.show();
+		return scene;
 	}
 
 	public double towards(int id, double x, double y) {
@@ -336,6 +322,8 @@ public class SLogoView implements Observer {
 		Text text = new Text(message);
 		root.getChildren().add(text);
 
+		
+		//TODO: my dimensions does not actually work properly. it is set to the stage dimensions but is not updated in real-time
 		Scene scene = new Scene(root, myDimensions.getWidth() / 4,
 				myDimensions.getHeight() / 6);
 
@@ -400,5 +388,10 @@ public class SLogoView implements Observer {
 
 	private void updateCommand(String s) {
 		mySidebar.updateCommand(s);
+	}
+	
+	private void createInitialTurtle(){
+		TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
+		myTurtles.put(0, turtle);
 	}
 }

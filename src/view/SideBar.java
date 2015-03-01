@@ -4,6 +4,7 @@ package view;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import controller.SLogoController;
 import javafx.beans.value.ChangeListener;
@@ -31,33 +32,22 @@ public class SideBar extends VBox {
 	private ObservableList<VariableView> variablesList;
 	private SLogoController myController;
 	private TableView<VariableView> variablesTable;
-	// private Workspace myWorkspace;
-
-	// when do you ever use getActiveTurtle???? If it is never used, remove
-	// myWorkspace completely and the method from the workspace class
-
-	// private ObservableList<VariableView> turtlePropertiesList;
 	private TableView<VariableView> turtlePropertiesTable;
-	// variablesList.add(new Variable("Added var2.5", 5));
-
 	private ObservableList<String> commandItems;
+	private ResourceBundle myResources;
 
-	// make this into a new class with its own stuff that have variablesView and
-	// commandView and historyView???
-	// sidebarPane class with parameters that specify column constraints /
-	// location
-
-	public SideBar(Map<Integer, TurtleView> turtleList, SLogoController controller) {
+	public SideBar(Map<Integer, TurtleView> turtleList, SLogoController controller, ResourceBundle resources) {
 		myTurtles = turtleList;
 		myController = controller;
+		myResources = resources;
 		// myWorkspace = workspace;
 
-		setPadding(new Insets(5, 15, 0, 0));
+		setPadding(new Insets(5, 12, 0, 0));
 		setSpacing(5);
 		setMaxWidth(Double.MAX_VALUE);
 
 		// turtle properties
-		Text title = new Text("Turtle Properties");
+		Text title = new Text(myResources.getString("TurtleProperties")); //lila
 		title.setFont(new Font(15));
 		title.setUnderline(true);
 		// title.setTextAlignment(TextAlignment.CENTER);
@@ -66,8 +56,9 @@ public class SideBar extends VBox {
 		createTurtlePropertiesTable();
 		// updateTurtleProperties();
 
-		// variables pane
-		Text variables = new Text(Strings.VARIABLES_HEADER);
+	//	createVariablesPane(); TODO: make a class out of this
+		//variables pane
+		Text variables = new Text(myResources.getString("VariablesHeader")); //lila
 		// is this necessary to use a .properties file AND a strings class?
 		variables.setFont(new Font(15));
 		variables.setUnderline(true);
@@ -78,10 +69,10 @@ public class SideBar extends VBox {
 
 		variablesTable = new TableView<VariableView>();
 		TableColumn<VariableView, String> variablesCol = new TableColumn<VariableView, String>(
-				"Variables");
+				myResources.getString("Variables"));
 		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
 		TableColumn<VariableView, Double> valuesCol = new TableColumn<VariableView, Double>(
-				"Values");
+				myResources.getString("Values"));
 
 		variablesCol.setCellValueFactory(new PropertyValueFactory<VariableView, String>(
 				"myName"));
@@ -91,7 +82,7 @@ public class SideBar extends VBox {
 		variablesCol.setPrefWidth(164); // TODO: set dynamically
 		valuesCol.setPrefWidth(164);
 		// TODO:
-		// valuesCol.setEditable(true);
+		//valuesCol.setEditable(true);
 
 		variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		variablesCol
@@ -136,7 +127,7 @@ public class SideBar extends VBox {
 		variablesTable.setEditable(true);
 
 		variablesTable.setMaxWidth(Double.MAX_VALUE);
-		variablesTable.setPrefHeight(150);
+		variablesTable.setPrefHeight(132);
 
 		getChildren().add(variablesTable);
 		variablesTable.setItems(variablesList);
@@ -152,7 +143,7 @@ public class SideBar extends VBox {
 		// create an object instead
 		userCommandsList.setItems(commandItems);
 		userCommandsList.setMaxWidth(Double.MAX_VALUE);
-		userCommandsList.setPrefHeight(150);
+		userCommandsList.setPrefHeight(132);
 		getChildren().add(userCommandsList);
 
 		// history pane
@@ -165,7 +156,7 @@ public class SideBar extends VBox {
 		historyItems = FXCollections.observableArrayList();
 		historyList.setItems(historyItems);
 		historyList.setMaxWidth(Double.MAX_VALUE);
-		historyList.setPrefHeight(150);
+		historyList.setPrefHeight(132);
 		getChildren().add(historyList);
 
 		// TODO: Selected item can only have action once until other item is
@@ -266,7 +257,7 @@ public class SideBar extends VBox {
 		turtlePropertiesTable.setEditable(true);
 
 		turtlePropertiesTable.setMaxWidth(Double.MAX_VALUE);
-		turtlePropertiesTable.setPrefHeight(150);
+		turtlePropertiesTable.setPrefHeight(132);
 		updateTurtleProperties(0); // TODO: change ID to 1
 
 		getChildren().add(turtlePropertiesTable);

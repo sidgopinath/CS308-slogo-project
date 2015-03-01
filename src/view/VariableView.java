@@ -9,10 +9,16 @@ public class VariableView {
 
 	private StringProperty myName;
 	private DoubleProperty myVar;
+	private StringProperty myProperty;
 
 	public VariableView(String varName, double varValue) {
 		this.myName = new SimpleStringProperty(varName);
 		this.myVar = new SimpleDoubleProperty(varValue);
+	}
+	
+	public VariableView(String varName, String property) {
+		this.myName = new SimpleStringProperty(varName);
+		this.myProperty = new SimpleStringProperty(property);
 	}
 
 	public void setName(String name) {
@@ -21,6 +27,11 @@ public class VariableView {
 
 	public String getName() {
 		return myName.get();
+	}
+	
+	//is this below method necessary?
+	public String getProperty() {
+		return myProperty.get();
 	}
 
 	public void setValue(double value) {
@@ -41,5 +52,9 @@ public class VariableView {
 
 	public DoubleProperty myVarProperty() {
 		return myVar;
+	}
+	
+	public StringProperty myPropertyProperty() {
+		return myProperty;
 	}
 }

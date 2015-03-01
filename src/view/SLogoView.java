@@ -1,5 +1,8 @@
 //TODO: use resource file instead of strings. Pass resource file as parameters to other classes
 
+//TODO for backend: in order to change the state of the turtle, commands must always be passed back into the parser so have one global update method call theupdateTurtlePropperties method. 
+//TODO: variableschange when a user-defined command is put even though thse variables should not really be set directly. or maybe it should?
+
 package view;
 
 import java.util.ArrayList;
@@ -13,7 +16,6 @@ import java.util.Observer;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.HPos;
@@ -60,6 +62,7 @@ public class SLogoView implements Observer {
 	private Group lines = new Group();
 	private SLogoController myController;
 	private Dimension2D myDimensions;
+	//private int activeTurtleID; //TODO: update this
 
 	private SideBar mySidebar;
 	private Editor myEditor;
@@ -75,6 +78,7 @@ public class SLogoView implements Observer {
 				System.out.println("CLOSING");
 			}
 		});
+	//	activeTurtleID = 1;
 
 		myRoot = new GridPane();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");

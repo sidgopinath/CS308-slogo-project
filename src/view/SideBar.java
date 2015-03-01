@@ -21,6 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.image.Image;
@@ -43,6 +44,13 @@ public class SideBar extends VBox {
 	private ObservableList<VariableView> variablesList;
 	private SLogoController myController;
 	private TableView<VariableView> variablesTable;
+	private TurtleView myActiveTurtle; //TODO: get this from the workspace
+	
+	private ObservableList<VariableView> turtlePropertiesList;
+	private TableView<VariableView> turtlePropertiesTable;
+	// variablesList.add(new Variable("Added var2.5", 5));
+
+	
 	private ObservableList<String> commandItems;
 
 	// make this into a new class with its own stuff that have variablesView and
@@ -57,20 +65,25 @@ public class SideBar extends VBox {
 		setPadding(new Insets(5, 15, 0, 0));
 		setSpacing(5);
 		setMaxWidth(Double.MAX_VALUE);
-		
-		
-		
 
 		// turtle properties
 		Text title = new Text("Turtle Properties");
 		title.setFont(new Font(15));
 		title.setUnderline(true);
-		//title.setTextAlignment(TextAlignment.CENTER);
+		// title.setTextAlignment(TextAlignment.CENTER);
 		getChildren().add(title);
 		
-		
+		createTurtlePropertiesTable();
+		//updateTurtleProperties();
 
+		
+		
+		
 		System.out.println("placeholder -- get turtle info somewhere here");
+		
+		
+		
+		
 		
 
 		// variables pane
@@ -81,7 +94,7 @@ public class SideBar extends VBox {
 		getChildren().add(variables);
 
 		variablesList = FXCollections.observableArrayList();
-		//variablesList.add(new Variable("Added var2.5", 5));
+		// variablesList.add(new Variable("Added var2.5", 5));
 
 		variablesTable = new TableView<VariableView>();
 		TableColumn<VariableView, String> variablesCol = new TableColumn<VariableView, String>(
@@ -92,50 +105,52 @@ public class SideBar extends VBox {
 
 		variablesCol.setCellValueFactory(new PropertyValueFactory<VariableView, String>(
 				"myName"));
-		valuesCol
-				.setCellValueFactory(new PropertyValueFactory<VariableView, Double>("myVar"));
+		valuesCol.setCellValueFactory(new PropertyValueFactory<VariableView, Double>(
+				"myVar"));
 
 		variablesCol.setPrefWidth(164); // TODO: set dynamically
 		valuesCol.setPrefWidth(164);
-		//TODO:
-		//valuesCol.setEditable(true);
+		// TODO:
+		// valuesCol.setEditable(true);
 
 		variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		variablesCol.setOnEditCommit(new EventHandler<CellEditEvent<VariableView, String>>() {
-			@Override
-			public void handle(CellEditEvent<VariableView, String> t) {
-				t.getTableView().getItems().get(t.getTablePosition().getRow())
-						.setName(t.getNewValue());
-				System.out.println("newvalue: " + t.getNewValue());
-			}
-		});
+		variablesCol
+				.setOnEditCommit(new EventHandler<CellEditEvent<VariableView, String>>() {
+					@Override
+					public void handle(CellEditEvent<VariableView, String> t) {
+						t.getTableView().getItems().get(t.getTablePosition().getRow())
+								.setName(t.getNewValue());
+						System.out.println("newvalue: " + t.getNewValue());
+					}
+				});
 
 		// some issue with strings and ints
 		valuesCol.setCellFactory(TextFieldTableCell
-				.forTableColumn(new StringConverter<Double>() {
+			.forTableColumn(new StringConverter<Double>() {
 
-					@Override
-					public Double fromString(String userInput) {
-						// try{
-						return Double.valueOf(userInput);
-						/*
-						 * } catch(NumberFormatException e){
-						 * System.out.println("Number Format Exception"); }
-						 */
-					}
+				@Override
+				public Double fromString(String userInput) {
+					// try{
+					return Double.valueOf(userInput);
+					/*
+					 * } catch(NumberFormatException e){
+					 * System.out.println("Number Format Exception"); }
+					 */
+				}
 
+				@Override
+				public String toString(Double t) {
+					return t.toString();
+				}
+			}));
+		valuesCol
+				.setOnEditCommit(new EventHandler<CellEditEvent<VariableView, Double>>() {
 					@Override
-					public String toString(Double t) {
-						return t.toString();
+					public void handle(CellEditEvent<VariableView, Double> t) {
+						t.getTableView().getItems().get(t.getTablePosition().getRow())
+								.setValue(t.getNewValue());
 					}
-				}));
-		valuesCol.setOnEditCommit(new EventHandler<CellEditEvent<VariableView, Double>>() {
-			@Override
-			public void handle(CellEditEvent<VariableView, Double> t) {
-				t.getTableView().getItems().get(t.getTablePosition().getRow())
-						.setValue(t.getNewValue());
-			}
-		});
+				});
 
 		variablesTable.getColumns().addAll(variablesCol, valuesCol);
 		variablesTable.setEditable(true);
@@ -153,9 +168,8 @@ public class SideBar extends VBox {
 		getChildren().add(userCommands);
 
 		ListView<String> userCommandsList = new ListView<String>();
-		commandItems = FXCollections.observableArrayList(
-				"String1", "String2", "String3");
-		//create an object instead
+		commandItems = FXCollections.observableArrayList();
+		// create an object instead
 		userCommandsList.setItems(commandItems);
 		userCommandsList.setMaxWidth(Double.MAX_VALUE);
 		userCommandsList.setPrefHeight(150);
@@ -172,7 +186,6 @@ public class SideBar extends VBox {
 		historyList.setItems(historyItems);
 		historyList.setMaxWidth(Double.MAX_VALUE);
 		historyList.setPrefHeight(150);
-		// setHistory("test");
 		getChildren().add(historyList);
 
 		// TODO: Selected item can only have action once until other item is
@@ -212,7 +225,6 @@ public class SideBar extends VBox {
 		// return sidePane;
 	}
 
-	
 	public void setHistory(String string) {
 		historyItems.add(string);
 	}
@@ -229,7 +241,6 @@ public class SideBar extends VBox {
 				return;
 			}
 		}
-		;
 
 		variablesList.add(variable);
 
@@ -239,14 +250,77 @@ public class SideBar extends VBox {
 		 */
 
 	}
-	
-	public void updateCommand(String s){
-		commandItems.add(s);
+
+	public void updateCommand(String newCommand) {
+		for (String command : commandItems) {
+			if (command.equals(newCommand))
+				return;
+		}
+		commandItems.add(newCommand);
 	}
 	
-	private void updateTurtleProperties (int ID){
-		//TODO: kjsdlkfajilwjfakjd
-		//remove all current
+	private void createTurtlePropertiesTable(){
+		
+		turtlePropertiesList = FXCollections.observableArrayList(new VariableView("ID", myActiveTurtle.getID()), new VariableView("Pen Position", "Down"));
+		// variablesList.add(new Variable("Added var2.5", 5));
+
+		turtlePropertiesTable = new TableView<VariableView>();
+		
+		TableColumn<VariableView, String> propertiesCol = new TableColumn<VariableView, String>(
+				"Properties");
+		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
+		TableColumn<VariableView, String> valuesCol = new TableColumn<VariableView, String>(
+				"Values");
+
+		propertiesCol.setCellValueFactory(new PropertyValueFactory<VariableView, String>(
+				"myName"));
+		valuesCol.setCellValueFactory(new PropertyValueFactory<VariableView, String>(
+				"myProperty"));
+
+		propertiesCol.setPrefWidth(152); // TODO: set dynamically
+		valuesCol.setPrefWidth(150);
+
+		turtlePropertiesTable.getColumns().addAll(propertiesCol, valuesCol);
+		turtlePropertiesTable.setEditable(true);
+
+		turtlePropertiesTable.setMaxWidth(Double.MAX_VALUE);
+		turtlePropertiesTable.setPrefHeight(150);
+
+		getChildren().add(turtlePropertiesTable);
+		turtlePropertiesTable.setItems(turtlePropertiesList);
+	}
+
+	private void updateTurtleProperties(int ID) {
+		// TODO: kjsdlkfajilwjfakjd
+		
+		
+		
+		// remove all current
+		//turtle ID
+/*			HBox turtleIDBox = new HBox();
+			Text turtleIDText = new Text("Turtle ID");
+			turtleIDBox.getChildren().add(turtleIDText);
+			
+			TextField turtleIDField = new TextField();
+			turtleIDBox.getChildren().add(turtleIDField);
+			
+			getChildren().add(turtleIDBox);
+			
+			//pen up?
+			HBox penUpBox = new HBox();
+			Text penUpText = new Text("Pen");
+			turtleIDBox.getChildren().add(penUpText);
+			
+			TextField turtleIDField = new TextField();
+			turtleIDBox.getChildren().add(turtleIDField);
+			
+			getChildren().add(turtleIDBox);*/
+
+	}
+	
+	private void updateTurtleProperties(){
 		
 	}
+	
+	
 }

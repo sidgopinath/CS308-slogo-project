@@ -37,7 +37,8 @@ public class CustomizationBar extends HBox {
 	public CustomizationBar(SLogoController controller,
 			Map<Integer, TurtleView> turtleList, Drawer drawer, Workspace workspace,
 			Stage stage, Dimension2D dimensions) {
-		// select language
+
+	
 		setPadding(new Insets(0, dimensions.getWidth() / 120, 0,
 				dimensions.getWidth() / 120));
 		setSpacing(dimensions.getWidth() / 120);

@@ -47,8 +47,8 @@ public class TurtleView extends ImageView {
 	public double setAbsoluteHeading(double angle) {
 		double old = getRotate();
 		setRotate(adjustAngle(angle));
-		myHeading = angle;
-		return getRotate() - old;
+		myHeading = getRotate() - old;
+		return myHeading;
 	}
 
 	public void setPenUp(boolean isUp) {
@@ -87,8 +87,8 @@ public class TurtleView extends ImageView {
 
 	public double getYCoord() {
 		double yCoord = getTranslateY();
-		if (yCoord == -0) //fix some formatting errors
-			return 0;
+		if (yCoord == 0)
+			return yCoord;
 		return -1 * yCoord;
 	}
 

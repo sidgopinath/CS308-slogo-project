@@ -1,6 +1,6 @@
 package view;
 
-protected class Strings {
+public class Strings {
 
 	protected static final String DEFAULT_TURTLE_IMG = "resources/images/defaultTurtle.png";
 	protected static final String USER_DEFINED_COMMANDS_HEADER = "UserDefinedCommandsHeader";

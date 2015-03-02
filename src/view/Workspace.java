@@ -4,7 +4,6 @@ import java.util.Map;
 
 import javafx.geometry.Dimension2D;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
@@ -19,10 +18,14 @@ public class Workspace extends StackPane {
 	private Rectangle myBackground;
 	private Map<Integer, TurtleView> myTurtles;
 	private SideBar mySidebar;
-	// TODO: move myTUrtles to this class?
+	// TODO: move myTUrtles to this class
 
 	private TurtleView myActiveTurtle;
 
+	//
+
+	// public static final double X_ADJUSTMENT = GRID_WIDTH / 2;
+	// public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2;
 
 	// TODO: associate a Group of lines with the TurtleView object (maybe as a
 	// myDrawing variable, so that way it can be moved easily and associated
@@ -33,11 +36,7 @@ public class Workspace extends StackPane {
 		// dimensions.getWidth()/85, dimensions.getWidth()/85));
 		myBackground = new Rectangle(dimensions.getWidth() * 11.7 / 16,
 				dimensions.getHeight() * 10 / 16);
-        myBackground.widthProperty().bind(widthProperty().subtract(20));
-        myBackground.heightProperty().bind(heightProperty().subtract(20));
-        
 		myBackground.setFill(Color.WHITE);
-		
 		myTurtles = turtleList;
 		mySidebar = sidebar;
 
@@ -48,14 +47,14 @@ public class Workspace extends StackPane {
 
 		// TODO: make the turtles list here and have the view simply "get" it
 		TurtleView turtle = turtleList.get(0);
-		turtleList.put(1, turtle);
+		turtleList.put(0, turtle);
 		// setAlignment(Pos.CENTER);
 		getChildren().addAll(myBackground, lines, turtle);
 
 	}
 
 	public void addTurtle() {// int id, TurtleView turtle) {
-		int newID = myTurtles.size() + 1;
+		int newID = myTurtles.size();
 		// We utilize a hashmap because if in the future turtles can be deleted,
 		// we do not want to have ID's that are reused/changed
 		TurtleView newTurtle = new TurtleView(newID,

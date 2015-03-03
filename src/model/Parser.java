@@ -82,26 +82,14 @@ public class Parser implements Observer{
 	public void parseAndExecute(String input) throws InstantiationException,IllegalAccessException, IllegalArgumentException,InvocationTargetException, ModelException, NoSuchMethodException,SecurityException {
 		try {
 			myFurthestDepth = 0;
-			// System.out.println("parser input" + input);
-			input = input.replaceAll("\\s+", " ");
-			String[] splitCommands = input.split(" ");
+			String[] splitCommands = input.split("\\s+");
 			List<Node> nodeList = new ArrayList<Node>();
 			while (myFurthestDepth < splitCommands.length) {
 				nodeList.add(makeTree(splitCommands));
-				// System.out.println("tree done");
 			}
-			
-//			for (Node root : nodeList) {
-//				System.out.println("new tree");
-//				System.out.println(root.getInstruction());
-//				printTree(root);
-//				printInOrderTraversal(root);
-//			}
-			
 			for (Node root : nodeList) {
 				root.getInstruction().execute();
 			}
-
 		} catch (Exception e) {
 			System.out.println("in parse and execute");
 			e.printStackTrace();
@@ -109,41 +97,14 @@ public class Parser implements Observer{
 			throw new ModelException();
 		}
 	}
-		
-//	private void turtleCommandGetter(List<TurtleCommand> cList, Node root) {
-//		for(Node n: inOrderTraverser(root)){
-//			//System.out.println(n.getValue());
-//			TurtleCommand t = n.getInstruction().getTurtleCommand();
-//			//System.out.println(t);
-//			if(t!=null)
-//				cList.add(t);
-//		}
-//	}
-
-//	private List<Node> inOrderTraverser(Node root) {
-//		List<Node> output = new ArrayList();
-//		inOrderTraverserHelper(output,root);
-//		return output;
-//	}
 	
-//	private void inOrderTraverserHelper(List<Node> in,Node root) {
-//		if(root.getChildren()!=null){
-//			List<Node> children = root.getChildren();
-//			for(int i =0; i<children.size();i++){
-//				inOrderTraverserHelper(in,children.get(i));
-//			}
-//		}
-//	}
-
 	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ModelException {
 		int myVars = 0;
 		int neededVars = -1;
 		Node myNode = null;
 		List<Instruction> futureInstructions = new ArrayList<Instruction>();
-		
-		// go through and determine what type of node we are adding
 		String match = testMatches(command[myFurthestDepth]).toUpperCase();
-		
+		System.out.println("match " + match);
 		switch (match){
 		//TODO: instead of while loop, find where closing bracket is
 		//run until you hit that
@@ -175,12 +136,15 @@ public class Parser implements Observer{
 			return new Node(tempInt);
 		case "COMMAND":
 			myFurthestDepth++;
-			if(myExecutionParameters.getCommand(command[myFurthestDepth-1])!=null){
+			System.out.println(myExecutionParameters.getCommand(command[myFurthestDepth-1])!=null);
+			if(myExecutionParameters.getUserCommandMap().containsKey(command[myFurthestDepth-1])&&(myFurthestDepth<2||myFurthestDepth>=2&&testMatches(command[myFurthestDepth-2]).toUpperCase()!="MAKEUSERINSTRUCTION")){
 				myNode = new Node(new UserRunningInstruction(futureInstructions, command[myFurthestDepth-1], mySLogoView, myExecutionParameters));
 				System.out.println(" Node "+ myNode);
 				neededVars = 1;
 			}
 			else{
+				myExecutionParameters.addCommand(command[myFurthestDepth-1], null);
+				
 				return new Node(new StringInstruction(command[myFurthestDepth-1], myExecutionParameters));
 			}
 			break;
@@ -192,7 +156,6 @@ public class Parser implements Observer{
 			//this is either a known command or invalid input.  
 			//instantiate the command, if reflection cannot find the file then must be invalid
 		if(myNode==null){
-			System.out.println("match" + match);
 			try{
 				Instruction myInt = Class.forName("model.instructions."+myCommandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,mySLogoView, myExecutionParameters});
 				myFurthestDepth++;
@@ -210,9 +173,6 @@ public class Parser implements Observer{
 		}
 		while(myVars<neededVars){
 			Node level = makeTree(command);
-//			System.out.println("got kid " + level.getInstruction() + " for "
-//							+ myNode.getInstruction() + " " + myVars + " "
-//							+ neededVars);
 			myNode.addChild(level);
 			myVars++;
 		}
@@ -231,20 +191,14 @@ public class Parser implements Observer{
         return regex.matcher(input).matches();
     }
 	
-//	public boolean matchString (String input, String regex) {
-//		return input.matches(regex);
-//    }
-	
 	private String testMatches(String test) {
 		if (test.trim().length() > 0) {
 			for (Entry<String, Pattern> p : myPatterns) {
 				if (match(test, p.getValue())) {
-					// System.out.println(String.format("%s matches %s", test, p.getKey()));
 					return p.getKey();
 				}
 			}
 		}
-		// System.out.println(String.format("%s not matched", test));
 		return "NONE";
 	}
 
@@ -256,6 +210,5 @@ public class Parser implements Observer{
 	@Override
 	public void update(Observable o, Object arg) {
 		myExecutionParameters = (ExecutionEnvironment) o;
-		// System.out.println("notified"+executionParameters.get());
 	}
 }

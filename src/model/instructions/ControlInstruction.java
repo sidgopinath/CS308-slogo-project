@@ -10,7 +10,7 @@ public class ControlInstruction extends Instruction{
 	public ControlInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
 		super(dependencies, instructionType, view, environment);
 	}
-
+// to recurse [ :count ] [ IFELSE EQUALS? :count 0 [ fd 1 ] [ fd recurse [ - :count 1 ] ] ]
 	public enum implementers {
 		MAKEVARIABLE(2),
 		REPEAT(2),
@@ -61,14 +61,16 @@ public class ControlInstruction extends Instruction{
 			}
 			return executeList(myDependencies.get(2));
 		case "MAKEUSERINSTRUCTION":
-			String commandName = myDependencies.get(0).getName();
-			myEnvironment.addCommand(commandName, this);
-			return 1.0;
+			return addToMap();
 		default:
 			return 0.0;
 		}
 	}
-	
+	public double addToMap(){
+		String commandName = myDependencies.get(0).getName();
+		myEnvironment.addCommand(commandName, this);
+		return 1;
+	}
 	public double forLoop(Instruction varHead, Instruction listHead, int startIndex, int endIndex, int increment){
 		double returnVal = 0;
 		for(int i =startIndex; i<=endIndex; i+=increment){
@@ -89,7 +91,7 @@ public class ControlInstruction extends Instruction{
 	}
 	
 	public double makeVariable(Instruction input, Instruction value){
-		myEnvironment.addVariable(input.getName(), value);
+		myEnvironment.addVariable(input.getName(), value.execute());
 		return value.execute();
 	}
 	

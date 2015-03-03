@@ -67,7 +67,7 @@ public class SLogoView implements Observer {
 	// TODO: move myTUrtles to relavant class (Workspace). Maybe drawer too? But
 	// there is no functionality after moving it
 	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>();
-    private TabPane myTabPane;
+    private TabPane myTabPane = new TabPane();
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
 	public SLogoView(Stage s) {
@@ -131,7 +131,6 @@ public class SLogoView implements Observer {
       root.add(mySidebar, 1, 3, 1, 2);
       myEditor = new Editor(myController, mySidebar, myDimensions);
       root.add(myEditor, 0, 4);
-      myTabPane = new TabPane();
       Tab tab = new Tab();
       tab.setText("SLogoView 1");
       tab.setContent(root);

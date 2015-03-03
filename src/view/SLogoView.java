@@ -133,7 +133,7 @@ public class SLogoView implements Observer {
       myRoot.add(myEditor, 0, 4);
       TabPane tabPane = new TabPane();
       Tab tab = new Tab();
-      tab.setText("View 1");
+      tab.setText("SLogoView 1");
       tab.setContent(myRoot);
       tabPane.getTabs().add(tab);
       return tabPane;

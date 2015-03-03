@@ -10,7 +10,7 @@ public class Variable extends Instruction{
 
 	@Override
 	public double execute(){
-		return myEnvironment.getVariable(myInstructionType).execute();
+		return myEnvironment.getVariable(myInstructionType);
 	}
 	@Override
 	public int getNumberOfArguments() {

@@ -9,7 +9,7 @@ import model.instructions.Instruction;
 public class ExecutionEnvironment extends Observable{
 	
 	private Map<String,Instruction> myUserInstructionMap;
-	private Map<String, Instruction> myVariableMap;
+	private Map<String, Double> myVariableMap;
 	
 	public ExecutionEnvironment(){
 		clear();
@@ -22,7 +22,7 @@ public class ExecutionEnvironment extends Observable{
 		updateObserver();
 	}
 	
-	public void addVariable(String variableName, Instruction value){
+	public void addVariable(String variableName, Double value){
 		if(myVariableMap.containsKey(variableName))
 			myVariableMap.remove(variableName);
 		myVariableMap.put(variableName, value);
@@ -35,7 +35,7 @@ public class ExecutionEnvironment extends Observable{
 		clearChanged();
 	}
 
-	public Instruction getVariable(String key){
+	public Double getVariable(String key){
 		return myVariableMap.get(key);
 	}
 	
@@ -51,14 +51,14 @@ public class ExecutionEnvironment extends Observable{
 	
 	public void clear(){
 		myUserInstructionMap = new HashMap<String, Instruction>();
-		myVariableMap = new HashMap<String, Instruction>();
+		myVariableMap = new HashMap<String, Double>();
 	}
 	
 	public Map<String, Instruction> getUserCommandMap(){
 		return myUserInstructionMap;
 	}
 	
-	public Map<String, Instruction> getVariableMap(){
+	public Map<String, Double> getVariableMap(){
 		return myVariableMap;
 	}
 }

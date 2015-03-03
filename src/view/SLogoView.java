@@ -52,7 +52,6 @@ import controller.SLogoController;
 
 public class SLogoView implements Observer {
 	private Stage myStage;
-	private GridPane myRoot;
 	protected ResourceBundle myResources;
 	private Map<String, Node> variables;
 	private Drawer drawer;
@@ -68,6 +67,7 @@ public class SLogoView implements Observer {
 	// TODO: move myTUrtles to relavant class (Workspace). Maybe drawer too? But
 	// there is no functionality after moving it
 	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>();
+    private TabPane myTabPane;
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
 	public SLogoView(Stage s) {
@@ -81,7 +81,6 @@ public class SLogoView implements Observer {
 		});
 		// activeTurtleID = 1;
 
-		myRoot = new GridPane();
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 		lines.setManaged(false);
 		// myRoot.setGridLinesVisible(true);
@@ -91,7 +90,7 @@ public class SLogoView implements Observer {
 		myDimensions = new Dimension2D(bounds.getWidth(), bounds.getHeight());
 		myStage.setResizable(false);
 
-		TabPane myTabPane = configureUI();
+		configureUI();
 		setupScene(myStage, myTabPane, myDimensions.getWidth(), myDimensions.getHeight());
 	}
 
@@ -114,8 +113,9 @@ public class SLogoView implements Observer {
 //		myRoot.add(myEditor, 0, 4);
 //        myRoot.add(configureTabs(myRoot));
 //	}
-	 private TabPane configureUI() {
-      setGridPaneConstraints();
+	 private void configureUI() {
+	  GridPane root = new GridPane();
+      setGridPaneConstraints(root);
     
       // set initial turtle
       TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
@@ -123,20 +123,19 @@ public class SLogoView implements Observer {
     
       mySidebar = new SideBar(myTurtles, myController);
       setDefaultWorkspace();
-      myRoot.add(configureTopMenu(), 0, 0, 2, 1);
-      myRoot.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace,
+      root.add(configureTopMenu(), 0, 0, 2, 1);
+      root.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace,
               myStage, myDimensions), 0, 1);
-      myRoot.add(configureAddTurtlesButton(), 1, 2);
-      myRoot.add(myWorkspace, 0, 3);
-      myRoot.add(mySidebar, 1, 3, 1, 2);
+      root.add(configureAddTurtlesButton(), 1, 2);
+      root.add(myWorkspace, 0, 3);
+      root.add(mySidebar, 1, 3, 1, 2);
       myEditor = new Editor(myController, mySidebar, myDimensions);
-      myRoot.add(myEditor, 0, 4);
-      TabPane tabPane = new TabPane();
+      root.add(myEditor, 0, 4);
+      myTabPane = new TabPane();
       Tab tab = new Tab();
       tab.setText("SLogoView 1");
-      tab.setContent(myRoot);
-      tabPane.getTabs().add(tab);
-      return tabPane;
+      tab.setContent(root);
+      myTabPane.getTabs().add(tab);
     }
 
 	// does this do anything?
@@ -254,7 +253,7 @@ public class SLogoView implements Observer {
 //		return title;
 //		
 //	}
-	private void setGridPaneConstraints() {
+	private void setGridPaneConstraints(GridPane root) {
 		// menu bar
 		RowConstraints row0 = new RowConstraints();
 		row0.setPercentHeight(2);
@@ -271,18 +270,18 @@ public class SLogoView implements Observer {
 		RowConstraints row4 = new RowConstraints();
 		row4.setPercentHeight(20);
 
-		myRoot.getRowConstraints().add(row0);
-		myRoot.getRowConstraints().add(row1);
-		myRoot.getRowConstraints().add(row2);
-		myRoot.getRowConstraints().add(row3);
-		myRoot.getRowConstraints().add(row4);
+		root.getRowConstraints().add(row0);
+		root.getRowConstraints().add(row1);
+		root.getRowConstraints().add(row2);
+		root.getRowConstraints().add(row3);
+		root.getRowConstraints().add(row4);
 
 		ColumnConstraints col1 = new ColumnConstraints();
 		col1.setPercentWidth(75);
 		ColumnConstraints col2 = new ColumnConstraints();
 		col2.setPercentWidth(25);
-		myRoot.getColumnConstraints().add(col1);
-		myRoot.getColumnConstraints().add(col2);
+		root.getColumnConstraints().add(col1);
+		root.getColumnConstraints().add(col2);
 	}
 
 	private void setDefaultWorkspace() {

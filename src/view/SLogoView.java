@@ -28,6 +28,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -89,29 +91,53 @@ public class SLogoView implements Observer {
 		myDimensions = new Dimension2D(bounds.getWidth(), bounds.getHeight());
 		myStage.setResizable(false);
 
-		configureUI();
-		setupScene(myStage, myRoot, myDimensions.getWidth(), myDimensions.getHeight());
+		TabPane myTabPane = configureUI();
+		setupScene(myStage, myTabPane, myDimensions.getWidth(), myDimensions.getHeight());
 	}
 
-	private void configureUI() {
-		setGridPaneConstraints();
-
-		// set initial turtle
-		TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
-		myTurtles.put(0, turtle);
-
-		mySidebar = new SideBar(myTurtles, myController);
-		setDefaultWorkspace();
-		myRoot.add(configureTopMenu(), 0, 0, 2, 1);
-		myRoot.add(configureTopRow(), 0, 1, 2, 1);
-		myRoot.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace,
-				myStage, myDimensions), 0, 2);
-		myRoot.add(configureAddTurtlesButton(), 1, 2);
-		myRoot.add(myWorkspace, 0, 3);
-		myRoot.add(mySidebar, 1, 3, 1, 2);
-		myEditor = new Editor(myController, mySidebar, myDimensions);
-		myRoot.add(myEditor, 0, 4);
-	}
+//	private void configureUI() {
+//		setGridPaneConstraints();
+//
+//		// set initial turtle
+//		TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
+//		myTurtles.put(0, turtle);
+//
+//		mySidebar = new SideBar(myTurtles, myController);
+//		setDefaultWorkspace();
+//		myRoot.add(configureTopMenu(), 0, 0, 2, 1);
+//		myRoot.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace,
+//				myStage, myDimensions), 0, 2);
+//		myRoot.add(configureAddTurtlesButton(), 1, 2);
+//		myRoot.add(myWorkspace, 0, 3);
+//		myRoot.add(mySidebar, 1, 3, 1, 2);
+//		myEditor = new Editor(myController, mySidebar, myDimensions);
+//		myRoot.add(myEditor, 0, 4);
+//        myRoot.add(configureTabs(myRoot));
+//	}
+	 private TabPane configureUI() {
+      setGridPaneConstraints();
+    
+      // set initial turtle
+      TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
+      myTurtles.put(0, turtle);
+    
+      mySidebar = new SideBar(myTurtles, myController);
+      setDefaultWorkspace();
+      myRoot.add(configureTopMenu(), 0, 0, 2, 1);
+      myRoot.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace,
+              myStage, myDimensions), 0, 1);
+      myRoot.add(configureAddTurtlesButton(), 1, 2);
+      myRoot.add(myWorkspace, 0, 3);
+      myRoot.add(mySidebar, 1, 3, 1, 2);
+      myEditor = new Editor(myController, mySidebar, myDimensions);
+      myRoot.add(myEditor, 0, 4);
+      TabPane tabPane = new TabPane();
+      Tab tab = new Tab();
+      tab.setText("View 1");
+      tab.setContent(myRoot);
+      tabPane.getTabs().add(tab);
+      return tabPane;
+    }
 
 	// does this do anything?
 	// do we need to return anything
@@ -221,13 +247,13 @@ public class SLogoView implements Observer {
 	}
 
 	// TODO: make into a tab pane
-	private Text configureTopRow() {
-		Text title = new Text("SLogo");
-		title.setFont(new Font(30));
-		title.setTextAlignment(TextAlignment.CENTER); // why does this not work
-		return title;
-	}
-
+//	private Text configureTopRow() {
+//		Text title = new Text("SLogo");
+//		title.setFont(new Font(30));
+//		title.setTextAlignment(TextAlignment.CENTER); // why does this not work
+//		return title;
+//		
+//	}
 	private void setGridPaneConstraints() {
 		// menu bar
 		RowConstraints row0 = new RowConstraints();

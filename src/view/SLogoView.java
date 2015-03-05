@@ -83,7 +83,6 @@ public class SLogoView implements Observer {
 
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 		lines.setManaged(false);
-		// myRoot.setGridLinesVisible(true);
 
 		Screen screen = Screen.getPrimary();
 		Rectangle2D bounds = screen.getVisualBounds();
@@ -94,25 +93,6 @@ public class SLogoView implements Observer {
 		setupScene(myStage, myTabPane, myDimensions.getWidth(), myDimensions.getHeight());
 	}
 
-//	private void configureUI() {
-//		setGridPaneConstraints();
-//
-//		// set initial turtle
-//		TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
-//		myTurtles.put(0, turtle);
-//
-//		mySidebar = new SideBar(myTurtles, myController);
-//		setDefaultWorkspace();
-//		myRoot.add(configureTopMenu(), 0, 0, 2, 1);
-//		myRoot.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace,
-//				myStage, myDimensions), 0, 2);
-//		myRoot.add(configureAddTurtlesButton(), 1, 2);
-//		myRoot.add(myWorkspace, 0, 3);
-//		myRoot.add(mySidebar, 1, 3, 1, 2);
-//		myEditor = new Editor(myController, mySidebar, myDimensions);
-//		myRoot.add(myEditor, 0, 4);
-//        myRoot.add(configureTabs(myRoot));
-//	}
 	 private void configureUI() {
 	  GridPane root = new GridPane();
       setGridPaneConstraints(root);
@@ -121,20 +101,24 @@ public class SLogoView implements Observer {
       TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
       myTurtles.put(0, turtle);
     
+      //TODO: move tabpane to mainview and create a gridpane within tabview
       mySidebar = new SideBar(myTurtles, myController);
       setDefaultWorkspace();
-      root.add(configureTopMenu(), 0, 0, 2, 1);
+      //root.add(configureTopMenu(), 0, 0, 2, 1);
       root.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace,
-              myStage, myDimensions), 0, 1);
-      root.add(configureAddTurtlesButton(), 1, 2);
-      root.add(myWorkspace, 0, 3);
-      root.add(mySidebar, 1, 3, 1, 2);
+              myStage, myDimensions), 0, 0);
+      root.add(configureAddTurtlesButton(), 1, 0);
+      root.add(myWorkspace, 0, 1);
+      root.add(mySidebar, 1, 1, 1, 2);
       myEditor = new Editor(myController, mySidebar, myDimensions);
-      root.add(myEditor, 0, 4);
+      root.add(myEditor, 0, 2);
+      
       Tab tab = new Tab();
       tab.setText("SLogoView 1");
       tab.setContent(root);
       myTabPane.getTabs().add(tab);
+	  root.setGridLinesVisible(true);
+
     }
 
 	// does this do anything?
@@ -253,8 +237,10 @@ public class SLogoView implements Observer {
 //		
 //	}
 	private void setGridPaneConstraints(GridPane root) {
+		
+		//TODO: move menu bar to MainView
 		// menu bar
-		RowConstraints row0 = new RowConstraints();
+	/*	RowConstraints row0 = new RowConstraints();
 		row0.setPercentHeight(2);
 		// tabs
 		RowConstraints row1 = new RowConstraints();
@@ -273,7 +259,14 @@ public class SLogoView implements Observer {
 		root.getRowConstraints().add(row1);
 		root.getRowConstraints().add(row2);
 		root.getRowConstraints().add(row3);
-		root.getRowConstraints().add(row4);
+		root.getRowConstraints().add(row4);*/
+		
+		RowConstraints row0 = new RowConstraints();
+		row0.setPercentHeight(4);
+		RowConstraints row1 = new RowConstraints();
+		row1.setPercentHeight(60);
+		RowConstraints row2 = new RowConstraints();
+		row1.setPercentHeight(20);
 
 		ColumnConstraints col1 = new ColumnConstraints();
 		col1.setPercentWidth(75);
@@ -372,15 +365,9 @@ public class SLogoView implements Observer {
 		mySidebar.updateVariable(variable);
 	}
 
-	// TODO THIS
-	// this should be in the workspace, but it would have to be called twice in
-	// this class and in that class
-	// but then again maybe not because the group is added on in this class
 	public double clearScreen(int id) {
-		// these group of lines somehow need to be connected with the turtle
 		lines.getChildren().clear();
 		myTurtles.get(id).setAbsoluteHeading(0);
-		// update with clearscreen
 		double dist = myTurtles.get(id).setXY(0, 0);
 		mySidebar.updateTurtleProperties(id); // dist is used twice so that
 												// turtle properties can be

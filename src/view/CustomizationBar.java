@@ -44,16 +44,9 @@ public class CustomizationBar extends HBox {
 		getChildren().add(configureLanguageOptions());
 
 		// select turtle image
-		HBox customizeTurtleBox = new HBox(10);
-		Text selectTurtle = new Text(myResources.getString("SelTurtle"));
-		Button uploadImg = new Button(myResources.getString("Upload"));
-		uploadImg.setPrefSize(dimensions.getWidth() / 12, dimensions.getHeight() / 29);
-		// uploadImg.setPadding(new Insets(0, 0, 0, 3));
-		uploadImg.setOnAction(e -> uploadTurtleFile(turtleList.get(0)));
-
-		customizeTurtleBox.getChildren().addAll(selectTurtle, uploadImg);
-		getChildren().add(customizeTurtleBox);
-
+		selectTurtleImage(dimensions);
+		
+		//TODO: set pen color for the active turtle. 
 		// select pen color
 		HBox customizePenBox = new HBox(10);
 
@@ -136,4 +129,15 @@ public class CustomizationBar extends HBox {
 				});
 		return selectLanguage;
 	}
+	
+	private void selectTurtleImage(Dimension2D dimensions){
+		HBox customizeTurtleBox = new HBox(10);
+		Text selectTurtle = new Text(myResources.getString("SelTurtle"));
+		Button uploadImg = new Button(myResources.getString("Upload"));
+		uploadImg.setPrefSize(dimensions.getWidth() / 12, dimensions.getHeight() / 29);
+		uploadImg.setOnAction(e -> uploadTurtleFile(myWorkspace.getActiveTurtle()));
+		customizeTurtleBox.getChildren().addAll(selectTurtle, uploadImg);
+		getChildren().add(customizeTurtleBox);
+	}
+	
 }

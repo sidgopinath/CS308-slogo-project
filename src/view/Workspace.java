@@ -13,52 +13,29 @@ import javafx.scene.text.Text;
 
 public class Workspace extends StackPane {
 
-	// TOOD: check for hardcoded visual display values and make it so that they
-	// are dynamically fit
-
-	// private StackPane myDisplay;
 	private Rectangle myBackground;
 	private Map<Integer, TurtleView> myTurtles;
 	private SideBar mySidebar;
-	// TODO: move myTUrtles to this class
 
 	private TurtleView myActiveTurtle;
+	//TODO: set initial id to 1
 	private static final int INITIAL_TURTLE_ID = 0;
-	//private static 
-
-	//
-
-	// public static final double X_ADJUSTMENT = GRID_WIDTH / 2;
-	// public static final double Y_ADJUSTMENT = GRID_HEIGHT / 2;
-
-	// TODO: associate a Group of lines with the TurtleView object (maybe as a
-	// myDrawing variable, so that way it can be moved easily and associated
-	// with the correct turtle)
+	
 	public Workspace(Group lines,
 			Dimension2D dimensions, SideBar sidebar) {
-		// setPadding(new Insets(0, dimensions.getWidth()/85,
-		// dimensions.getWidth()/85, dimensions.getWidth()/85));
+
 		myBackground = new Rectangle(dimensions.getWidth() * 11.7 / 16,
 				dimensions.getHeight() * 10 / 16);
 		myBackground.setFill(Color.WHITE);
     	myTurtles = new HashMap<Integer, TurtleView>(); //TODO: move
 		mySidebar = sidebar;
 		
-		//create initial turtle
 		
-		
-
-//		myActiveTurtle = myTurtles.get(1);
-		//configureTurtleEventHandler(1); // TODO: this needs to be called every
-										// time you make a new one
-		// TODO: the first turtle's id needs to be made into 1
-
-		// TODO: make the turtles list here and have the view simply "get" it
-	//	TurtleView turtle = turtleList.get(1);
-	//	turtleList.put(1, turtle);
-		// setAlignment(Pos.CENTER);
+	
 		getChildren().addAll(myBackground, lines);
-	//change both values within the method from 0 to 1
+	//TODO: change both values within the method from 0 to 1
+		
+		//create initial turtle (id = 1)
 		addTurtle();
 		setActiveTurtle(INITIAL_TURTLE_ID);
 
@@ -66,19 +43,14 @@ public class Workspace extends StackPane {
 
 	public void addTurtle() {// int id, TurtleView turtle) {
 		TurtleView newTurtle;
-		System.out.println(myTurtles.size());
 		int newID = myTurtles.size();//+1;
-		System.out.println("newid" + newID);
 		// We utilize a hashmap because if in the future turtles can be deleted,
 		// we do not want to have ID's that are reused/changed
 		 newTurtle = new TurtleView(newID,
 				new Image(Strings.DEFAULT_TURTLE_IMG));
-		myTurtles.put(newID, newTurtle); // TODO: newId's are utilized twice. is
-											// that okay?
-		System.out.println(myTurtles);
+		myTurtles.put(newID, newTurtle);
 		configureTurtleEventHandler(newID);
 		getChildren().add(newTurtle);
-		System.out.println("where is the turtle image");
 	}
 
 	public void setBackground(Color color) {
@@ -102,18 +74,12 @@ public class Workspace extends StackPane {
 		System.out.println("newID" + ID);
 	}
 
-	/*
-	 * //this may not be necessary private void configureTurtleEventHandlers(){
-	 * for (Integer i: myTurtles.keySet()){ TurtleView activeTurtle =
-	 * myTurtles.get(i); activeTurtle.setOnMouseClicked(e ->
-	 * setActiveTurtleID(activeTurtle.getID())); } }
-	 */
-
 	private void configureTurtleEventHandler(int ID) {
 		TurtleView selectedTurtle = myTurtles.get(ID);
 		selectedTurtle.setOnMouseClicked(e -> setActiveTurtle(selectedTurtle.getID()));
 	}
 
+	//TODO
 	public TurtleView getActiveTurtle() {
 		return myActiveTurtle;
 	}

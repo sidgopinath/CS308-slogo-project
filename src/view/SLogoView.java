@@ -248,10 +248,6 @@ public class SLogoView implements Observer {
 		stage.show();
 	}
 
-	//public void updateVariable(Property variable) {
-	//	mySidebar.updateVariable(variable);
-	//}
-
 	public double clearScreen(int id) {
 		lines.getChildren().clear();
 		myWorkspace.getTurtleMap().get(id).setAbsoluteHeading(0);

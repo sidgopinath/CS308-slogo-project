@@ -29,12 +29,7 @@ public class SLogoController {
 	 * @param input
 	 */
 	public void parseInput(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
-		try{
 			myParser.parseAndExecute(input);
-		}
-		catch (ModelException e){
-			System.out.println("ModelException thrown");
-		}
 	}
 	
 	/**

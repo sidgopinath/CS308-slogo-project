@@ -96,7 +96,7 @@ public class TurtleView extends ImageView {
 
 	// for consistency
 	public double getXCoord() {
-		return Converter.roundToSignificantFigures(getTranslateX(),2);
+		return getTranslateX();
 	}
 	
 	/**

@@ -139,11 +139,13 @@ public class SLogoView implements Observer {
         // return returnString;
     }
 
-    public Turtle getTurtleInfo(int index) {
-        ImageView temp = myWorkspace.getTurtleMap().get(index);
-        return new Turtle(temp.getX(), temp.getY(), temp.getRotate());
+    
+//    public Turtle getTurtleInfo(int index) {
+//        ImageView temp = myTurtles.get(index);
+//        return new Turtle(temp.getX(), temp.getY(), temp.getRotate());
+//
+//    }
 
-    }
 
     // this one is not actually used
     // TODO: what is being passed in and how to update the tableview? may have

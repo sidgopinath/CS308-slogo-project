@@ -3,7 +3,9 @@ package view;
 //move lambda function into the main UI? 
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.DecimalFormat;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import controller.SLogoController;
 import javafx.beans.value.ChangeListener;
@@ -31,6 +33,8 @@ public class SideBar extends VBox {
 	private ObservableList<VariableView> variablesList;
 	private SLogoController myController;
 	private TableView<VariableView> variablesTable;
+    public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
+    private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 	// private Workspace myWorkspace;
 
 	// when do you ever use getActiveTurtle???? If it is never used, remove
@@ -78,10 +82,10 @@ public class SideBar extends VBox {
 
 		variablesTable = new TableView<VariableView>();
 		TableColumn<VariableView, String> variablesCol = new TableColumn<VariableView, String>(
-				"Variables");
+		        myResources.getString("Variables"));
 		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
 		TableColumn<VariableView, Double> valuesCol = new TableColumn<VariableView, Double>(
-				"Values");
+		        myResources.getString("Values"));
 
 		variablesCol.setCellValueFactory(new PropertyValueFactory<VariableView, String>(
 				"myName"));
@@ -250,15 +254,15 @@ public class SideBar extends VBox {
 		turtlePropertiesTable = new TableView<VariableView>();
 
 		TableColumn<VariableView, String> propertiesCol = new TableColumn<VariableView, String>(
-				"Properties");
+		        myResources.getString("Properties"));
 		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
 		TableColumn<VariableView, String> valuesCol = new TableColumn<VariableView, String>(
-				"Values");
+		        myResources.getString("Values"));
 
 		propertiesCol.setCellValueFactory(new PropertyValueFactory<VariableView, String>(
-				"myName"));
+		        "myName"));
 		valuesCol.setCellValueFactory(new PropertyValueFactory<VariableView, String>(
-				"myProperty"));
+		        "myProperty"));
 
 		propertiesCol.setPrefWidth(152); // TODO: set dynamically
 		valuesCol.setPrefWidth(150);
@@ -277,20 +281,20 @@ public class SideBar extends VBox {
 	// if we use an observer this does not have to be updated every time
 	protected void updateTurtleProperties(int ID) {
 		// myWorkspace.getActiveTurtle();
-
+	    DecimalFormat decimalFormat = new DecimalFormat("#.#");
 		TurtleView updatedTurtle = myTurtles.get(ID);
 		// for (String property : turtlePropertiesList) {
 		ObservableList<VariableView> turtlePropertiesList = FXCollections
 				.observableArrayList(
-						new VariableView("ID", String.valueOf(updatedTurtle.getID())),
-						new VariableView("X-position", String.valueOf(updatedTurtle
-								.getTranslateX())),
-						new VariableView("Y-position", String.valueOf(updatedTurtle
+						new VariableView(myResources.getString("ID"), String.valueOf(updatedTurtle.getID())),
+						new VariableView(myResources.getString("XPos"), String.valueOf(decimalFormat.format(updatedTurtle
+								.getTranslateX()))),
+						new VariableView(myResources.getString("YPos"), String.valueOf(updatedTurtle
 								.getYCoord())),
-						new VariableView("Heading", String.valueOf(updatedTurtle
-								.getHeading())), new VariableView("Pen Position",
+						new VariableView(myResources.getString("Heading"), String.valueOf(updatedTurtle
+								.getHeading())), new VariableView(myResources.getString("PenPos"),
 								updatedTurtle.getPenPosition()), new VariableView(
-								"Turtle Image", updatedTurtle.isShowing()));
+								myResources.getString("TurImg"), updatedTurtle.isShowing()));
 		turtlePropertiesTable.setItems(turtlePropertiesList);
 
 		// remove all current

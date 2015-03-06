@@ -25,7 +25,7 @@ public class MainView {
     
     private Dimension2D myDimensions;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
-    protected ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");;
+    protected ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 	private Stage myStage;
     private TabPane myTabPane = new TabPane();
     private SceneSetter mySceneSetter = new SceneSetter();
@@ -41,7 +41,7 @@ public class MainView {
 		myStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
-                System.out.println("CLOSING");
+                System.out.println(myResources.getString("Closing"));
             }
         });
 		myStage.setResizable(false);
@@ -65,15 +65,15 @@ public class MainView {
 	}
 
     private MenuBar configureTopMenu() {
-        Menu file = new Menu("File");
-        Menu info = new Menu("Info");
-        MenuItem help = new MenuItem("Help");
-        MenuItem work = new MenuItem("New Workspace");
+        Menu file = new Menu(myResources.getString("File"));
+        Menu info = new Menu(myResources.getString("Info"));
+        MenuItem help = new MenuItem(myResources.getString("Help"));
+        MenuItem work = new MenuItem(myResources.getString("NewWork"));
 
         // perhaps change these expressions into lambdas?
         help.setOnAction(e -> displayPage("/src/resources/help.html"));
         work.setOnAction(e -> newTab());
-        MenuItem exit = new MenuItem("Exit");
+        MenuItem exit = new MenuItem(myResources.getString("Exit"));
         file.getItems().addAll(work);
         file.getItems().addAll(exit);
         info.getItems().addAll(help);

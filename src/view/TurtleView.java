@@ -2,6 +2,8 @@
 
 package view;
 
+import java.text.DecimalFormat;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -86,18 +88,19 @@ public class TurtleView extends ImageView {
 		// isVisible = show;
 	}
 
-	public double getYCoord() {
+	public String getYCoord() {
+	    DecimalFormat decimalFormat = new DecimalFormat("#.#");
 		double yCoord = getTranslateY();
 		if (yCoord == -0)
-			return 0;
-		return -1 * yCoord;
+			return "0";
+		return decimalFormat.format(-1 * yCoord);
 	}
 
 	// for consistency
 	public double getXCoord() {
-		return getTranslateX();
+		return Converter.roundToSignificantFigures(getTranslateX(),2);
 	}
-
+	
 	/**
 	 * Normalizes a double parameter to an angle between 0-360
 	 * 

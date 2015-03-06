@@ -2,6 +2,7 @@ package view;
 
 import java.io.File;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import controller.SLogoController;
 import javafx.beans.value.ChangeListener;
@@ -22,11 +23,11 @@ import javafx.stage.Stage;
 
 public class CustomizationBar extends HBox {
 
-	Map<Integer, TurtleView> myTurtles;
-	SLogoController myController;
-	Drawer myDrawer;
-	Workspace myWorkspace;
-	Stage myStage;
+	private SLogoController myController;
+	private Workspace myWorkspace;
+	private Stage myStage;
+    public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
+    private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 
 	public CustomizationBar(SLogoController controller,
 			Map<Integer, TurtleView> turtleList, Drawer drawer, Workspace workspace,
@@ -37,8 +38,6 @@ public class CustomizationBar extends HBox {
 		setSpacing(dimensions.getWidth() / 120);
 
 		myController = controller;
-		myTurtles = turtleList;
-		myDrawer = drawer;
 		myWorkspace = workspace;
 		myStage = stage;
 
@@ -46,8 +45,8 @@ public class CustomizationBar extends HBox {
 
 		// select turtle image
 		HBox customizeTurtleBox = new HBox(10);
-		Text selectTurtle = new Text("Select Turtle");
-		Button uploadImg = new Button("Upload");
+		Text selectTurtle = new Text(myResources.getString("SelTurtle"));
+		Button uploadImg = new Button(myResources.getString("Upload"));
 		uploadImg.setPrefSize(dimensions.getWidth() / 12, dimensions.getHeight() / 29);
 		// uploadImg.setPadding(new Insets(0, 0, 0, 3));
 		uploadImg.setOnAction(e -> uploadTurtleFile(turtleList.get(0)));
@@ -92,9 +91,9 @@ public class CustomizationBar extends HBox {
 
 	private File displayFileChooser() {
 		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Open Image File");
+		fileChooser.setTitle(myResources.getString("OpenImage"));
 		fileChooser.getExtensionFilters()
-				.add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg",
+				.add(new FileChooser.ExtensionFilter(myResources.getString("ImageFiles"), "*.png", "*.jpg",
 						"*.gif"));
 		return fileChooser.showOpenDialog(myStage);
 	}
@@ -109,7 +108,7 @@ public class CustomizationBar extends HBox {
 
 	private HBox configureLanguageOptions() {
 		HBox selectLanguage = new HBox(10);
-		Text select = new Text("Select Language");
+		Text select = new Text(myResources.getString("SelLan"));
 		ComboBox<String> languageOptions = new ComboBox<String>();
 		ObservableList<String> languages = FXCollections.observableArrayList("English",
 				"Chinese", "French", "German", "Italian", "Japanese", "Korean",

@@ -10,4 +10,5 @@ public class Strings {
 	protected static final String SELECT_PEN_COLOR = "Select Pen Color";
 	protected static final String VARIABLES_HEADER = "VariablesHeader";
 	protected static final String HISTORY_HEADER = "HistoryHeader";
+    protected static final String NEW_TURTLE = "Add a turtle";
 }

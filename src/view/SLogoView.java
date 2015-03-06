@@ -37,7 +37,7 @@ import controller.SLogoController;
 
 public class SLogoView implements Observer {
 	private Stage myStage;
-	protected ResourceBundle myResources;
+	protected ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 	private Map<String, Node> variables;
 	private Drawer drawer;
 	private Workspace myWorkspace;
@@ -58,7 +58,6 @@ public class SLogoView implements Observer {
 		createNewController(this);
 		// activeTurtleID = 1;
 		this.myDimensions=myDimensions;
-		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 		lines.setManaged(false);
 	}
 
@@ -82,19 +81,13 @@ public class SLogoView implements Observer {
         root.getRowConstraints().add(row2);
 	}
 
-	private void setDefaultWorkspace() {
-		myWorkspace = new Workspace(myTurtles, lines, myDimensions, mySidebar);
-		drawer = new Drawer(myWorkspace.getGridWidth(), myWorkspace.getGridHeight());
-	}
-
-
     private SLogoController createNewController(SLogoView view) {
         return new SLogoController(view);
     }
 
     private Button configureAddTurtlesButton() {
         // Add turtle button
-        Button newTurtleButton = new Button("Add a turtle");
+        Button newTurtleButton = new Button(myResources.getString("AddTurtle"));
         newTurtleButton.setStyle("-fx-base: #b6e7c9;");
         newTurtleButton.setAlignment(Pos.CENTER_RIGHT);
         newTurtleButton.setOnAction(e -> myWorkspace.addTurtle());
@@ -118,7 +111,9 @@ public class SLogoView implements Observer {
       
         //TODO: move tabpane to mainview and create a gridpane within tabview
         mySidebar = new SideBar(myTurtles, myController);
-        setDefaultWorkspace();
+
+        myWorkspace = new Workspace(myTurtles, lines, myDimensions, mySidebar);
+        drawer = new Drawer(myWorkspace.getGridWidth(), myWorkspace.getGridHeight());
         //root.add(configureTopMenu(), 0, 0, 2, 1);
         root.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace, myStage, myDimensions), 0, 0);
         root.add(configureAddTurtlesButton(), 1, 0);
@@ -239,11 +234,11 @@ public class SLogoView implements Observer {
 
 	// these definitely methods should not be in SLogoView;
 	public double getXCor(int id) {
-		return myTurtles.get(0).getTranslateX();
+		return myTurtles.get(id).getTranslateX();
 	}
 
 	public double getYCor(int id) {
-		return myTurtles.get(0).getYCoord();
+		return Double.parseDouble(myTurtles.get(id).getYCoord());
 	}
 
 	public void openDialog(String message) {
@@ -256,7 +251,7 @@ public class SLogoView implements Observer {
 		Scene scene = new Scene(root, myDimensions.getWidth() / 4,
 				myDimensions.getHeight() / 6);
 
-		stage.setTitle("Error");
+		stage.setTitle(myResources.getString("Error"));
 		stage.setScene(scene);
 		stage.show();
 	}

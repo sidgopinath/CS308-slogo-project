@@ -47,7 +47,7 @@ public class MovementInstruction extends Instruction {
 		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
 			myReturnVal = myDependencies.get(0).execute();
-			myPolar = new Polar(1, myReturnVal);
+			myPolar = new Polar(0, myReturnVal);
 			updateView();
 			return myReturnVal;
 		case "BACKWARD":

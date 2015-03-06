@@ -54,6 +54,7 @@ public class Drawer {
 				double turtleY = turtle.getLayoutY();
 				double moveX = Math.sin(Math.toRadians(polar.myAngle + 180 - angle))
 						* polar.myDistance;
+				System.out.println("My sin "+Math.sin(Math.toRadians(polar.myAngle + 180 - angle)));
 				double moveY = Math.cos(Math.toRadians(polar.myAngle + 180 - angle))
 						* polar.myDistance;
 				double startX = turtleX + turtle.getTranslateX() + turtle.getFitWidth()

@@ -8,7 +8,6 @@ import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
@@ -28,7 +27,6 @@ public class MainView {
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     protected ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");;
 	private Stage myStage;
-	private Group myMainGroup = new Group();
     private TabPane myTabPane = new TabPane();
     private SceneSetter mySceneSetter = new SceneSetter();
     private int myTabCount=1;
@@ -51,7 +49,6 @@ public class MainView {
         Rectangle2D bounds = screen.getVisualBounds();
         myDimensions = new Dimension2D(bounds.getWidth(), bounds.getHeight());
         SLogoView mySlogoView = new SLogoView(s,myDimensions);
-		myMainGroup.getChildren().add(configureTopMenu());
 		Tab tab = new Tab();
 		tab.setText("SLogoView 1");
 	    tab.setContent(mySlogoView.configureUI());
@@ -62,7 +59,7 @@ public class MainView {
 	    row1.setPercentHeight(96);
 	    grid.getRowConstraints().add(row0);
 	    grid.getRowConstraints().add(row1);
-	    grid.add(myMainGroup,0,0);
+	    grid.add(configureTopMenu(),0,0);
         grid.add(myTabPane,0,1);
         mySceneSetter.setupScene(myStage, grid, myDimensions.getWidth(), myDimensions.getHeight(), myResources);
 	}

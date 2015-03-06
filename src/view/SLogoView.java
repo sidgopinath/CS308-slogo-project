@@ -98,30 +98,28 @@ public class SLogoView implements Observer {
     private void updateCommand(String s) {
         mySidebar.updateCommand(s);
     }
-	// ---------
 
 	// methods for the backend to call. TODO: organize better
     public GridPane configureUI() {
         GridPane root = new GridPane();
         setGridPaneConstraints(root);
-      
+        
         // set initial turtle
-        TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
-        myTurtles.put(0, turtle);
-      
-        //TODO: move tabpane to mainview and create a gridpane within tabview
-        mySidebar = new SideBar(myTurtles, myController);
-
+        
+        //temp
+       // TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
+      //  myTurtles.put(0, turtle);
+        
+        mySidebar = new SideBar(myWorkspace, myController);
         myWorkspace = new Workspace(myTurtles, lines, myDimensions, mySidebar);
-        drawer = new Drawer(myWorkspace.getGridWidth(), myWorkspace.getGridHeight());
-        //root.add(configureTopMenu(), 0, 0, 2, 1);
+      //  myWorkspace.addTurtle();
+        drawer = new Drawer(myWorkspace);
         root.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace, myStage, myDimensions), 0, 0);
         root.add(configureAddTurtlesButton(), 1, 0);
         root.add(myWorkspace, 0, 1);
         root.add(mySidebar, 1, 1, 1, 2);
         myEditor = new Editor(myController, mySidebar, myDimensions);
         root.add(myEditor, 0, 2);
-      //  root.setGridLinesVisible(false);
         return root;
     }
 
@@ -135,17 +133,12 @@ public class SLogoView implements Observer {
          * for (TurtleCommand instruction : instructionList) { returnString +=
          * updateFromInstruction(instruction) + "\n"; }
          */
+    	System.out.println(myTurtles);
         List<Polyline> newlines = drawer.draw(myTurtles, instructionList, mySidebar);
         lines.getChildren().addAll(newlines);
 
         // return returnString;
     }
-
-    // make update from a single command
-    /*
-     * private String updateFromInstruction(TurtleCommand instruction) { return
-     * "return value"; }
-     */
 
     public Turtle getTurtleInfo(int index) {
         ImageView temp = myTurtles.get(index);
@@ -168,7 +161,7 @@ public class SLogoView implements Observer {
                 // or we can just keep the variables object as just a front end
                 // thing for displaying (otherwise both front and back end have
                 // access to it which may not be good)
-                mySidebar.updateVariable(new VariableView(name, value));
+                mySidebar.updateVariable(new Property(name, value));
             } else {
                 // variables.get(name).setText(value);
             }
@@ -182,7 +175,7 @@ public class SLogoView implements Observer {
 
 	public double setXY(int id, double x, double y) {
 		double xy = myTurtles.get(id).setXY(x, y);
-		mySidebar.updateTurtleProperties(id); // are these methods duplicated
+		mySidebar.updateTurtleProperties(id, myWorkspace); // are these methods duplicated
 												// code since they are all the
 												// same thing with just one
 												// added line in them?
@@ -197,7 +190,7 @@ public class SLogoView implements Observer {
 		} else {
 			heading = myTurtles.get(id).setAbsoluteHeading(angle);
 		}
-		mySidebar.updateTurtleProperties(id);
+		mySidebar.updateTurtleProperties(id, myWorkspace);
 		return heading;
 	}
 
@@ -208,7 +201,7 @@ public class SLogoView implements Observer {
 		 */
 
 		myTurtles.get(id).setPenUp(setPen);
-		mySidebar.updateTurtleProperties(id);
+		mySidebar.updateTurtleProperties(id, myWorkspace);
 	}
 
 	public double getPenDown(int id) {
@@ -225,7 +218,7 @@ public class SLogoView implements Observer {
 
 	public void showTurtle(int id, boolean show) {
 		myTurtles.get(id).showTurtle(show);
-		mySidebar.updateTurtleProperties(id);
+		mySidebar.updateTurtleProperties(id, myWorkspace);
 	}
 
 	public double getHeading(int id) {
@@ -256,7 +249,7 @@ public class SLogoView implements Observer {
 		stage.show();
 	}
 
-	public void updateVariable(VariableView variable) {
+	public void updateVariable(Property variable) {
 		mySidebar.updateVariable(variable);
 	}
 
@@ -264,7 +257,7 @@ public class SLogoView implements Observer {
 		lines.getChildren().clear();
 		myTurtles.get(id).setAbsoluteHeading(0);
 		double dist = myTurtles.get(id).setXY(0, 0);
-		mySidebar.updateTurtleProperties(id);
+		mySidebar.updateTurtleProperties(id, myWorkspace);
 		return dist;
 	}
 
@@ -273,7 +266,7 @@ public class SLogoView implements Observer {
 		ExecutionEnvironment env = (ExecutionEnvironment) o;
 		for (String s : env.getVariableMap().keySet()) {
 			double value = env.getVariableMap().get(s);
-			mySidebar.updateVariable(new VariableView(s, value));
+			mySidebar.updateVariable(new Property(s, value));
 		}
 
 		for (String s : env.getUserCommandMap().keySet()) {

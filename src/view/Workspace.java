@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 
 public class Workspace extends StackPane {
 
@@ -21,6 +22,9 @@ public class Workspace extends StackPane {
 	// TODO: move myTUrtles to this class
 
 	private TurtleView myActiveTurtle;
+	
+	//TODO: set to 1
+	private static final int INITIAL_TURTLE_ID = 0;
 
 	//
 
@@ -40,30 +44,28 @@ public class Workspace extends StackPane {
 		myTurtles = turtleList;
 		mySidebar = sidebar;
 
-		myActiveTurtle = myTurtles.get(0);
-		configureTurtleEventHandler(0); // TODO: this needs to be called every
-										// time you make a new one
-		// TODO: the first turtle's id needs to be made into 1
-
-		// TODO: make the turtles list here and have the view simply "get" it
-		TurtleView turtle = turtleList.get(0);
-		turtleList.put(0, turtle);
-		// setAlignment(Pos.CENTER);
-		getChildren().addAll(myBackground, lines, turtle);
+		getChildren().addAll(myBackground, lines);
+	//change both values within the method from 0 to 1
+		addTurtle();
+		setActiveTurtle(INITIAL_TURTLE_ID);
 
 	}
 
 	public void addTurtle() {// int id, TurtleView turtle) {
-		int newID = myTurtles.size();
+		TurtleView newTurtle;
+		System.out.println(myTurtles.size());
+		int newID = myTurtles.size(); //TODO:+1;
+		System.out.println("newid" + newID);
 		// We utilize a hashmap because if in the future turtles can be deleted,
 		// we do not want to have ID's that are reused/changed
-		TurtleView newTurtle = new TurtleView(newID,
+		 newTurtle = new TurtleView(newID,
 				new Image(Strings.DEFAULT_TURTLE_IMG));
 		myTurtles.put(newID, newTurtle); // TODO: newId's are utilized twice. is
 											// that okay?
 		System.out.println(myTurtles);
 		configureTurtleEventHandler(newID);
 		getChildren().add(newTurtle);
+		System.out.println("where is the turtle image");
 	}
 
 	public void setBackground(Color color) {
@@ -83,7 +85,7 @@ public class Workspace extends StackPane {
 											// sidebar. but that seems less
 											// relevant :(
 		myActiveTurtle = myTurtles.get(ID);
-		mySidebar.updateTurtleProperties(ID);
+		mySidebar.updateTurtleProperties(ID, this);
 		System.out.println("newID" + ID);
 	}
 
@@ -101,5 +103,9 @@ public class Workspace extends StackPane {
 
 	public TurtleView getActiveTurtle() {
 		return myActiveTurtle;
+	}
+	
+	public Map<Integer, TurtleView> getTurtleMap(){
+		return myTurtles;
 	}
 }

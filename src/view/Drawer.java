@@ -15,8 +15,12 @@ public class Drawer {
 	private double[] myXBounds = new double[2];
 	private double[] myYBounds = new double[2];
 	private double[] myHalf = new double[2];
+	private Workspace myWorkspace;
 
-	public Drawer(double xMax, double yMax) {
+	public Drawer(Workspace workspace){//double xMax, double yMax) {
+		myWorkspace = workspace;
+		double xMax = myWorkspace.getGridWidth();
+		double yMax = myWorkspace.getGridHeight();
 		myXBounds[0] = 0;
 		myXBounds[1] = xMax+5;
 		myYBounds[0] = 0;
@@ -28,13 +32,17 @@ public class Drawer {
 
 	// may have to remove list from turtlecommand
 	// TODO: remove list if it is no longer a list being used
+	
+	//get rid of list of turtlecommands if there is only one
 	public List<Polyline> draw(Map<Integer, TurtleView> turtles,
 			List<TurtleCommand> instructions, SideBar sidebar) {
 		ArrayList<Polyline> lines = new ArrayList<Polyline>();
 		Iterator<TurtleCommand> it = instructions.iterator();
 		while (it.hasNext()) {
 			TurtleCommand command = it.next();
+			System.out.println(command.getTurtleId());
 			TurtleView turtle = turtles.get(command.getTurtleId());
+			System.out.println(turtle);
 			Polar polar = command.getPolar();
 			// move turtle and draw line
 			if (polar.myDistance != 0) {
@@ -83,7 +91,7 @@ public class Drawer {
 					turtle.setAbsoluteHeading(polar.myAngle);
 				}
 			}
-			sidebar.updateTurtleProperties(command.getTurtleId());
+			sidebar.updateTurtleProperties(command.getTurtleId(), myWorkspace);
 		}
 
 		return lines;

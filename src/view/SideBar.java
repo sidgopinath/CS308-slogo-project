@@ -30,18 +30,18 @@ public class SideBar extends VBox {
 	private Map<Integer, TurtleView> myTurtles;
 	private ListView<String> historyList;
 	private ObservableList<String> historyItems;
-	private ObservableList<VariableView> variablesList;
+	private ObservableList<Property> variablesList;
 	private SLogoController myController;
-	private TableView<VariableView> variablesTable;
+	private TableView<Property> variablesTable;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
-	// private Workspace myWorkspace;
+	 private Workspace myWorkspace;
 
 	// when do you ever use getActiveTurtle???? If it is never used, remove
 	// myWorkspace completely and the method from the workspace class
 
-	// private ObservableList<VariableView> turtlePropertiesList;
-	private TableView<VariableView> turtlePropertiesTable;
+	// private ObservableList<Property> turtlePropertiesList;
+	private TableView<Property> turtlePropertiesTable;
 	// variablesList.add(new Variable("Added var2.5", 5));
 
 	private ObservableList<String> commandItems;
@@ -51,11 +51,12 @@ public class SideBar extends VBox {
 	// sidebarPane class with parameters that specify column constraints /
 	// location
 
-	public SideBar(Map<Integer, TurtleView> turtleList, SLogoController controller) {
-		myTurtles = turtleList;
+	public SideBar(Workspace workspace, SLogoController controller) {
+	//	myTurtles = turtleList;
 		myController = controller;
-		// myWorkspace = workspace;
-
+		 myWorkspace = workspace;
+		
+		
 		setPadding(new Insets(5, 15, 0, 0));
 		setSpacing(5);
 		setMaxWidth(Double.MAX_VALUE);
@@ -80,16 +81,16 @@ public class SideBar extends VBox {
 		variablesList = FXCollections.observableArrayList();
 		// variablesList.add(new Variable("Added var2.5", 5));
 
-		variablesTable = new TableView<VariableView>();
-		TableColumn<VariableView, String> variablesCol = new TableColumn<VariableView, String>(
+		variablesTable = new TableView<Property>();
+		TableColumn<Property, String> variablesCol = new TableColumn<Property, String>(
 		        myResources.getString("Variables"));
 		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
-		TableColumn<VariableView, Double> valuesCol = new TableColumn<VariableView, Double>(
+		TableColumn<Property, Double> valuesCol = new TableColumn<Property, Double>(
 		        myResources.getString("Values"));
 
-		variablesCol.setCellValueFactory(new PropertyValueFactory<VariableView, String>(
+		variablesCol.setCellValueFactory(new PropertyValueFactory<Property, String>(
 				"myName"));
-		valuesCol.setCellValueFactory(new PropertyValueFactory<VariableView, Double>(
+		valuesCol.setCellValueFactory(new PropertyValueFactory<Property, Double>(
 				"myVar"));
 
 		variablesCol.setPrefWidth(164); // TODO: set dynamically
@@ -99,9 +100,9 @@ public class SideBar extends VBox {
 
 		variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		variablesCol
-				.setOnEditCommit(new EventHandler<CellEditEvent<VariableView, String>>() {
+				.setOnEditCommit(new EventHandler<CellEditEvent<Property, String>>() {
 					@Override
-					public void handle(CellEditEvent<VariableView, String> t) {
+					public void handle(CellEditEvent<Property, String> t) {
 						t.getTableView().getItems().get(t.getTablePosition().getRow())
 								.setName(t.getNewValue());
 						System.out.println("newvalue: " + t.getNewValue());
@@ -129,9 +130,9 @@ public class SideBar extends VBox {
 					}
 				}));
 		valuesCol
-				.setOnEditCommit(new EventHandler<CellEditEvent<VariableView, Double>>() {
+				.setOnEditCommit(new EventHandler<CellEditEvent<Property, Double>>() {
 					@Override
-					public void handle(CellEditEvent<VariableView, Double> t) {
+					public void handle(CellEditEvent<Property, Double> t) {
 						t.getTableView().getItems().get(t.getTablePosition().getRow())
 								.setValue(t.getNewValue());
 					}
@@ -214,9 +215,9 @@ public class SideBar extends VBox {
 		historyItems.add(string);
 	}
 
-	public void updateVariable(VariableView variable) {
+	public void updateVariable(Property variable) {
 		// variablesTable.getItems().stream().forEach((o) ->
-		for (VariableView o : variablesTable.getItems()) {
+		for (Property o : variablesTable.getItems()) {
 			System.out.println("updatevar in sidebar class");
 			System.out.println(o.getName());
 			System.out.println(variable.getName());
@@ -247,21 +248,21 @@ public class SideBar extends VBox {
 	private void createTurtlePropertiesTable() {
 
 		// turtlePropertiesList = FXCollections.observableArrayList(new
-		// VariableView("ID", myWorkspace.getActiveTurtle().getID()), new
-		// VariableView("Pen Position", "Down"));
+		// Property("ID", myWorkspace.getActiveTurtle().getID()), new
+		// Property("Pen Position", "Down"));
 		// variablesList.add(new Variable("Added var2.5", 5));
 
-		turtlePropertiesTable = new TableView<VariableView>();
+		turtlePropertiesTable = new TableView<Property>();
 
-		TableColumn<VariableView, String> propertiesCol = new TableColumn<VariableView, String>(
+		TableColumn<Property, String> propertiesCol = new TableColumn<Property, String>(
 		        myResources.getString("Properties"));
 		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
-		TableColumn<VariableView, String> valuesCol = new TableColumn<VariableView, String>(
+		TableColumn<Property, String> valuesCol = new TableColumn<Property, String>(
 		        myResources.getString("Values"));
 
-		propertiesCol.setCellValueFactory(new PropertyValueFactory<VariableView, String>(
+		propertiesCol.setCellValueFactory(new PropertyValueFactory<Property, String>(
 		        "myName"));
-		valuesCol.setCellValueFactory(new PropertyValueFactory<VariableView, String>(
+		valuesCol.setCellValueFactory(new PropertyValueFactory<Property, String>(
 		        "myProperty"));
 
 		propertiesCol.setPrefWidth(152); // TODO: set dynamically
@@ -272,28 +273,28 @@ public class SideBar extends VBox {
 
 		turtlePropertiesTable.setMaxWidth(Double.MAX_VALUE);
 		turtlePropertiesTable.setPrefHeight(150);
-		updateTurtleProperties(0); // TODO: change ID to 1
+		//updateTurtleProperties(1, myWorkspace); // TODO: change ID to 1
 
 		getChildren().add(turtlePropertiesTable);
 		// turtlePropertiesTable.setItems(turtlePropertiesList);
 	}
 
 	// if we use an observer this does not have to be updated every time
-	protected void updateTurtleProperties(int ID) {
+	protected void updateTurtleProperties(int ID, Workspace workspace) {
 		// myWorkspace.getActiveTurtle();
 	    DecimalFormat decimalFormat = new DecimalFormat("#.#");
-		TurtleView updatedTurtle = myTurtles.get(ID);
+		TurtleView updatedTurtle = workspace.getTurtleMap().get(ID);
 		// for (String property : turtlePropertiesList) {
-		ObservableList<VariableView> turtlePropertiesList = FXCollections
+		ObservableList<Property> turtlePropertiesList = FXCollections
 				.observableArrayList(
-						new VariableView(myResources.getString("ID"), String.valueOf(updatedTurtle.getID())),
-						new VariableView(myResources.getString("XPos"), String.valueOf(decimalFormat.format(updatedTurtle
+						new Property(myResources.getString("ID"), String.valueOf(updatedTurtle.getID())),
+						new Property(myResources.getString("XPos"), String.valueOf(decimalFormat.format(updatedTurtle
 								.getTranslateX()))),
-						new VariableView(myResources.getString("YPos"), String.valueOf(updatedTurtle
+						new Property(myResources.getString("YPos"), String.valueOf(updatedTurtle
 								.getYCoord())),
-						new VariableView(myResources.getString("Heading"), String.valueOf(updatedTurtle
-								.getHeading())), new VariableView(myResources.getString("PenPos"),
-								updatedTurtle.getPenPosition()), new VariableView(
+						new Property(myResources.getString("Heading"), String.valueOf(updatedTurtle
+								.getHeading())), new Property(myResources.getString("PenPos"),
+								updatedTurtle.getPenPosition()), new Property(
 								myResources.getString("TurImg"), updatedTurtle.isShowing()));
 		turtlePropertiesTable.setItems(turtlePropertiesList);
 

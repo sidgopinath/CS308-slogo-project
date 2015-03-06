@@ -5,18 +5,18 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
-public class VariableView {
+public class Property {
 
 	private StringProperty myName;
 	private DoubleProperty myVar;
 	private StringProperty myProperty;
 
-	public VariableView(String varName, double varValue) {
+	public Property(String varName, double varValue) {
 		this.myName = new SimpleStringProperty(varName);
 		this.myVar = new SimpleDoubleProperty(varValue);
 	}
 
-	public VariableView(String varName, String property) {
+	public Property(String varName, String property) {
 		this.myName = new SimpleStringProperty(varName);
 		this.myProperty = new SimpleStringProperty(property);
 	}

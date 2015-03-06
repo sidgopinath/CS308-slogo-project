@@ -21,8 +21,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -31,8 +29,7 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.ExecutionEnvironment;
-import model.turtle.Turtle;
-import model.turtle.TurtleCommand;
+import model.TurtleCommand;
 import controller.SLogoController;
 
 public class SLogoView implements Observer {

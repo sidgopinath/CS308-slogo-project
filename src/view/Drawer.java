@@ -8,7 +8,7 @@ import java.util.Map;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import model.Polar;
-import model.turtle.TurtleCommand;
+import model.TurtleCommand;
 
 public class Drawer {
 	private Color myColor;
@@ -37,7 +37,7 @@ public class Drawer {
 	// TODO: remove list if it is no longer a list being used
 	public List<Polyline> draw(Map<Integer, TurtleView> turtles,
 			List<TurtleCommand> instructions, SideBar sidebar) {
-		ArrayList<Polyline> lines = new ArrayList<Polyline>();
+		List<Polyline> lines = new ArrayList<Polyline>();
 		Iterator<TurtleCommand> it = instructions.iterator();
 		while (it.hasNext()) {
 			TurtleCommand command = it.next();
@@ -101,7 +101,7 @@ public class Drawer {
 	}
 
 	private void wrapY(int dir, TurtleView turtle, Polar polar,
-			ArrayList<Polyline> lines, int i, double newY, double startX, double moveX,
+			List<Polyline> lines, int i, double newY, double startX, double moveX,
 			double moveY, double turtleY, double startY) {
 		double endX1 = startX + moveX
 				* Math.abs((Math.pow(-1, i) * (myYBounds[i] - newY + moveY)) / moveY);
@@ -117,7 +117,7 @@ public class Drawer {
 	}
 
 	private void wrapX(int dir, TurtleView turtle, Polar polar,
-			ArrayList<Polyline> lines, int i, double newX, double startY, double moveY,
+			List<Polyline> lines, int i, double newX, double startY, double moveY,
 			double moveX, double turtleX, double startX) {
 		double endY1 = startY + moveY
 				* Math.abs(Math.pow(-1, i) * (newX - moveX - myXBounds[i]) / moveX);

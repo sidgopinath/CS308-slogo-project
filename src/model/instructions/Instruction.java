@@ -5,7 +5,7 @@ import java.util.Observable;
 import java.util.Observer;
 
 import model.ExecutionEnvironment;
-import model.turtle.TurtleCommand;
+import model.TurtleCommand;
 import view.SLogoView;
 
 public abstract class Instruction implements Observer{

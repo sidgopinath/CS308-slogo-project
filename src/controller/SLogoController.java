@@ -2,10 +2,8 @@ package controller;
 
 import java.lang.reflect.InvocationTargetException;
 
-import view.SLogoView;
-import javafx.stage.Stage;
-import model.ModelException;
 import model.Parser;
+import view.SLogoView;
 
 
 public class SLogoController {

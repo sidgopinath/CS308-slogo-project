@@ -14,6 +14,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.control.FocusModel;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -115,14 +116,9 @@ public class SideBar extends VBox {
 					}
 				}));
 		valuesCol
-				.setOnEditCommit(new EventHandler<CellEditEvent<Property, Double>>() {
-					@Override
-					public void handle(CellEditEvent<Property, Double> t) {
-						t.getTableView().getItems().get(t.getTablePosition().getRow())
-								.setValue(t.getNewValue());
-					}
-				});
-
+				.setOnEditCommit(t -> t.getTableView().getItems().get(t.getTablePosition().getRow())
+								.setValue(t.getNewValue()));
+		
 		variablesTable.getColumns().addAll(variablesCol, valuesCol);
 		variablesTable.setEditable(true);
 
@@ -158,35 +154,9 @@ public class SideBar extends VBox {
 		// TODO: Selecting the same command after another of the same command
 		// does not work
 		historyList.getFocusModel().focusedItemProperty()
-				.addListener(new ChangeListener<String>() {
-					@Override
-					public void changed(ObservableValue<? extends String> ov,
-							String old_val, String new_val) {
-						try {
-							myController.parseInput(historyList.getFocusModel()
-									.getFocusedItem());
-						} catch (SecurityException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (InstantiationException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IllegalAccessException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IllegalArgumentException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (NoSuchMethodException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				});
-
+				.addListener(changeListener ->
+								{if(historyList.getFocusModel().getFocusedItem()!=null){myController.parseInput(historyList.getFocusModel()
+												.getFocusedItem());} historyList.getFocusModel().focus(-1);});
 		// return sidePane;
 	}
 

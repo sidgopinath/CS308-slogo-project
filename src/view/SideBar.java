@@ -2,12 +2,9 @@ package view;
 
 //move lambda function into the main UI? 
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
-import java.util.Map;
 import java.util.ResourceBundle;
 
-import controller.SLogoController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -16,21 +13,22 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
+import model.Parser;
 
 public class SideBar extends VBox {
 
 	private ListView<String> historyList;
 	private ObservableList<String> historyItems;
 	private ObservableList<Property> variablesList;
-	private SLogoController myController;
+	private Parser myParser;
 	private TableView<Property> variablesTable;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
@@ -44,8 +42,8 @@ public class SideBar extends VBox {
 	// sidebarPane class with parameters that specify column constraints /
 	// location
 
-	public SideBar(Workspace workspace, SLogoController controller) {
-		myController = controller;
+	public SideBar(Workspace workspace, Parser parser) {
+		myParser = parser;
 		myWorkspace = workspace;
 		
 		setDimensionRestrictions();
@@ -163,29 +161,16 @@ public class SideBar extends VBox {
 					public void changed(ObservableValue<? extends String> ov,
 							String old_val, String new_val) {
 						try {
-							myController.parseInput(historyList.getFocusModel()
+							myParser.parseAndExecute(historyList.getFocusModel()
 									.getFocusedItem());
 						} catch (SecurityException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (InstantiationException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (IllegalAccessException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						} catch (IllegalArgumentException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
-						} catch (InvocationTargetException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						} catch (NoSuchMethodException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
 					}
-				});
+					}});
 
 		// return sidePane;
 	}

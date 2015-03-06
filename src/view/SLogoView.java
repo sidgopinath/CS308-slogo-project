@@ -29,8 +29,8 @@ import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.ExecutionEnvironment;
+import model.Parser;
 import model.TurtleCommand;
-import controller.SLogoController;
 
 public class SLogoView implements Observer {
 	private Stage myStage;
@@ -39,11 +39,11 @@ public class SLogoView implements Observer {
 	private Drawer drawer;
 	private Workspace myWorkspace;
 	private Group lines = new Group();
-	private SLogoController myController=createNewController(this);
 	private Dimension2D myDimensions;
 	// private int activeTurtleID; //TODO: update this
 	private SideBar mySidebar;
 	private Editor myEditor;
+	private Parser myParser = createNewParser(this);
 
 	// TODO: move myTUrtles to relavant class (Workspace). Maybe drawer too? But
 	// there is no functionality after moving it
@@ -51,11 +51,12 @@ public class SLogoView implements Observer {
 
 	public SLogoView(Stage s, Dimension2D myDimensions) {
 		myStage = s;
-		createNewController(this);
+		createNewParser(this);
 		// activeTurtleID = 1;
 		this.myDimensions=myDimensions;
 		lines.setManaged(false);
 	}
+	
 
 	private void setGridPaneConstraints(GridPane root) {
 		
@@ -77,8 +78,8 @@ public class SLogoView implements Observer {
         root.getRowConstraints().add(row2);
 	}
 
-    private SLogoController createNewController(SLogoView view) {
-        return new SLogoController(view);
+    private Parser createNewParser(SLogoView view) {
+        return new Parser(view);
     }
 
     private Button configureAddTurtlesButton() {
@@ -107,14 +108,14 @@ public class SLogoView implements Observer {
       //  myTurtles.put(0, turtle);
     	Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>(); //TODO: move
 
-        mySidebar = new SideBar(myWorkspace, myController);
+        mySidebar = new SideBar(myWorkspace, myParser);
         myWorkspace = new Workspace(lines, myDimensions, mySidebar);
         drawer = new Drawer(myWorkspace);
-        root.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace, myStage, myDimensions), 0, 0);
+        root.add(new CustomizationBar(myParser, myTurtles, drawer, myWorkspace, myStage, myDimensions), 0, 0);
         root.add(configureAddTurtlesButton(), 1, 0);
         root.add(myWorkspace, 0, 1);
         root.add(mySidebar, 1, 1, 1, 2);
-        myEditor = new Editor(myController, mySidebar, myDimensions);
+        myEditor = new Editor(myParser, mySidebar, myDimensions);
         root.add(myEditor, 0, 2);
         return root;
     }

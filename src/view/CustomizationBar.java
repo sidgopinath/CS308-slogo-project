@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import controller.SLogoController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -20,16 +19,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import model.Parser;
 
 public class CustomizationBar extends HBox {
 
-	private SLogoController myController;
+	private Parser myParser;
 	private Workspace myWorkspace;
 	private Stage myStage;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 
-	public CustomizationBar(SLogoController controller,
+	public CustomizationBar(Parser parser,
 			Map<Integer, TurtleView> turtleList, Drawer drawer, Workspace workspace,
 			Stage stage, Dimension2D dimensions) {
 
@@ -37,7 +37,7 @@ public class CustomizationBar extends HBox {
 				dimensions.getWidth() / 120));
 		setSpacing(dimensions.getWidth() / 120);
 
-		myController = controller;
+		myParser = parser;
 		myWorkspace = workspace;
 		myStage = stage;
 
@@ -123,7 +123,7 @@ public class CustomizationBar extends HBox {
 					public void changed(ObservableValue<? extends String> ov,
 							String old_val, String new_val) {
 						System.out.println(new_val);
-						myController.setLanguage(new_val);
+						myParser.setLanguage(new_val);
 
 					}
 				});

@@ -34,7 +34,6 @@ public class SideBar extends VBox {
 	private TableView<Property> variablesTable;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
-	private Workspace myWorkspace;
 	private TableView<Property> turtlePropertiesTable;
 	private ObservableList<String> commandItems;
 
@@ -45,62 +44,18 @@ public class SideBar extends VBox {
 
 	public SideBar(Workspace workspace, SLogoController controller) {
 		myController = controller;
-		myWorkspace = workspace;	
 		setDimensionRestrictions();
 		
 		// turtle properties
-		createTitleText("Turtle Properties"); //TODO: myResources.get()
 		createTurtlePropertiesTable();
 		// updateTurtleProperties();
 
 		createVariablesPane();
+
+
 		
-
-		//user defin
-		createTitleText(myResources.getString("ID")); //"User-defined Commands"); //TODO:
-
-		ListView<String> userCommandsList = new ListView<String>();
-		commandItems = FXCollections.observableArrayList();
-		// create an object instead
-		userCommandsList.setItems(commandItems);
-		userCommandsList.setMaxWidth(Double.MAX_VALUE);
-		userCommandsList.setPrefHeight(150);
-		getChildren().add(userCommandsList);
-
-		// history pane
-		createTitleText(Strings.HISTORY_HEADER); //TODO:
-
-		historyList = new ListView<String>();
-		historyItems = FXCollections.observableArrayList();
-		historyList.setItems(historyItems);
-		historyList.setMaxWidth(Double.MAX_VALUE);
-		historyList.setPrefHeight(150);
-		getChildren().add(historyList);
-
-		// TODO: Selected item can only have action once until other item is
-		// selected
-		// TODO: Selecting the same command after another of the same command
-		// does not work
-		historyList.getFocusModel().focusedItemProperty()
-				.addListener(new ChangeListener<String>() {
-					@Override
-					public void changed(ObservableValue<? extends String> ov,
-							String old_val, String new_val) {
-							try {
-								myController.parseInput(historyList.getFocusModel()
-										.getFocusedItem());
-							} catch (InstantiationException | IllegalAccessException
-									| IllegalArgumentException
-									| InvocationTargetException | NoSuchMethodException
-									| SecurityException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-					
-					}
-				});
-
-		// return sidePane;
+		createUserCommandsPane();
+		createHistoryPane();
 	}
 
 	public void setHistory(String string) {
@@ -138,8 +93,10 @@ public class SideBar extends VBox {
 	}
 
 	private void createTurtlePropertiesTable() {
+		createTitleText(myResources.getString("PropertiesHeader"));
 		turtlePropertiesTable = new TableView<Property>();
 
+		//TODO: remove hardcoding
 		TableColumn<Property, String> propertiesCol = new TableColumn<Property, String>(
 		        myResources.getString("Properties"));
 		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
@@ -225,6 +182,9 @@ public class SideBar extends VBox {
 					public void handle(CellEditEvent<Property, String> t) {
 						t.getTableView().getItems().get(t.getTablePosition().getRow())
 								.setName(t.getNewValue());
+						
+						//parseandexecute("MAKE :var 90");
+						//TODO
 						System.out.println("newvalue: " + t.getNewValue());
 						//TODO: send an update to the controller back to the backend. 
 					}
@@ -267,5 +227,51 @@ public class SideBar extends VBox {
 		getChildren().add(variablesTable);
 		variablesTable.setItems(variablesList);
 	}
+	
+	private void createHistoryPane(){
+		createTitleText(myResources.getString("HistoryHeader")); //TODO:
+
+		historyList = new ListView<String>();
+		historyItems = FXCollections.observableArrayList();
+		historyList.setItems(historyItems);
+		historyList.setMaxWidth(Double.MAX_VALUE);
+		historyList.setPrefHeight(150);
+		getChildren().add(historyList);
+
+		// TODO: Selected item can only have action once until other item is
+		// selected
+		// TODO: Selecting the same command after another of the same command
+		// does not work
+		historyList.getFocusModel().focusedItemProperty()
+			.addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> ov,
+					String old_val, String new_val) {
+					try {
+						myController.parseInput(historyList.getFocusModel()
+								.getFocusedItem());
+					} catch (InstantiationException | IllegalAccessException
+							| IllegalArgumentException
+							| InvocationTargetException | NoSuchMethodException
+							| SecurityException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			});
+	}
+	
+	private void createUserCommandsPane(){
+		createTitleText(myResources.getString("UserDefinedCommandsHeader")); 
+		ListView<String> userCommandsList = new ListView<String>();
+		commandItems = FXCollections.observableArrayList();
+		// create an object instead
+		userCommandsList.setItems(commandItems);
+		userCommandsList.setMaxWidth(Double.MAX_VALUE);
+		userCommandsList.setPrefHeight(150);
+		getChildren().add(userCommandsList);
+		
+	}
+	
 
 }

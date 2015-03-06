@@ -17,10 +17,10 @@ public class Drawer {
 	private double[] myHalf = new double[2];
 
 	public Drawer(double xMax, double yMax) {
-		myXBounds[0] = 20;
-		myXBounds[1] = xMax + 20;
-		myYBounds[0] = 15;
-		myYBounds[1] = yMax + 15;
+		myXBounds[0] = 0;
+		myXBounds[1] = xMax+5;
+		myYBounds[0] = 0;
+		myYBounds[1] = yMax;
 		myHalf[0] = 0.5 * (myXBounds[1] - myXBounds[0]);
 		myHalf[1] = 0.5 * (myYBounds[1] - myYBounds[0]);
 		myColor = Color.BLACK;

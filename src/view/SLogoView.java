@@ -14,22 +14,13 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
-import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
@@ -37,14 +28,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.shape.Polyline;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import model.ExecutionEnvironment;
 import model.turtle.Turtle;
 import model.turtle.TurtleCommand;
@@ -57,43 +42,27 @@ public class SLogoView implements Observer {
 	private Drawer drawer;
 	private Workspace myWorkspace;
 	private Group lines = new Group();
-	private SLogoController myController;
+	private SLogoController myController=createNewController(this);
 	private Dimension2D myDimensions;
 	// private int activeTurtleID; //TODO: update this
-
 	private SideBar mySidebar;
 	private Editor myEditor;
 
 	// TODO: move myTUrtles to relavant class (Workspace). Maybe drawer too? But
 	// there is no functionality after moving it
 	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>();
-    private TabPane myTabPane = new TabPane();
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
-	public SLogoView(Stage s) {
+	public SLogoView(Stage s, Dimension2D myDimensions) {
 		myStage = s;
 		createNewController(this);
-		myStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			@Override
-			public void handle(WindowEvent t) {
-				System.out.println("CLOSING");
-			}
-		});
 		// activeTurtleID = 1;
-
+		this.myDimensions=myDimensions;
 		myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 		lines.setManaged(false);
-
-		Screen screen = Screen.getPrimary();
-		Rectangle2D bounds = screen.getVisualBounds();
-		myDimensions = new Dimension2D(bounds.getWidth(), bounds.getHeight());
-		myStage.setResizable(false);
-
-		configureUI();
-		setupScene(myStage, myTabPane, myDimensions.getWidth(), myDimensions.getHeight());
 	}
 
-	 private void configureUI() {
+	 public GridPane configureUI() {
 	  GridPane root = new GridPane();
       setGridPaneConstraints(root);
     
@@ -112,13 +81,8 @@ public class SLogoView implements Observer {
       root.add(mySidebar, 1, 1, 1, 2);
       myEditor = new Editor(myController, mySidebar, myDimensions);
       root.add(myEditor, 0, 2);
-      
-      Tab tab = new Tab();
-      tab.setText("SLogoView 1");
-      tab.setContent(root);
-      myTabPane.getTabs().add(tab);
 	  root.setGridLinesVisible(true);
-
+	  return root;
     }
 
 	// does this do anything?
@@ -171,14 +135,6 @@ public class SLogoView implements Observer {
 		}
 	}
 
-	private void setupScene(Stage stage, Parent root, double xSize, double ySize) {
-		Scene scene = new Scene(root, xSize, ySize);
-		stage.setTitle(myResources.getString("Title"));
-		stage.setScene(scene);
-		// scene.setOnKeyPressed(e -> handleKeyInput(e));
-		stage.show();
-	}
-
 	public double towards(int id, double x, double y) {
 		double angle = Math.toDegrees(Math.atan2(x, y));
 		return setHeading(id, angle, false);
@@ -201,32 +157,6 @@ public class SLogoView implements Observer {
 	 * myTurtles.get(0).getTranslateY()); } }
 	 */
 
-	private void displayPage(String loc) {
-		WebView browser = new WebView();
-		WebEngine webEngine = browser.getEngine();
-		webEngine.load("file://" + System.getProperty("user.dir") + loc);
-
-		Stage stage = new Stage();
-		setupScene(stage, browser, 1000, 750);
-	}
-
-	private MenuBar configureTopMenu() {
-		Menu file = new Menu("File");
-		Menu info = new Menu("Info");
-		MenuItem help = new MenuItem("Help");
-
-		// perhaps change these expressions into lambdas?
-		help.setOnAction(e -> displayPage("/src/resources/help.html"));
-		MenuItem exit = new MenuItem("Exit");
-		file.getItems().addAll(exit);
-		info.getItems().addAll(help);
-
-		exit.setOnAction(e -> Platform.exit());
-
-		MenuBar menuBar = new MenuBar();
-		menuBar.getMenus().addAll(file, info);
-		return menuBar;
-	}
 
 	// TODO: make into a tab pane
 //	private Text configureTopRow() {
@@ -266,7 +196,7 @@ public class SLogoView implements Observer {
 		RowConstraints row1 = new RowConstraints();
 		row1.setPercentHeight(60);
 		RowConstraints row2 = new RowConstraints();
-		row1.setPercentHeight(20);
+		row2.setPercentHeight(20);
 
 		ColumnConstraints col1 = new ColumnConstraints();
 		col1.setPercentWidth(75);
@@ -274,6 +204,9 @@ public class SLogoView implements Observer {
 		col2.setPercentWidth(25);
 		root.getColumnConstraints().add(col1);
 		root.getColumnConstraints().add(col2);
+        root.getRowConstraints().add(row0);
+        root.getRowConstraints().add(row1);
+        root.getRowConstraints().add(row2);
 	}
 
 	private void setDefaultWorkspace() {
@@ -389,8 +322,8 @@ public class SLogoView implements Observer {
 		}
 	}
 
-	public void createNewController(SLogoView view) {
-		myController = new SLogoController(view);
+	public SLogoController createNewController(SLogoView view) {
+		return new SLogoController(view);
 	}
 
 	private Button configureAddTurtlesButton() {

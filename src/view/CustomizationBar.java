@@ -105,6 +105,11 @@ public class CustomizationBar extends HBox {
 	private void changeBackgroundColor(Color color) {
 		myWorkspace.setBackground(color);
 	}
+	
+	private void changeBackgroundColor(int i){
+		ColorPicker colorPicker = new ColorPicker();
+		myWorkspace.setBackground(colorPicker.getCustomColors().get(i));
+	}
 
 	private HBox configureLanguageOptions() {
 		HBox selectLanguage = new HBox(10);

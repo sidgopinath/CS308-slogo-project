@@ -1,5 +1,6 @@
 package view;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import javafx.geometry.Dimension2D;
@@ -22,9 +23,8 @@ public class Workspace extends StackPane {
 	// TODO: move myTUrtles to this class
 
 	private TurtleView myActiveTurtle;
-	
-	//TODO: set to 1
 	private static final int INITIAL_TURTLE_ID = 0;
+	//private static 
 
 	//
 
@@ -34,16 +34,29 @@ public class Workspace extends StackPane {
 	// TODO: associate a Group of lines with the TurtleView object (maybe as a
 	// myDrawing variable, so that way it can be moved easily and associated
 	// with the correct turtle)
-	public Workspace(Map<Integer, TurtleView> turtleList, Group lines,
+	public Workspace(Group lines,
 			Dimension2D dimensions, SideBar sidebar) {
 		// setPadding(new Insets(0, dimensions.getWidth()/85,
 		// dimensions.getWidth()/85, dimensions.getWidth()/85));
 		myBackground = new Rectangle(dimensions.getWidth() * 11.7 / 16,
 				dimensions.getHeight() * 10 / 16);
 		myBackground.setFill(Color.WHITE);
-		myTurtles = turtleList;
+    	myTurtles = new HashMap<Integer, TurtleView>(); //TODO: move
 		mySidebar = sidebar;
+		
+		//create initial turtle
+		
+		
 
+//		myActiveTurtle = myTurtles.get(1);
+		//configureTurtleEventHandler(1); // TODO: this needs to be called every
+										// time you make a new one
+		// TODO: the first turtle's id needs to be made into 1
+
+		// TODO: make the turtles list here and have the view simply "get" it
+	//	TurtleView turtle = turtleList.get(1);
+	//	turtleList.put(1, turtle);
+		// setAlignment(Pos.CENTER);
 		getChildren().addAll(myBackground, lines);
 	//change both values within the method from 0 to 1
 		addTurtle();
@@ -54,7 +67,7 @@ public class Workspace extends StackPane {
 	public void addTurtle() {// int id, TurtleView turtle) {
 		TurtleView newTurtle;
 		System.out.println(myTurtles.size());
-		int newID = myTurtles.size(); //TODO:+1;
+		int newID = myTurtles.size();//+1;
 		System.out.println("newid" + newID);
 		// We utilize a hashmap because if in the future turtles can be deleted,
 		// we do not want to have ID's that are reused/changed

@@ -35,8 +35,6 @@ public class Drawer {
 
 	// may have to remove list from turtlecommand
 	// TODO: remove list if it is no longer a list being used
-	
-	//get rid of list of turtlecommands if there is only one
 	public List<Polyline> draw(Map<Integer, TurtleView> turtles,
 			List<TurtleCommand> instructions, SideBar sidebar) {
 		ArrayList<Polyline> lines = new ArrayList<Polyline>();
@@ -48,15 +46,15 @@ public class Drawer {
 			System.out.println(turtle);
 			Polar polar = command.getPolar();
 			// move turtle and draw line
-			if (polar.myDistance != 0) {
+			if (polar.getDistance() != 0) {
 				double angle = turtle.getRotate();
 				double turtleX = turtle.getLayoutX();
 				double turtleY = turtle.getLayoutY();
-				double moveX = Math.sin(Math.toRadians(polar.myAngle + 180 - angle))
-						* polar.myDistance;
-				System.out.println("My sin "+Math.sin(Math.toRadians(polar.myAngle + 180 - angle)));
-				double moveY = Math.cos(Math.toRadians(polar.myAngle + 180 - angle))
-						* polar.myDistance;
+				double moveX = Math.sin(Math.toRadians(polar.getAngle() + 180 - angle))
+						* polar.getDistance();
+				double moveY = Math.cos(Math.toRadians(polar.getAngle() + 180 - angle))
+						* polar.getDistance();
+
 				double startX = turtleX + turtle.getTranslateX() + turtle.getFitWidth()
 						/ 2;
 				double startY = turtleY + turtle.getTranslateY() + turtle.getFitHeight()
@@ -91,9 +89,9 @@ public class Drawer {
 				}
 			} else {
 				if (command.isRelative()) {
-					turtle.setRelativeHeading(polar.myAngle);
+					turtle.setRelativeHeading(polar.getAngle());
 				} else {
-					turtle.setAbsoluteHeading(polar.myAngle);
+					turtle.setAbsoluteHeading(polar.getAngle());
 				}
 			}
 			sidebar.updateTurtleProperties(command.getTurtleId(), myWorkspace);

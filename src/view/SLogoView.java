@@ -50,7 +50,6 @@ public class SLogoView implements Observer {
 
 	// TODO: move myTUrtles to relavant class (Workspace). Maybe drawer too? But
 	// there is no functionality after moving it
-	private Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>();
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
 	public SLogoView(Stage s, Dimension2D myDimensions) {
@@ -109,10 +108,10 @@ public class SLogoView implements Observer {
         //temp
        // TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
       //  myTurtles.put(0, turtle);
-        
+    	Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>(); //TODO: move
+
         mySidebar = new SideBar(myWorkspace, myController);
-        myWorkspace = new Workspace(myTurtles, lines, myDimensions, mySidebar);
-      //  myWorkspace.addTurtle();
+        myWorkspace = new Workspace(lines, myDimensions, mySidebar);
         drawer = new Drawer(myWorkspace);
         root.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace, myStage, myDimensions), 0, 0);
         root.add(configureAddTurtlesButton(), 1, 0);
@@ -133,18 +132,20 @@ public class SLogoView implements Observer {
          * for (TurtleCommand instruction : instructionList) { returnString +=
          * updateFromInstruction(instruction) + "\n"; }
          */
-    	System.out.println(myTurtles);
-        List<Polyline> newlines = drawer.draw(myTurtles, instructionList, mySidebar);
+    	//System.out.println(myWorkspace.getTurtleMap());
+        List<Polyline> newlines = drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar);
         lines.getChildren().addAll(newlines);
 
         // return returnString;
     }
 
-    public Turtle getTurtleInfo(int index) {
-        ImageView temp = myTurtles.get(index);
-        return new Turtle(temp.getX(), temp.getY(), temp.getRotate());
+    
+//    public Turtle getTurtleInfo(int index) {
+//        ImageView temp = myTurtles.get(index);
+//        return new Turtle(temp.getX(), temp.getY(), temp.getRotate());
+//
+//    }
 
-    }
 
     // this one is not actually used
     // TODO: what is being passed in and how to update the tableview? may have
@@ -174,7 +175,7 @@ public class SLogoView implements Observer {
     }
 
 	public double setXY(int id, double x, double y) {
-		double xy = myTurtles.get(id).setXY(x, y);
+		double xy = myWorkspace.getTurtleMap().get(id).setXY(x, y);
 		mySidebar.updateTurtleProperties(id, myWorkspace); // are these methods duplicated
 												// code since they are all the
 												// same thing with just one
@@ -185,10 +186,10 @@ public class SLogoView implements Observer {
 	public double setHeading(int id, double angle, boolean relative) {
 		double heading;
 		if (relative) {
-			heading = myTurtles.get(id).setRelativeHeading(angle);
+			heading = myWorkspace.getTurtleMap().get(id).setRelativeHeading(angle);
 
 		} else {
-			heading = myTurtles.get(id).setAbsoluteHeading(angle);
+			heading = myWorkspace.getTurtleMap().get(id).setAbsoluteHeading(angle);
 		}
 		mySidebar.updateTurtleProperties(id, myWorkspace);
 		return heading;
@@ -200,38 +201,38 @@ public class SLogoView implements Observer {
 		 * myTurtles.get(id).setPenUp(false); //return 1;
 		 */
 
-		myTurtles.get(id).setPenUp(setPen);
+		myWorkspace.getTurtleMap().get(id).setPenUp(setPen);
 		mySidebar.updateTurtleProperties(id, myWorkspace);
 	}
 
 	public double getPenDown(int id) {
-		if (myTurtles.get(id).getPenUp())
+		if (myWorkspace.getTurtleMap().get(id).getPenUp())
 			return 0;
 		return 1;
 	}
 
 	public double isShowing(int id) {
-		if (myTurtles.get(id).isVisible())
+		if (myWorkspace.getTurtleMap().get(id).isVisible())
 			return 1;
 		return 0;
 	}
 
 	public void showTurtle(int id, boolean show) {
-		myTurtles.get(id).showTurtle(show);
+		myWorkspace.getTurtleMap().get(id).showTurtle(show);
 		mySidebar.updateTurtleProperties(id, myWorkspace);
 	}
 
 	public double getHeading(int id) {
-		return myTurtles.get(id).getRotate();
+		return myWorkspace.getTurtleMap().get(id).getRotate();
 	}
 
 	// these definitely methods should not be in SLogoView;
 	public double getXCor(int id) {
-		return myTurtles.get(id).getTranslateX();
+		return myWorkspace.getTurtleMap().get(id).getTranslateX();
 	}
 
 	public double getYCor(int id) {
-		return Double.parseDouble(myTurtles.get(id).getYCoord());
+		return Double.parseDouble(myWorkspace.getTurtleMap().get(id).getYCoord());
 	}
 
 	public void openDialog(String message) {
@@ -249,14 +250,10 @@ public class SLogoView implements Observer {
 		stage.show();
 	}
 
-	public void updateVariable(Property variable) {
-		mySidebar.updateVariable(variable);
-	}
-
 	public double clearScreen(int id) {
 		lines.getChildren().clear();
-		myTurtles.get(id).setAbsoluteHeading(0);
-		double dist = myTurtles.get(id).setXY(0, 0);
+		myWorkspace.getTurtleMap().get(id).setAbsoluteHeading(0);
+		double dist = myWorkspace.getTurtleMap().get(id).setXY(0, 0);
 		mySidebar.updateTurtleProperties(id, myWorkspace);
 		return dist;
 	}

@@ -79,7 +79,7 @@ public class Parser implements Observer{
 		}
 	}
 
-	public void parseAndExecute(String input) throws InstantiationException,IllegalAccessException, IllegalArgumentException,InvocationTargetException, ModelException, NoSuchMethodException,SecurityException {
+	public void parseAndExecute(String input) {
 		try {
 			myFurthestDepth = 0;
 			String[] splitCommands = input.split("\\s+");
@@ -94,12 +94,11 @@ public class Parser implements Observer{
 			System.out.println("in parse and execute");
 			e.printStackTrace();
 			mySLogoView.openDialog("Invalid input! Try again.");
-			throw new ModelException();
 		}
 	}
 	
-	private Node makeTree(String[] command) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException, ModelException {
-		int myVars = 0;
+	private Node makeTree(String[] command) throws ModelException{
+	int myVars = 0;
 		int neededVars = -1;
 		Node myNode = null;
 		List<Instruction> futureInstructions = new ArrayList<Instruction>();
@@ -157,13 +156,16 @@ public class Parser implements Observer{
 			//instantiate the command, if reflection cannot find the file then must be invalid
 		if(myNode==null){
 			try{
-				Instruction myInt = Class.forName("model.instructions."+myCommandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,mySLogoView, myExecutionParameters});
+				Instruction myInt;
+				myInt = Class.forName("model.instructions."+myCommandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,mySLogoView, myExecutionParameters});
 				myFurthestDepth++;
 				myExecutionParameters.addObserver(myInt);
 				myNode = new Node(myInt);
 				neededVars = myInt.getNumberOfArguments();
 			}
-			catch(ClassNotFoundException e){
+			catch(InstantiationException | IllegalAccessException
+					| IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException |ClassNotFoundException e){
 				throw new ModelException();
 			}
 			catch(ArrayIndexOutOfBoundsException e){

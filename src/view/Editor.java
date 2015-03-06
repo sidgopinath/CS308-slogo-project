@@ -22,7 +22,7 @@ public class Editor extends HBox {
 		// HBox bottomRow = new HBox();
 		mySidebar = sidebar;
 		myController = controller;
-		setPadding(new Insets(0, 0, dimensions.getWidth() / 85,
+		setPadding(new Insets(dimensions.getWidth() / 89, 0, dimensions.getWidth() / 85,
 				dimensions.getWidth() / 89));
 		setSpacing(15);
 

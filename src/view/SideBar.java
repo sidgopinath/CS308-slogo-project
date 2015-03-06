@@ -91,7 +91,7 @@ public class SideBar extends VBox {
 		variablesCol.setPrefWidth(164); // TODO: set dynamically
 		valuesCol.setPrefWidth(164);
 		// TODO:
-		// valuesCol.setEditable(true);
+		 valuesCol.setEditable(true);
 
 		variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		variablesCol
@@ -101,6 +101,7 @@ public class SideBar extends VBox {
 						t.getTableView().getItems().get(t.getTablePosition().getRow())
 								.setName(t.getNewValue());
 						System.out.println("newvalue: " + t.getNewValue());
+						//TODO: send an update to the controller back to the backend. 
 					}
 				});
 

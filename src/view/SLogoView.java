@@ -69,7 +69,7 @@ public class SLogoView implements Observer {
 		RowConstraints row1 = new RowConstraints();
 		row1.setPercentHeight(60);
 		RowConstraints row2 = new RowConstraints();
-		row2.setPercentHeight(20);
+		row2.setPercentHeight(22);
 
 		ColumnConstraints col1 = new ColumnConstraints();
 		col1.setPercentWidth(75);
@@ -126,7 +126,7 @@ public class SLogoView implements Observer {
         root.add(mySidebar, 1, 1, 1, 2);
         myEditor = new Editor(myController, mySidebar, myDimensions);
         root.add(myEditor, 0, 2);
-        root.setGridLinesVisible(true);
+      //  root.setGridLinesVisible(false);
         return root;
     }
 

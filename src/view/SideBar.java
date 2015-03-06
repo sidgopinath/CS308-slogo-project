@@ -32,8 +32,6 @@ public class SideBar extends VBox {
 	private TableView<Property> variablesTable;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
-	private Workspace myWorkspace;
-
 	private TableView<Property> turtlePropertiesTable;
 	private ObservableList<String> commandItems;
 
@@ -44,94 +42,14 @@ public class SideBar extends VBox {
 
 	public SideBar(Workspace workspace, Parser parser) {
 		myParser = parser;
-		myWorkspace = workspace;
 		
 		setDimensionRestrictions();
 		
 		// turtle properties
-		createTitleText("Turtle Properties"); //TODO: myResources.get()
-
 		createTurtlePropertiesTable();
 		// updateTurtleProperties();
 
-		// variables pane
-		Text variables = new Text(Strings.VARIABLES_HEADER);
-		// is this necessary to use a .properties file AND a strings class?
-		variables.setFont(new Font(15));
-		variables.setUnderline(true);
-		getChildren().add(variables);
-
-		variablesList = FXCollections.observableArrayList();
-		// variablesList.add(new Variable("Added var2.5", 5));
-
-		variablesTable = new TableView<Property>();
-		TableColumn<Property, String> variablesCol = new TableColumn<Property, String>(
-		        myResources.getString("Variables"));
-		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
-		TableColumn<Property, Double> valuesCol = new TableColumn<Property, Double>(
-		        myResources.getString("Values"));
-
-		variablesCol.setCellValueFactory(new PropertyValueFactory<Property, String>(
-				"myName"));
-		valuesCol.setCellValueFactory(new PropertyValueFactory<Property, Double>(
-				"myVar"));
-
-		variablesCol.setPrefWidth(164); // TODO: set dynamically
-		valuesCol.setPrefWidth(164);
-		// TODO:
-		 valuesCol.setEditable(true);
-
-		variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		variablesCol
-				.setOnEditCommit(new EventHandler<CellEditEvent<Property, String>>() {
-					@Override
-					public void handle(CellEditEvent<Property, String> t) {
-						t.getTableView().getItems().get(t.getTablePosition().getRow())
-								.setName(t.getNewValue());
-						System.out.println("newvalue: " + t.getNewValue());
-						//TODO: send an update to the controller back to the backend. 
-					}
-				});
-
-		// some issue with strings and ints
-		valuesCol.setCellFactory(TextFieldTableCell
-				.forTableColumn(new StringConverter<Double>() {
-
-					@Override
-					public Double fromString(String userInput) {
-						// try{
-						return Double.valueOf(userInput);
-						/*
-						 * } catch(NumberFormatException e){
-						 * System.out.println("Number Format Exception"); }
-						 */
-					}
-
-					@Override
-					public String toString(Double t) {
-						return t.toString();
-					}
-				}));
-		valuesCol
-				.setOnEditCommit(new EventHandler<CellEditEvent<Property, Double>>() {
-					@Override
-					public void handle(CellEditEvent<Property, Double> t) {
-						t.getTableView().getItems().get(t.getTablePosition().getRow())
-								.setValue(t.getNewValue());
-					}
-				});
-
-		variablesTable.getColumns().addAll(variablesCol, valuesCol);
-		variablesTable.setEditable(true);
-
-		variablesTable.setMaxWidth(Double.MAX_VALUE);
-		variablesTable.setPrefHeight(150);
-
-		getChildren().add(variablesTable);
-		variablesTable.setItems(variablesList);
-
-		//user defin
-		createTitleText("User-defined Commands"); //TODO:
+		createVariablesPane();
 
 		ListView<String> userCommandsList = new ListView<String>();
 		commandItems = FXCollections.observableArrayList();
@@ -172,7 +90,9 @@ public class SideBar extends VBox {
 					}
 					}});
 
-		// return sidePane;
+		
+		createUserCommandsPane();
+		createHistoryPane();
 	}
 
 	public void setHistory(String string) {
@@ -210,8 +130,10 @@ public class SideBar extends VBox {
 	}
 
 	private void createTurtlePropertiesTable() {
+		createTitleText(myResources.getString("PropertiesHeader"));
 		turtlePropertiesTable = new TableView<Property>();
 
+		//TODO: remove hardcoding
 		TableColumn<Property, String> propertiesCol = new TableColumn<Property, String>(
 		        myResources.getString("Properties"));
 		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
@@ -265,5 +187,121 @@ public class SideBar extends VBox {
 		title.setUnderline(true);
 		getChildren().add(title);
 	}
+	
+	private void createVariablesPane(){
+		Text variables = new Text(myResources.getString("ID"));
+		// is this necessary to use a .properties file AND a strings class?
+		variables.setFont(new Font(15));
+		variables.setUnderline(true);
+		getChildren().add(variables);
+
+		variablesList = FXCollections.observableArrayList();
+		variablesTable = new TableView<Property>();
+		TableColumn<Property, String> variablesCol = new TableColumn<Property, String>(
+		        myResources.getString("Variables"));
+		TableColumn<Property, Double> valuesCol = new TableColumn<Property, Double>(
+		        myResources.getString("Values"));
+
+		variablesCol.setCellValueFactory(new PropertyValueFactory<Property, String>(
+				"myName"));
+		valuesCol.setCellValueFactory(new PropertyValueFactory<Property, Double>(
+				"myVar"));
+
+		variablesCol.setPrefWidth(164); // TODO: set dynamically
+		valuesCol.setPrefWidth(164);
+		// TODO:
+		 valuesCol.setEditable(true);
+
+		variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
+		variablesCol
+				.setOnEditCommit(new EventHandler<CellEditEvent<Property, String>>() {
+					@Override
+					public void handle(CellEditEvent<Property, String> t) {
+						t.getTableView().getItems().get(t.getTablePosition().getRow())
+								.setName(t.getNewValue());
+						
+						//parseandexecute("MAKE :var 90");
+						//TODO
+						System.out.println("newvalue: " + t.getNewValue());
+						//TODO: send an update to the controller back to the backend. 
+					}
+				});
+
+		// some issue with strings and ints
+		valuesCol.setCellFactory(TextFieldTableCell
+				.forTableColumn(new StringConverter<Double>() {
+
+					@Override
+					public Double fromString(String userInput) {
+						// try{
+						return Double.valueOf(userInput);
+						/*
+						 * } catch(NumberFormatException e){
+						 * System.out.println("Number Format Exception"); }
+						 */
+					}
+
+					@Override
+					public String toString(Double t) {
+						return t.toString();
+					}
+				}));
+		valuesCol
+				.setOnEditCommit(new EventHandler<CellEditEvent<Property, Double>>() {
+					@Override
+					public void handle(CellEditEvent<Property, Double> t) {
+						t.getTableView().getItems().get(t.getTablePosition().getRow())
+								.setValue(t.getNewValue());
+					}
+				});
+
+		variablesTable.getColumns().addAll(variablesCol, valuesCol);
+		variablesTable.setEditable(true);
+
+		variablesTable.setMaxWidth(Double.MAX_VALUE);
+		variablesTable.setPrefHeight(150);
+
+		getChildren().add(variablesTable);
+		variablesTable.setItems(variablesList);
+	}
+	
+	private void createHistoryPane(){
+		createTitleText(myResources.getString("HistoryHeader")); //TODO:
+
+		historyList = new ListView<String>();
+		historyItems = FXCollections.observableArrayList();
+		historyList.setItems(historyItems);
+		historyList.setMaxWidth(Double.MAX_VALUE);
+		historyList.setPrefHeight(150);
+		getChildren().add(historyList);
+
+		// TODO: Selected item can only have action once until other item is
+		// selected
+		// TODO: Selecting the same command after another of the same command
+		// does not work
+		historyList.getFocusModel().focusedItemProperty()
+			.addListener(new ChangeListener<String>() {
+				@Override
+				public void changed(ObservableValue<? extends String> ov,
+					String old_val, String new_val) {
+						myParser.parseAndExecute(historyList.getFocusModel()
+								.getFocusedItem());
+
+				}
+			});
+	}
+	
+	private void createUserCommandsPane(){
+		createTitleText(myResources.getString("UserDefinedCommandsHeader")); 
+		ListView<String> userCommandsList = new ListView<String>();
+		commandItems = FXCollections.observableArrayList();
+		// create an object instead
+		userCommandsList.setItems(commandItems);
+		userCommandsList.setMaxWidth(Double.MAX_VALUE);
+		userCommandsList.setPrefHeight(150);
+		getChildren().add(userCommandsList);
+		
+	}
+	
 
 }

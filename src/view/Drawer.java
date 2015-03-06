@@ -16,7 +16,10 @@ public class Drawer {
 	private double[] myYBounds = new double[2];
 	private double[] myHalf = new double[2];
 	private Workspace myWorkspace;
-
+	private double STROKE_SIZE = 1;
+	public void setStroke(Double size){
+		STROKE_SIZE = size;
+	}
 	public Drawer(Workspace workspace){//double xMax, double yMax) {
 		myWorkspace = workspace;
 		double xMax = myWorkspace.getGridWidth();
@@ -77,6 +80,7 @@ public class Drawer {
 					if (!turtle.getPenUp()) {
 						Polyline polyline = new Polyline();
 						polyline.setStroke(myColor);
+						polyline.setStrokeWidth(STROKE_SIZE);
 						polyline.getPoints().addAll(
 								new Double[] { startX, startY, endX, endY });
 						lines.add(polyline);

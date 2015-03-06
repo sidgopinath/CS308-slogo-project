@@ -267,9 +267,9 @@ public class SLogoView implements Observer {
 			double value = env.getVariableMap().get(s);
 			mySidebar.updateVariable(new Property(s, value));
 		}
-
 		for (String s : env.getUserCommandMap().keySet()) {
 			updateCommand(s);
 		}
+		
 	}
 }

@@ -35,8 +35,6 @@ public class Drawer {
 
 	// may have to remove list from turtlecommand
 	// TODO: remove list if it is no longer a list being used
-	
-	//get rid of list of turtlecommands if there is only one
 	public List<Polyline> draw(Map<Integer, TurtleView> turtles,
 			List<TurtleCommand> instructions, SideBar sidebar) {
 		ArrayList<Polyline> lines = new ArrayList<Polyline>();

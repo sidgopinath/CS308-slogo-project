@@ -27,7 +27,6 @@ import javafx.util.StringConverter;
 
 public class SideBar extends VBox {
 
-	private Map<Integer, TurtleView> myTurtles;
 	private ListView<String> historyList;
 	private ObservableList<String> historyItems;
 	private ObservableList<Property> variablesList;
@@ -35,15 +34,9 @@ public class SideBar extends VBox {
 	private TableView<Property> variablesTable;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
-	 private Workspace myWorkspace;
+	private Workspace myWorkspace;
 
-	// when do you ever use getActiveTurtle???? If it is never used, remove
-	// myWorkspace completely and the method from the workspace class
-
-	// private ObservableList<Property> turtlePropertiesList;
 	private TableView<Property> turtlePropertiesTable;
-	// variablesList.add(new Variable("Added var2.5", 5));
-
 	private ObservableList<String> commandItems;
 
 	// make this into a new class with its own stuff that have variablesView and
@@ -52,21 +45,13 @@ public class SideBar extends VBox {
 	// location
 
 	public SideBar(Workspace workspace, SLogoController controller) {
-	//	myTurtles = turtleList;
 		myController = controller;
-		 myWorkspace = workspace;
+		myWorkspace = workspace;
 		
+		setDimensionRestrictions();
 		
-		setPadding(new Insets(5, 15, 0, 0));
-		setSpacing(5);
-		setMaxWidth(Double.MAX_VALUE);
-
 		// turtle properties
-		Text title = new Text("Turtle Properties");
-		title.setFont(new Font(15));
-		title.setUnderline(true);
-		// title.setTextAlignment(TextAlignment.CENTER);
-		getChildren().add(title);
+		createTitleText("Turtle Properties"); //TODO: myResources.get()
 
 		createTurtlePropertiesTable();
 		// updateTurtleProperties();
@@ -147,11 +132,8 @@ public class SideBar extends VBox {
 		getChildren().add(variablesTable);
 		variablesTable.setItems(variablesList);
 
-		// user-defined commands
-		Text userCommands = new Text(Strings.USER_DEFINED_COMMANDS_HEADER);
-		userCommands.setFont(new Font(15));
-		userCommands.setUnderline(true);
-		getChildren().add(userCommands);
+		//user defin
+		createTitleText("User-defined Commands"); //TODO:
 
 		ListView<String> userCommandsList = new ListView<String>();
 		commandItems = FXCollections.observableArrayList();
@@ -162,10 +144,7 @@ public class SideBar extends VBox {
 		getChildren().add(userCommandsList);
 
 		// history pane
-		Text history = new Text(Strings.HISTORY_HEADER);
-		history.setFont(new Font(15));
-		history.setUnderline(true);
-		getChildren().add(history);
+		createTitleText(Strings.HISTORY_HEADER); //TODO:
 
 		historyList = new ListView<String>();
 		historyItems = FXCollections.observableArrayList();
@@ -246,12 +225,6 @@ public class SideBar extends VBox {
 	}
 
 	private void createTurtlePropertiesTable() {
-
-		// turtlePropertiesList = FXCollections.observableArrayList(new
-		// Property("ID", myWorkspace.getActiveTurtle().getID()), new
-		// Property("Pen Position", "Down"));
-		// variablesList.add(new Variable("Added var2.5", 5));
-
 		turtlePropertiesTable = new TableView<Property>();
 
 		TableColumn<Property, String> propertiesCol = new TableColumn<Property, String>(
@@ -273,18 +246,14 @@ public class SideBar extends VBox {
 
 		turtlePropertiesTable.setMaxWidth(Double.MAX_VALUE);
 		turtlePropertiesTable.setPrefHeight(150);
-		//updateTurtleProperties(1, myWorkspace); // TODO: change ID to 1
 
 		getChildren().add(turtlePropertiesTable);
-		// turtlePropertiesTable.setItems(turtlePropertiesList);
 	}
 
 	// if we use an observer this does not have to be updated every time
 	protected void updateTurtleProperties(int ID, Workspace workspace) {
-		// myWorkspace.getActiveTurtle();
 	    DecimalFormat decimalFormat = new DecimalFormat("#.#");
 		TurtleView updatedTurtle = workspace.getTurtleMap().get(ID);
-		// for (String property : turtlePropertiesList) {
 		ObservableList<Property> turtlePropertiesList = FXCollections
 				.observableArrayList(
 						new Property(myResources.getString("ID"), String.valueOf(updatedTurtle.getID())),
@@ -297,27 +266,19 @@ public class SideBar extends VBox {
 								updatedTurtle.getPenPosition()), new Property(
 								myResources.getString("TurImg"), updatedTurtle.isShowing()));
 		turtlePropertiesTable.setItems(turtlePropertiesList);
-
-		// remove all current
-		// turtle ID
-		/*
-		 * HBox turtleIDBox = new HBox(); Text turtleIDText = new
-		 * Text("Turtle ID"); turtleIDBox.getChildren().add(turtleIDText);
-		 * 
-		 * TextField turtleIDField = new TextField();
-		 * turtleIDBox.getChildren().add(turtleIDField);
-		 * 
-		 * getChildren().add(turtleIDBox);
-		 * 
-		 * //pen up? HBox penUpBox = new HBox(); Text penUpText = new
-		 * Text("Pen"); turtleIDBox.getChildren().add(penUpText);
-		 * 
-		 * TextField turtleIDField = new TextField();
-		 * turtleIDBox.getChildren().add(turtleIDField);
-		 * 
-		 * getChildren().add(turtleIDBox);
-		 */
-
+	}
+	
+	private void setDimensionRestrictions(){
+		setPadding(new Insets(5, 15, 0, 0));
+		setSpacing(5);
+		setMaxWidth(Double.MAX_VALUE);
+	}
+	
+	private void createTitleText(String s){
+		Text title = new Text(s);
+		title.setFont(new Font(15));
+		title.setUnderline(true);
+		getChildren().add(title);
 	}
 
 }

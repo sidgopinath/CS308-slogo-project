@@ -44,7 +44,7 @@ public class FrontEndInstruction extends Instruction{
 		case "SetPalette":
 			return 0;
 		case "GetPenColor":
-			return 0;
+			return ViewUpdater.getBackgroundColor();
 		case "GetShape":
 			return 0;
 		case "Stamp":

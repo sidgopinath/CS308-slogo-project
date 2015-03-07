@@ -1,14 +1,8 @@
 package view;
 
-//move lambda function into the main UI? 
-
 import java.text.DecimalFormat;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
@@ -26,86 +20,73 @@ import javafx.util.StringConverter;
 import model.ExecutionEnvironment;
 import model.Parser;
 
-
 public class SideBar extends VBox{
 
-	private ObservableList<String> historyItems;
-	private ObservableList<Property> variablesList;
+	private ObservableList<String> myHistoryItems;
+	private ObservableList<Property> myVariablesList;
 	private Parser myParser;
-	private TableView<Property> variablesTable;
-    public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
+	private TableView<Property> myVariablesTable;
+    private static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
-	private TableView<Property> turtlePropertiesTable;
-	private ObservableList<String> commandItems;
+	private TableView<Property> myTurtlePropertiesTable;
+	private ObservableList<String> myCommandItems;
 	private ExecutionEnvironment myEnvironment;
-
-	// make this into a new class with its own stuff that have variablesView and
-	// commandView and historyView???
-	// sidebarPane class with parameters that specify column constraints /
-	// location
 
 	public SideBar(Workspace workspace, Parser parser) {
 		myParser = parser;
-		
 		setDimensionRestrictions();
 		createTurtlePropertiesTable();
 		createVariablesPane();
-		
 		createUserCommandsPane();
 		createHistoryPane();	
 	}
 
 	public void setHistory(String string) {
-		historyItems.add(string);
+		myHistoryItems.add(string);
 	}
 
 	public void updateVariable(Property variable) {
-		// variablesTable.getItems().stream().forEach((o) ->
-		for (Property o : variablesTable.getItems()) {
+		for (Property o : myVariablesTable.getItems()) {
 			if (o.getName().equals(variable.getName())) {
 				o.setValue(variable.getValue());
 				return;
 			}
 		}
-		variablesList.add(variable);
+		myVariablesList.add(variable);
 	}
 
 	public void updateCommand(String newCommand) {
-		for (String command : commandItems) {
+		for (String command : myCommandItems) {
 			if (command.equals(newCommand))
 				return;
 		}
-		commandItems.add(newCommand);
+		myCommandItems.add(newCommand);
 	}
 
 	private void createTurtlePropertiesTable() {
 		createTitleText(myResources.getString("PropertiesHeader"));
-		turtlePropertiesTable = new TableView<Property>();
+		myTurtlePropertiesTable = new TableView<Property>();
+		createColumns();
+		myTurtlePropertiesTable.setEditable(true);
+		myTurtlePropertiesTable.setMaxWidth(Double.MAX_VALUE);
+		myTurtlePropertiesTable.setPrefHeight(130);
+		getChildren().add(myTurtlePropertiesTable);
+	}
 
-		//TODO: remove hardcoding
+	private void createColumns() {
 		TableColumn<Property, String> propertiesCol = new TableColumn<Property, String>(
 		        myResources.getString("Properties"));
 		TableColumn<Property, String> valuesCol = new TableColumn<Property, String>(
 		        myResources.getString("Values"));
-
 		propertiesCol.setCellValueFactory(new PropertyValueFactory<Property, String>(
 		        "myName"));
 		valuesCol.setCellValueFactory(new PropertyValueFactory<Property, String>(
 		        "myProperty"));
-
 		propertiesCol.setPrefWidth(164); // TODO: set dynamically
 		valuesCol.setPrefWidth(164);  //divide width by 7.3 or 7.4
-
-		turtlePropertiesTable.getColumns().addAll(propertiesCol, valuesCol);
-		turtlePropertiesTable.setEditable(true);
-
-		turtlePropertiesTable.setMaxWidth(Double.MAX_VALUE);
-		turtlePropertiesTable.setPrefHeight(130);
-
-		getChildren().add(turtlePropertiesTable);
+		myTurtlePropertiesTable.getColumns().addAll(propertiesCol, valuesCol);
 	}
 
-	// if we use an observer this does not have to be updated every time
 	protected void updateTurtleProperties(int ID, Workspace workspace) {
 	    DecimalFormat decimalFormat = new DecimalFormat("#.#");
 		TurtleView updatedTurtle = workspace.getTurtleMap().get(ID);
@@ -120,7 +101,7 @@ public class SideBar extends VBox{
 						.getHeading())), new Property(myResources.getString("PenPos"),
 						updatedTurtle.getPenPosition()), new Property(
 						myResources.getString("TurImg"), updatedTurtle.isShowing()));
-		turtlePropertiesTable.setItems(turtlePropertiesList);
+		myTurtlePropertiesTable.setItems(turtlePropertiesList);
 	}
 	
 	private void setDimensionRestrictions(){
@@ -138,51 +119,34 @@ public class SideBar extends VBox{
 	
 	private void createVariablesPane(){
 		createTitleText(myResources.getString("VariablesHeader"));
+		myVariablesList = FXCollections.observableArrayList();
+		myVariablesTable = new TableView<Property>();
+		createVariableColumns();
+		myVariablesTable.setEditable(true);
+		myVariablesTable.setMaxWidth(Double.MAX_VALUE);
+		myVariablesTable.setPrefHeight(130);
+		getChildren().add(myVariablesTable);
+		myVariablesTable.setItems(myVariablesList);
+	}
 
-		variablesList = FXCollections.observableArrayList();
-		variablesTable = new TableView<Property>();
+	private void createVariableColumns() {
 		TableColumn<Property, String> variablesCol = new TableColumn<Property, String>(
 		        myResources.getString("Variables"));
 		TableColumn<Property, Double> valuesCol = new TableColumn<Property, Double>(
 		        myResources.getString("Values"));
-
 		variablesCol.setCellValueFactory(new PropertyValueFactory<Property, String>(
 				"myName"));
 		valuesCol.setCellValueFactory(new PropertyValueFactory<Property, Double>(
 				"myVar"));
-
 		variablesCol.setPrefWidth(164); // TODO: set dynamically
 		valuesCol.setPrefWidth(164);
-		// TODO:
-		 variablesCol.setEditable(true);
-
-	/*	variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
-		variablesCol
-			.setOnEditCommit(new EventHandler<CellEditEvent<Property, String>>() {
-				@Override
-				public void handle(CellEditEvent<Property, String> t) {
-					Property variable = t.getTableView().getItems().get(t.getTablePosition().getRow());
-					String oldName = variable.getName();
-					variable.setName(t.getNewValue()); 
-					System.out.println("old " + oldName + "new " + t.getNewValue());
-					myEnvironment.updateVariableName(oldName, t.getNewValue());
-				}
-			});*/
-
-		// some issue with strings and ints
+		variablesCol.setEditable(true);
 		valuesCol.setCellFactory(TextFieldTableCell
 			.forTableColumn(new StringConverter<Double>() {
-
 				@Override
 				public Double fromString(String userInput) {
-					// try{
 					return Double.valueOf(userInput);
-					/*
-					 * } catch(NumberFormatException e){
-					 * System.out.println("Number Format Exception"); }
-					 */
 				}
-
 				@Override
 				public String toString(Double t) {
 					return t.toString();
@@ -192,46 +156,33 @@ public class SideBar extends VBox{
 				.setOnEditCommit(new EventHandler<CellEditEvent<Property, Double>>() {
 					@Override
 					public void handle(CellEditEvent<Property, Double> t) {
-
 						Property variable = t.getTableView().getItems().get(t.getTablePosition().getRow());
 						variable.setValue(t.getNewValue());
 						if (myEnvironment == null){
 							System.out.println("lul");
 						}
 						myEnvironment.addVariable(variable.getName(), t.getNewValue());
-						//TODO
-						
-						
 					}
 				});
 
-		variablesTable.getColumns().addAll(variablesCol, valuesCol);
-		variablesTable.setEditable(true);
-
-		variablesTable.setMaxWidth(Double.MAX_VALUE);
-		variablesTable.setPrefHeight(130);
-
-		getChildren().add(variablesTable);
-		variablesTable.setItems(variablesList);
+		myVariablesTable.getColumns().addAll(variablesCol, valuesCol);
 	}
 	
 	private void createHistoryPane(){
-		createTitleText(myResources.getString("HistoryHeader")); //TODO:
-		historyItems = FXCollections.observableArrayList();
-		ListView<String> historyList = createListView(historyItems, 130);
+		createTitleText(myResources.getString("HistoryHeader"));
+		myHistoryItems = FXCollections.observableArrayList();
+		ListView<String> historyList = createListView(myHistoryItems, 130);
 		getChildren().add(historyList);
-
 		historyList.getFocusModel().focusedItemProperty()
 				.addListener(changeListener ->
 								{if(historyList.getFocusModel().getFocusedItem()!=null){myParser.parseAndExecute(historyList.getFocusModel()
 												.getFocusedItem());} historyList.getFocusModel().focus(-1);});
-		
 	}
 	
 	private void createUserCommandsPane(){
 		createTitleText(myResources.getString("UserDefinedCommandsHeader")); 
-		commandItems = FXCollections.observableArrayList();
-		getChildren().add(createListView(commandItems, 130));
+		myCommandItems = FXCollections.observableArrayList();
+		getChildren().add(createListView(myCommandItems, 130));
 	}
 	
 	private ListView<String> createListView(ObservableList<String> items, int height){
@@ -245,7 +196,4 @@ public class SideBar extends VBox{
 	public void updateExecutionEnvironment(ExecutionEnvironment env) {
 		myEnvironment = env;
 	}
-	
-	
-
 }

@@ -81,7 +81,6 @@ public class Workspace extends StackPane {
 											// relevant :(
 		myActiveTurtle = myTurtles.get(ID);
 		mySidebar.updateTurtleProperties(ID, this);
-		System.out.println("newID" + ID);
 	}
 
 	private void configureTurtleEventHandler(int ID) {

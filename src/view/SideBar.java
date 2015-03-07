@@ -2,29 +2,21 @@ package view;
 
 //move lambda function into the main UI? 
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
-import java.util.Map;
 import java.util.ResourceBundle;
-
-import controller.SLogoController;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.FocusModel;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
+import controller.SLogoController;
 
 public class SideBar extends VBox {
 
@@ -36,7 +28,6 @@ public class SideBar extends VBox {
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 	private Workspace myWorkspace;
-
 	private TableView<Property> turtlePropertiesTable;
 	private ObservableList<String> commandItems;
 
@@ -86,28 +77,15 @@ public class SideBar extends VBox {
 
 		variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		variablesCol
-				.setOnEditCommit(new EventHandler<CellEditEvent<Property, String>>() {
-					@Override
-					public void handle(CellEditEvent<Property, String> t) {
-						t.getTableView().getItems().get(t.getTablePosition().getRow())
-								.setName(t.getNewValue());
-						System.out.println("newvalue: " + t.getNewValue());
-						//TODO: send an update to the controller back to the backend. 
-					}
-				});
+				.setOnEditCommit(t->t.getTableView().getItems().get(t.getTablePosition().getRow())
+								.setName(t.getNewValue()));
 
 		// some issue with strings and ints
 		valuesCol.setCellFactory(TextFieldTableCell
 				.forTableColumn(new StringConverter<Double>() {
-
 					@Override
 					public Double fromString(String userInput) {
-						// try{
 						return Double.valueOf(userInput);
-						/*
-						 * } catch(NumberFormatException e){
-						 * System.out.println("Number Format Exception"); }
-						 */
 					}
 
 					@Override
@@ -167,23 +145,12 @@ public class SideBar extends VBox {
 	public void updateVariable(Property variable) {
 		// variablesTable.getItems().stream().forEach((o) ->
 		for (Property o : variablesTable.getItems()) {
-			System.out.println("updatevar in sidebar class");
-			System.out.println(o.getName());
-			System.out.println(variable.getName());
 			if (o.getName().equals(variable.getName())) {
-				System.out.println("already exists. let's edit this variable");
 				o.setValue(variable.getValue());
 				return;
 			}
 		}
-
 		variablesList.add(variable);
-
-		/*
-		 * t.getTableView().getItems()
-		 * .get(t.getTablePosition().getRow())).setName(t.getNewValue());
-		 */
-
 	}
 
 	public void updateCommand(String newCommand) {

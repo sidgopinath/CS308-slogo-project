@@ -14,6 +14,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -21,8 +23,6 @@ import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -30,8 +30,8 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.ExecutionEnvironment;
-import model.turtle.Turtle;
 import model.turtle.TurtleCommand;
 import controller.SLogoController;
 
@@ -47,7 +47,6 @@ public class SLogoView implements Observer {
 	// private int activeTurtleID; //TODO: update this
 	private SideBar mySidebar;
 	private Editor myEditor;
-
 	// TODO: move myTUrtles to relavant class (Workspace). Maybe drawer too? But
 	// there is no functionality after moving it
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
@@ -59,6 +58,20 @@ public class SLogoView implements Observer {
 		this.myDimensions=myDimensions;
 		lines.setManaged(false);
 	}
+	   List<Polyline> newLines;
+	    public void updateWorkspace(List<TurtleCommand> instructionList) {
+	        // String returnString = null;
+	        /*
+	         * for (TurtleCommand instruction : instructionList) { returnString +=
+	         * updateFromInstruction(instruction) + "\n"; }
+	         */
+	    	//System.out.println(myWorkspace.getTurtleMap());
+	    	
+	       drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar, lines);
+	        
+	        	
+	        // return returnString;
+	    }
 
 	private void setGridPaneConstraints(GridPane root) {
 		
@@ -126,20 +139,8 @@ public class SLogoView implements Observer {
     // do we need to return anything
 
     // do we still need an entire list for this?
-    public void updateWorkspace(List<TurtleCommand> instructionList) {
-        // String returnString = null;
-        /*
-         * for (TurtleCommand instruction : instructionList) { returnString +=
-         * updateFromInstruction(instruction) + "\n"; }
-         */
-    	//System.out.println(myWorkspace.getTurtleMap());
-        List<Polyline> newlines = drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar);
-        lines.getChildren().addAll(newlines);
+ 
 
-        // return returnString;
-    }
-
-    
 //    public Turtle getTurtleInfo(int index) {
 //        ImageView temp = myTurtles.get(index);
 //        return new Turtle(temp.getX(), temp.getY(), temp.getRotate());

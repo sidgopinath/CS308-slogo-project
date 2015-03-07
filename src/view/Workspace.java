@@ -19,7 +19,7 @@ public class Workspace extends StackPane {
 
 	private TurtleView myActiveTurtle;
 	//TODO: set initial id to 1
-	private static final int INITIAL_TURTLE_ID = 0;
+	private static final int INITIAL_TURTLE_ID = 1;
 	
 	public Workspace(Group lines,
 			Dimension2D dimensions, SideBar sidebar) {
@@ -43,7 +43,7 @@ public class Workspace extends StackPane {
 
 	public void addTurtle() {// int id, TurtleView turtle) {
 		TurtleView newTurtle;
-		int newID = myTurtles.size();//+1;
+		int newID = myTurtles.size()+1;
 		// We utilize a hashmap because if in the future turtles can be deleted,
 		// we do not want to have ID's that are reused/changed
 		 newTurtle = new TurtleView(newID,

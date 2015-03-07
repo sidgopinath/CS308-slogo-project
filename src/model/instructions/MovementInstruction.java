@@ -44,6 +44,7 @@ public class MovementInstruction extends Instruction {
 	
 	@Override
 	public double execute() {
+		System.out.println("active guy is "+ myEnvironment.getActiveTurtle());
 		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
 			myReturnVal = myDependencies.get(0).execute();
@@ -71,24 +72,24 @@ public class MovementInstruction extends Instruction {
 			updateView();
 			return 0.0;
 		case "SETTOWARDS":
-			return myView.towards(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());
+			return myView.towards(myEnvironment.getActiveTurtle(), myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "SETPOSITION":
 			myJump = true;
-			return myView.setXY(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());
+			return myView.setXY(myEnvironment.getActiveTurtle(), myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "PENDOWN":
-			myView.setPenUp(0, false);
+			myView.setPenUp(myEnvironment.getActiveTurtle(), false);
 			return 1.0;
 		case "PENUP":
-			myView.setPenUp(0, true);
+			myView.setPenUp(myEnvironment.getActiveTurtle(), true);
 			return 0.0;
 		case "SHOWTURTLE":
-			myView.showTurtle(0, true);
+			myView.showTurtle(myEnvironment.getActiveTurtle(), true);
 			return 1.0;
 		case "HIDETURTLE":
-			myView.showTurtle(0, false);
+			myView.showTurtle(myEnvironment.getActiveTurtle(), false);
 			return 0.0;
 		case "CLEARSCREEN":
-			return myView.clearScreen(0);
+			return myView.clearScreen(myEnvironment.getActiveTurtle());
 		case "HOME":
 			myJump = true;
 			return myView.setXY(0,0,0);
@@ -99,7 +100,7 @@ public class MovementInstruction extends Instruction {
 
 	private void updateView() {
 		List<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
-		commandList.add(new TurtleCommand(0, myPolar, myJump));
+		commandList.add(new TurtleCommand(myEnvironment.getActiveTurtle(), myPolar, myJump));
 		myView.updateWorkspace(commandList);
 	}
 

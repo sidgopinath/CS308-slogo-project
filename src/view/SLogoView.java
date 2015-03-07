@@ -59,7 +59,7 @@ public class SLogoView implements Observer {
 		this.myDimensions = myDimensions;
 		lines.setManaged(false);
 	}
-<<<<<<< HEAD
+
 	    public void updateWorkspace(List<TurtleCommand> instructionList) {
 	        // String returnString = null;
 	        /*
@@ -72,12 +72,8 @@ public class SLogoView implements Observer {
 	       	
 	        // return returnString;
 	    }
-=======
->>>>>>> 03f21ce737f03543cccb9d0ef24774b6485c4428
 
-	public void updateWorkspace(List<TurtleCommand> instructionList) {
-		drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar, lines);
-	}
+
 
 	private void setGridPaneConstraints(GridPane root) {
 

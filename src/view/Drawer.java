@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import model.Polar;
@@ -17,10 +18,12 @@ public class Drawer {
 	private double[] myYBounds = new double[2];
 	private double[] myHalf = new double[2];
 	private Workspace myWorkspace;
-	private double strokeSize = 1;
+	private double strokeSize;
+	private int myIndex;
 	
 	public Drawer(Workspace workspace){
 		myWorkspace = workspace;
+		strokeSize = 1;
 		double xMax = myWorkspace.getGridWidth();
 		double yMax = myWorkspace.getGridHeight();
 		myXBounds[0] = 0;
@@ -43,7 +46,6 @@ public class Drawer {
 
 		List<Polyline> lines = new ArrayList<Polyline>();
 		Iterator<TurtleCommand> it = instructions.iterator();
-		System.out.println("draweing");
 		
 		while (it.hasNext()) {
 			TurtleCommand command = it.next();
@@ -188,9 +190,14 @@ public class Drawer {
 		return polyline;
 	}
 
+	public void stamp(TurtleView currentTurtle){
+		ImageView stamp = new ImageView(currentTurtle.getImage());
+		
+	}
 
 	public void changeColor(Color c) {
 		myColor = c;
 	}
+	
 
 }

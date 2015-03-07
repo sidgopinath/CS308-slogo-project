@@ -35,17 +35,17 @@ public class FrontEndInstruction extends Instruction{
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "SETBACKGROUND":
-			return ViewUpdater.setBackgroundColor(myDependencies.get(0).execute());
+			return myViewUpdater.setBackgroundColor(myDependencies.get(0).execute());
 		case "SETPENCOLOR":
-			return ViewUpdater.setBackgroundColor(myDependencies.get(0).execute());
+			return myViewUpdater.setPenColor(myDependencies.get(0).execute());
 		case "SETPENSIZE":
-			return ViewUpdater.setBackgroundColor(myDependencies.get(0).execute());
+			return myViewUpdater.setPenSize(myDependencies.get(0).execute());
 		case "SETSHAPE":
-			return 0;
-		case "SETPALETTE":
-			return 0;
+			return myViewUpdater.setShape(myDependencies.get(0).execute(), myEnvironment.getActiveTurtle());
+		//case "SETPALETTE":
+			//return 0;
 		case "GETPENCOLOR":
-			return ViewUpdater.getBackgroundColor();
+			return 0; //myViewUpdater.getBackgroundColor();
 		case "GETSHAPE":
 			return 0;
 		case "STAMP":

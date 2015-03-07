@@ -91,7 +91,6 @@ public class MovementInstruction extends Instruction {
 			return 0.0;
 		case "CLEARSCREEN":
 			return myViewUpdater.clearScreen(0);
-
 		case "HOME":
 			myJump = true;
 			return myViewUpdater.setXY(0,0,0);

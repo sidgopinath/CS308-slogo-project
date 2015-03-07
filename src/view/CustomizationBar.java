@@ -29,10 +29,10 @@ public class CustomizationBar extends HBox {
     private static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 
-	public CustomizationBar(Parser parser,
+	public CustomizationBar(
 			Map<Integer, TurtleView> turtleList, Drawer drawer, Workspace workspace,
 			Stage stage, Dimension2D dimensions) {
-		myParser = parser;
+
 		myWorkspace = workspace;
 		myStage = stage;
 		setPadding(new Insets(0, dimensions.getWidth() / 120, 0,dimensions.getWidth() / 120));
@@ -42,6 +42,10 @@ public class CustomizationBar extends HBox {
 		//TODO: set pen color for the active turtle. 
 		selectPenColor(drawer);
 		selectBackgroundColor(dimensions);
+	}
+	
+	public void setParser(Parser parser){
+		myParser = parser;
 	}
 
 	private void selectBackgroundColor(Dimension2D dimensions) {

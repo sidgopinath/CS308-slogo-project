@@ -1,5 +1,3 @@
-//Turtle view class only accessible to the View
-
 package view;
 
 import java.text.DecimalFormat;
@@ -26,7 +24,6 @@ public class TurtleView extends ImageView {
 	public void move(double moveX, double moveY) {
 		setTranslateX(moveX);
 		setTranslateY(moveY);
-		System.out.println("myX "+this.getTranslateX()+" myY " +this.getTranslateY());
 	}
 
 	// absolute movement
@@ -40,8 +37,7 @@ public class TurtleView extends ImageView {
 
 	public double setRelativeHeading(double angle) {
 		setRotate(adjustAngle(getRotate() + angle));
-		myHeading = getRotate(); // need to use myHeading both here and below in order to
-									// update it the first time.
+		myHeading = getRotate();
 		return myHeading;
 	}
 
@@ -49,7 +45,6 @@ public class TurtleView extends ImageView {
 		double old = getRotate();
 		setRotate(adjustAngle(angle));
 		myHeading = angle;
-		
 		return getRotate() - old;
 	}
 
@@ -66,47 +61,37 @@ public class TurtleView extends ImageView {
 	}
 
 	public String getPenPosition() {
-		if (penUp == true)
+		if (penUp == true){
 			return "Up";
+		}
 		return "Down";
-
 	}
 
-	/*
-	 * public boolean isShowing() { return isVisible; }
-	 */
-
 	public String isShowing() {
-		if (isVisible())
+		if (isVisible()){
 			return "Visible";
+		}
 		return "Hidden";
 	}
 
 	public void showTurtle(boolean show) {
 		setVisible(show);
-		// isVisible = show;
 	}
 
 	public String getYCoord() {
 	    DecimalFormat decimalFormat = new DecimalFormat("#.#");
 		double yCoord = getTranslateY();
-		if (yCoord == -0)
+		if (yCoord == -0){
 			return "0";
+		}
 		return decimalFormat.format(-1 * yCoord);
-	}
-
-	// for consistency
-	public double getXCoord() {
-		return getTranslateX();
 	}
 	
 	/**
 	 * Normalizes a double parameter to an angle between 0-360
-	 * 
 	 * @param angle
 	 * @return normalized angle between 0-360
 	 */
-
 	private double adjustAngle(double angle) {
 		angle = angle % 360;
 		if (angle < 0) {
@@ -118,10 +103,4 @@ public class TurtleView extends ImageView {
 	public int getID() {
 		return myID;
 	}
-
-	// for displaying in a table
-	// public TurtleProperty createTurtleProperty(){
-
-	// }
-
 }

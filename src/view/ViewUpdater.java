@@ -8,6 +8,7 @@ import java.util.Observer;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import model.ExecutionEnvironment;
 import model.TurtleCommand;
@@ -177,9 +178,15 @@ public class ViewUpdater implements Observer{
 		return myWorkspace.getTurtleMap().get(id).getImageID();
 	}
 	
-	/*public double getPenColor(){
-		return myWorkspace.getPenColor();
-	}*/
+	public double createStamp(int id){
+		TurtleView turtle = myWorkspace.getTurtleMap().get(id);
+		return (double) turtle.createStamp(myWorkspace);
+	}
+	
+	public double clearStamps(int id){
+		TurtleView turtle = myWorkspace.getTurtleMap().get(id);
+		return (double) turtle.clearStamps(myWorkspace);
+	}
 	
 	
 	

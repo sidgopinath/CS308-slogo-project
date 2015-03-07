@@ -3,6 +3,7 @@ package view;
 import java.text.DecimalFormat;
 import java.util.List;
 
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -12,8 +13,7 @@ public class TurtleView extends ImageView {
 	private boolean penUp = false;
 	private int myID;
 	private int myImageID;
-	
-	private List<ImageView> myStamps;
+	private Group myStamps;
 
 	public TurtleView(int id, Image img) {
 		super(img);
@@ -23,6 +23,7 @@ public class TurtleView extends ImageView {
 		myHeading = 0;
 		myID = id;
 		myImageID = 1;
+		myStamps = new Group();
 	}
 	
 
@@ -119,7 +120,24 @@ public class TurtleView extends ImageView {
 	}
 	
 	public int createStamp(Workspace workspace){
-		workspace.getChildren().add(new ImageView(getImage()));
+		ImageView newStamp = new ImageView(getImage());
+		newStamp.setFitWidth(30);
+		newStamp.setFitHeight(30);
+		newStamp.setTranslateX(getX());
+		newStamp.setTranslateY(Integer.parseInt(getYCoord()));
+		myStamps.getChildren().add(newStamp);
+		System.out.println("createstamp");
+		workspace.getChildren().add(myStamps);
 		return getImageID();
+	}
+	
+	public int clearStamps(Workspace workspace){
+		myStamps.getChildren().clear();
+		int stampsCleared = 0;
+		if (myStamps.getChildren().size() > 0)
+			stampsCleared = 1;
+		myStamps = new Group(); //forget all values from old list
+		workspace.getChildren().add(myStamps);
+		return stampsCleared; 
 	}
 }

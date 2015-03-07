@@ -37,7 +37,8 @@ import model.TurtleCommand;
 
 public class SLogoView implements Observer {
 	private Stage myStage;
-	protected ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
+	protected ResourceBundle myResources = ResourceBundle
+			.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 	private Map<String, Node> variables;
 	private Drawer drawer;
 	private Workspace myWorkspace;
@@ -55,26 +56,16 @@ public class SLogoView implements Observer {
 		myStage = s;
 		createNewParser(this);
 		// activeTurtleID = 1;
-		this.myDimensions=myDimensions;
+		this.myDimensions = myDimensions;
 		lines.setManaged(false);
 	}
-	    public void updateWorkspace(List<TurtleCommand> instructionList) {
-	        // String returnString = null;
-	        /*
-	         * for (TurtleCommand instruction : instructionList) { returnString +=
-	         * updateFromInstruction(instruction) + "\n"; }
-	         */
-	    	//System.out.println(myWorkspace.getTurtleMap());
-	    	
-	       drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar, lines);
-	        
-	        	
-	        // return returnString;
-	    }
 
+	public void updateWorkspace(List<TurtleCommand> instructionList) {
+		drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar, lines);
+	}
 
 	private void setGridPaneConstraints(GridPane root) {
-		
+
 		RowConstraints row0 = new RowConstraints();
 		row0.setPercentHeight(4);
 		RowConstraints row1 = new RowConstraints();
@@ -88,99 +79,101 @@ public class SLogoView implements Observer {
 		col2.setPercentWidth(25);
 		root.getColumnConstraints().add(col1);
 		root.getColumnConstraints().add(col2);
-        root.getRowConstraints().add(row0);
-        root.getRowConstraints().add(row1);
-        root.getRowConstraints().add(row2);
+		root.getRowConstraints().add(row0);
+		root.getRowConstraints().add(row1);
+		root.getRowConstraints().add(row2);
 	}
 
-    private Parser createNewParser(SLogoView view) {
-        return new Parser(view);
-    }
+	private Parser createNewParser(SLogoView view) {
+		return new Parser(view);
+	}
 
-    private Button configureAddTurtlesButton() {
-        // Add turtle button
-        Button newTurtleButton = new Button(myResources.getString("AddTurtle"));
-        newTurtleButton.setStyle("-fx-base: #b6e7c9;");
-        newTurtleButton.setAlignment(Pos.CENTER_RIGHT);
-        newTurtleButton.setOnAction(e -> myWorkspace.addTurtle());
-        GridPane.setHalignment(newTurtleButton, HPos.CENTER);
-        return newTurtleButton;
-    }
+	private Button configureAddTurtlesButton() {
+		// Add turtle button
+		Button newTurtleButton = new Button(myResources.getString("AddTurtle"));
+		newTurtleButton.setStyle("-fx-base: #b6e7c9;");
+		newTurtleButton.setAlignment(Pos.CENTER_RIGHT);
+		newTurtleButton.setOnAction(e -> myWorkspace.addTurtle());
+		GridPane.setHalignment(newTurtleButton, HPos.CENTER);
+		return newTurtleButton;
+	}
 
-    private void updateCommand(String s) {
-        mySidebar.updateCommand(s);
-    }
+	private void updateCommand(String s) {
+		mySidebar.updateCommand(s);
+	}
 
 	// methods for the backend to call. TODO: organize better
-    public GridPane configureUI() {
-        GridPane root = new GridPane();
-        setGridPaneConstraints(root);
-        
-        // set initial turtle
-        
-        //temp
-       // TurtleView turtle = new TurtleView(0, new Image(Strings.DEFAULT_TURTLE_IMG));
-      //  myTurtles.put(0, turtle);
-    	Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>(); //TODO: move
+	public GridPane configureUI() {
+		GridPane root = new GridPane();
+		setGridPaneConstraints(root);
 
-        mySidebar = new SideBar(myWorkspace, myParser);
-        myWorkspace = new Workspace(lines, myDimensions, mySidebar);
-        drawer = new Drawer(myWorkspace);
-        root.add(new CustomizationBar(myParser, myTurtles, drawer, myWorkspace, myStage, myDimensions), 0, 0);
-        root.add(configureAddTurtlesButton(), 1, 0);
-        root.add(myWorkspace, 0, 1);
-        root.add(mySidebar, 1, 1, 1, 2);
-        myEditor = new Editor(myParser, mySidebar, myDimensions);
-        root.add(myEditor, 0, 2);
-        return root;
-    }
+		// set initial turtle
 
-    // does this do anything?
-    // do we need to return anything
+		// temp
+		// TurtleView turtle = new TurtleView(0, new
+		// Image(Strings.DEFAULT_TURTLE_IMG));
+		// myTurtles.put(0, turtle);
+		Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>(); // TODO:
+																					// move
 
-    // do we still need an entire list for this?
- 
+		mySidebar = new SideBar(myWorkspace, myParser);
+		myWorkspace = new Workspace(lines, myDimensions, mySidebar);
+		drawer = new Drawer(myWorkspace);
+		root.add(new CustomizationBar(myParser, myTurtles, drawer, myWorkspace, myStage,
+				myDimensions), 0, 0);
+		root.add(configureAddTurtlesButton(), 1, 0);
+		root.add(myWorkspace, 0, 1);
+		root.add(mySidebar, 1, 1, 1, 2);
+		myEditor = new Editor(myParser, mySidebar, myDimensions);
+		root.add(myEditor, 0, 2);
+		return root;
+	}
 
-//    public Turtle getTurtleInfo(int index) {
-//        ImageView temp = myTurtles.get(index);
-//        return new Turtle(temp.getX(), temp.getY(), temp.getRotate());
-//
-//    }
+	// does this do anything?
+	// do we need to return anything
 
+	// do we still need an entire list for this?
 
-    // this one is not actually used
-    // TODO: what is being passed in and how to update the tableview? may have
-    // to iterate through observablelist
-    public void updateVariables(Map<String, Double> variableUpdates) {
-        Iterator<Entry<String, Double>> it = variableUpdates.entrySet().iterator();
-        while (it.hasNext()) {
-            Entry<String, Double> variable = it.next();
-            String name = variable.getKey();
-            double value = variable.getValue();
-            if (variables.get(name) == null) {
-                // TODO: it should be passed in not as a map but as the actual
-                // variable object in the parameter
-                // or we can just keep the variables object as just a front end
-                // thing for displaying (otherwise both front and back end have
-                // access to it which may not be good)
-                mySidebar.updateVariable(new Property(name, value));
-            } else {
-                // variables.get(name).setText(value);
-            }
-        }
-    }
+	// public Turtle getTurtleInfo(int index) {
+	// ImageView temp = myTurtles.get(index);
+	// return new Turtle(temp.getX(), temp.getY(), temp.getRotate());
+	//
+	// }
 
-    public double towards(int id, double x, double y) {
-        double angle = Math.toDegrees(Math.atan2(x, y));
-        return setHeading(id, angle, false);
-    }
+	// this one is not actually used
+	// TODO: what is being passed in and how to update the tableview? may have
+	// to iterate through observablelist
+	public void updateVariables(Map<String, Double> variableUpdates) {
+		Iterator<Entry<String, Double>> it = variableUpdates.entrySet().iterator();
+		while (it.hasNext()) {
+			Entry<String, Double> variable = it.next();
+			String name = variable.getKey();
+			double value = variable.getValue();
+			if (variables.get(name) == null) {
+				// TODO: it should be passed in not as a map but as the actual
+				// variable object in the parameter
+				// or we can just keep the variables object as just a front end
+				// thing for displaying (otherwise both front and back end have
+				// access to it which may not be good)
+				mySidebar.updateVariable(new Property(name, value));
+			} else {
+				// variables.get(name).setText(value);
+			}
+		}
+	}
+
+	public double towards(int id, double x, double y) {
+		double angle = Math.toDegrees(Math.atan2(x, y));
+		return setHeading(id, angle, false);
+	}
 
 	public double setXY(int id, double x, double y) {
 		double xy = myWorkspace.getTurtleMap().get(id).setXY(x, y);
-		mySidebar.updateTurtleProperties(id, myWorkspace); // are these methods duplicated
-												// code since they are all the
-												// same thing with just one
-												// added line in them?
+		mySidebar.updateTurtleProperties(id, myWorkspace); // are these methods
+															// duplicated
+		// code since they are all the
+		// same thing with just one
+		// added line in them?
 		return xy;
 	}
 
@@ -262,6 +255,10 @@ public class SLogoView implements Observer {
 	@Override
 	public void update(Observable o, Object arg) {
 		ExecutionEnvironment env = (ExecutionEnvironment) o;
+		mySidebar.updateExecutionEnvironment(env);
+		if (env == null){
+			System.out.println("null");
+		}
 		for (String s : env.getVariableMap().keySet()) {
 			double value = env.getVariableMap().get(s);
 			mySidebar.updateVariable(new Property(s, value));
@@ -269,6 +266,5 @@ public class SLogoView implements Observer {
 		for (String s : env.getUserCommandMap().keySet()) {
 			updateCommand(s);
 		}
-		
 	}
 }

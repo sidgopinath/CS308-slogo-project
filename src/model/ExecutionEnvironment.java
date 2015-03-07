@@ -28,6 +28,12 @@ public class ExecutionEnvironment extends Observable{
 		myVariableMap.put(variableName, value);
 		updateObserver();
 	}
+	
+	/*public void updateVariableName(String oldName, String newName){
+		myVariableMap.put(newName, myVariableMap.get(oldName));
+		myVariableMap.remove(oldName);
+		updateObserver();
+	}*/
 
 	private void updateObserver() {
 		setChanged();

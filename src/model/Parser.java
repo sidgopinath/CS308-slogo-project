@@ -3,6 +3,7 @@ package model;
 import java.lang.reflect.InvocationTargetException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import model.instructions.Constant;
@@ -21,6 +23,7 @@ import model.instructions.UserRunningInstruction;
 import model.instructions.Variable;
 //import model.turtle.TurtleCommand;
 import view.SLogoView;
+import view.ViewUpdater;
 
 /**
  * To parse, first create a parsing tree which will be created/traversed recursively
@@ -32,9 +35,10 @@ public class Parser implements Observer{
 	
 	private List<Entry<String, Pattern>> myPatterns;
 	private Map<String,String> myCommandMap;
-	private static final String[] COMMAND_TYPES = new String[]{"BooleanInstruction","ControlInstruction","MathInstruction","MovementInstruction","TurtleRequestInstruction"};
+	private static final String[] COMMAND_TYPES = new String[]{"BooleanInstruction","ControlInstruction","FrontEndInstruction","MathInstruction","MovementInstruction","MultipleTurtlesInstruction","TurtleRequestInstruction"};
 	private int myFurthestDepth;
 	private SLogoView mySLogoView;
+	private ViewUpdater myViewUpdater;
 	private ExecutionEnvironment myExecutionParameters;
 	
 	public Parser(SLogoView view){
@@ -43,7 +47,9 @@ public class Parser implements Observer{
 		myCommandMap = new HashMap<String, String>();
 		myExecutionParameters = new ExecutionEnvironment();
 		myExecutionParameters.addObserver(this);
-		myExecutionParameters.addObserver(view);
+		myViewUpdater = new ViewUpdater(view);
+		myExecutionParameters.addObserver(myViewUpdater); //create the viewupdater and store as global and pass to others
+		view.setEnvironment(myExecutionParameters);
 		addAllPatterns("English");
 		makeCommandMap();
 	}
@@ -89,10 +95,17 @@ public class Parser implements Observer{
 				nodeList.add(makeTree(splitCommands));
 			}
 			for (Node root : nodeList) {
-				root.getInstruction().execute();
+					try{
+						for(int turtle:myExecutionParameters.getActiveList()){
+							myExecutionParameters.setActiveTurtle(turtle);
+							root.getInstruction().execute();
+						}
+					}
+					catch (ConcurrentModificationException e){
+						
+					}
 			}
 		} catch (Exception e) {
-			System.out.println("in parse and execute");
 			e.printStackTrace();
 			mySLogoView.openDialog("Invalid input! Try again.");
 		}
@@ -112,7 +125,7 @@ public class Parser implements Observer{
 		case "LISTSTART":
 			// count number of strings til you reach a ], thats number of dependencies
 			myFurthestDepth++;
-			myNode = new Node(new ListInstruction(futureInstructions, match,mySLogoView, myExecutionParameters));
+			myNode = new Node(new ListInstruction(futureInstructions, match,myViewUpdater, myExecutionParameters));
 			Node temp;
 			while (true) {
 				temp = makeTree(command);
@@ -138,7 +151,7 @@ public class Parser implements Observer{
 			myFurthestDepth++;
 			System.out.println(myExecutionParameters.getCommand(command[myFurthestDepth-1])!=null);
 			if(myExecutionParameters.getUserCommandMap().containsKey(command[myFurthestDepth-1])&&(myFurthestDepth<2||myFurthestDepth>=2&&testMatches(command[myFurthestDepth-2]).toUpperCase()!="MAKEUSERINSTRUCTION")){
-				myNode = new Node(new UserRunningInstruction(futureInstructions, command[myFurthestDepth-1], mySLogoView, myExecutionParameters));
+				myNode = new Node(new UserRunningInstruction(futureInstructions, command[myFurthestDepth-1], myViewUpdater, myExecutionParameters));
 				System.out.println(" Node "+ myNode);
 				neededVars = 1;
 			}
@@ -156,23 +169,37 @@ public class Parser implements Observer{
 			//this is either a known command or invalid input.  
 			//instantiate the command, if reflection cannot find the file then must be invalid
 		if(myNode==null){
-			try{
-				Instruction myInt;
-				myInt = Class.forName("model.instructions."+myCommandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,SLogoView.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,mySLogoView, myExecutionParameters});
-				myFurthestDepth++;
-				myExecutionParameters.addObserver(myInt);
-				myNode = new Node(myInt);
-				neededVars = myInt.getNumberOfArguments();
-			}
-			catch(InstantiationException | IllegalAccessException
-					| IllegalArgumentException | InvocationTargetException
-					| NoSuchMethodException | SecurityException |ClassNotFoundException e){
-				throw new ModelException();
-			}
-			catch(ArrayIndexOutOfBoundsException e){
-				mySLogoView.openDialog("Out of bounds error.");
-				throw new ModelException();
-			}
+				try {
+					Instruction myInt;
+					myInt = Class.forName("model.instructions."+myCommandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,ViewUpdater.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,myViewUpdater, myExecutionParameters});
+					myFurthestDepth++;
+					myExecutionParameters.addObserver(myInt);
+					myNode = new Node(myInt);
+					neededVars = myInt.getNumberOfArguments();
+				} catch (InstantiationException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IllegalArgumentException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (NoSuchMethodException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (SecurityException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ClassNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+		
 		}
 		while(myVars<neededVars){
 			Node level = makeTree(command);

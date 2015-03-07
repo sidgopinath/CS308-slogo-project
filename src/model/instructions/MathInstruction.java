@@ -5,11 +5,12 @@ import java.util.Random;
 
 import model.ExecutionEnvironment;
 import view.SLogoView;
+import view.ViewUpdater;
 
 public class MathInstruction extends Instruction{
 	
-	public MathInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
-		super(dependencies, instructionType, view, environment);
+	public MathInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, updater, environment);
 	}
 
 	public enum implementers {

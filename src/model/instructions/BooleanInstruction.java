@@ -4,12 +4,13 @@ import java.util.List;
 
 import model.ExecutionEnvironment;
 import view.SLogoView;
+import view.ViewUpdater;
 
 
 public class BooleanInstruction extends Instruction {
 
-	public BooleanInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
-		super(dependencies, instructionType, view, environment);
+	public BooleanInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, updater, environment);
 	}
 
 	public enum implementers {

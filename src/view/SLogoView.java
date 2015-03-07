@@ -10,16 +10,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.ResourceBundle;
 
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -27,15 +22,13 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
-import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 import model.ExecutionEnvironment;
 import model.Parser;
 import model.TurtleCommand;
 
-public class SLogoView implements Observer {
+public class SLogoView {
 	private Stage myStage;
 	protected ResourceBundle myResources = ResourceBundle
 			.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
@@ -45,22 +38,16 @@ public class SLogoView implements Observer {
 	private Dimension2D myDimensions;
 	private SideBar mySidebar;
 	private Editor myEditor;
-	private Parser myParser = createNewParser(this);
+	private Parser myParser;
+	private ExecutionEnvironment myEnvironment = null;
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
 	public SLogoView(Stage s, Dimension2D myDimensions) {
 		myStage = s;
-		createNewParser(this);
 		this.myDimensions = myDimensions;
 	}
 
-
-	public void updateWorkspace(List<TurtleCommand> instructionList) {
-		drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar, myWorkspace.getLines());
-	}
-
 	private void setGridPaneConstraints(GridPane root) {
-
 		RowConstraints row0 = new RowConstraints();
 		row0.setPercentHeight(4);
 		RowConstraints row1 = new RowConstraints();
@@ -84,54 +71,37 @@ public class SLogoView implements Observer {
 	}
 
 	private Button configureAddTurtlesButton() {
-		// Add turtle button
 		Button newTurtleButton = new Button(myResources.getString("AddTurtle"));
 		newTurtleButton.setStyle("-fx-base: #b6e7c9;");
 		newTurtleButton.setAlignment(Pos.CENTER_RIGHT);
-		newTurtleButton.setOnAction(e -> myWorkspace.addTurtle());
+		newTurtleButton.setOnAction(e -> myWorkspace.addTurtle(myEnvironment));
 		GridPane.setHalignment(newTurtleButton, HPos.CENTER);
 		return newTurtleButton;
 	}
 
-	private void updateCommand(String s) {
-		mySidebar.updateCommand(s);
-	}
-
-	// methods for the backend to call. TODO: organize better
 	public GridPane configureUI() {
 		GridPane root = new GridPane();
 		setGridPaneConstraints(root);
-		
-		Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>(); // TODO:
-																					// move
+		Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>(); // TODO:																				// move
 
 		mySidebar = new SideBar(myWorkspace, myParser);
 		myWorkspace = new Workspace(myDimensions, mySidebar);
 		drawer = new Drawer(myWorkspace);
+		System.out.println("created drawer =====================================");
 		root.add(new CustomizationBar(myParser, myTurtles, drawer, myWorkspace, myStage,
 				myDimensions), 0, 0);
 		root.add(configureAddTurtlesButton(), 1, 0);
 		root.add(myWorkspace, 0, 1);
 		root.add(mySidebar, 1, 1, 1, 2);
+		
+		//TODO: not a UI thing, make this another method that is called from mainview
+		myParser = createNewParser(this);
+
 		myEditor = new Editor(myParser, mySidebar, myDimensions);
 		root.add(myEditor, 0, 2);
 		return root;
 	}
 
-	// does this do anything?
-	// do we need to return anything
-
-	// do we still need an entire list for this?
-
-	// public Turtle getTurtleInfo(int index) {
-	// ImageView temp = myTurtles.get(index);
-	// return new Turtle(temp.getX(), temp.getY(), temp.getRotate());
-	//
-	// }
-
-	// this one is not actually used
-	// TODO: what is being passed in and how to update the tableview? may have
-	// to iterate through observablelist
 	public void updateVariables(Map<String, Double> variableUpdates) {
 		Iterator<Entry<String, Double>> it = variableUpdates.entrySet().iterator();
 		while (it.hasNext()) {
@@ -139,13 +109,8 @@ public class SLogoView implements Observer {
 			String name = variable.getKey();
 			double value = variable.getValue();
 			if (variables.get(name) == null) {
-				// TODO: it should be passed in not as a map but as the actual
-				// variable object in the parameter
-				// or we can just keep the variables object as just a front end
-				// thing for displaying (otherwise both front and back end have
-				// access to it which may not be good)
 				mySidebar.updateVariable(new Property(name, value));
-			} else {
+		//	} else {
 				// variables.get(name).setText(value);
 			}
 		}
@@ -217,7 +182,9 @@ public class SLogoView implements Observer {
 	public double getYCor(int id) {
 		return Double.parseDouble(myWorkspace.getTurtleMap().get(id).getYCoord());
 	}
-
+	public void setEnvironment(ExecutionEnvironment e){
+		myEnvironment = e;
+	}
 	public void openDialog(String message) {
 		Stage stage = new Stage();
 		HBox root = new HBox();
@@ -233,32 +200,19 @@ public class SLogoView implements Observer {
 		stage.show();
 	}
 
-	public double clearScreen(int id) {
-		myWorkspace.getTurtleMap().get(id).setAbsoluteHeading(0);
-		myWorkspace.clearLines();
-		double dist = myWorkspace.getTurtleMap().get(id).setXY(0, 0);
-		mySidebar.updateTurtleProperties(id, myWorkspace);
-		return dist;
-	}
 
-	@Override
-	public void update(Observable o, Object arg) {
-		ExecutionEnvironment env = (ExecutionEnvironment) o;
-		mySidebar.updateExecutionEnvironment(env);
-		for (String s : env.getVariableMap().keySet()) {
-			double value = env.getVariableMap().get(s);
-			mySidebar.updateVariable(new Property(s, value));
-		}
-		for (String s : env.getUserCommandMap().keySet()) {
-			updateCommand(s);
-		}
-	}
-	
-	public void getSidebar(){
+	public SideBar getSidebar(){
 		return mySidebar;
 	}
 	
-	public void getWorkspace(){
+	public Workspace getWorkspace(){
 		return myWorkspace;
 	}
+	
+	public Drawer getDrawer(){
+		System.out.println("get drawer");
+		return drawer;
+	}
+
+
 }

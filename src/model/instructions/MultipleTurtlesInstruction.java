@@ -6,6 +6,7 @@ import model.ExecutionEnvironment;
 import model.Polar;
 import model.instructions.BooleanInstruction.implementers;
 import view.SLogoView;
+import view.ViewUpdater;
 
 public class MultipleTurtlesInstruction extends Instruction{
 	
@@ -22,25 +23,42 @@ public class MultipleTurtlesInstruction extends Instruction{
 	}
 }
 	public MultipleTurtlesInstruction(List<Instruction> dependencies,
-			String instructionType, SLogoView view,
+			String instructionType, ViewUpdater updater,
 			ExecutionEnvironment environment) {
-		super(dependencies, instructionType, view, environment);
+		super(dependencies, instructionType, updater, environment);
 	}
 
 	@Override
 	public double execute() {
+		double returnVal = 0; 
 		switch(myInstructionType.toUpperCase()){
 		case "ID":
-			return ViewUpdater.getCurrentTurtleID();
+			return myEnvironment.getActiveTurtle();
 		case "TURTLES":
-			return ViewUpdater.getNumTurtles();
+			return myEnvironment.getTurtles().size();
 		case "TELL":
-			return myDependencies.get(0).execute();
+			myEnvironment.clearActiveList();
+			for(Instruction i :myDependencies.get(0).myDependencies){
+				myEnvironment.addTurtle(i.execute());
+				myEnvironment.addTurtleToActiveList(i.execute());
+				returnVal = i.execute();
+			}
+			return returnVal;
 		case "ASK":
-			return myDependencies.get(0).execute();
+			for(Instruction i :myDependencies.get(0).myDependencies){
+				myEnvironment.addTurtle(i.execute());
+				myEnvironment.setActiveTurtle(i.execute());
+				for(Instruction j : myDependencies.get(1).myDependencies){
+					returnVal = j.execute();
+				}
+			}
+			return returnVal;
 		case "ASKWITH":
+			// Not implemented
 			return myDependencies.get(0).execute();
-	}
+		default:
+			return 0;
+		}
 	}
 
 	@Override

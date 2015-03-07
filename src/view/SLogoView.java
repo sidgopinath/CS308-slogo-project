@@ -53,6 +53,21 @@ public class SLogoView implements Observer {
 		createNewParser(this);
 		this.myDimensions = myDimensions;
 	}
+<<<<<<< HEAD
+	    public void updateWorkspace(List<TurtleCommand> instructionList) {
+	        // String returnString = null;
+	        /*
+	         * for (TurtleCommand instruction : instructionList) { returnString +=
+	         * updateFromInstruction(instruction) + "\n"; }
+	         */
+	    	//System.out.println(myWorkspace.getTurtleMap());    	
+	       List<Polyline> polyline = drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar);
+	       lines.getChildren().addAll(polyline);
+	       	
+	        // return returnString;
+	    }
+=======
+>>>>>>> 03f21ce737f03543cccb9d0ef24774b6485c4428
 
 	public void updateWorkspace(List<TurtleCommand> instructionList) {
 		drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar, myWorkspace.getLines());

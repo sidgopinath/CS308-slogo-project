@@ -137,7 +137,6 @@ public class SideBar extends VBox{
 	}
 	
 	private void createVariablesPane(){
-		System.out.println("createdvarpane");
 		createTitleText(myResources.getString("VariablesHeader"));
 
 		variablesList = FXCollections.observableArrayList();
@@ -237,8 +236,6 @@ public class SideBar extends VBox{
 	
 	private ListView<String> createListView(ObservableList<String> items, int height){
 		ListView<String> list = new ListView<String>();
-		
-		// create an object instead
 		list.setItems(items);
 		list.setMaxWidth(Double.MAX_VALUE);
 		list.setPrefHeight(130);
@@ -246,7 +243,6 @@ public class SideBar extends VBox{
 	}
 
 	public void updateExecutionEnvironment(ExecutionEnvironment env) {
-		// TODO Auto-generated method stub
 		myEnvironment = env;
 	}
 	

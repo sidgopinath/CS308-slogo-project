@@ -1,6 +1,7 @@
 package view;
 
 import java.text.DecimalFormat;
+import java.util.List;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,6 +12,8 @@ public class TurtleView extends ImageView {
 	private boolean penUp = false;
 	private int myID;
 	private int myImageID;
+	
+	private List<ImageView> myStamps;
 
 	public TurtleView(int id, Image img) {
 		super(img);
@@ -113,5 +116,10 @@ public class TurtleView extends ImageView {
 	
 	public int getImageID(){
 		return myImageID;
+	}
+	
+	public int createStamp(Workspace workspace){
+		workspace.getChildren().add(new ImageView(getImage()));
+		return getImageID();
 	}
 }

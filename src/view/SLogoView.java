@@ -73,7 +73,6 @@ public class SLogoView {
 	private Button configureAddTurtlesButton() {
 		Button newTurtleButton = new Button(myResources.getString("AddTurtle"));
 		newTurtleButton.setStyle("-fx-base: #b6e7c9;");
-		newTurtleButton.setAlignment(Pos.CENTER_RIGHT);
 		newTurtleButton.setOnAction(e -> myWorkspace.addTurtle(myEnvironment));
 		GridPane.setHalignment(newTurtleButton, HPos.CENTER);
 		return newTurtleButton;
@@ -84,7 +83,6 @@ public class SLogoView {
 		setGridPaneConstraints(root);
 		Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>(); // TODO:																				// move
 
-		
 		mySidebar = new SideBar();
 		myWorkspace = new Workspace(myDimensions, mySidebar);
 		drawer = new Drawer(myWorkspace);

@@ -90,7 +90,7 @@ public class MovementInstruction extends Instruction {
 			myViewUpdater.showTurtle(0, false);
 			return 0.0;
 		case "CLEARSCREEN":
-			return myViewUpdater.clearScreen(0);
+			return myViewUpdater.clearScreen(myEnvironment.getActiveTurtle());
 
 		case "HOME":
 			myJump = true;

@@ -36,7 +36,6 @@ public class SideBar extends VBox {
 	private ExecutionEnvironment myEnvironment;
 
 	public SideBar() {
-		//myParser = parser;
 		setDimensionRestrictions();
 		createTurtlePropertiesTable();
 		createVariablesPane();

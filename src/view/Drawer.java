@@ -189,6 +189,10 @@ public class Drawer {
 		return polyline;
 	}
 
+	public void stamp(TurtleView currentTurtle){
+		ImageView stamp = new ImageView(currentTurtle.getImage());
+		
+	}
 
 	public void changeColor(Color c) {
 		myColor = c;

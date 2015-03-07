@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='us-ascii'?> 
+
+<!-- A test file for user variables and commands-->
+
+<userInfo>
+
+	<userVariables>
+		
+		<a>0.3</a>
+		<b>99</b>
+		<c>1.05</c>
+		
+	</userVariables>
+
+	<userCommands>
+		
+		<one>
+			<variables>d e f</variables>
+			<commands>fd rt 50</commands>
+		</one>
+
+		<two>
+			<variables>g h i</variables>
+			<commands>back rt 50</commands>
+		</two>
+
+	</userCommands>
+
+</userInfo>

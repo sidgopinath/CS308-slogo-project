@@ -3,11 +3,11 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
-import model.Polar;
-import model.instructions.BooleanInstruction.implementers;
-import view.SLogoView;
 import view.ViewUpdater;
-
+/*
+ * Class which implements instructions that handle multiple turtles.  AskWith's implementations is incomplete.  These commands tell the parser which
+ * turtles to execute a set of instructions on, and update the active turtles lists held in the executionenvironment object.
+ */
 public class MultipleTurtlesInstruction extends Instruction{
 	
 	public enum implementers {

@@ -26,7 +26,6 @@ import model.Parser;
 
 public class SideBar extends VBox {
 
-	private ListView<String> historyList;
 	private ObservableList<String> historyItems;
 	private ObservableList<Property> variablesList;
 	private Parser myParser;
@@ -93,14 +92,14 @@ public class SideBar extends VBox {
 		valuesCol.setCellValueFactory(new PropertyValueFactory<Property, String>(
 		        "myProperty"));
 
-		propertiesCol.setPrefWidth(152); // TODO: set dynamically
-		valuesCol.setPrefWidth(148);
+		propertiesCol.setPrefWidth(164); // TODO: set dynamically
+		valuesCol.setPrefWidth(164);  //divide width by 7.3 or 7.4
 
 		turtlePropertiesTable.getColumns().addAll(propertiesCol, valuesCol);
 		turtlePropertiesTable.setEditable(true);
 
 		turtlePropertiesTable.setMaxWidth(Double.MAX_VALUE);
-		turtlePropertiesTable.setPrefHeight(148);
+		turtlePropertiesTable.setPrefHeight(130);
 
 		getChildren().add(turtlePropertiesTable);
 	}
@@ -206,7 +205,7 @@ public class SideBar extends VBox {
 		variablesTable.setEditable(true);
 
 		variablesTable.setMaxWidth(Double.MAX_VALUE);
-		variablesTable.setPrefHeight(148);
+		variablesTable.setPrefHeight(130);
 
 		getChildren().add(variablesTable);
 		variablesTable.setItems(variablesList);
@@ -214,31 +213,33 @@ public class SideBar extends VBox {
 	
 	private void createHistoryPane(){
 		createTitleText(myResources.getString("HistoryHeader")); //TODO:
-
-		historyList = new ListView<String>();
 		historyItems = FXCollections.observableArrayList();
-		historyList.setItems(historyItems);
-		historyList.setMaxWidth(Double.MAX_VALUE);
-		historyList.setPrefHeight(148);
+		ListView<String> historyList = createListView(historyItems, 130);
 		getChildren().add(historyList);
 
 		historyList.getFocusModel().focusedItemProperty()
 				.addListener(changeListener ->
 								{if(historyList.getFocusModel().getFocusedItem()!=null){myParser.parseAndExecute(historyList.getFocusModel()
 												.getFocusedItem());} historyList.getFocusModel().focus(-1);});
+		
 	}
 	
 	private void createUserCommandsPane(){
 		createTitleText(myResources.getString("UserDefinedCommandsHeader")); 
-		ListView<String> userCommandsList = new ListView<String>();
 		commandItems = FXCollections.observableArrayList();
-		// create an object instead
-		userCommandsList.setItems(commandItems);
-		userCommandsList.setMaxWidth(Double.MAX_VALUE);
-		userCommandsList.setPrefHeight(148);
-		getChildren().add(userCommandsList);
-
+		getChildren().add(createListView(commandItems, 130));
 	}
+	
+	private ListView<String> createListView(ObservableList<String> items, int height){
+		ListView<String> list = new ListView<String>();
+		
+		// create an object instead
+		list.setItems(items);
+		list.setMaxWidth(Double.MAX_VALUE);
+		list.setPrefHeight(130);
+		return list;
+	}
+	
 	
 
 }

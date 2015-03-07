@@ -72,10 +72,7 @@ public class Workspace extends StackPane {
 		return myBackground.getHeight();
 	}
 
-	public void setActiveTurtle(int ID) { // could stick this into slogoview so
-											// that we do not need to pass a
-											// sidebar. but that seems less
-											// relevant :(
+	public void setActiveTurtle(int ID) {
 		myActiveTurtle = myTurtles.get(ID);
 		mySidebar.updateTurtleProperties(ID, this);
 	}
@@ -101,5 +98,6 @@ public class Workspace extends StackPane {
 	public void clearLines(){
 		myLines.getChildren().clear();
 	}
+
 }
 

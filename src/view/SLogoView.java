@@ -84,18 +84,20 @@ public class SLogoView {
 		setGridPaneConstraints(root);
 		Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>(); // TODO:																				// move
 
-		mySidebar = new SideBar(myWorkspace, myParser);
+		
+		mySidebar = new SideBar();
 		myWorkspace = new Workspace(myDimensions, mySidebar);
 		drawer = new Drawer(myWorkspace);
-		System.out.println("created drawer =====================================");
-		root.add(new CustomizationBar(myParser, myTurtles, drawer, myWorkspace, myStage,
-				myDimensions), 0, 0);
+		CustomizationBar customizationBar = new CustomizationBar( myTurtles, drawer, myWorkspace, myStage,
+				myDimensions);
+		root.add(customizationBar, 0, 0);
 		root.add(configureAddTurtlesButton(), 1, 0);
 		root.add(myWorkspace, 0, 1);
 		root.add(mySidebar, 1, 1, 1, 2);
 		
-		//TODO: not a UI thing, make this another method that is called from mainview
 		myParser = createNewParser(this);
+		mySidebar.setParser(myParser);
+		customizationBar.setParser(myParser);
 
 		myEditor = new Editor(myParser, mySidebar, myDimensions);
 		root.add(myEditor, 0, 2);

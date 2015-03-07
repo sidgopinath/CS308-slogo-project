@@ -176,6 +176,9 @@ public class ViewUpdater implements Observer{
 		return myWorkspace.getTurtleMap().get(id).getImageID();
 	}
 	
+	public double getPenColor(){
+		return myWorkspace.getPenColor();
+	}
 	
 	
 	

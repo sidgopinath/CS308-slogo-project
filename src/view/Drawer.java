@@ -45,7 +45,6 @@ public class Drawer {
 
 		List<Polyline> lines = new ArrayList<Polyline>();
 		Iterator<TurtleCommand> it = instructions.iterator();
-		System.out.println("draweing");
 		
 		while (it.hasNext()) {
 			TurtleCommand command = it.next();
@@ -193,6 +192,10 @@ public class Drawer {
 
 	public void changeColor(Color c) {
 		myColor = c;
+	}
+	
+	public Color getPenColor(){
+		return 
 	}
 
 }

@@ -17,11 +17,12 @@ public class Drawer {
 	private double[] myYBounds = new double[2];
 	private double[] myHalf = new double[2];
 	private Workspace myWorkspace;
-	private double strokeSize = 1;
+	private double strokeSize;
 	private int myIndex;
 	
 	public Drawer(Workspace workspace){
 		myWorkspace = workspace;
+		strokeSize = 1;
 		double xMax = myWorkspace.getGridWidth();
 		double yMax = myWorkspace.getGridHeight();
 		myXBounds[0] = 0;

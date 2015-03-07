@@ -1,10 +1,13 @@
 package view;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import javafx.collections.ObservableList;
 import javafx.scene.control.ColorPicker;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import model.ExecutionEnvironment;
 import model.TurtleCommand;
@@ -113,11 +116,67 @@ public class ViewUpdater implements Observer{
 
 	public double setBackgroundColor(double index){
 		int colorIndex = (int) index;
-		ColorPicker picker = new ColorPicker();
-		Color newColor = picker.getCustomColors().get(colorIndex);
-		myWorkspace.setBackground(newColor);
+		
+		//TODO
+		List<Color> colorList = new ArrayList<Color>();
+		colorList.add(Color.RED);
+		colorList.add(Color.ORANGE);
+		colorList.add(Color.YELLOW);
+		colorList.add(Color.GREEN);
+		colorList.add(Color.BLUE);
+		colorList.add(Color.PURPLE);
+		colorList.add(Color.BLACK);
+		
+		myWorkspace.setBackground(colorList.get(colorIndex));
 		return index;
 	}
+	
+	public double setPenColor(double index){
+		int colorIndex = (int) index;
+		
+		//TODO
+		List<Color> colorList = new ArrayList<Color>();
+		colorList.add(Color.RED);
+		colorList.add(Color.ORANGE);
+		colorList.add(Color.YELLOW);
+		colorList.add(Color.GREEN);
+		colorList.add(Color.BLUE);
+		colorList.add(Color.PURPLE);
+		colorList.add(Color.BLACK);
+
+		myDrawer.changeColor(colorList.get(colorIndex));	
+		return index;
+	}
+	
+	public double setPenSize(double index){
+		myDrawer.setStroke(index);
+		return index;
+	}
+	
+	public double setShape(double i, int id){
+		//TODO
+		int index = (int) i;
+		if (index == 0){
+			myWorkspace.getActiveTurtle().setImage(new Image("resources/images/defaultTurtle.png")); //default turtle
+			myWorkspace.getTurtleMap().get(id).setImageID(index);
+		}
+		else if (index == 1){
+			myWorkspace.getActiveTurtle().setImage(new Image("resources/images/happyTurtle.png")); //happy turtle
+			myWorkspace.getTurtleMap().get(id).setImageID(index);
+		}
+		else{
+			//TODO
+		//	myWorkspace.getActiveTurtle().setImage(new Image("resources/images/triangleTurtle.png")); //triangle
+			myWorkspace.getTurtleMap().get(id).setImageID(index);
+		}
+		return index;
+	}
+	
+	public double getShapeIndex(int id){
+		return myWorkspace.getTurtleMap().get(id).getImageID();
+	}
+	
+	
 	
 	
 	

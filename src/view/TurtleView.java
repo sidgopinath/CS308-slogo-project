@@ -10,6 +10,7 @@ public class TurtleView extends ImageView {
 	private double myHeading;
 	private boolean penUp = false;
 	private int myID;
+	private int myImageID;
 
 	public TurtleView(int id, Image img) {
 		super(img);
@@ -18,7 +19,9 @@ public class TurtleView extends ImageView {
 		penUp = false;
 		myHeading = 0;
 		myID = id;
+		myImageID = 1;
 	}
+	
 
 	// relative movement
 	public void move(double moveX, double moveY) {
@@ -102,5 +105,13 @@ public class TurtleView extends ImageView {
 
 	public int getID() {
 		return myID;
+	}
+	
+	public void setImageID(int id){
+		myImageID = id;
+	}
+	
+	public int getImageID(){
+		return myImageID;
 	}
 }

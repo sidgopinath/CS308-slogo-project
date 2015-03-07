@@ -12,8 +12,6 @@ public class SceneSetter {
         Scene scene = new Scene(root, xSize, ySize);
         stage.setTitle(myResources.getString("Title"));
         stage.setScene(scene);
-        // scene.setOnKeyPressed(e -> handleKeyInput(e));
         stage.show();
     }
-    
 }

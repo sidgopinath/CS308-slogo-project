@@ -34,12 +34,12 @@ public class FrontEndInstruction extends Instruction{
 	@Override
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
-		case "SetBackground":
-			return ViewUpdater.setBackgroundColor(myDependencies.get(0).execute());
+		case "SETBACKGROUND":
+			return myViewUpdater.setBackgroundColor(myDependencies.get(0).execute());
 		case "SetPenColor":
-			return ViewUpdater.setBackgroundColor(myDependencies.get(0).execute());
+			return myViewUpdater.set(myDependencies.get(0).execute());
 		case "SetPenSize":
-			return ViewUpdater.setBackgroundColor(myDependencies.get(0).execute());
+			return myViewUpdater.set(myDependencies.get(0).execute());
 		case "SetShape":
 			return 0;
 		case "SetPalette":

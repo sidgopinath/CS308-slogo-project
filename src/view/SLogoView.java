@@ -210,7 +210,6 @@ public class SLogoView {
 	}
 	
 	public Drawer getDrawer(){
-		System.out.println("get drawer");
 		return drawer;
 	}
 

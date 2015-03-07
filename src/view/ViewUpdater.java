@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
+import javafx.scene.control.ColorPicker;
+import javafx.scene.paint.Color;
 import model.ExecutionEnvironment;
 import model.TurtleCommand;
 
@@ -109,15 +111,16 @@ public class ViewUpdater implements Observer{
 		myWorkspace.getLines().getChildren().addAll(myDrawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar));
 	}
 
-	public double getCurrentTurtleID() {
-		// TODO Auto-generated method stub
-		return 0;
+	public double setBackgroundColor(double index){
+		int colorIndex = (int) index;
+		ColorPicker picker = new ColorPicker();
+		Color newColor = picker.getCustomColors().get(colorIndex);
+		myWorkspace.setBackground(newColor);
+		return index;
 	}
-
-	public double getNumTurtles() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
+	
+	
 	
 	
 	

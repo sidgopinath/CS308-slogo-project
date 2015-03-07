@@ -3,6 +3,8 @@ package view;
 //move lambda function into the main UI? 
 
 import java.text.DecimalFormat;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
@@ -21,21 +23,21 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
+import model.ExecutionEnvironment;
 import model.Parser;
 
 
-public class SideBar extends VBox {
+public class SideBar extends VBox{
 
-	private ListView<String> historyList;
 	private ObservableList<String> historyItems;
 	private ObservableList<Property> variablesList;
 	private Parser myParser;
 	private TableView<Property> variablesTable;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
-	private Workspace myWorkspace;
 	private TableView<Property> turtlePropertiesTable;
 	private ObservableList<String> commandItems;
+	private ExecutionEnvironment myEnvironment;
 
 	// make this into a new class with its own stuff that have variablesView and
 	// commandView and historyView???
@@ -46,43 +48,11 @@ public class SideBar extends VBox {
 		myParser = parser;
 		
 		setDimensionRestrictions();
-		
-		// turtle properties
 		createTurtlePropertiesTable();
-		// updateTurtleProperties();
-
 		createVariablesPane();
-
-		ListView<String> userCommandsList = new ListView<String>();
-		commandItems = FXCollections.observableArrayList();
-		// create an object instead
-		userCommandsList.setItems(commandItems);
-		userCommandsList.setMaxWidth(Double.MAX_VALUE);
-		userCommandsList.setPrefHeight(150);
-		getChildren().add(userCommandsList);
-
-		// history pane
-		createTitleText(Strings.HISTORY_HEADER); //TODO:
-
-		historyList = new ListView<String>();
-		historyItems = FXCollections.observableArrayList();
-		historyList.setItems(historyItems);
-		historyList.setMaxWidth(Double.MAX_VALUE);
-		historyList.setPrefHeight(150);
-		getChildren().add(historyList);
-
-		// TODO: Selected item can only have action once until other item is
-		// selected
-		// TODO: Selecting the same command after another of the same command
-		// does not work
-		historyList.getFocusModel().focusedItemProperty()
-				.addListener(changeListener ->
-								{if(historyList.getFocusModel().getFocusedItem()!=null){myParser.parseAndExecute(historyList.getFocusModel()
-												.getFocusedItem());} historyList.getFocusModel().focus(-1);});
-		// return sidePane;
-
+		
 		createUserCommandsPane();
-		createHistoryPane();
+		createHistoryPane();	
 	}
 
 	public void setHistory(String string) {
@@ -115,7 +85,6 @@ public class SideBar extends VBox {
 		//TODO: remove hardcoding
 		TableColumn<Property, String> propertiesCol = new TableColumn<Property, String>(
 		        myResources.getString("Properties"));
-		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
 		TableColumn<Property, String> valuesCol = new TableColumn<Property, String>(
 		        myResources.getString("Values"));
 
@@ -124,14 +93,14 @@ public class SideBar extends VBox {
 		valuesCol.setCellValueFactory(new PropertyValueFactory<Property, String>(
 		        "myProperty"));
 
-		propertiesCol.setPrefWidth(152); // TODO: set dynamically
-		valuesCol.setPrefWidth(150);
+		propertiesCol.setPrefWidth(164); // TODO: set dynamically
+		valuesCol.setPrefWidth(164);  //divide width by 7.3 or 7.4
 
 		turtlePropertiesTable.getColumns().addAll(propertiesCol, valuesCol);
 		turtlePropertiesTable.setEditable(true);
 
 		turtlePropertiesTable.setMaxWidth(Double.MAX_VALUE);
-		turtlePropertiesTable.setPrefHeight(150);
+		turtlePropertiesTable.setPrefHeight(130);
 
 		getChildren().add(turtlePropertiesTable);
 	}
@@ -141,38 +110,35 @@ public class SideBar extends VBox {
 	    DecimalFormat decimalFormat = new DecimalFormat("#.#");
 		TurtleView updatedTurtle = workspace.getTurtleMap().get(ID);
 		ObservableList<Property> turtlePropertiesList = FXCollections
-				.observableArrayList(
-						new Property(myResources.getString("ID"), String.valueOf(updatedTurtle.getID())),
-						new Property(myResources.getString("XPos"), String.valueOf(decimalFormat.format(updatedTurtle
-								.getTranslateX()))),
-						new Property(myResources.getString("YPos"), String.valueOf(updatedTurtle
-								.getYCoord())),
-						new Property(myResources.getString("Heading"), String.valueOf(updatedTurtle
-								.getHeading())), new Property(myResources.getString("PenPos"),
-								updatedTurtle.getPenPosition()), new Property(
-								myResources.getString("TurImg"), updatedTurtle.isShowing()));
+			.observableArrayList(
+				new Property(myResources.getString("ID"), String.valueOf(updatedTurtle.getID())),
+				new Property(myResources.getString("XPos"), String.valueOf(decimalFormat.format(updatedTurtle
+						.getTranslateX()))),
+				new Property(myResources.getString("YPos"), String.valueOf(updatedTurtle
+						.getYCoord())),
+				new Property(myResources.getString("Heading"), String.valueOf(updatedTurtle
+						.getHeading())), new Property(myResources.getString("PenPos"),
+						updatedTurtle.getPenPosition()), new Property(
+						myResources.getString("TurImg"), updatedTurtle.isShowing()));
 		turtlePropertiesTable.setItems(turtlePropertiesList);
 	}
 	
 	private void setDimensionRestrictions(){
 		setPadding(new Insets(5, 15, 0, 0));
-		setSpacing(5);
+		setSpacing(3);
 		setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	private void createTitleText(String s){
 		Text title = new Text(s);
-		title.setFont(new Font(15));
+		title.setFont(new Font(13));
 		title.setUnderline(true);
 		getChildren().add(title);
 	}
 	
 	private void createVariablesPane(){
-		Text variables = new Text(myResources.getString("ID"));
-		// is this necessary to use a .properties file AND a strings class?
-		variables.setFont(new Font(15));
-		variables.setUnderline(true);
-		getChildren().add(variables);
+		System.out.println("createdvarpane");
+		createTitleText(myResources.getString("VariablesHeader"));
 
 		variablesList = FXCollections.observableArrayList();
 		variablesTable = new TableView<Property>();
@@ -189,48 +155,54 @@ public class SideBar extends VBox {
 		variablesCol.setPrefWidth(164); // TODO: set dynamically
 		valuesCol.setPrefWidth(164);
 		// TODO:
-		 valuesCol.setEditable(true);
+		 variablesCol.setEditable(true);
 
-		variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
+	/*	variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		variablesCol
-				.setOnEditCommit(new EventHandler<CellEditEvent<Property, String>>() {
-					@Override
-					public void handle(CellEditEvent<Property, String> t) {
-						t.getTableView().getItems().get(t.getTablePosition().getRow())
-								.setName(t.getNewValue());
-						
-						//parseandexecute("MAKE :var 90");
-						//TODO
-						System.out.println("newvalue: " + t.getNewValue());
-						//TODO: send an update to the controller back to the backend. 
-					}
-				});
+			.setOnEditCommit(new EventHandler<CellEditEvent<Property, String>>() {
+				@Override
+				public void handle(CellEditEvent<Property, String> t) {
+					Property variable = t.getTableView().getItems().get(t.getTablePosition().getRow());
+					String oldName = variable.getName();
+					variable.setName(t.getNewValue()); 
+					System.out.println("old " + oldName + "new " + t.getNewValue());
+					myEnvironment.updateVariableName(oldName, t.getNewValue());
+				}
+			});*/
 
 		// some issue with strings and ints
 		valuesCol.setCellFactory(TextFieldTableCell
-				.forTableColumn(new StringConverter<Double>() {
+			.forTableColumn(new StringConverter<Double>() {
 
-					@Override
-					public Double fromString(String userInput) {
-						// try{
-						return Double.valueOf(userInput);
-						/*
-						 * } catch(NumberFormatException e){
-						 * System.out.println("Number Format Exception"); }
-						 */
-					}
+				@Override
+				public Double fromString(String userInput) {
+					// try{
+					return Double.valueOf(userInput);
+					/*
+					 * } catch(NumberFormatException e){
+					 * System.out.println("Number Format Exception"); }
+					 */
+				}
 
-					@Override
-					public String toString(Double t) {
-						return t.toString();
-					}
-				}));
+				@Override
+				public String toString(Double t) {
+					return t.toString();
+				}
+			}));
 		valuesCol
 				.setOnEditCommit(new EventHandler<CellEditEvent<Property, Double>>() {
 					@Override
 					public void handle(CellEditEvent<Property, Double> t) {
-						t.getTableView().getItems().get(t.getTablePosition().getRow())
-								.setValue(t.getNewValue());
+
+						Property variable = t.getTableView().getItems().get(t.getTablePosition().getRow());
+						variable.setValue(t.getNewValue());
+						if (myEnvironment == null){
+							System.out.println("lul");
+						}
+						myEnvironment.addVariable(variable.getName(), t.getNewValue());
+						//TODO
+						
+						
 					}
 				});
 
@@ -238,7 +210,7 @@ public class SideBar extends VBox {
 		variablesTable.setEditable(true);
 
 		variablesTable.setMaxWidth(Double.MAX_VALUE);
-		variablesTable.setPrefHeight(150);
+		variablesTable.setPrefHeight(130);
 
 		getChildren().add(variablesTable);
 		variablesTable.setItems(variablesList);
@@ -246,41 +218,38 @@ public class SideBar extends VBox {
 	
 	private void createHistoryPane(){
 		createTitleText(myResources.getString("HistoryHeader")); //TODO:
-
-		historyList = new ListView<String>();
 		historyItems = FXCollections.observableArrayList();
-		historyList.setItems(historyItems);
-		historyList.setMaxWidth(Double.MAX_VALUE);
-		historyList.setPrefHeight(150);
+		ListView<String> historyList = createListView(historyItems, 130);
 		getChildren().add(historyList);
 
-		// TODO: Selected item can only have action once until other item is
-		// selected
-		// TODO: Selecting the same command after another of the same command
-		// does not work
 		historyList.getFocusModel().focusedItemProperty()
-			.addListener(new ChangeListener<String>() {
-				@Override
-				public void changed(ObservableValue<? extends String> ov,
-					String old_val, String new_val) {
-						myParser.parseAndExecute(historyList.getFocusModel()
-								.getFocusedItem());
-
-				}
-			});
+				.addListener(changeListener ->
+								{if(historyList.getFocusModel().getFocusedItem()!=null){myParser.parseAndExecute(historyList.getFocusModel()
+												.getFocusedItem());} historyList.getFocusModel().focus(-1);});
+		
 	}
 	
 	private void createUserCommandsPane(){
 		createTitleText(myResources.getString("UserDefinedCommandsHeader")); 
-		ListView<String> userCommandsList = new ListView<String>();
 		commandItems = FXCollections.observableArrayList();
-		// create an object instead
-		userCommandsList.setItems(commandItems);
-		userCommandsList.setMaxWidth(Double.MAX_VALUE);
-		userCommandsList.setPrefHeight(150);
-		getChildren().add(userCommandsList);
-		
+		getChildren().add(createListView(commandItems, 130));
 	}
+	
+	private ListView<String> createListView(ObservableList<String> items, int height){
+		ListView<String> list = new ListView<String>();
+		
+		// create an object instead
+		list.setItems(items);
+		list.setMaxWidth(Double.MAX_VALUE);
+		list.setPrefHeight(130);
+		return list;
+	}
+
+	public void updateExecutionEnvironment(ExecutionEnvironment env) {
+		// TODO Auto-generated method stub
+		myEnvironment = env;
+	}
+	
 	
 
 }

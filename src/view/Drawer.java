@@ -11,15 +11,15 @@ import model.Polar;
 import model.TurtleCommand;
 
 public class Drawer {
+	
 	private Color myColor;
 	private double[] myXBounds = new double[2];
 	private double[] myYBounds = new double[2];
 	private double[] myHalf = new double[2];
 	private Workspace myWorkspace;
-	private double STROKE_SIZE = 1;
-	public void setStroke(Double size){
-		STROKE_SIZE = size;
-	}
+	private double strokeSize = 1;
+	private int myIndex;
+	
 	public Drawer(Workspace workspace){//double xMax, double yMax) {
 		myWorkspace = workspace;
 		double xMax = myWorkspace.getGridWidth();
@@ -32,20 +32,24 @@ public class Drawer {
 		myHalf[1] = 0.5 * (myYBounds[1] - myYBounds[0]);
 		myColor = Color.BLACK;
 	}
+	
+	public void setStroke(Double size){
+		strokeSize = size;
+	}
 
 	// may have to remove list from turtlecommand
 	// TODO: remove list if it is no longer a list being used
 	public List<Polyline> draw(Map<Integer, TurtleView> turtles,
 			List<TurtleCommand> instructions, SideBar sidebar) {
+
 		List<Polyline> lines = new ArrayList<Polyline>();
 		Iterator<TurtleCommand> it = instructions.iterator();
+		
 		while (it.hasNext()) {
 			TurtleCommand command = it.next();
-			System.out.println(command.getTurtleId());
 			TurtleView turtle = turtles.get(command.getTurtleId());
-			System.out.println(turtle);
 			Polar polar = command.getPolar();
-			// move turtle and draw line
+			
 			if (polar.getDistance() != 0) {
 				double angle = turtle.getRotate();
 				double turtleX = turtle.getLayoutX();
@@ -61,6 +65,7 @@ public class Drawer {
 						/ 2;
 				double newX = turtleX + moveX + turtle.getTranslateX() + 15;
 				double newY = turtleY + moveY + turtle.getTranslateY() + 15;
+				
 				if (newY < myYBounds[0]) {
 					wrapY(1, turtle, polar, lines, 0, newY, startX, moveX, moveY,
 							turtleY, startY);
@@ -81,25 +86,58 @@ public class Drawer {
 					if (!turtle.getPenUp()) {
 						Polyline polyline = new Polyline();
 						polyline.setStroke(myColor);
-						polyline.setStrokeWidth(STROKE_SIZE);
+						polyline.setStrokeWidth(strokeSize);
 						polyline.getPoints().addAll(
 								new Double[] { startX, startY, endX, endY });
 						lines.add(polyline);
 					}
 				}
-			} else {
+			} 
+			else {
 				if (command.isRelative()) {
 					turtle.setRelativeHeading(polar.getAngle());
-				} else {
+				} 
+				else {
 					turtle.setAbsoluteHeading(polar.getAngle());
 				}
 			}
 			sidebar.updateTurtleProperties(command.getTurtleId(), myWorkspace);
 		}
-
 		return lines;
 	}
 
+//	
+//	private void animate(TurtleView turtle,List<Polyline> lines, Group target) {
+//		myIndex = 0;
+//        Timeline animation = new Timeline();
+//		KeyFrame animate = new KeyFrame(Duration.millis(30),
+//				e -> updateKeyFrame(turtle,lines, target));
+//		animation.getKeyFrames().add(animate);
+//		animation.setCycleCount(lines.size());
+//		animation.play();
+//	}
+//	
+//	private void updateKeyFrame(TurtleView turtle,List<Polyline> lines, Group target) {
+//		System.out.println("turtle was at "+ turtle.getTranslateX()+" "+ turtle.getTranslateY());
+//		target.getChildren().add(lines.get(myIndex));
+//		turtle.move(turtle.getTranslateX()+(lines.get(1).getPoints().get(2)-lines.get(0).getPoints().get(2)), turtle.getTranslateY()+(lines.get(1).getPoints().get(3)-lines.get(0).getPoints().get(3)));
+//		myIndex++;
+//	}
+//	
+//	private List<Polyline> animator(double startX,
+//			double startY, double endX, double endY) {
+//		List<Polyline> myLines = new ArrayList<Polyline>();
+//		for	(int i=0; i<10; i++){
+//			Polyline pLine = new Polyline();
+//			pLine.setStroke(myColor);
+//			pLine.setStrokeWidth(strokeSize);
+//			pLine.getPoints().addAll(
+//					new Double[] { startX+(double)i/10*(endX-startX), startY+(double)i/10*(endY-startY), startX+(double)(i+1)/10*(endX-startX), startY+(double)(i+1)/10*(endY-startY)});
+//			System.out.println("adding line from "+ startX+(double)i/10*(endX-startX)+" "+startY+(double)i/10*(endY-startY)+ " to "+startX+(double)(i+1)/10*(endX-startX)+ " "+ startY+(double)(i+1)/10*(endY-startY));
+//			myLines.add(pLine);
+//		}
+//		return myLines;
+//	}
 	private void wrapY(int dir, TurtleView turtle, Polar polar,
 			List<Polyline> lines, int i, double newY, double startX, double moveX,
 			double moveY, double turtleY, double startY) {
@@ -138,20 +176,9 @@ public class Drawer {
 		return polyline;
 	}
 
-	/*
-	 * private getEditedTurtleID(List<TurtleCommand> instructions){
-	 * Iterator<TurtleCommand> it = instructions.iterator(); while
-	 * (it.hasNext()) { TurtleCommand command = it.next(); return
-	 * command.getTurtleId(); } }
-	 */
-	// It may be better to remove this method above and directly pass the
-	// updates to the sidebar
 
 	public void changeColor(Color c) {
 		myColor = c;
 	}
 
-	/*
-	 * public void setPenUp(boolean isUp){ penUp = isUp; }
-	 */
 }

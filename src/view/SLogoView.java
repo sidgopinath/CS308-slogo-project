@@ -14,6 +14,8 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
@@ -28,9 +30,10 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.shape.Polyline;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import model.ExecutionEnvironment;
+import model.Parser;
 import model.TurtleCommand;
-import controller.SLogoController;
 
 public class SLogoView implements Observer {
 	private Stage myStage;
@@ -39,23 +42,36 @@ public class SLogoView implements Observer {
 	private Drawer drawer;
 	private Workspace myWorkspace;
 	private Group lines = new Group();
-	private SLogoController myController=createNewController(this);
 	private Dimension2D myDimensions;
 	// private int activeTurtleID; //TODO: update this
 	private SideBar mySidebar;
 	private Editor myEditor;
-
+	private Parser myParser = createNewParser(this);
 	// TODO: move myTUrtles to relavant class (Workspace). Maybe drawer too? But
 	// there is no functionality after moving it
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
 	public SLogoView(Stage s, Dimension2D myDimensions) {
 		myStage = s;
-		createNewController(this);
+		createNewParser(this);
 		// activeTurtleID = 1;
 		this.myDimensions=myDimensions;
 		lines.setManaged(false);
 	}
+	    public void updateWorkspace(List<TurtleCommand> instructionList) {
+	        // String returnString = null;
+	        /*
+	         * for (TurtleCommand instruction : instructionList) { returnString +=
+	         * updateFromInstruction(instruction) + "\n"; }
+	         */
+	    	//System.out.println(myWorkspace.getTurtleMap());
+	    	
+	       drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar, lines);
+	        
+	        	
+	        // return returnString;
+	    }
+
 
 	private void setGridPaneConstraints(GridPane root) {
 		
@@ -77,8 +93,8 @@ public class SLogoView implements Observer {
         root.getRowConstraints().add(row2);
 	}
 
-    private SLogoController createNewController(SLogoView view) {
-        return new SLogoController(view);
+    private Parser createNewParser(SLogoView view) {
+        return new Parser(view);
     }
 
     private Button configureAddTurtlesButton() {
@@ -107,14 +123,14 @@ public class SLogoView implements Observer {
       //  myTurtles.put(0, turtle);
     	Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>(); //TODO: move
 
-        mySidebar = new SideBar(myWorkspace, myController);
+        mySidebar = new SideBar(myWorkspace, myParser);
         myWorkspace = new Workspace(lines, myDimensions, mySidebar);
         drawer = new Drawer(myWorkspace);
-        root.add(new CustomizationBar(myController, myTurtles, drawer, myWorkspace, myStage, myDimensions), 0, 0);
+        root.add(new CustomizationBar(myParser, myTurtles, drawer, myWorkspace, myStage, myDimensions), 0, 0);
         root.add(configureAddTurtlesButton(), 1, 0);
         root.add(myWorkspace, 0, 1);
         root.add(mySidebar, 1, 1, 1, 2);
-        myEditor = new Editor(myController, mySidebar, myDimensions);
+        myEditor = new Editor(myParser, mySidebar, myDimensions);
         root.add(myEditor, 0, 2);
         return root;
     }
@@ -123,20 +139,8 @@ public class SLogoView implements Observer {
     // do we need to return anything
 
     // do we still need an entire list for this?
-    public void updateWorkspace(List<TurtleCommand> instructionList) {
-        // String returnString = null;
-        /*
-         * for (TurtleCommand instruction : instructionList) { returnString +=
-         * updateFromInstruction(instruction) + "\n"; }
-         */
-    	//System.out.println(myWorkspace.getTurtleMap());
-        List<Polyline> newlines = drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar);
-        lines.getChildren().addAll(newlines);
+ 
 
-        // return returnString;
-    }
-
-    
 //    public Turtle getTurtleInfo(int index) {
 //        ImageView temp = myTurtles.get(index);
 //        return new Turtle(temp.getX(), temp.getY(), temp.getRotate());

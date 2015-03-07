@@ -10,7 +10,7 @@ public class ControlInstruction extends Instruction{
 	public ControlInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
 		super(dependencies, instructionType, view, environment);
 	}
-// to recurse [ :count ] [ IFELSE EQUALS? :count 0 [ fd 1 ] [ fd recurse [ - :count 1 ] ] ]
+// to recurse [ :count ] [ IFELSE EQUAL? :count 0 [ fd 1 ] [ fd recurse [ - :count 1 ] ] ]
 	public enum implementers {
 		MAKEVARIABLE(2),
 		REPEAT(2),

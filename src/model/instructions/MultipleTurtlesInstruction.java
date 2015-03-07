@@ -3,6 +3,7 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
+import model.Polar;
 import view.SLogoView;
 
 public class MultipleTurtlesInstruction extends Instruction{
@@ -29,7 +30,17 @@ public class MultipleTurtlesInstruction extends Instruction{
 	@Override
 	public double execute() {
 		// TODO Auto-generated method stub
-		return 0;
+		switch(myInstructionType.toUpperCase()){
+		case "ID":
+			return myReturnVal;
+		case "TURTLES":
+			return myDependencies.get(0).execute();
+		case "TELL":
+			return myDependencies.get(0).execute();
+		case "ASK":
+			return myDependencies.get(0).execute();
+		case "ASKWITH":
+			return myDependencies.get(0).execute();
 	}
 
 	@Override

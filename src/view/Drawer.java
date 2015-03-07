@@ -1,12 +1,17 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.scene.Group;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
+import javafx.util.Duration;
 import model.Polar;
 import model.TurtleCommand;
 
@@ -36,7 +41,7 @@ public class Drawer {
 	// may have to remove list from turtlecommand
 	// TODO: remove list if it is no longer a list being used
 	public List<Polyline> draw(Map<Integer, TurtleView> turtles,
-			List<TurtleCommand> instructions, SideBar sidebar) {
+			List<TurtleCommand> instructions, SideBar sidebar, Group linesGroup) {
 		List<Polyline> lines = new ArrayList<Polyline>();
 		Iterator<TurtleCommand> it = instructions.iterator();
 		while (it.hasNext()) {
@@ -54,7 +59,7 @@ public class Drawer {
 						* polar.getDistance();
 				double moveY = Math.cos(Math.toRadians(polar.getAngle() + 180 - angle))
 						* polar.getDistance();
-
+				
 				double startX = turtleX + turtle.getTranslateX() + turtle.getFitWidth()
 						/ 2;
 				double startY = turtleY + turtle.getTranslateY() + turtle.getFitHeight()
@@ -64,28 +69,27 @@ public class Drawer {
 				if (newY < myYBounds[0]) {
 					wrapY(1, turtle, polar, lines, 0, newY, startX, moveX, moveY,
 							turtleY, startY);
+					linesGroup.getChildren().addAll(lines);
 				} else if (newY > myYBounds[1]) {
 					wrapY(1, turtle, polar, lines, 1, newY, startX, moveX, moveY,
 							turtleY, startY);
+					linesGroup.getChildren().addAll(lines);
 				} else if (newX < myXBounds[0]) {
 					wrapX(0, turtle, polar, lines, 0, newX, startY, moveY, moveX,
 							turtleX, startX);
+					linesGroup.getChildren().addAll(lines);
 				} else if (newX > myXBounds[1]) {
 					wrapX(0, turtle, polar, lines, 1, newX, startY, moveY, moveX,
 							turtleX, startX);
+					linesGroup.getChildren().addAll(lines);
 				} else {
-					turtle.move(turtle.getTranslateX() + moveX, turtle.getTranslateY()
-							+ moveY);
 					double endX = startX + moveX;
 					double endY = startY + moveY;
 					if (!turtle.getPenUp()) {
-						Polyline polyline = new Polyline();
-						polyline.setStroke(myColor);
-						polyline.setStrokeWidth(STROKE_SIZE);
-						polyline.getPoints().addAll(
-								new Double[] { startX, startY, endX, endY });
-						lines.add(polyline);
+						lines.addAll(animator(startX, startY, endX, endY));
+						animate(turtle,lines, linesGroup);
 					}
+					
 				}
 			} else {
 				if (command.isRelative()) {
@@ -99,7 +103,36 @@ public class Drawer {
 
 		return lines;
 	}
-
+	int index;
+	private void animate(TurtleView turtle,List<Polyline> lines, Group target) {
+		index = 0;
+        Timeline animation = new Timeline();
+		KeyFrame animate = new KeyFrame(Duration.millis(30),
+				e -> updateKeyFrame(turtle,lines, target));
+		animation.getKeyFrames().add(animate);
+		animation.setCycleCount(lines.size());
+		animation.play();
+	}
+	private void updateKeyFrame(TurtleView turtle,List<Polyline> lines, Group target) {
+		System.out.println("turtle was at "+ turtle.getTranslateX()+" "+ turtle.getTranslateY());
+		target.getChildren().add(lines.get(index));
+		turtle.move(turtle.getTranslateX()+(lines.get(1).getPoints().get(2)-lines.get(0).getPoints().get(2)), turtle.getTranslateY()+(lines.get(1).getPoints().get(3)-lines.get(0).getPoints().get(3)));
+		index++;
+	}
+	private List<Polyline> animator(double startX,
+			double startY, double endX, double endY) {
+		List<Polyline> myLines = new ArrayList();
+		for	(int i=0; i<10; i++){
+			Polyline pLine = new Polyline();
+			pLine.setStroke(myColor);
+			pLine.setStrokeWidth(STROKE_SIZE);
+			pLine.getPoints().addAll(
+					new Double[] { startX+(double)i/10*(endX-startX), startY+(double)i/10*(endY-startY), startX+(double)(i+1)/10*(endX-startX), startY+(double)(i+1)/10*(endY-startY)});
+			System.out.println("adding line from "+ startX+(double)i/10*(endX-startX)+" "+startY+(double)i/10*(endY-startY)+ " to "+startX+(double)(i+1)/10*(endX-startX)+ " "+ startY+(double)(i+1)/10*(endY-startY));
+			myLines.add(pLine);
+		}
+		return myLines;
+	}
 	private void wrapY(int dir, TurtleView turtle, Polar polar,
 			List<Polyline> lines, int i, double newY, double startX, double moveX,
 			double moveY, double turtleY, double startY) {

@@ -2,12 +2,9 @@ package view;
 
 //move lambda function into the main UI? 
 
-import java.lang.reflect.InvocationTargetException;
 import java.text.DecimalFormat;
-import java.util.Map;
 import java.util.ResourceBundle;
 
-import controller.SLogoController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -16,21 +13,23 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.control.TableColumn.CellEditEvent;
+import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
+import model.Parser;
+
 
 public class SideBar extends VBox {
 
 	private ListView<String> historyList;
 	private ObservableList<String> historyItems;
 	private ObservableList<Property> variablesList;
-	private SLogoController myController;
+	private Parser myParser;
 	private TableView<Property> variablesTable;
     public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
@@ -42,11 +41,16 @@ public class SideBar extends VBox {
 	// sidebarPane class with parameters that specify column constraints /
 	// location
 
-	public SideBar(Workspace workspace, SLogoController controller) {
-		myController = controller;
+	public SideBar(Workspace workspace, Parser parser) {
+		myParser = parser;
+		
 		setDimensionRestrictions();
 		createTurtlePropertiesTable();
 		createVariablesPane();
+
+		
+
+		
 		createUserCommandsPane();
 		createHistoryPane();
 	}
@@ -63,13 +67,7 @@ public class SideBar extends VBox {
 				return;
 			}
 		}
-
 		variablesList.add(variable);
-
-		/*
-		 * t.getTableView().getItems()
-		 * .get(t.getTablePosition().getRow())).setName(t.getNewValue());
-		 */
 	}
 
 	public void updateCommand(String newCommand) {
@@ -96,13 +94,13 @@ public class SideBar extends VBox {
 		        "myProperty"));
 
 		propertiesCol.setPrefWidth(152); // TODO: set dynamically
-		valuesCol.setPrefWidth(150);
+		valuesCol.setPrefWidth(148);
 
 		turtlePropertiesTable.getColumns().addAll(propertiesCol, valuesCol);
 		turtlePropertiesTable.setEditable(true);
 
 		turtlePropertiesTable.setMaxWidth(Double.MAX_VALUE);
-		turtlePropertiesTable.setPrefHeight(150);
+		turtlePropertiesTable.setPrefHeight(148);
 
 		getChildren().add(turtlePropertiesTable);
 	}
@@ -127,23 +125,19 @@ public class SideBar extends VBox {
 	
 	private void setDimensionRestrictions(){
 		setPadding(new Insets(5, 15, 0, 0));
-		setSpacing(5);
+		setSpacing(3);
 		setMaxWidth(Double.MAX_VALUE);
 	}
 	
 	private void createTitleText(String s){
 		Text title = new Text(s);
-		title.setFont(new Font(15));
+		title.setFont(new Font(13));
 		title.setUnderline(true);
 		getChildren().add(title);
 	}
 	
 	private void createVariablesPane(){
-		Text variables = new Text(myResources.getString("ID"));
-		// is this necessary to use a .properties file AND a strings class?
-		variables.setFont(new Font(15));
-		variables.setUnderline(true);
-		getChildren().add(variables);
+		createTitleText(myResources.getString("VariablesHeader"));
 
 		variablesList = FXCollections.observableArrayList();
 		variablesTable = new TableView<Property>();
@@ -170,8 +164,7 @@ public class SideBar extends VBox {
 					Property variable = t.getTableView().getItems().get(t.getTablePosition().getRow());
 					variable.setName(t.getNewValue());
 					
-					//parseandexecute("MAKE :var 90");
-					myController.parseInput("MAKE " + variable.getName() + " " + variable.getValue());
+					myParser.parseInput("MAKE " + variable.getName() + " " + variable.getValue());
 					//variablesTable.re
 					//remove();
 					//TODO
@@ -213,7 +206,7 @@ public class SideBar extends VBox {
 		variablesTable.setEditable(true);
 
 		variablesTable.setMaxWidth(Double.MAX_VALUE);
-		variablesTable.setPrefHeight(150);
+		variablesTable.setPrefHeight(148);
 
 		getChildren().add(variablesTable);
 		variablesTable.setItems(variablesList);
@@ -226,24 +219,13 @@ public class SideBar extends VBox {
 		historyItems = FXCollections.observableArrayList();
 		historyList.setItems(historyItems);
 		historyList.setMaxWidth(Double.MAX_VALUE);
-		historyList.setPrefHeight(150);
+		historyList.setPrefHeight(148);
 		getChildren().add(historyList);
 
-		// TODO: Selected item can only have action once until other item is
-		// selected
-		// TODO: Selecting the same command after another of the same command
-		// does not work
 		historyList.getFocusModel().focusedItemProperty()
-			.addListener(new ChangeListener<String>() {
-				@Override
-				public void changed(ObservableValue<? extends String> ov,
-					String old_val, String new_val) {
-						myController.parseInput(historyList.getFocusModel()
-								.getFocusedItem());
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-			});
+				.addListener(changeListener ->
+								{if(historyList.getFocusModel().getFocusedItem()!=null){myParser.parseAndExecute(historyList.getFocusModel()
+												.getFocusedItem());} historyList.getFocusModel().focus(-1);});
 	}
 	
 	private void createUserCommandsPane(){
@@ -253,8 +235,9 @@ public class SideBar extends VBox {
 		// create an object instead
 		userCommandsList.setItems(commandItems);
 		userCommandsList.setMaxWidth(Double.MAX_VALUE);
-		userCommandsList.setPrefHeight(150);
+		userCommandsList.setPrefHeight(148);
 		getChildren().add(userCommandsList);
+
 	}
 	
 

@@ -1,24 +1,22 @@
 package view;
 
-import java.lang.reflect.InvocationTargetException;
-
-import controller.SLogoController;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
+import model.Parser;
 
 public class Editor extends HBox {
 
 	private Button runButton;
 	private TextArea textEditor;
-	private SLogoController myController;
+	private Parser myParser;
 	private SideBar mySidebar;
 
-	public Editor(SLogoController controller, SideBar sidebar, Dimension2D dimensions) {
+	public Editor(Parser parser, SideBar sidebar, Dimension2D dimensions) {
 		mySidebar = sidebar;
-		myController = controller;
+		myParser = parser;
 		setPadding(new Insets(dimensions.getWidth() / 89, 0, dimensions.getWidth() / 85,
 				dimensions.getWidth() / 89));
 		setSpacing(15);
@@ -34,9 +32,7 @@ public class Editor extends HBox {
 		mySidebar.setHistory(userText);
 		
 		//TODO: remove catch
-
-			myController.parseInput(userText);
-
+		myParser.parseAndExecute(userText);
 	}
 	
 	private void createTextEditor(Dimension2D dimensions){

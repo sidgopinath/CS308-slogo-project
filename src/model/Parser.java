@@ -81,6 +81,7 @@ public class Parser implements Observer{
 
 	public void parseAndExecute(String input) {
 		try {
+			System.out.println(input);
 			myFurthestDepth = 0;
 			String[] splitCommands = input.split("\\s+");
 			List<Node> nodeList = new ArrayList<Node>();

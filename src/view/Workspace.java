@@ -16,12 +16,13 @@ public class Workspace extends StackPane {
 	private Rectangle myBackground;
 	private Map<Integer, TurtleView> myTurtles;
 	private SideBar mySidebar;
+	private Group myLines;
 
 	private TurtleView myActiveTurtle;
 	//TODO: set initial id to 1
 	private static final int INITIAL_TURTLE_ID = 0;
 	
-	public Workspace(Group lines,
+	public Workspace(
 			Dimension2D dimensions, SideBar sidebar) {
 
 		myBackground = new Rectangle(dimensions.getWidth() * 11.7 / 16,
@@ -29,10 +30,13 @@ public class Workspace extends StackPane {
 		myBackground.setFill(Color.WHITE);
     	myTurtles = new HashMap<Integer, TurtleView>(); //TODO: move
 		mySidebar = sidebar;
+		myLines = new Group();
+		myLines.setManaged(false);
+
 		
 		
 	
-		getChildren().addAll(myBackground, lines);
+		getChildren().addAll(myBackground, myLines);
 	//TODO: change both values within the method from 0 to 1
 		
 		//create initial turtle (id = 1)
@@ -86,5 +90,13 @@ public class Workspace extends StackPane {
 	
 	public Map<Integer, TurtleView> getTurtleMap(){
 		return myTurtles;
+	}
+	
+	public Group getLines(){
+		return myLines;
+	}
+	
+	public void clearLines(){
+		myLines.getChildren().clear();
 	}
 }

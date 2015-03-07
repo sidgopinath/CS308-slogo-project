@@ -42,26 +42,20 @@ public class SLogoView implements Observer {
 	private Map<String, Node> variables;
 	private Drawer drawer;
 	private Workspace myWorkspace;
-	private Group lines = new Group();
 	private Dimension2D myDimensions;
-	// private int activeTurtleID; //TODO: update this
 	private SideBar mySidebar;
 	private Editor myEditor;
 	private Parser myParser = createNewParser(this);
-	// TODO: move myTUrtles to relavant class (Workspace). Maybe drawer too? But
-	// there is no functionality after moving it
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
 	public SLogoView(Stage s, Dimension2D myDimensions) {
 		myStage = s;
 		createNewParser(this);
-		// activeTurtleID = 1;
 		this.myDimensions = myDimensions;
-		lines.setManaged(false);
 	}
 
 	public void updateWorkspace(List<TurtleCommand> instructionList) {
-		drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar, lines);
+		drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar, myWorkspace.getLines());
 	}
 
 	private void setGridPaneConstraints(GridPane root) {
@@ -106,18 +100,12 @@ public class SLogoView implements Observer {
 	public GridPane configureUI() {
 		GridPane root = new GridPane();
 		setGridPaneConstraints(root);
-
-		// set initial turtle
-
-		// temp
-		// TurtleView turtle = new TurtleView(0, new
-		// Image(Strings.DEFAULT_TURTLE_IMG));
-		// myTurtles.put(0, turtle);
+		
 		Map<Integer, TurtleView> myTurtles = new HashMap<Integer, TurtleView>(); // TODO:
 																					// move
 
 		mySidebar = new SideBar(myWorkspace, myParser);
-		myWorkspace = new Workspace(lines, myDimensions, mySidebar);
+		myWorkspace = new Workspace(myDimensions, mySidebar);
 		drawer = new Drawer(myWorkspace);
 		root.add(new CustomizationBar(myParser, myTurtles, drawer, myWorkspace, myStage,
 				myDimensions), 0, 0);
@@ -245,8 +233,8 @@ public class SLogoView implements Observer {
 	}
 
 	public double clearScreen(int id) {
-		lines.getChildren().clear();
 		myWorkspace.getTurtleMap().get(id).setAbsoluteHeading(0);
+		myWorkspace.clearLines();
 		double dist = myWorkspace.getTurtleMap().get(id).setXY(0, 0);
 		mySidebar.updateTurtleProperties(id, myWorkspace);
 		return dist;
@@ -256,9 +244,6 @@ public class SLogoView implements Observer {
 	public void update(Observable o, Object arg) {
 		ExecutionEnvironment env = (ExecutionEnvironment) o;
 		mySidebar.updateExecutionEnvironment(env);
-		if (env == null){
-			System.out.println("null");
-		}
 		for (String s : env.getVariableMap().keySet()) {
 			double value = env.getVariableMap().get(s);
 			mySidebar.updateVariable(new Property(s, value));
@@ -266,5 +251,13 @@ public class SLogoView implements Observer {
 		for (String s : env.getUserCommandMap().keySet()) {
 			updateCommand(s);
 		}
+	}
+	
+	public void getSidebar(){
+		return mySidebar;
+	}
+	
+	public void getWorkspace(){
+		return myWorkspace;
 	}
 }

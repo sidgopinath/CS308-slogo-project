@@ -26,55 +26,44 @@ public class CustomizationBar extends HBox {
 	private Parser myParser;
 	private Workspace myWorkspace;
 	private Stage myStage;
-    public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
+    private static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 
 	public CustomizationBar(Parser parser,
 			Map<Integer, TurtleView> turtleList, Drawer drawer, Workspace workspace,
 			Stage stage, Dimension2D dimensions) {
-
-		setPadding(new Insets(0, dimensions.getWidth() / 120, 0,
-				dimensions.getWidth() / 120));
-		setSpacing(dimensions.getWidth() / 120);
-
 		myParser = parser;
 		myWorkspace = workspace;
 		myStage = stage;
-
+		setPadding(new Insets(0, dimensions.getWidth() / 120, 0,dimensions.getWidth() / 120));
+		setSpacing(dimensions.getWidth() / 120);
 		getChildren().add(configureLanguageOptions());
-
-		// select turtle image
 		selectTurtleImage(dimensions);
-		
 		//TODO: set pen color for the active turtle. 
-		// select pen color
-		HBox customizePenBox = new HBox(10);
+		selectPenColor(drawer);
+		selectBackgroundColor(dimensions);
+	}
 
-		Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);
-		ColorPicker penColorChoice = new ColorPicker(Color.BLACK);
-		penColorChoice.setOnAction(e -> drawer.changeColor(penColorChoice.getValue()));
-
-		customizePenBox.getChildren().addAll(selectPenColor, penColorChoice);
-		// sidePane.getChildren().addAll(hbox2, strokeColorChoice);
-		getChildren().add(customizePenBox);
-
-		// select background color
+	private void selectBackgroundColor(Dimension2D dimensions) {
 		HBox customizeBackgroundBox = new HBox(10);
 		Text selectBackgroundColor = new Text(Strings.SELECT_BACKGROUND_COLOR);
-
 		ColorPicker backgroundChoice = new ColorPicker(Color.WHITE);
 		backgroundChoice.setOnAction(e -> changeBackgroundColor(backgroundChoice
 				.getValue()));
-
-		// User can pick color for the stroke
-
 		customizeBackgroundBox.getChildren().addAll(selectBackgroundColor,
 				backgroundChoice);
 		HBox spaceHolder = new HBox();
 		spaceHolder.setPrefWidth(dimensions.getWidth() / 40);
-
 		getChildren().addAll(customizeBackgroundBox, spaceHolder);
+	}
 
+	private void selectPenColor(Drawer drawer) {
+		HBox customizePenBox = new HBox(10);
+		Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);
+		ColorPicker penColorChoice = new ColorPicker(Color.BLACK);
+		penColorChoice.setOnAction(e -> drawer.changeColor(penColorChoice.getValue()));
+		customizePenBox.getChildren().addAll(selectPenColor, penColorChoice);
+		getChildren().add(customizePenBox);
 	}
 
 	private void uploadTurtleFile(TurtleView turtle) {
@@ -98,11 +87,6 @@ public class CustomizationBar extends HBox {
 	private void changeBackgroundColor(Color color) {
 		myWorkspace.setBackground(color);
 	}
-	
-	private void changeBackgroundColor(int i){
-		ColorPicker colorPicker = new ColorPicker();
-		myWorkspace.setBackground(colorPicker.getCustomColors().get(i));
-	}
 
 	private HBox configureLanguageOptions() {
 		HBox selectLanguage = new HBox(10);
@@ -111,20 +95,15 @@ public class CustomizationBar extends HBox {
 		ObservableList<String> languages = FXCollections.observableArrayList("English",
 				"Chinese", "French", "German", "Italian", "Japanese", "Korean",
 				"Portugese", "Russian", "Spanish");
-
 		languageOptions.setItems(languages);
 		languageOptions.setValue(languages.get(0));
-
 		selectLanguage.getChildren().addAll(select, languageOptions);
-
 		languageOptions.getSelectionModel().selectedItemProperty()
 				.addListener(new ChangeListener<String>() {
 					@Override
 					public void changed(ObservableValue<? extends String> ov,
 							String old_val, String new_val) {
-						System.out.println(new_val);
 						myParser.setLanguage(new_val);
-
 					}
 				});
 		return selectLanguage;
@@ -139,5 +118,4 @@ public class CustomizationBar extends HBox {
 		customizeTurtleBox.getChildren().addAll(selectTurtle, uploadImg);
 		getChildren().add(customizeTurtleBox);
 	}
-	
 }

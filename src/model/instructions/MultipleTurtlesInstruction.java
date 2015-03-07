@@ -4,6 +4,7 @@ import java.util.List;
 
 import model.ExecutionEnvironment;
 import model.Polar;
+import model.instructions.BooleanInstruction.implementers;
 import view.SLogoView;
 
 public class MultipleTurtlesInstruction extends Instruction{
@@ -24,17 +25,15 @@ public class MultipleTurtlesInstruction extends Instruction{
 			String instructionType, SLogoView view,
 			ExecutionEnvironment environment) {
 		super(dependencies, instructionType, view, environment);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public double execute() {
-		// TODO Auto-generated method stub
 		switch(myInstructionType.toUpperCase()){
 		case "ID":
-			return myReturnVal;
+			return ViewUpdater.getCurrentTurtleID();
 		case "TURTLES":
-			return myDependencies.get(0).execute();
+			return ViewUpdater.getNumTurtles();
 		case "TELL":
 			return myDependencies.get(0).execute();
 		case "ASK":
@@ -42,11 +41,10 @@ public class MultipleTurtlesInstruction extends Instruction{
 		case "ASKWITH":
 			return myDependencies.get(0).execute();
 	}
+	}
 
 	@Override
 	public int getNumberOfArguments() {
-		// TODO Auto-generated method stub
-		return 0;
+		return implementers.valueOf(myInstructionType.toUpperCase()).numArgs;
 	}
-
 }

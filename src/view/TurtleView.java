@@ -26,6 +26,7 @@ public class TurtleView extends ImageView {
 	public void move(double moveX, double moveY) {
 		setTranslateX(moveX);
 		setTranslateY(moveY);
+		System.out.println("myX "+this.getTranslateX()+" myY " +this.getTranslateY());
 	}
 
 	// absolute movement

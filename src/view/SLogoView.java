@@ -64,11 +64,10 @@ public class SLogoView implements Observer {
 	         * for (TurtleCommand instruction : instructionList) { returnString +=
 	         * updateFromInstruction(instruction) + "\n"; }
 	         */
-	    	//System.out.println(myWorkspace.getTurtleMap());
-	    	
-	       drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar, lines);
-	        
-	        	
+	    	//System.out.println(myWorkspace.getTurtleMap());    	
+	       List<Polyline> polyline = drawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar);
+	       lines.getChildren().addAll(polyline);
+	       	
 	        // return returnString;
 	    }
 

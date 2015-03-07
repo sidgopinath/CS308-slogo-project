@@ -45,6 +45,7 @@ public class MovementInstruction extends Instruction {
 	
 	@Override
 	public double execute() {
+		System.out.println("active guy is "+ myEnvironment.getActiveTurtle());
 		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
 			myReturnVal = myDependencies.get(0).execute();
@@ -90,6 +91,7 @@ public class MovementInstruction extends Instruction {
 			return 0.0;
 		case "CLEARSCREEN":
 			return myViewUpdater.clearScreen(0);
+
 		case "HOME":
 			myJump = true;
 			return myViewUpdater.setXY(0,0,0);
@@ -100,7 +102,7 @@ public class MovementInstruction extends Instruction {
 
 	private void updateView() {
 		List<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
-		commandList.add(new TurtleCommand(0, myPolar, myJump));
+		commandList.add(new TurtleCommand(myEnvironment.getActiveTurtle(), myPolar, myJump));
 		myViewUpdater.updateWorkspace(commandList);
 	}
 

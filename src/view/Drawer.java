@@ -93,9 +93,9 @@ public class Drawer {
 						polyline.setStroke(myColor);
 						System.out.println(strokeSize);
 						polyline.setStrokeWidth(strokeSize);
-						/*polyline.getPoints().addAll(
-								new Double[] { startX, startY, endX, endY });*/
-						drawLine(startX, startY, endX, endY);
+						polyline.getPoints().addAll(
+								new Double[] { startX, startY, endX, endY });
+						//drawLine(startX, startY, endX, endY);
 						lines.add(polyline);
 					}
 				}
@@ -180,12 +180,11 @@ public class Drawer {
 	}
 
 	private Polyline drawLine(double startX, double startY, double endX, double endY) {
-		System.out.println("DRAW THE LINE!!");
 		Polyline polyline = new Polyline();
 		polyline.setStroke(myColor);
 		polyline.setStrokeWidth(strokeSize);
 
-		System.out.println(strokeSize);
+		System.out.println(myColor);
 		polyline.getPoints().addAll(new Double[] { startX, startY, endX, endY });
 		return polyline;
 	}

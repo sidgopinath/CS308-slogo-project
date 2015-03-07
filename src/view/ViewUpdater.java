@@ -43,6 +43,8 @@ public class ViewUpdater implements Observer{
 		return setHeading(id, angle, false);
 	}
 
+
+
 	public double setHeading(int id, double angle, boolean relative) {
 		double heading;
 		if (relative) {
@@ -104,9 +106,7 @@ public class ViewUpdater implements Observer{
 	}
 	
 	public void updateWorkspace(List<TurtleCommand> instructionList) {
-		if (myDrawer == null)
-			System.out.println("null drawer!");
-		myDrawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar);
+		myWorkspace.getLines().getChildren().addAll(myDrawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar));
 	}
 
 	public double getCurrentTurtleID() {

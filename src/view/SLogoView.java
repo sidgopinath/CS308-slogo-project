@@ -24,6 +24,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import model.ExecutionEnvironment;
 import model.Parser;
 import model.TurtleCommand;
 
@@ -38,6 +39,7 @@ public class SLogoView {
 	private SideBar mySidebar;
 	private Editor myEditor;
 	private Parser myParser;
+	private ExecutionEnvironment myEnvironment = null;
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 
 	public SLogoView(Stage s, Dimension2D myDimensions) {
@@ -72,7 +74,7 @@ public class SLogoView {
 		Button newTurtleButton = new Button(myResources.getString("AddTurtle"));
 		newTurtleButton.setStyle("-fx-base: #b6e7c9;");
 		newTurtleButton.setAlignment(Pos.CENTER_RIGHT);
-		newTurtleButton.setOnAction(e -> myWorkspace.addTurtle());
+		newTurtleButton.setOnAction(e -> myWorkspace.addTurtle(myEnvironment));
 		GridPane.setHalignment(newTurtleButton, HPos.CENTER);
 		return newTurtleButton;
 	}
@@ -113,7 +115,76 @@ public class SLogoView {
 			}
 		}
 	}
-	
+
+	public double towards(int id, double x, double y) {
+		double angle = Math.toDegrees(Math.atan2(x, y));
+		return setHeading(id, angle, false);
+	}
+
+	public double setXY(int id, double x, double y) {
+		double xy = myWorkspace.getTurtleMap().get(id).setXY(x, y);
+		mySidebar.updateTurtleProperties(id, myWorkspace); // are these methods
+															// duplicated
+		// code since they are all the
+		// same thing with just one
+		// added line in them?
+		return xy;
+	}
+
+	public double setHeading(int id, double angle, boolean relative) {
+		double heading;
+		if (relative) {
+			heading = myWorkspace.getTurtleMap().get(id).setRelativeHeading(angle);
+
+		} else {
+			heading = myWorkspace.getTurtleMap().get(id).setAbsoluteHeading(angle);
+		}
+		mySidebar.updateTurtleProperties(id, myWorkspace);
+		return heading;
+	}
+
+	public void setPenUp(int id, boolean setPen) {
+		/*
+		 * if (setPen){ myTurtles.get(id).setPenUp(true); //return 0; }
+		 * myTurtles.get(id).setPenUp(false); //return 1;
+		 */
+
+		myWorkspace.getTurtleMap().get(id).setPenUp(setPen);
+		mySidebar.updateTurtleProperties(id, myWorkspace);
+	}
+
+	public double getPenDown(int id) {
+		if (myWorkspace.getTurtleMap().get(id).getPenUp())
+			return 0;
+		return 1;
+	}
+
+	public double isShowing(int id) {
+		if (myWorkspace.getTurtleMap().get(id).isVisible())
+			return 1;
+		return 0;
+	}
+
+	public void showTurtle(int id, boolean show) {
+		myWorkspace.getTurtleMap().get(id).showTurtle(show);
+		mySidebar.updateTurtleProperties(id, myWorkspace);
+	}
+
+	public double getHeading(int id) {
+		return myWorkspace.getTurtleMap().get(id).getRotate();
+	}
+
+	// these definitely methods should not be in SLogoView;
+	public double getXCor(int id) {
+		return myWorkspace.getTurtleMap().get(id).getTranslateX();
+	}
+
+	public double getYCor(int id) {
+		return Double.parseDouble(myWorkspace.getTurtleMap().get(id).getYCoord());
+	}
+	public void setEnvironment(ExecutionEnvironment e){
+		myEnvironment = e;
+	}
 	public void openDialog(String message) {
 		Stage stage = new Stage();
 		HBox root = new HBox();

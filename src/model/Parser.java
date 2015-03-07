@@ -3,6 +3,7 @@ package model;
 import java.lang.reflect.InvocationTargetException;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 import model.instructions.Constant;
@@ -33,7 +35,7 @@ public class Parser implements Observer{
 	
 	private List<Entry<String, Pattern>> myPatterns;
 	private Map<String,String> myCommandMap;
-	private static final String[] COMMAND_TYPES = new String[]{"BooleanInstruction","ControlInstruction","MathInstruction","MovementInstruction","TurtleRequestInstruction"};
+	private static final String[] COMMAND_TYPES = new String[]{"BooleanInstruction","ControlInstruction","FrontEndInstruction","MathInstruction","MovementInstruction","MultipleTurtlesInstruction","TurtleRequestInstruction"};
 	private int myFurthestDepth;
 	private SLogoView mySLogoView;
 	private ViewUpdater myViewUpdater;
@@ -47,6 +49,7 @@ public class Parser implements Observer{
 		myExecutionParameters.addObserver(this);
 		myViewUpdater = new ViewUpdater(view);
 		myExecutionParameters.addObserver(myViewUpdater); //create the viewupdater and store as global and pass to others
+		view.setEnvironment(myExecutionParameters);
 		addAllPatterns("English");
 		makeCommandMap();
 	}
@@ -92,7 +95,15 @@ public class Parser implements Observer{
 				nodeList.add(makeTree(splitCommands));
 			}
 			for (Node root : nodeList) {
-				root.getInstruction().execute();
+					try{
+						for(int turtle:myExecutionParameters.getActiveList()){
+							myExecutionParameters.setActiveTurtle(turtle);
+							root.getInstruction().execute();
+						}
+					}
+					catch (ConcurrentModificationException e){
+						
+					}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

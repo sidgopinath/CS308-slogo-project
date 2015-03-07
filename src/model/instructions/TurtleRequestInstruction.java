@@ -28,15 +28,15 @@ public class TurtleRequestInstruction extends Instruction {
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "XCOORDINATE":
-			return myViewUpdater.getXCor(0);
+			return myViewUpdater.getXCor(myEnvironment.getActiveTurtle());
 		case "YCOORDINATE":
-			return myViewUpdater.getYCor(0);
+			return myViewUpdater.getYCor(myEnvironment.getActiveTurtle());
 		case "HEADING":
-			return myViewUpdater.getHeading(0);
+			return myViewUpdater.getHeading(myEnvironment.getActiveTurtle());
 		case "ISPENDOWN":
-			return myViewUpdater.getPenDown(0);
+			return myViewUpdater.getPenDown(myEnvironment.getActiveTurtle());
 		case "ISSHOWING":
-			return myViewUpdater.isShowing(0);
+			return myViewUpdater.isShowing(myEnvironment.getActiveTurtle());
 		default: 
 			return 0.0;
 		}

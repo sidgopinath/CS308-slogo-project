@@ -15,15 +15,15 @@ public class FrontEndInstruction extends Instruction{
 	}
 
 	public enum implementers {
-		SetBackground(1),
-		SetPenColor(1),
-		SetPenSize(1),
-		SetShape(1),
-		SetPalette(4),
-		GetPenColor(0),
-		GetShape(0),
-		Stamp(0),
-		ClearStamps(0);
+		SETBACKGROUND(1),
+		SETPENCOLOR(1),
+		SETPENSIZE(1),
+		SETSHAPE(1),
+		SETPALETTE(4),
+		GETPENCOLOR(0),
+		GETSHAPE(0),
+		STAMP(0),
+		CLEARSTAMPS(0);
 		
     private int numArgs;
 	implementers(int args){
@@ -34,23 +34,23 @@ public class FrontEndInstruction extends Instruction{
 	@Override
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
-		case "SetBackground":
+		case "SETBACKGROUND":
 			return ViewUpdater.setBackgroundColor(myDependencies.get(0).execute());
-		case "SetPenColor":
+		case "SETPENCOLOR":
 			return ViewUpdater.setBackgroundColor(myDependencies.get(0).execute());
-		case "SetPenSize":
+		case "SETPENSIZE":
 			return ViewUpdater.setBackgroundColor(myDependencies.get(0).execute());
-		case "SetShape":
+		case "SETSHAPE":
 			return 0;
-		case "SetPalette":
+		case "SETPALETTE":
 			return 0;
-		case "GetPenColor":
+		case "GETPENCOLOR":
 			return ViewUpdater.getBackgroundColor();
-		case "GetShape":
+		case "GETSHAPE":
 			return 0;
-		case "Stamp":
+		case "STAMP":
 			return 0;
-		case "ClearStamps":
+		case "CLEARSTAMPS":
 			return 0;
 		default:
 			return -1;

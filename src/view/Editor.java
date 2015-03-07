@@ -20,7 +20,6 @@ public class Editor extends HBox {
 		setPadding(new Insets(dimensions.getWidth() / 89, 0, dimensions.getWidth() / 85,
 				dimensions.getWidth() / 89));
 		setSpacing(15);
-
 		createTextEditor(dimensions);
 		createRunButton();
 	}
@@ -28,10 +27,7 @@ public class Editor extends HBox {
 	private void parse() {
 		String userText = textEditor.getText();
 		textEditor.clear();
-		System.out.println(userText);
 		mySidebar.setHistory(userText);
-		
-		//TODO: remove catch
 		myParser.parseAndExecute(userText);
 	}
 	

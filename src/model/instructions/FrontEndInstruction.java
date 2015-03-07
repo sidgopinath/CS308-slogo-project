@@ -5,12 +5,13 @@ import java.util.List;
 import model.ExecutionEnvironment;
 import model.instructions.BooleanInstruction.implementers;
 import view.SLogoView;
+import view.ViewUpdater;
 
 public class FrontEndInstruction extends Instruction{
 	public FrontEndInstruction(List<Instruction> dependencies,
-			String instructionType, SLogoView view,
+			String instructionType, ViewUpdater updater,
 			ExecutionEnvironment environment) {
-		super(dependencies, instructionType, view, environment);
+		super(dependencies, instructionType, updater, environment);
 	}
 
 	public enum implementers {

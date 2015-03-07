@@ -6,6 +6,7 @@ import model.ExecutionEnvironment;
 import model.Polar;
 import model.instructions.BooleanInstruction.implementers;
 import view.SLogoView;
+import view.ViewUpdater;
 
 public class MultipleTurtlesInstruction extends Instruction{
 	
@@ -22,18 +23,18 @@ public class MultipleTurtlesInstruction extends Instruction{
 	}
 }
 	public MultipleTurtlesInstruction(List<Instruction> dependencies,
-			String instructionType, SLogoView view,
+			String instructionType, ViewUpdater updater,
 			ExecutionEnvironment environment) {
-		super(dependencies, instructionType, view, environment);
+		super(dependencies, instructionType, updater, environment);
 	}
 
 	@Override
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "ID":
-			return ViewUpdater.getCurrentTurtleID();
+			return myViewUpdater.getCurrentTurtleID();
 		case "TURTLES":
-			return ViewUpdater.getNumTurtles();
+			return myViewUpdater.getNumTurtles();
 		case "TELL":
 			return myDependencies.get(0).execute();
 		case "ASK":

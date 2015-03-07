@@ -33,9 +33,6 @@ public class Workspace extends StackPane {
 		myLines = new Group();
 		myLines.setManaged(false);
 
-		
-		
-	
 		getChildren().addAll(myBackground, myLines);
 	//TODO: change both values within the method from 0 to 1
 		
@@ -75,7 +72,6 @@ public class Workspace extends StackPane {
 											// relevant :(
 		myActiveTurtle = myTurtles.get(ID);
 		mySidebar.updateTurtleProperties(ID, this);
-		System.out.println("newID" + ID);
 	}
 
 	private void configureTurtleEventHandler(int ID) {
@@ -100,3 +96,4 @@ public class Workspace extends StackPane {
 		myLines.getChildren().clear();
 	}
 }
+

@@ -1,6 +1,7 @@
 package model;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Observable;
 
@@ -52,7 +53,6 @@ public class ExecutionEnvironment extends Observable{
 		
 	public Instruction getCommand(String key){
 		return myUserInstructionMap.get(key);
-
 	}
 	
 	public void clear(){
@@ -67,4 +67,5 @@ public class ExecutionEnvironment extends Observable{
 	public Map<String, Double> getVariableMap(){
 		return myVariableMap;
 	}
+	
 }

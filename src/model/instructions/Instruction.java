@@ -7,18 +7,19 @@ import java.util.Observer;
 import model.ExecutionEnvironment;
 import model.TurtleCommand;
 import view.SLogoView;
+import view.ViewUpdater;
 
 public abstract class Instruction implements Observer{
  
 	protected List<Instruction> myDependencies;
 	protected String myInstructionType;
-	protected SLogoView myView;
+	protected ViewUpdater myViewUpdater;
 	protected ExecutionEnvironment myEnvironment;
 	
-	public Instruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment){
+	public Instruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment){
 		myDependencies = dependencies;
 		myInstructionType = instructionType;
-		myView = view;
+		myViewUpdater = updater;
 		myEnvironment=environment;
 	}
 	

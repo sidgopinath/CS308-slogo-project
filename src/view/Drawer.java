@@ -20,7 +20,7 @@ public class Drawer {
 	private double strokeSize = 1;
 	private int myIndex;
 	
-	public Drawer(Workspace workspace){//double xMax, double yMax) {
+	public Drawer(Workspace workspace){
 		myWorkspace = workspace;
 		double xMax = myWorkspace.getGridWidth();
 		double yMax = myWorkspace.getGridHeight();
@@ -44,6 +44,7 @@ public class Drawer {
 
 		List<Polyline> lines = new ArrayList<Polyline>();
 		Iterator<TurtleCommand> it = instructions.iterator();
+		System.out.println("draweing");
 		
 		while (it.hasNext()) {
 			TurtleCommand command = it.next();
@@ -65,7 +66,8 @@ public class Drawer {
 						/ 2;
 				double newX = turtleX + moveX + turtle.getTranslateX() + 15;
 				double newY = turtleY + moveY + turtle.getTranslateY() + 15;
-				
+
+
 				if (newY < myYBounds[0]) {
 					wrapY(1, turtle, polar, lines, 0, newY, startX, moveX, moveY,
 							turtleY, startY);
@@ -79,16 +81,21 @@ public class Drawer {
 					wrapX(0, turtle, polar, lines, 1, newX, startY, moveY, moveX,
 							turtleX, startX);
 				} else {
+
 					turtle.move(turtle.getTranslateX() + moveX, turtle.getTranslateY()
 							+ moveY);
 					double endX = startX + moveX;
 					double endY = startY + moveY;
+
 					if (!turtle.getPenUp()) {
+						System.out.println("drawing" + turtle.getPenUp());
 						Polyline polyline = new Polyline();
 						polyline.setStroke(myColor);
+						System.out.println(strokeSize);
 						polyline.setStrokeWidth(strokeSize);
-						polyline.getPoints().addAll(
-								new Double[] { startX, startY, endX, endY });
+						/*polyline.getPoints().addAll(
+								new Double[] { startX, startY, endX, endY });*/
+						drawLine(startX, startY, endX, endY);
 						lines.add(polyline);
 					}
 				}
@@ -147,6 +154,9 @@ public class Drawer {
 		System.out.println(Math.pow(-1, i) * myHalf[dir] - myYBounds[i] + newY);
 		turtle.move(turtle.getTranslateX() + moveX, Math.pow(-1, i) * myHalf[dir]
 				- myYBounds[i] + newY);
+		
+		System.out.println("turtle.getPenUp()" + turtle.getPenUp());
+		
 		if (!turtle.getPenUp()) {
 			double endY = turtle.getTranslateY() + turtleY + turtle.getFitHeight() / 2;
 			lines.add(drawLine(startX, startY, endX1, myYBounds[i]));
@@ -170,8 +180,12 @@ public class Drawer {
 	}
 
 	private Polyline drawLine(double startX, double startY, double endX, double endY) {
+		System.out.println("DRAW THE LINE!!");
 		Polyline polyline = new Polyline();
 		polyline.setStroke(myColor);
+		polyline.setStrokeWidth(strokeSize);
+
+		System.out.println(strokeSize);
 		polyline.getPoints().addAll(new Double[] { startX, startY, endX, endY });
 		return polyline;
 	}

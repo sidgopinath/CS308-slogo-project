@@ -4,11 +4,12 @@ import java.util.List;
 
 import model.ExecutionEnvironment;
 import view.SLogoView;
+import view.ViewUpdater;
 
 public class ControlInstruction extends Instruction{
 
-	public ControlInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
-		super(dependencies, instructionType, view, environment);
+	public ControlInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, updater, environment);
 	}
 // to recurse [ :count ] [ IFELSE EQUAL? :count 0 [ fd 1 ] [ fd recurse [ - :count 1 ] ] ]
 	public enum implementers {

@@ -4,11 +4,12 @@ import java.util.List;
 
 import model.ExecutionEnvironment;
 import view.SLogoView;
+import view.ViewUpdater;
 
 public class ListInstruction extends Instruction {
 	
-	public ListInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
-		super(dependencies, instructionType, view, environment);
+	public ListInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, updater, environment);
 	}
 
 	@Override

@@ -35,9 +35,6 @@ public class Workspace extends StackPane {
 		myLines = new Group();
 		myLines.setManaged(false);
 
-		
-		
-	
 		getChildren().addAll(myBackground, myLines);
 	//TODO: change both values within the method from 0 to 1
 		
@@ -105,3 +102,4 @@ public class Workspace extends StackPane {
 		myLines.getChildren().clear();
 	}
 }
+

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import view.SLogoView;
+import view.ViewUpdater;
 import model.ExecutionEnvironment;
 import model.Polar;
 import model.TurtleCommand;
@@ -34,8 +35,8 @@ public class MovementInstruction extends Instruction {
     }
 	}
 	
-	public MovementInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
-		super(dependencies, instructionType, view, environment);
+	public MovementInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, updater, environment);
 		myDependencies = dependencies;
 		myInstructionType = instructionType;
 		myTurtle = null;
@@ -72,27 +73,28 @@ public class MovementInstruction extends Instruction {
 			updateView();
 			return 0.0;
 		case "SETTOWARDS":
-			return myView.towards(myEnvironment.getActiveTurtle(), myDependencies.get(0).execute(), myDependencies.get(1).execute());
+			return myViewUpdater.towards(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "SETPOSITION":
 			myJump = true;
-			return myView.setXY(myEnvironment.getActiveTurtle(), myDependencies.get(0).execute(), myDependencies.get(1).execute());
+			return myViewUpdater.setXY(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "PENDOWN":
-			myView.setPenUp(myEnvironment.getActiveTurtle(), false);
+			myViewUpdater.setPenUp(0, false);
 			return 1.0;
 		case "PENUP":
-			myView.setPenUp(myEnvironment.getActiveTurtle(), true);
+			myViewUpdater.setPenUp(0, true);
 			return 0.0;
 		case "SHOWTURTLE":
-			myView.showTurtle(myEnvironment.getActiveTurtle(), true);
+			myViewUpdater.showTurtle(0, true);
 			return 1.0;
 		case "HIDETURTLE":
-			myView.showTurtle(myEnvironment.getActiveTurtle(), false);
+			myViewUpdater.showTurtle(0, false);
 			return 0.0;
 		case "CLEARSCREEN":
-			return myView.clearScreen(myEnvironment.getActiveTurtle());
+			return myViewUpdater.clearScreen(0);
+
 		case "HOME":
 			myJump = true;
-			return myView.setXY(0,0,0);
+			return myViewUpdater.setXY(0,0,0);
 		default: 
 			return 0;
 		}
@@ -101,7 +103,7 @@ public class MovementInstruction extends Instruction {
 	private void updateView() {
 		List<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
 		commandList.add(new TurtleCommand(myEnvironment.getActiveTurtle(), myPolar, myJump));
-		myView.updateWorkspace(commandList);
+		myViewUpdater.updateWorkspace(commandList);
 	}
 
 	@Override

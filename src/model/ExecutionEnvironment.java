@@ -64,7 +64,6 @@ public class ExecutionEnvironment extends Observable{
 		
 	public Instruction getCommand(String key){
 		return myUserInstructionMap.get(key);
-
 	}
 	
 	public void clear(){
@@ -90,6 +89,7 @@ public class ExecutionEnvironment extends Observable{
 	public Map<String, Double> getVariableMap(){
 		return myVariableMap;
 	}
+
 	public Set<Integer> getActiveList(){
 		return activeTurtleList;
 	}

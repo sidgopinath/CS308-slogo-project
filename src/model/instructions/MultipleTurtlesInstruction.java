@@ -6,6 +6,7 @@ import model.ExecutionEnvironment;
 import model.Polar;
 import model.instructions.BooleanInstruction.implementers;
 import view.SLogoView;
+import view.ViewUpdater;
 
 public class MultipleTurtlesInstruction extends Instruction{
 	
@@ -22,9 +23,9 @@ public class MultipleTurtlesInstruction extends Instruction{
 	}
 }
 	public MultipleTurtlesInstruction(List<Instruction> dependencies,
-			String instructionType, SLogoView view,
+			String instructionType, ViewUpdater updater,
 			ExecutionEnvironment environment) {
-		super(dependencies, instructionType, view, environment);
+		super(dependencies, instructionType, updater, environment);
 	}
 
 	@Override

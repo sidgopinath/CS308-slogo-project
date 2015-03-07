@@ -4,11 +4,12 @@ import java.util.List;
 
 import model.ExecutionEnvironment;
 import view.SLogoView;
+import view.ViewUpdater;
 
 public class TurtleRequestInstruction extends Instruction {
 	
-	public TurtleRequestInstruction(List<Instruction> dependencies, String instructionType, SLogoView view, ExecutionEnvironment environment) {
-		super(dependencies, instructionType, view, environment);
+	public TurtleRequestInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, updater, environment);
 	}
 	
 	public enum implementers {
@@ -27,15 +28,15 @@ public class TurtleRequestInstruction extends Instruction {
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "XCOORDINATE":
-			return myView.getXCor(myEnvironment.getActiveTurtle());
+			return myViewUpdater.getXCor(myEnvironment.getActiveTurtle());
 		case "YCOORDINATE":
-			return myView.getYCor(myEnvironment.getActiveTurtle());
+			return myViewUpdater.getYCor(myEnvironment.getActiveTurtle());
 		case "HEADING":
-			return myView.getHeading(myEnvironment.getActiveTurtle());
+			return myViewUpdater.getHeading(myEnvironment.getActiveTurtle());
 		case "ISPENDOWN":
-			return myView.getPenDown(myEnvironment.getActiveTurtle());
+			return myViewUpdater.getPenDown(myEnvironment.getActiveTurtle());
 		case "ISSHOWING":
-			return myView.isShowing(myEnvironment.getActiveTurtle());
+			return myViewUpdater.isShowing(myEnvironment.getActiveTurtle());
 		default: 
 			return 0.0;
 		}

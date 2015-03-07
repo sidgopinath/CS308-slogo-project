@@ -4,13 +4,14 @@ import java.util.List;
 
 import model.ExecutionEnvironment;
 import view.SLogoView;
+import view.ViewUpdater;
 
 public class UserRunningInstruction extends Instruction{
 	// dependencies will be a list of constants for assignment
 	public UserRunningInstruction(List<Instruction> dependencies,
-			String instructionType, SLogoView view,
+			String instructionType, ViewUpdater updater,
 			ExecutionEnvironment environment) {
-		super(dependencies, instructionType, view, environment);
+		super(dependencies, instructionType, updater, environment);
 	}
 
 	@Override

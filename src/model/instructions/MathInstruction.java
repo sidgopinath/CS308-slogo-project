@@ -4,8 +4,15 @@ import java.util.List;
 import java.util.Random;
 
 import model.ExecutionEnvironment;
-import view.SLogoView;
 import view.ViewUpdater;
+
+/**
+ * All math instructions are stored here
+ * When a math instruction is called, it calls this
+ * A combination of math in this class and constants/variables being executed makes this work
+ * @author Greg, Sid
+ *
+ */
 
 public class MathInstruction extends Instruction{
 	

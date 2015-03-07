@@ -3,8 +3,13 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
-import view.SLogoView;
 import view.ViewUpdater;
+
+/**
+ * 
+ * @author Greg
+ *
+ */
 
 public class UserRunningInstruction extends Instruction{
 	// dependencies will be a list of constants for assignment

@@ -6,7 +6,6 @@ import java.util.Observer;
 
 import model.ExecutionEnvironment;
 import model.TurtleCommand;
-import view.SLogoView;
 import view.ViewUpdater;
 
 public abstract class Instruction implements Observer{

@@ -3,8 +3,13 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
-import view.SLogoView;
 import view.ViewUpdater;
+
+/**
+ * This method does nothing, since lists cannot be executed
+ * It just holds onto them as a ListInstruction object
+ */
+
 
 public class ListInstruction extends Instruction {
 	
@@ -13,9 +18,6 @@ public class ListInstruction extends Instruction {
 	}
 
 	@Override
-	/**
-	 * Does nothing, since lists can't be executed
-	 */
 	public double execute() {
 		return 0;
 	}

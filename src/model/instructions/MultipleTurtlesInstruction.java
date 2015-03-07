@@ -3,10 +3,15 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
-import model.Polar;
-import model.instructions.BooleanInstruction.implementers;
-import view.SLogoView;
 import view.ViewUpdater;
+
+/**
+ * These commands deal with multiple turtles
+ * They are called in much the same way as other instructions
+ * Use the dependencies list to create loops and update which turtles are active
+ * @author Greg
+ *
+ */
 
 public class MultipleTurtlesInstruction extends Instruction{
 	

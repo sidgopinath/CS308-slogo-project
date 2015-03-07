@@ -116,7 +116,7 @@ public class Drawer {
 	private void updateKeyFrame(TurtleView turtle,List<Polyline> lines, Group target) {
 		System.out.println("turtle was at "+ turtle.getTranslateX()+" "+ turtle.getTranslateY());
 		target.getChildren().add(lines.get(index));
-		turtle.move((index+1)*(lines.get(1).getPoints().get(2)-lines.get(0).getPoints().get(2)), (index+1)*(lines.get(1).getPoints().get(3)-lines.get(0).getPoints().get(3)));
+		turtle.move(turtle.getTranslateX()+(lines.get(1).getPoints().get(2)-lines.get(0).getPoints().get(2)), turtle.getTranslateY()+(lines.get(1).getPoints().get(3)-lines.get(0).getPoints().get(3)));
 		index++;
 	}
 	private List<Polyline> animator(double startX,

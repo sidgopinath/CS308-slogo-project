@@ -2,6 +2,7 @@ package view;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ResourceBundle;
 
 import javafx.geometry.Dimension2D;
 import javafx.scene.Group;
@@ -9,7 +10,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
 public class Workspace extends StackPane {
 
@@ -17,7 +17,8 @@ public class Workspace extends StackPane {
 	private Map<Integer, TurtleView> myTurtles;
 	private SideBar mySidebar;
 	private Group myLines;
-
+	private static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
+	private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 	private TurtleView myActiveTurtle;
 	//TODO: set initial id to 1
 	private static final int INITIAL_TURTLE_ID = 0;
@@ -51,7 +52,7 @@ public class Workspace extends StackPane {
 		// We utilize a hashmap because if in the future turtles can be deleted,
 		// we do not want to have ID's that are reused/changed
 		 newTurtle = new TurtleView(newID,
-				new Image(Strings.DEFAULT_TURTLE_IMG));
+				new Image(myResources.getString("DefaultTurtleImage")));
 		myTurtles.put(newID, newTurtle);
 		configureTurtleEventHandler(newID);
 		getChildren().add(newTurtle);

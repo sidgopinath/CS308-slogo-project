@@ -46,7 +46,7 @@ public class CustomizationBar extends HBox {
 
 	private void selectBackgroundColor(Dimension2D dimensions) {
 		HBox customizeBackgroundBox = new HBox(10);
-		Text selectBackgroundColor = new Text(Strings.SELECT_BACKGROUND_COLOR);
+		Text selectBackgroundColor = new Text(myResources.getString("SelectBackgroundColor"));
 		ColorPicker backgroundChoice = new ColorPicker(Color.WHITE);
 		backgroundChoice.setOnAction(e -> changeBackgroundColor(backgroundChoice
 				.getValue()));
@@ -59,7 +59,7 @@ public class CustomizationBar extends HBox {
 
 	private void selectPenColor(Drawer drawer) {
 		HBox customizePenBox = new HBox(10);
-		Text selectPenColor = new Text(Strings.SELECT_PEN_COLOR);
+		Text selectPenColor = new Text(myResources.getString("SelectPenColor"));
 		ColorPicker penColorChoice = new ColorPicker(Color.BLACK);
 		penColorChoice.setOnAction(e -> drawer.changeColor(penColorChoice.getValue()));
 		customizePenBox.getChildren().addAll(selectPenColor, penColorChoice);

@@ -18,7 +18,6 @@ public class Drawer {
 	private double[] myHalf = new double[2];
 	private Workspace myWorkspace;
 	private double strokeSize = 1;
-	private int myIndex;
 	
 	public Drawer(Workspace workspace){
 		myWorkspace = workspace;

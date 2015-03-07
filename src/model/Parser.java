@@ -12,16 +12,13 @@ import java.util.Map.Entry;
 import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.regex.Pattern;
-
 import model.instructions.Constant;
 import model.instructions.Instruction;
 import model.instructions.ListInstruction;
 import model.instructions.StringInstruction;
 import model.instructions.UserRunningInstruction;
 import model.instructions.Variable;
-//import model.turtle.TurtleCommand;
 import view.SLogoView;
 import view.ViewUpdater;
 
@@ -110,7 +107,6 @@ public class Parser implements Observer{
 			mySLogoView.openDialog("Invalid input! Try again.");
 		}
 	}
-	
 	private Node makeTree(String[] command) throws ModelException{
 	int myVars = 0;
 		int neededVars = -1;
@@ -149,7 +145,6 @@ public class Parser implements Observer{
 			return new Node(tempInt);
 		case "COMMAND":
 			myFurthestDepth++;
-			System.out.println(myExecutionParameters.getCommand(command[myFurthestDepth-1])!=null);
 			if(myExecutionParameters.getUserCommandMap().containsKey(command[myFurthestDepth-1])&&(myFurthestDepth<2||myFurthestDepth>=2&&testMatches(command[myFurthestDepth-2]).toUpperCase()!="MAKEUSERINSTRUCTION")){
 				myNode = new Node(new UserRunningInstruction(futureInstructions, command[myFurthestDepth-1], myViewUpdater, myExecutionParameters));
 				System.out.println(" Node "+ myNode);
@@ -169,37 +164,21 @@ public class Parser implements Observer{
 			//this is either a known command or invalid input.  
 			//instantiate the command, if reflection cannot find the file then must be invalid
 		if(myNode==null){
-				try {
 					Instruction myInt;
+					try {
 					myInt = Class.forName("model.instructions."+myCommandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,ViewUpdater.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,myViewUpdater, myExecutionParameters});
 					myFurthestDepth++;
 					myExecutionParameters.addObserver(myInt);
 					myNode = new Node(myInt);
 					neededVars = myInt.getNumberOfArguments();
-				} catch (InstantiationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalAccessException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (IllegalArgumentException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (InvocationTargetException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (NoSuchMethodException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (SecurityException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ClassNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-		
+					}
+					catch (InstantiationException | IllegalAccessException
+								| IllegalArgumentException
+								| InvocationTargetException | NoSuchMethodException
+								| SecurityException | ClassNotFoundException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 		}
 		while(myVars<neededVars){
 			Node level = makeTree(command);

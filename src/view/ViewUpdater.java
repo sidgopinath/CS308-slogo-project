@@ -107,6 +107,7 @@ public class ViewUpdater implements Observer{
 	
 	public void updateWorkspace(List<TurtleCommand> instructionList) {
 		myWorkspace.getLines().getChildren().addAll(myDrawer.draw(myWorkspace.getTurtleMap(), instructionList, mySidebar));
+		
 	}
 
 	public double getCurrentTurtleID() {

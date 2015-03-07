@@ -1,11 +1,15 @@
 package view;
 
 import java.text.DecimalFormat;
-import java.util.List;
-
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+
+/**
+ * Represents a turtle ImageView object that carries the properties and functionality of a turtle
+ * @author Callie, Mengchao
+ *
+ */
 
 public class TurtleView extends ImageView {
 
@@ -126,7 +130,6 @@ public class TurtleView extends ImageView {
 		newStamp.setTranslateX(getX());
 		newStamp.setTranslateY(Integer.parseInt(getYCoord()));
 		myStamps.getChildren().add(newStamp);
-		System.out.println("createstamp");
 		workspace.getChildren().add(myStamps);
 		return getImageID();
 	}

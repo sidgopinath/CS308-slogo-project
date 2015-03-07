@@ -7,7 +7,6 @@ package view;
 
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.ResourceBundle;
@@ -26,7 +25,12 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import model.ExecutionEnvironment;
 import model.Parser;
-import model.TurtleCommand;
+
+/**
+ * Contains all the visual properties of SLogo, containing the workspace/display, the editor, and the sidebar.
+ * @author Callie
+ *
+ */
 
 public class SLogoView {
 	private Stage myStage;
@@ -41,7 +45,7 @@ public class SLogoView {
 	private Parser myParser;
 	private ExecutionEnvironment myEnvironment = null;
 	public static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
-
+	
 	public SLogoView(Stage s, Dimension2D myDimensions) {
 		myStage = s;
 		this.myDimensions = myDimensions;

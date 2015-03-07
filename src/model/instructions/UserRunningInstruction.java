@@ -5,8 +5,10 @@ import java.util.List;
 import model.ExecutionEnvironment;
 import view.ViewUpdater;
 
+
 /**
- * 
+ * This class is created by the parser when a user instruction is actually executed.  This class sets up the environment by assigning all variables, 
+ * then executing the instructions in it dependency list (a controlInstruction object).
  * @author Greg
  *
  */

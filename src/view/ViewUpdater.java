@@ -4,14 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
-
-import javafx.collections.ObservableList;
-import javafx.scene.control.ColorPicker;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import model.ExecutionEnvironment;
 import model.TurtleCommand;
+
+/**
+ * Intermediary class that updates the view from the model
+ * @author Callie
+ *
+ */
 
 public class ViewUpdater implements Observer{
 

@@ -6,7 +6,10 @@ import model.ExecutionEnvironment;
 import model.instructions.BooleanInstruction.implementers;
 import view.SLogoView;
 import view.ViewUpdater;
-
+/**
+ * Class which contains sprint 3's instructions, most of which involve interaction with the view.  Some have not been implemented due to complexities in
+ * how the front end is laid out.
+ **/
 public class FrontEndInstruction extends Instruction{
 	public FrontEndInstruction(List<Instruction> dependencies,
 			String instructionType, ViewUpdater updater,

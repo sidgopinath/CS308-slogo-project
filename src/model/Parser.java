@@ -23,8 +23,9 @@ import view.SLogoView;
 import view.ViewUpdater;
 
 /**
- * To parse, first create a parsing tree which will be created/traversed recursively
- * Then, use reflection to instantiate the proper commands
+ * This class is used as the primary backend class.  The parser reads in a string value and creates an expression tree of instructions that
+ * can are then executed.  Valid instructions are given in an enum at the head of each instruction file, and are read into the Command Types array.
+ * This class also handles enabing all other classes to observe the execution environment passed in to each instruction.
  * Note, our list implementation does not allow a list to return a value
  * @author Primary: Greg, Secondary: Sid
  */

@@ -17,6 +17,12 @@ import javafx.scene.web.WebView;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
+/**
+ * Main view class containing the menupane and tabpane, which do not change regardless of the number of tabs/scenes added
+ * @author Callie, Mengchao
+ *
+ */
+
 public class MainView {
     
     private Dimension2D myDimensions;

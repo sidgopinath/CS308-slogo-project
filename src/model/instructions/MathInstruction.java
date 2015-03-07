@@ -8,7 +8,7 @@ import view.ViewUpdater;
 
 /**
  * All math instructions are stored here
- * When a math instruction is called, it calls this
+ * Math instructions consist entirely of constants as dependancies.
  * A combination of math in this class and constants/variables being executed makes this work
  * @author Greg, Sid
  *

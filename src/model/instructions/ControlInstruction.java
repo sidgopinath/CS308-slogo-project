@@ -6,7 +6,8 @@ import model.ExecutionEnvironment;
 import view.ViewUpdater;
 
 /**
- * 
+ * Control Instructions deal with program flow or variable creation.  Since many of these commands use the same loop, a loop is available at the bottom.
+ * This class plays a small role in recursion.
  * @author Greg, Sid
  *
  */

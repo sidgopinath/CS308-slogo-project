@@ -10,7 +10,7 @@ import model.instructions.Instruction;
 
 /**
  * Execution environment holds user instructions, variables, and a list of turtles
- * This environment is an observable and is accessed by the Parser and View
+ * This environment is observable and is accessed by the Parser and View
  * By making it observable, there are fewer method calls and public variables
  * Whenever any of the variables is updated, the view will know about it
  * @author Greg

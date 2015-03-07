@@ -8,6 +8,13 @@ import model.ExecutionEnvironment;
 import model.TurtleCommand;
 import view.ViewUpdater;
 
+/**
+ * This class is the superclass for all Instructions implemented in this program.  All instructions contains a dependency list, which is
+ * the children nodes of this node in the expression tree.  The .execute method is called when a command is actually run, and produces the output of that instruction.
+ * Every instruction is always required to maintain the number of its required arguments, so that the tree can properly be constructed.  The update method is used to keep
+ * all copies of the execution environment consistent across the instructions, so variables ad user commands can be easily implemented.  Actual implementations contain an enum describing the instructions the class contains.
+ * @author Greg McKeon
+ **/
 public abstract class Instruction implements Observer{
  
 	protected List<Instruction> myDependencies;

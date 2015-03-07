@@ -35,7 +35,4 @@ public class Node{
 		return myInstruction;
 	}
 	
-	public void setInstruction(Instruction instruction){
-		myInstruction = instruction;
-	}
 }

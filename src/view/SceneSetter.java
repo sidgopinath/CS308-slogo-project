@@ -6,6 +6,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+
 public class SceneSetter {
     
     public void setupScene(Stage stage, Parent root, double xSize, double ySize, ResourceBundle myResources) {

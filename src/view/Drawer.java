@@ -5,11 +5,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
 import model.Polar;
 import model.TurtleCommand;
+
+/**
+ * Draws and animates the lines following movement of a turtle
+ * @author Mengchao, Callie
+ *
+ */
 
 public class Drawer {
 	

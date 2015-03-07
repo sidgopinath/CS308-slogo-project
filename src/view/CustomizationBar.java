@@ -1,6 +1,7 @@
 package view;
 
 import java.io.File;
+
 import java.util.Map;
 import java.util.ResourceBundle;
 
@@ -20,6 +21,12 @@ import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.Parser;
+
+/**
+ * Customization for the bar at the top that allows the user to set the visual representations of the IDE
+ * @author Callie
+ *
+ */
 
 public class CustomizationBar extends HBox {
 

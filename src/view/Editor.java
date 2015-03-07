@@ -7,6 +7,11 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import model.Parser;
 
+/**
+ * Lower panel containing the text editor that reads in user text input.
+ * @author Callie
+ *
+ */
 public class Editor extends HBox {
 
 	private Button runButton;

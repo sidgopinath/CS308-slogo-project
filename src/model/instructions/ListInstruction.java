@@ -6,8 +6,7 @@ import model.ExecutionEnvironment;
 import view.ViewUpdater;
 
 /**
- * This method does nothing, since lists cannot be executed
- * It just holds onto them as a ListInstruction object
+ *  This class holds the elements of a list in its dependencies
  */
 
 

@@ -3,6 +3,7 @@ package view;
 import java.util.HashMap;
 import java.util.Map;
 
+import model.ExecutionEnvironment;
 import javafx.geometry.Dimension2D;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
@@ -36,12 +37,12 @@ public class Workspace extends StackPane {
 	//TODO: change both values within the method from 0 to 1
 		
 		//create initial turtle (id = 1)
-		addTurtle();
+		addTurtle(null);
 		setActiveTurtle(INITIAL_TURTLE_ID);
 
 	}
 
-	public void addTurtle() {// int id, TurtleView turtle) {
+	public void addTurtle(ExecutionEnvironment update) {// int id, TurtleView turtle) {
 		TurtleView newTurtle;
 		int newID = myTurtles.size()+1;
 		// We utilize a hashmap because if in the future turtles can be deleted,
@@ -51,6 +52,10 @@ public class Workspace extends StackPane {
 		myTurtles.put(newID, newTurtle);
 		configureTurtleEventHandler(newID);
 		getChildren().add(newTurtle);
+		if(update!=null){
+			update.addTurtle(newID);
+			update.setActiveTurtle(newID);
+		}
 	}
 
 	public void setBackground(Color color) {

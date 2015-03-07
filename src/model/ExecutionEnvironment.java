@@ -29,6 +29,7 @@ public class ExecutionEnvironment extends Observable{
 	}
 	public void addTurtle(double d){
 		myTurtleList.add((int) d);
+		updateObserver();
 	}
 	public Set<Integer> getTurtles(){
 		return myTurtleList;
@@ -80,6 +81,7 @@ public class ExecutionEnvironment extends Observable{
 	}
 	public void setActiveTurtle(double turtle){
 		activeTurtle = (int) turtle;
+		updateObserver();
 	}
 	public Map<String, Instruction> getUserCommandMap(){
 		return myUserInstructionMap;
@@ -93,8 +95,10 @@ public class ExecutionEnvironment extends Observable{
 	}
 	public void clearActiveList(){
 		activeTurtleList.clear();
+		updateObserver();
 	}
 	public void addTurtleToActiveList(double turtle) {
 		activeTurtleList.add((int)turtle);
+		updateObserver();
 	}
 }

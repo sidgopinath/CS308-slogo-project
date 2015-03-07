@@ -47,6 +47,7 @@ public class SLogoView implements Observer {
 	// private int activeTurtleID; //TODO: update this
 	private SideBar mySidebar;
 	private Editor myEditor;
+	private ExecutionEnvironment myEnvironment = null;
 	private Parser myParser = createNewParser(this);
 	// TODO: move myTUrtles to relavant class (Workspace). Maybe drawer too? But
 	// there is no functionality after moving it
@@ -104,7 +105,7 @@ public class SLogoView implements Observer {
 		Button newTurtleButton = new Button(myResources.getString("AddTurtle"));
 		newTurtleButton.setStyle("-fx-base: #b6e7c9;");
 		newTurtleButton.setAlignment(Pos.CENTER_RIGHT);
-		newTurtleButton.setOnAction(e -> myWorkspace.addTurtle());
+		newTurtleButton.setOnAction(e -> myWorkspace.addTurtle(myEnvironment));
 		GridPane.setHalignment(newTurtleButton, HPos.CENTER);
 		return newTurtleButton;
 	}
@@ -239,7 +240,9 @@ public class SLogoView implements Observer {
 	public double getYCor(int id) {
 		return Double.parseDouble(myWorkspace.getTurtleMap().get(id).getYCoord());
 	}
-
+	public void setEnvironment(ExecutionEnvironment e){
+		myEnvironment = e;
+	}
 	public void openDialog(String message) {
 		Stage stage = new Stage();
 		HBox root = new HBox();
@@ -265,16 +268,16 @@ public class SLogoView implements Observer {
 
 	@Override
 	public void update(Observable o, Object arg) {
-		ExecutionEnvironment env = (ExecutionEnvironment) o;
-		mySidebar.updateExecutionEnvironment(env);
-		if (env == null){
+		myEnvironment = (ExecutionEnvironment) o;
+		mySidebar.updateExecutionEnvironment(myEnvironment);
+		if (myEnvironment == null){
 			System.out.println("null");
 		}
-		for (String s : env.getVariableMap().keySet()) {
-			double value = env.getVariableMap().get(s);
+		for (String s : myEnvironment.getVariableMap().keySet()) {
+			double value = myEnvironment.getVariableMap().get(s);
 			mySidebar.updateVariable(new Property(s, value));
 		}
-		for (String s : env.getUserCommandMap().keySet()) {
+		for (String s : myEnvironment.getUserCommandMap().keySet()) {
 			updateCommand(s);
 		}
 	}

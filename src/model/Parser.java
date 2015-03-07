@@ -46,6 +46,7 @@ public class Parser implements Observer{
 		myExecutionParameters = new ExecutionEnvironment();
 		myExecutionParameters.addObserver(this);
 		myExecutionParameters.addObserver(view);
+		view.setEnvironment(myExecutionParameters);
 		addAllPatterns("English");
 		makeCommandMap();
 	}
@@ -98,10 +99,7 @@ public class Parser implements Observer{
 						}
 					}
 					catch (ConcurrentModificationException e){
-						for(int turtle:myExecutionParameters.getActiveList()){
-							myExecutionParameters.setActiveTurtle(turtle);
-							root.getInstruction().execute();
-						}
+						
 					}
 			}
 		} catch (Exception e) {

@@ -6,10 +6,10 @@ import model.ExecutionEnvironment;
 import model.instructions.BooleanInstruction.implementers;
 import view.SLogoView;
 import view.ViewUpdater;
-/*
+/**
  * Class which contains sprint 3's instructions, most of which involve interaction with the view.  Some have not been implemented due to complexities in
  * how the front end is laid out.
- */
+ **/
 public class FrontEndInstruction extends Instruction{
 	public FrontEndInstruction(List<Instruction> dependencies,
 			String instructionType, ViewUpdater updater,
@@ -52,9 +52,9 @@ public class FrontEndInstruction extends Instruction{
 		case "GETSHAPE":
 			return 0;
 		case "STAMP":
-			return (double)myViewUpdater.createStamp(myEnvironment.getActiveTurtle());
+			//return (double)myViewUpdater.createStamp(myEnvironment.getActiveTurtle());
 		case "CLEARSTAMPS":
-			return (double)myViewUpdater.clearStamp(myEnvironment.getActiveTurtle());
+			//return (double)myViewUpdater.clearStamp(myEnvironment.getActiveTurtle());
 		default:
 			return -1;
 		}

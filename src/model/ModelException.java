@@ -1,13 +1,16 @@
 package model;
 
+/**
+ * This custom exception is thrown as our primary exception
+ * Whenever the model runs into an error parsing input, this is thrown
+ * @author Sid
+ *
+ */
+
 public class ModelException extends Exception {
 
-	/**
-	 * This warning was thrown:
-	 * The serializable class ModelException does not declare a static final serialVersionUID field of type long
-	 * Fixed by adding the below long
-	 */
 	private static final long serialVersionUID = -7694548898164928953L;
-	public ModelException(){};	
-}
 
+	public ModelException() {
+	};
+}

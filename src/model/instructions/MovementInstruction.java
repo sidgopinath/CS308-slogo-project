@@ -3,11 +3,19 @@ package model.instructions;
 import java.util.ArrayList;
 import java.util.List;
 
-import view.SLogoView;
-import view.ViewUpdater;
 import model.ExecutionEnvironment;
 import model.Polar;
 import model.TurtleCommand;
+import view.ViewUpdater;
+
+/**
+ * Movement instructions for the turtle are stored here
+ * These methods usually call the updateView method
+ * The turtle is directly affected by these methods
+ * Observable comes into play also here
+ * @author Greg, Sid
+ *
+ */
 
 public class MovementInstruction extends Instruction {
 	private TurtleCommand myTurtle;
@@ -45,7 +53,6 @@ public class MovementInstruction extends Instruction {
 	
 	@Override
 	public double execute() {
-		System.out.println("active guy is "+ myEnvironment.getActiveTurtle());
 		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
 			myReturnVal = myDependencies.get(0).execute();

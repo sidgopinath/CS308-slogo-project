@@ -2,6 +2,12 @@ package model.instructions;
 
 import model.ExecutionEnvironment;
 
+/**
+ * Instruction to hold a String
+ * @author Greg
+ *
+ */
+
 public class StringInstruction extends Instruction{
 
 	public StringInstruction(String instructionType,ExecutionEnvironment environment) {

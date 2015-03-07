@@ -3,8 +3,14 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
-import view.SLogoView;
 import view.ViewUpdater;
+
+/**
+ * These instructions ask the view for information and return that information
+ * It relies heavily on methods in the view
+ * @author Greg, Sid
+ *
+ */
 
 public class TurtleRequestInstruction extends Instruction {
 	

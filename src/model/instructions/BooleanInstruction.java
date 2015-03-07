@@ -5,6 +5,13 @@ import java.util.List;
 import model.ExecutionEnvironment;
 import view.ViewUpdater;
 
+/**
+ * This class holds instructions that return boolean values
+ * Hence, there is a boolToDouble function that allows us to cast booleans to Doubles
+ * The functions here all return true or false in a double form
+ * @author Greg, Sid
+ *
+ */
 
 public class BooleanInstruction extends Instruction {
 

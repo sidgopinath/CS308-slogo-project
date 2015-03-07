@@ -14,8 +14,18 @@ import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+/**
+ * Based heavily off of the writer I made for CellSociety
+ * This writer will take in a map and a list from the parser or the view
+ * The writer will then output an XMLFile formatted in such a way that the parser can later read it
+ * Like the Parser, this has not been connected with the rest of the program due to lack of time
+ * @author Sid
+ *
+ */
+
 public class XMLWriter {
-	public XMLWriter(Map<String, Double> variableMap, List<XMLInstruction> userInstructions) {
+	public XMLWriter(Map<String, Double> variableMap,
+			List<XMLInstruction> userInstructions) {
 
 		try {
 
@@ -35,34 +45,40 @@ public class XMLWriter {
 			// iterate through variable map and make all variables
 			for (String variable : variableMap.keySet()) {
 				Element newVariable = xmlDoc.createElement(variable);
-				newVariable.appendChild(xmlDoc.createTextNode(Double.toString(variableMap
-						.get(variable))));
+				newVariable.appendChild(xmlDoc.createTextNode(Double
+						.toString(variableMap.get(variable))));
 				userVariables.appendChild(newVariable);
 			}
 
-			// make userCommands element, which all instructions will be children of
+			// make userCommands element, which all instructions will be
+			// children of
 			Element userCommands = xmlDoc.createElement("userCommands");
 			rootElement.appendChild(userCommands);
 
 			// make instructions
-			for(XMLInstruction currentInstruction: userInstructions){
-				String instructionName = currentInstruction.getInstructionName();
+			for (XMLInstruction currentInstruction : userInstructions) {
+				String instructionName = currentInstruction
+						.getInstructionName();
 				String instructionVariables = currentInstruction.getVariables();
-				String instructionCommands = currentInstruction.getUserCommands();
-				
+				String instructionCommands = currentInstruction
+						.getUserCommands();
+
 				Element newInstruction = xmlDoc.createElement(instructionName);
-				
-				Element newInstructionVariables = xmlDoc.createElement("variables");
-				newInstructionVariables.appendChild(xmlDoc.createTextNode(instructionVariables));
-				
-				Element newInstructionCommands = xmlDoc.createElement("commands");
-				newInstructionCommands.appendChild(xmlDoc.createTextNode(instructionCommands));
-				
+
+				Element newInstructionVariables = xmlDoc
+						.createElement("variables");
+				newInstructionVariables.appendChild(xmlDoc
+						.createTextNode(instructionVariables));
+
+				Element newInstructionCommands = xmlDoc
+						.createElement("commands");
+				newInstructionCommands.appendChild(xmlDoc
+						.createTextNode(instructionCommands));
+
 				newInstruction.appendChild(newInstructionVariables);
 				newInstruction.appendChild(newInstructionCommands);
 				userCommands.appendChild(newInstruction);
 			}
-			
 
 			// make xml file
 			TransformerFactory transformerFactory = TransformerFactory

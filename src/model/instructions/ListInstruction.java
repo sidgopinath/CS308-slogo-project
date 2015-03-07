@@ -3,8 +3,12 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
-import view.SLogoView;
 import view.ViewUpdater;
+
+/**
+ *  This class holds the elements of a list in its dependencies
+ */
+
 
 public class ListInstruction extends Instruction {
 	
@@ -13,9 +17,6 @@ public class ListInstruction extends Instruction {
 	}
 
 	@Override
-	/**
-	 * Does nothing, since lists can't be executed
-	 */
 	public double execute() {
 		return 0;
 	}

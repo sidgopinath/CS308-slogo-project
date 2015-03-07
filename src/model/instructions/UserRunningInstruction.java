@@ -3,13 +3,16 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
-import view.SLogoView;
 import view.ViewUpdater;
-/*
+
+
+/**
  * This class is created by the parser when a user instruction is actually executed.  This class sets up the environment by assigning all variables, 
  * then executing the instructions in it dependency list (a controlInstruction object).
- * 
+ * @author Greg
+ *
  */
+
 public class UserRunningInstruction extends Instruction{
 	// dependencies will be a list of constants for assignment
 	public UserRunningInstruction(List<Instruction> dependencies,

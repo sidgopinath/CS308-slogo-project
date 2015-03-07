@@ -3,15 +3,21 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
-import view.SLogoView;
 import view.ViewUpdater;
+
+/**
+ * Control Instructions deal with program flow or variable creation.  Since many of these commands use the same loop, a loop is available at the bottom.
+ * This class plays a small role in recursion.
+ * @author Greg, Sid
+ *
+ */
 
 public class ControlInstruction extends Instruction{
 
 	public ControlInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment) {
 		super(dependencies, instructionType, updater, environment);
 	}
-// to recurse [ :count ] [ IFELSE EQUAL? :count 0 [ fd 1 ] [ fd recurse [ - :count 1 ] ] ]
+
 	public enum implementers {
 		MAKEVARIABLE(2),
 		REPEAT(2),

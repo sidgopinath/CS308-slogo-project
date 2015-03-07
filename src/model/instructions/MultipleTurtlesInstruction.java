@@ -4,10 +4,15 @@ import java.util.List;
 
 import model.ExecutionEnvironment;
 import view.ViewUpdater;
-/*
+
+/**
  * Class which implements instructions that handle multiple turtles.  AskWith's implementations is incomplete.  These commands tell the parser which
  * turtles to execute a set of instructions on, and update the active turtles lists held in the executionenvironment object.
+ * Use the dependencies list to create loops and update which turtles are active
+ * @author Greg
+ *
  */
+
 public class MultipleTurtlesInstruction extends Instruction{
 	
 	public enum implementers {

@@ -10,7 +10,6 @@ import javafx.scene.image.ImageView;
 public class TurtleView extends ImageView {
 
 	private double myHeading;
-	// private boolean isVisible;
 	private boolean penUp = false;
 	private int myID;
 
@@ -20,7 +19,6 @@ public class TurtleView extends ImageView {
 		setFitHeight(30);
 		penUp = false;
 		myHeading = 0;
-		// isVisible = true;
 		myID = id;
 	}
 
@@ -41,7 +39,7 @@ public class TurtleView extends ImageView {
 
 	public double setRelativeHeading(double angle) {
 		setRotate(adjustAngle(getRotate() + angle));
-		myHeading = getRotate(); // need to use myHeading twice in order to
+		myHeading = getRotate(); // need to use myHeading both here and below in order to
 									// update it the first time.
 		return myHeading;
 	}

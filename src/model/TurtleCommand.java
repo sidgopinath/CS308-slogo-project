@@ -1,5 +1,4 @@
-package model.turtle;
-import model.Polar;
+package model;
 
 public class TurtleCommand {
     

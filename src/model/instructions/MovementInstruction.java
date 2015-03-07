@@ -6,7 +6,7 @@ import java.util.List;
 import view.SLogoView;
 import model.ExecutionEnvironment;
 import model.Polar;
-import model.turtle.TurtleCommand;
+import model.TurtleCommand;
 
 public class MovementInstruction extends Instruction {
 	private TurtleCommand myTurtle;

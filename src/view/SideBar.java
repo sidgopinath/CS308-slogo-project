@@ -3,6 +3,8 @@ package view;
 //move lambda function into the main UI? 
 
 import java.text.DecimalFormat;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
@@ -21,10 +23,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.util.StringConverter;
+import model.ExecutionEnvironment;
 import model.Parser;
 
 
-public class SideBar extends VBox {
+public class SideBar extends VBox{
 
 	private ObservableList<String> historyItems;
 	private ObservableList<Property> variablesList;
@@ -34,6 +37,7 @@ public class SideBar extends VBox {
     private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 	private TableView<Property> turtlePropertiesTable;
 	private ObservableList<String> commandItems;
+	private ExecutionEnvironment myEnvironment;
 
 	// make this into a new class with its own stuff that have variablesView and
 	// commandView and historyView???
@@ -46,12 +50,9 @@ public class SideBar extends VBox {
 		setDimensionRestrictions();
 		createTurtlePropertiesTable();
 		createVariablesPane();
-
-		
-
 		
 		createUserCommandsPane();
-		createHistoryPane();
+		createHistoryPane();	
 	}
 
 	public void setHistory(String string) {
@@ -136,6 +137,7 @@ public class SideBar extends VBox {
 	}
 	
 	private void createVariablesPane(){
+		System.out.println("createdvarpane");
 		createTitleText(myResources.getString("VariablesHeader"));
 
 		variablesList = FXCollections.observableArrayList();
@@ -153,25 +155,20 @@ public class SideBar extends VBox {
 		variablesCol.setPrefWidth(164); // TODO: set dynamically
 		valuesCol.setPrefWidth(164);
 		// TODO:
-		 valuesCol.setEditable(true);
+		 variablesCol.setEditable(true);
 
-		variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
+	/*	variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		variablesCol
 			.setOnEditCommit(new EventHandler<CellEditEvent<Property, String>>() {
 				@Override
 				public void handle(CellEditEvent<Property, String> t) {
 					Property variable = t.getTableView().getItems().get(t.getTablePosition().getRow());
-					variable.setName(t.getNewValue());
-					
-					myParser.parseInput("MAKE " + variable.getName() + " " + variable.getValue());
-					//variablesTable.re
-					//remove();
-					//TODO
-					System.out.println("MAKE " + variable.getName() + " " + variable.getValue());
-					System.out.println("MAKE " + variable.getName() + " " + t.getNewValue());
-					//TODO: send an update to the controller back to the backend. 
+					String oldName = variable.getName();
+					variable.setName(t.getNewValue()); 
+					System.out.println("old " + oldName + "new " + t.getNewValue());
+					myEnvironment.updateVariableName(oldName, t.getNewValue());
 				}
-			});
+			});*/
 
 		// some issue with strings and ints
 		valuesCol.setCellFactory(TextFieldTableCell
@@ -196,8 +193,16 @@ public class SideBar extends VBox {
 				.setOnEditCommit(new EventHandler<CellEditEvent<Property, Double>>() {
 					@Override
 					public void handle(CellEditEvent<Property, Double> t) {
-						t.getTableView().getItems().get(t.getTablePosition().getRow())
-								.setValue(t.getNewValue());
+
+						Property variable = t.getTableView().getItems().get(t.getTablePosition().getRow());
+						variable.setValue(t.getNewValue());
+						if (myEnvironment == null){
+							System.out.println("lul");
+						}
+						myEnvironment.addVariable(variable.getName(), t.getNewValue());
+						//TODO
+						
+						
 					}
 				});
 
@@ -238,6 +243,11 @@ public class SideBar extends VBox {
 		list.setMaxWidth(Double.MAX_VALUE);
 		list.setPrefHeight(130);
 		return list;
+	}
+
+	public void updateExecutionEnvironment(ExecutionEnvironment env) {
+		// TODO Auto-generated method stub
+		myEnvironment = env;
 	}
 	
 	

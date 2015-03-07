@@ -34,14 +34,9 @@ public class Editor extends HBox {
 		mySidebar.setHistory(userText);
 		
 		//TODO: remove catch
-		try {
+
 			myController.parseInput(userText);
-		} catch (InstantiationException | IllegalAccessException
-				| IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 	}
 	
 	private void createTextEditor(Dimension2D dimensions){

@@ -45,15 +45,8 @@ public class SideBar extends VBox {
 	public SideBar(Workspace workspace, SLogoController controller) {
 		myController = controller;
 		setDimensionRestrictions();
-		
-		// turtle properties
 		createTurtlePropertiesTable();
-		// updateTurtleProperties();
-
 		createVariablesPane();
-
-
-		
 		createUserCommandsPane();
 		createHistoryPane();
 	}
@@ -65,11 +58,7 @@ public class SideBar extends VBox {
 	public void updateVariable(Property variable) {
 		// variablesTable.getItems().stream().forEach((o) ->
 		for (Property o : variablesTable.getItems()) {
-			System.out.println("updatevar in sidebar class");
-			System.out.println(o.getName());
-			System.out.println(variable.getName());
 			if (o.getName().equals(variable.getName())) {
-				System.out.println("already exists. let's edit this variable");
 				o.setValue(variable.getValue());
 				return;
 			}
@@ -81,7 +70,6 @@ public class SideBar extends VBox {
 		 * t.getTableView().getItems()
 		 * .get(t.getTablePosition().getRow())).setName(t.getNewValue());
 		 */
-
 	}
 
 	public void updateCommand(String newCommand) {
@@ -99,7 +87,6 @@ public class SideBar extends VBox {
 		//TODO: remove hardcoding
 		TableColumn<Property, String> propertiesCol = new TableColumn<Property, String>(
 		        myResources.getString("Properties"));
-		// variablesCol.setPrefWidth(sidePane.getPrefWidth()/2);
 		TableColumn<Property, String> valuesCol = new TableColumn<Property, String>(
 		        myResources.getString("Values"));
 
@@ -125,16 +112,16 @@ public class SideBar extends VBox {
 	    DecimalFormat decimalFormat = new DecimalFormat("#.#");
 		TurtleView updatedTurtle = workspace.getTurtleMap().get(ID);
 		ObservableList<Property> turtlePropertiesList = FXCollections
-				.observableArrayList(
-						new Property(myResources.getString("ID"), String.valueOf(updatedTurtle.getID())),
-						new Property(myResources.getString("XPos"), String.valueOf(decimalFormat.format(updatedTurtle
-								.getTranslateX()))),
-						new Property(myResources.getString("YPos"), String.valueOf(updatedTurtle
-								.getYCoord())),
-						new Property(myResources.getString("Heading"), String.valueOf(updatedTurtle
-								.getHeading())), new Property(myResources.getString("PenPos"),
-								updatedTurtle.getPenPosition()), new Property(
-								myResources.getString("TurImg"), updatedTurtle.isShowing()));
+			.observableArrayList(
+				new Property(myResources.getString("ID"), String.valueOf(updatedTurtle.getID())),
+				new Property(myResources.getString("XPos"), String.valueOf(decimalFormat.format(updatedTurtle
+						.getTranslateX()))),
+				new Property(myResources.getString("YPos"), String.valueOf(updatedTurtle
+						.getYCoord())),
+				new Property(myResources.getString("Heading"), String.valueOf(updatedTurtle
+						.getHeading())), new Property(myResources.getString("PenPos"),
+						updatedTurtle.getPenPosition()), new Property(
+						myResources.getString("TurImg"), updatedTurtle.isShowing()));
 		turtlePropertiesTable.setItems(turtlePropertiesList);
 	}
 	
@@ -177,38 +164,42 @@ public class SideBar extends VBox {
 
 		variablesCol.setCellFactory(TextFieldTableCell.forTableColumn());
 		variablesCol
-				.setOnEditCommit(new EventHandler<CellEditEvent<Property, String>>() {
-					@Override
-					public void handle(CellEditEvent<Property, String> t) {
-						t.getTableView().getItems().get(t.getTablePosition().getRow())
-								.setName(t.getNewValue());
-						
-						//parseandexecute("MAKE :var 90");
-						//TODO
-						System.out.println("newvalue: " + t.getNewValue());
-						//TODO: send an update to the controller back to the backend. 
-					}
-				});
+			.setOnEditCommit(new EventHandler<CellEditEvent<Property, String>>() {
+				@Override
+				public void handle(CellEditEvent<Property, String> t) {
+					Property variable = t.getTableView().getItems().get(t.getTablePosition().getRow());
+					variable.setName(t.getNewValue());
+					
+					//parseandexecute("MAKE :var 90");
+					myController.parseInput("MAKE " + variable.getName() + " " + variable.getValue());
+					//variablesTable.re
+					//remove();
+					//TODO
+					System.out.println("MAKE " + variable.getName() + " " + variable.getValue());
+					System.out.println("MAKE " + variable.getName() + " " + t.getNewValue());
+					//TODO: send an update to the controller back to the backend. 
+				}
+			});
 
 		// some issue with strings and ints
 		valuesCol.setCellFactory(TextFieldTableCell
-				.forTableColumn(new StringConverter<Double>() {
+			.forTableColumn(new StringConverter<Double>() {
 
-					@Override
-					public Double fromString(String userInput) {
-						// try{
-						return Double.valueOf(userInput);
-						/*
-						 * } catch(NumberFormatException e){
-						 * System.out.println("Number Format Exception"); }
-						 */
-					}
+				@Override
+				public Double fromString(String userInput) {
+					// try{
+					return Double.valueOf(userInput);
+					/*
+					 * } catch(NumberFormatException e){
+					 * System.out.println("Number Format Exception"); }
+					 */
+				}
 
-					@Override
-					public String toString(Double t) {
-						return t.toString();
-					}
-				}));
+				@Override
+				public String toString(Double t) {
+					return t.toString();
+				}
+			}));
 		valuesCol
 				.setOnEditCommit(new EventHandler<CellEditEvent<Property, Double>>() {
 					@Override
@@ -247,17 +238,11 @@ public class SideBar extends VBox {
 				@Override
 				public void changed(ObservableValue<? extends String> ov,
 					String old_val, String new_val) {
-					try {
 						myController.parseInput(historyList.getFocusModel()
 								.getFocusedItem());
-					} catch (InstantiationException | IllegalAccessException
-							| IllegalArgumentException
-							| InvocationTargetException | NoSuchMethodException
-							| SecurityException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
 			});
 	}
 	
@@ -270,7 +255,6 @@ public class SideBar extends VBox {
 		userCommandsList.setMaxWidth(Double.MAX_VALUE);
 		userCommandsList.setPrefHeight(150);
 		getChildren().add(userCommandsList);
-		
 	}
 	
 

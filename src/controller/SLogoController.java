@@ -26,7 +26,7 @@ public class SLogoController {
 	 * Calls parser to parse string
 	 * @param input
 	 */
-	public void parseInput(String input) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
+	public void parseInput(String input) {
 			myParser.parseAndExecute(input);
 	}
 	

@@ -1,5 +1,16 @@
 package model;
 
+/**
+ * This very important class holds information about Turtles
+ * The getters and setters in this class are called across the program
+ * This class allows the model and the view to communicate
+ * The model places information into a TurtleCommand and then sends it to the View
+ * The view can read the information in TurtleCommands and move the Turtle accordingly
+ * This class is primarily used for commands that physically move the Turtle
+ * @authors Greg, Sid, Mengchao
+ *
+ */
+
 public class TurtleCommand {
     
 	private int myTurtleId;

@@ -5,6 +5,13 @@ import java.util.List;
 
 import model.instructions.Instruction;
 
+/**
+ * This node class holds a node of the tree created in Parser
+ * A node holds an actual instruction as well as a list of all of its child nodes
+ * @author Greg
+ *
+ */
+
 public class Node{
 		
 	private List<Node> myChildren;

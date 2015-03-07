@@ -17,6 +17,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+/**
+ * A functioning XMLParser
+ * This is based heavily off of the parser I made for the CellSociety project
+ * It has been improved to deal with the deeper levels of nodes that our XMLFile would require
+ * This has not been connected to the rest of the program due to a lack of time
+ * Theoretically, this could load in user variables and instructions that had been previously saved
+ * @author Sid
+ *
+ */
+
 public class XMLParser {
 
 	private Map<String, Double> myVariableMap = new HashMap<String, Double>();

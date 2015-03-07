@@ -1,11 +1,14 @@
 package model;
 
+/**
+ * A polar object stores an angle and a distance, like polar coordinates
+ * This is used by the view to make commands easier for them to implement
+ * @author Mengchao, Greg, Sid
+ *
+ */
+
 public class Polar {
     
-	/**
-	 * Consider refactoring this
-	 * Getter methods instead of public variables?
-	 */
 	private double myAngle;
     private double myDistance;
     

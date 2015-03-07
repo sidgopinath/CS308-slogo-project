@@ -15,8 +15,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class XMLWriter {
-	public XMLWriter(Map<String, Double> variableMap,
-			List<XMLInstruction> userInstructions) {
+	public XMLWriter(Map<String, Double> variableMap, List<XMLInstruction> userInstructions) {
 
 		try {
 

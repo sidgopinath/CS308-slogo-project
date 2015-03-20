@@ -1,0 +1,16 @@
+<map id="model.Node" name="model.Node">
+<area shape="rect" id="node3" href="$d1/dea/classmodel_1_1instructions_1_1_instruction.html" title="model.instructions.Instruction" alt="" coords="1184,132,1395,159"/>
+<area shape="rect" id="node10" href="$d4/d64/classview_1_1_view_updater.html" title="view.ViewUpdater" alt="" coords="791,533,924,560"/>
+<area shape="rect" id="node28" href="$dc/df5/classmodel_1_1_parser.html" title="model.Parser" alt="" coords="1236,333,1343,360"/>
+<area shape="rect" id="node5" href="$d1/dca/classmodel_1_1_execution_environment.html" title="model.ExecutionEnvironment" alt="" coords="753,139,962,165"/>
+<area shape="rect" id="node18" href="$d1/dc7/classview_1_1_side_bar.html" title="view.SideBar" alt="" coords="1637,732,1739,759"/>
+<area shape="rect" id="node22" href="$d9/dd3/classview_1_1_variables_view.html" title="view.VariablesView" alt="" coords="1220,927,1359,953"/>
+<area shape="rect" id="node31" href="$d6/de7/classview_1_1_s_logo_view.html" title="view.SLogoView" alt="" coords="2505,597,2626,624"/>
+<area shape="rect" id="node11" href="$da/d64/classview_1_1_workspace.html" title="view.Workspace" alt="" coords="1933,851,2053,877"/>
+<area shape="rect" id="node39" href="$de/d0a/classview_1_1_drawer.html" title="view.Drawer" alt="" coords="2226,597,2323,624"/>
+<area shape="rect" id="node14" href="$d8/df7/classview_1_1_turtle_view.html" title="view.TurtleView" alt="" coords="1631,1061,1745,1088"/>
+<area shape="rect" id="node33" href="$da/dc8/classview_1_1_editor.html" title="view.Editor" alt="" coords="1949,469,2038,496"/>
+<area shape="rect" id="node23" href="$d5/dea/classview_1_1_side_table_view.html" title="view.SideTableView" alt="" coords="787,952,928,979"/>
+<area shape="rect" id="node27" href="$d9/d3a/classview_1_1_turtle_properties_view.html" title="view.TurtlePropertiesView" alt="" coords="1199,1040,1379,1067"/>
+<area shape="rect" id="node24" href="$d2/d38/classview_1_1_side_properties_view.html" title="view.SidePropertiesView" alt="" coords="341,1005,515,1032"/>
+</map>

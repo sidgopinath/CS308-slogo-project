@@ -1,0 +1,9 @@
+<map id="view.SLogoView.setXY" name="view.SLogoView.setXY">
+<area shape="rect" id="node2" href="$da/d64/classview_1_1_workspace.html#ad460da1164f039e5ea9a265d446d13fe" title="view.Workspace.getTurtleMap" alt="" coords="723,5,930,32"/>
+<area shape="rect" id="node3" href="$d1/dc7/classview_1_1_side_bar.html#a7d73038dbba05f96990b60664afa2670" title="view.SideBar.updateTurtle\lProperties" alt="" coords="213,73,397,114"/>
+<area shape="rect" id="node4" href="$d9/d3a/classview_1_1_turtle_properties_view.html#af07bce3cf2bed2814a0fb3812d00b69e" title="view.TurtlePropertiesView.update" alt="" coords="446,101,674,128"/>
+<area shape="rect" id="node5" href="$d8/df7/classview_1_1_turtle_view.html#ab5fdc3775e06339f4a68d1b795a81643" title="view.TurtleView.getID" alt="" coords="751,56,903,83"/>
+<area shape="rect" id="node6" href="$d8/df7/classview_1_1_turtle_view.html#afddbc74313a99bb100c8c50efa88f330" title="view.TurtleView.getYCoord" alt="" coords="735,107,918,133"/>
+<area shape="rect" id="node7" href="$d8/df7/classview_1_1_turtle_view.html#a5da3d4c9dafb77af0db0c589a72eadc8" title="view.TurtleView.getHeading" alt="" coords="731,157,923,184"/>
+<area shape="rect" id="node8" href="$d5/dea/classview_1_1_side_table_view.html#adbdf2bf0ebf7fc8ab04db2087baea03a" title="view.SideTableView.getTable" alt="" coords="728,208,925,235"/>
+</map>

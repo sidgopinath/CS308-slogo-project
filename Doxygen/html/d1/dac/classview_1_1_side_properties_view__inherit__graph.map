@@ -1,0 +1,6 @@
+<map id="view.SidePropertiesView" name="view.SidePropertiesView">
+<area shape="rect" id="node2" href="$df/d7f/classview_1_1_side_list_view.html" title="view.SideListView" alt="" coords="5,80,135,107"/>
+<area shape="rect" id="node3" href="$d5/dea/classview_1_1_side_table_view.html" title="view.SideTableView" alt="" coords="160,80,300,107"/>
+<area shape="rect" id="node4" href="$d9/d3a/classview_1_1_turtle_properties_view.html" title="view.TurtlePropertiesView" alt="" coords="49,155,228,181"/>
+<area shape="rect" id="node5" href="$d9/dd3/classview_1_1_variables_view.html" title="view.VariablesView" alt="" coords="253,155,392,181"/>
+</map>

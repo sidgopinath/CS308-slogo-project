@@ -1,0 +1,16 @@
+<map id="model.instructions.MultipleTurtlesInstruction" name="model.instructions.MultipleTurtlesInstruction">
+<area shape="rect" id="node2" href="$d1/dea/classmodel_1_1instructions_1_1_instruction.html" title="model.instructions.Instruction" alt="" coords="1184,760,1395,787"/>
+<area shape="rect" id="node9" href="$d4/d64/classview_1_1_view_updater.html" title="view.ViewUpdater" alt="" coords="791,397,924,424"/>
+<area shape="rect" id="node27" href="$dc/df5/classmodel_1_1_parser.html" title="model.Parser" alt="" coords="1236,223,1343,249"/>
+<area shape="rect" id="node4" href="$d1/dca/classmodel_1_1_execution_environment.html" title="model.ExecutionEnvironment" alt="" coords="753,831,962,857"/>
+<area shape="rect" id="node17" href="$d1/dc7/classview_1_1_side_bar.html" title="view.SideBar" alt="" coords="1643,909,1746,936"/>
+<area shape="rect" id="node21" href="$d9/dd3/classview_1_1_variables_view.html" title="view.VariablesView" alt="" coords="1220,1025,1359,1052"/>
+<area shape="rect" id="node30" href="$d6/de7/classview_1_1_s_logo_view.html" title="view.SLogoView" alt="" coords="2518,657,2639,684"/>
+<area shape="rect" id="node10" href="$da/d64/classview_1_1_workspace.html" title="view.Workspace" alt="" coords="1947,637,2067,664"/>
+<area shape="rect" id="node38" href="$de/d0a/classview_1_1_drawer.html" title="view.Drawer" alt="" coords="2239,587,2337,613"/>
+<area shape="rect" id="node13" href="$d8/df7/classview_1_1_turtle_view.html" title="view.TurtleView" alt="" coords="1637,675,1752,701"/>
+<area shape="rect" id="node32" href="$da/dc8/classview_1_1_editor.html" title="view.Editor" alt="" coords="1962,253,2051,280"/>
+<area shape="rect" id="node22" href="$d5/dea/classview_1_1_side_table_view.html" title="view.SideTableView" alt="" coords="787,1084,928,1111"/>
+<area shape="rect" id="node26" href="$d9/d3a/classview_1_1_turtle_properties_view.html" title="view.TurtlePropertiesView" alt="" coords="1199,1079,1379,1105"/>
+<area shape="rect" id="node23" href="$d2/d38/classview_1_1_side_properties_view.html" title="view.SidePropertiesView" alt="" coords="341,1033,515,1060"/>
+</map>

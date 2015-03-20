@@ -8,9 +8,16 @@ import model.ExecutionEnvironment;
 import javafx.geometry.Dimension2D;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+
+/**
+ * Workspace for displaying turtles, lines, and the pane that displays the visual representation of the SLogo language.
+ * @author Callie
+ *
+ */
 
 public class Workspace extends StackPane {
 
@@ -21,7 +28,6 @@ public class Workspace extends StackPane {
 	private static final String DEFAULT_RESOURCE_PACKAGE = "resources.display/";
 	private ResourceBundle myResources = ResourceBundle.getBundle(DEFAULT_RESOURCE_PACKAGE + "english");
 	private TurtleView myActiveTurtle;
-	//TODO: set initial id to 1
 	private static final int INITIAL_TURTLE_ID = 1;
 	
 	public Workspace(
@@ -30,7 +36,7 @@ public class Workspace extends StackPane {
 		myBackground = new Rectangle(dimensions.getWidth() * 11.7 / 16,
 				dimensions.getHeight() * 10 / 16);
 		myBackground.setFill(Color.WHITE);
-    	myTurtles = new HashMap<Integer, TurtleView>(); //TODO: move
+    	myTurtles = new HashMap<Integer, TurtleView>(); 
 		mySidebar = sidebar;
 		myLines = new Group();
 		myLines.setManaged(false);
@@ -81,11 +87,6 @@ public class Workspace extends StackPane {
 		TurtleView selectedTurtle = myTurtles.get(ID);
 		selectedTurtle.setOnMouseClicked(e -> setActiveTurtle(selectedTurtle.getID()));
 	}
-
-	//TODO
-	public TurtleView getActiveTurtle() {
-		return myActiveTurtle;
-	}
 	
 	public Map<Integer, TurtleView> getTurtleMap(){
 		return myTurtles;
@@ -97,6 +98,10 @@ public class Workspace extends StackPane {
 	
 	public void clearLines(){
 		myLines.getChildren().clear();
+	}
+
+	public TurtleView getActiveTurtle() {
+		return myActiveTurtle;
 	}
 
 }

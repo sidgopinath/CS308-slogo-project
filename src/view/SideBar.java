@@ -2,7 +2,6 @@ package view;
 
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -21,6 +20,15 @@ import javafx.scene.text.Text;
 import javafx.util.StringConverter;
 import model.ExecutionEnvironment;
 import model.Parser;
+
+/**
+ * Right sidebar containing display properties of a turle's history, commands
+ * header, variables, and properties. The user can interact with some of these
+ * modules and directly edit/change them
+ * 
+ * @author Callie
+ *
+ */
 
 public class SideBar extends VBox {
 
@@ -43,8 +51,8 @@ public class SideBar extends VBox {
 		createHistoryPane();
 
 	}
-	
-	public void setParser(Parser parser){
+
+	public void setParser(Parser parser) {
 		myParser = parser;
 	}
 
@@ -185,7 +193,7 @@ public class SideBar extends VBox {
 		myHistoryItems = FXCollections.observableArrayList();
 		ListView<String> historyList = createListView(myHistoryItems, 130);
 		getChildren().add(historyList);
-		
+
 		historyList.getFocusModel().focusedItemProperty()
 				.addListener(new ChangeListener<String>() {
 					@Override
@@ -196,12 +204,13 @@ public class SideBar extends VBox {
 					}
 				});
 
-	/*	historyList.getFocusModel().focusedItemProperty().addListener(changeListener -> {
-			if (historyList.getFocusModel().getFocusedItem() != null) {
-				myParser.parseAndExecute(historyList.getFocusModel().getFocusedItem());
-			}
-			historyList.getFocusModel().focus(-1);
-		});*/
+		/*
+		 * historyList.getFocusModel().focusedItemProperty().addListener(
+		 * changeListener -> { if (historyList.getFocusModel().getFocusedItem()
+		 * != null) {
+		 * myParser.parseAndExecute(historyList.getFocusModel().getFocusedItem
+		 * ()); } historyList.getFocusModel().focus(-1); });
+		 */
 
 	}
 

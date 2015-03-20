@@ -13,7 +13,7 @@ import view.ViewUpdater;
  * These methods usually call the updateView method
  * The turtle is directly affected by these methods
  * Observable comes into play also here
- * @author Greg, Sid
+ * @author Greg, Sid, Callie
  *
  */
 

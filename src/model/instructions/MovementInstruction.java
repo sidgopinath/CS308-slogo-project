@@ -84,7 +84,7 @@ public class MovementInstruction extends Instruction {
 			return myViewUpdater.towards(myEnvironment.getActiveTurtle(), myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "SETPOSITION":
 			myJump = true;
-			return myViewUpdater.setXY(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());
+			return myViewUpdater.setXY(1, myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "PENDOWN":
 			myViewUpdater.setPenUp(myEnvironment.getActiveTurtle(), false);
 			return 1.0;

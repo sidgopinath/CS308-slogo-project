@@ -59,17 +59,17 @@ public class MathInstruction extends Instruction{
 		case "RANDOM":
 			Random randomNum = new Random();
 			return randomNum.nextInt((int)myDependencies.get(0).execute());
-		case "SIN":
+		case "SINE":
 			return Math.toDegrees(Math.sin(myDependencies.get(0).execute()));
-		case "COS":
-			return Math.toDegrees(Math.cos(myDependencies.get(1).execute()));
-		case "TAN":
-			return Math.toDegrees(divByZeroCheck((Math.tan(myDependencies.get(1).execute()))));
-		case "ATAN":
-			return Math.toDegrees(divByZeroCheck((Math.atan(myDependencies.get(1).execute()))));
-		case "LOG":
+		case "COSINE":
+			return Math.toDegrees(Math.cos(myDependencies.get(0).execute()));
+		case "TANGENT":
+			return Math.toDegrees(divByZeroCheck((Math.tan(myDependencies.get(0).execute()))));
+		case "ARCTANGENT":
+			return Math.toDegrees(divByZeroCheck((Math.atan(myDependencies.get(0).execute()))));
+		case "NATURALLOG":
 			return Math.log(myDependencies.get(0).execute());
-		case "POW":
+		case "POWER":
 			return Math.pow(myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "PI":
 			return Math.PI;

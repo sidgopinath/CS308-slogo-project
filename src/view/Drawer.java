@@ -24,7 +24,6 @@ public class Drawer {
 	private double[] myHalf = new double[2];
 	private Workspace myWorkspace;
 	private double strokeSize;
-	private int myIndex;
 	
 	public Drawer(Workspace workspace){
 		myWorkspace = workspace;
@@ -118,39 +117,7 @@ public class Drawer {
 		}
 		return lines;
 	}
-
-//	
-//	private void animate(TurtleView turtle,List<Polyline> lines, Group target) {
-//		myIndex = 0;
-//        Timeline animation = new Timeline();
-//		KeyFrame animate = new KeyFrame(Duration.millis(30),
-//				e -> updateKeyFrame(turtle,lines, target));
-//		animation.getKeyFrames().add(animate);
-//		animation.setCycleCount(lines.size());
-//		animation.play();
-//	}
-//	
-//	private void updateKeyFrame(TurtleView turtle,List<Polyline> lines, Group target) {
-//		System.out.println("turtle was at "+ turtle.getTranslateX()+" "+ turtle.getTranslateY());
-//		target.getChildren().add(lines.get(myIndex));
-//		turtle.move(turtle.getTranslateX()+(lines.get(1).getPoints().get(2)-lines.get(0).getPoints().get(2)), turtle.getTranslateY()+(lines.get(1).getPoints().get(3)-lines.get(0).getPoints().get(3)));
-//		myIndex++;
-//	}
-//	
-//	private List<Polyline> animator(double startX,
-//			double startY, double endX, double endY) {
-//		List<Polyline> myLines = new ArrayList<Polyline>();
-//		for	(int i=0; i<10; i++){
-//			Polyline pLine = new Polyline();
-//			pLine.setStroke(myColor);
-//			pLine.setStrokeWidth(strokeSize);
-//			pLine.getPoints().addAll(
-//					new Double[] { startX+(double)i/10*(endX-startX), startY+(double)i/10*(endY-startY), startX+(double)(i+1)/10*(endX-startX), startY+(double)(i+1)/10*(endY-startY)});
-//			System.out.println("adding line from "+ startX+(double)i/10*(endX-startX)+" "+startY+(double)i/10*(endY-startY)+ " to "+startX+(double)(i+1)/10*(endX-startX)+ " "+ startY+(double)(i+1)/10*(endY-startY));
-//			myLines.add(pLine);
-//		}
-//		return myLines;
-//	}
+	
 	private void wrapY(int dir, TurtleView turtle, Polar polar,
 			List<Polyline> lines, int i, double newY, double startX, double moveX,
 			double moveY, double turtleY, double startY) {
@@ -203,3 +170,9 @@ public class Drawer {
 	
 
 }
+/*This is the drawer class that takes in a list of turtles and a list of turtle commands, 
+ * and moves the turtle as well as draws the lines accordingly. I have always been very good at using mathematics. 
+ * This drawer class demonstrated this ability again. In the method wrapX and wrapY, 
+ * I used mathematical expressions to handle the different cases of wrapping the turtle, 
+ * so that the lines left by the turtle are consistent. 
+ */

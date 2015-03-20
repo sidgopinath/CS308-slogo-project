@@ -1,17 +1,19 @@
+// This entire file is part of my masterpiece.
+// Sid Gopinath
+
 package view;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ResourceBundle;
 
-import model.ExecutionEnvironment;
 import javafx.geometry.Dimension2D;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import model.ExecutionEnvironment;
 
 /**
  * Workspace for displaying turtles, lines, and the pane that displays the visual representation of the SLogo language.
@@ -30,9 +32,7 @@ public class Workspace extends StackPane {
 	private TurtleView myActiveTurtle;
 	private static final int INITIAL_TURTLE_ID = 1;
 	
-	public Workspace(
-			Dimension2D dimensions, SideBar sidebar) {
-
+	public Workspace(Dimension2D dimensions, SideBar sidebar) {
 		myBackground = new Rectangle(dimensions.getWidth() * 11.7 / 16,
 				dimensions.getHeight() * 10 / 16);
 		myBackground.setFill(Color.WHITE);
@@ -40,14 +40,9 @@ public class Workspace extends StackPane {
 		mySidebar = sidebar;
 		myLines = new Group();
 		myLines.setManaged(false);
-
 		getChildren().addAll(myBackground, myLines);
-	//TODO: change both values within the method from 0 to 1
-		
-		//create initial turtle (id = 1)
 		addTurtle(null);
 		setActiveTurtle(INITIAL_TURTLE_ID);
-
 	}
 
 	public void addTurtle(ExecutionEnvironment update) {// int id, TurtleView turtle) {
@@ -61,8 +56,8 @@ public class Workspace extends StackPane {
 		configureTurtleEventHandler(newID);
 		getChildren().add(newTurtle);
 		if(update!=null){
-			update.addTurtle(newID);
-			update.setActiveTurtle(newID);
+			update.myTurtleList.add((int) newID);
+			update.myActiveTurtle = (int) newID;
 		}
 	}
 
@@ -103,6 +98,4 @@ public class Workspace extends StackPane {
 	public TurtleView getActiveTurtle() {
 		return myActiveTurtle;
 	}
-
 }
-

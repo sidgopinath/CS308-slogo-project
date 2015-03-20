@@ -1,3 +1,6 @@
+// This entire file is part of my masterpiece.
+// Sid Gopinath
+
 package view;
 
 import java.util.ArrayList;
@@ -17,9 +20,9 @@ import model.TurtleCommand;
 
 public class ViewUpdater implements Observer{
 
-	Workspace myWorkspace;
-	SideBar mySidebar;
-	Drawer myDrawer;
+	private Workspace myWorkspace;
+	private SideBar mySidebar;
+	private Drawer myDrawer;
 	
 	public ViewUpdater(SLogoView view){
 		myWorkspace = view.getWorkspace();
@@ -50,8 +53,6 @@ public class ViewUpdater implements Observer{
 		double angle = Math.toDegrees(Math.atan2(x, y));
 		return setHeading(id, angle, false);
 	}
-
-
 
 	public double setHeading(int id, double angle, boolean relative) {
 		double heading;
@@ -86,7 +87,6 @@ public class ViewUpdater implements Observer{
 		return myWorkspace.getTurtleMap().get(id).getRotate();
 	}
 
-	// these definitely methods should not be in SLogoView;
 	public double getXCor(int id) {
 		return myWorkspace.getTurtleMap().get(id).getTranslateX();
 	}
@@ -104,11 +104,11 @@ public class ViewUpdater implements Observer{
 	public void update(Observable o, Object arg) {
 		ExecutionEnvironment env = (ExecutionEnvironment) o;
 		mySidebar.updateExecutionEnvironment(env);
-		for (String s : env.getVariableMap().keySet()) {
-			double value = env.getVariableMap().get(s);
+		for (String s : env.myVariableMap.keySet()) {
+			double value = env.myVariableMap.get(s);
 			mySidebar.updateVariable(new Property(s, value));
 		}
-		for (String s : env.getUserCommandMap().keySet()) {
+		for (String s : env.myVariableMap.keySet()) {
 			updateCommand(s);
 		}
 	}
@@ -120,8 +120,6 @@ public class ViewUpdater implements Observer{
 
 	public double setBackgroundColor(double index){
 		int colorIndex = (int) index;
-		
-		//TODO
 		List<Color> colorList = new ArrayList<Color>();
 		colorList.add(Color.RED);
 		colorList.add(Color.ORANGE);
@@ -130,15 +128,12 @@ public class ViewUpdater implements Observer{
 		colorList.add(Color.BLUE);
 		colorList.add(Color.PURPLE);
 		colorList.add(Color.BLACK);
-		
 		myWorkspace.setBackground(colorList.get(colorIndex));
 		return index;
 	}
 	
 	public double setPenColor(double index){
 		int colorIndex = (int) index;
-		
-		//TODO
 		List<Color> colorList = new ArrayList<Color>();
 		colorList.add(Color.RED);
 		colorList.add(Color.ORANGE);
@@ -147,7 +142,6 @@ public class ViewUpdater implements Observer{
 		colorList.add(Color.BLUE);
 		colorList.add(Color.PURPLE);
 		colorList.add(Color.BLACK);
-
 		myDrawer.changeColor(colorList.get(colorIndex));	
 		return index;
 	}
@@ -158,7 +152,6 @@ public class ViewUpdater implements Observer{
 	}
 	
 	public double setShape(double i, int id){
-		//TODO
 		int index = (int) i;
 		if (index == 0){
 			myWorkspace.getActiveTurtle().setImage(new Image("resources/images/defaultTurtle.png")); //default turtle
@@ -169,8 +162,6 @@ public class ViewUpdater implements Observer{
 			myWorkspace.getTurtleMap().get(id).setImageID(index);
 		}
 		else{
-			//TODO
-		//	myWorkspace.getActiveTurtle().setImage(new Image("resources/images/triangleTurtle.png")); //triangle
 			myWorkspace.getTurtleMap().get(id).setImageID(index);
 		}
 		return index;
@@ -189,11 +180,4 @@ public class ViewUpdater implements Observer{
 		TurtleView turtle = myWorkspace.getTurtleMap().get(id);
 		return (double) turtle.clearStamps(myWorkspace);
 	}
-	
-	
-	
-	
-	
-	
-	
 }

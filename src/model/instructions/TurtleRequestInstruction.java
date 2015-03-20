@@ -1,3 +1,6 @@
+// This entire file is part of my masterpiece.
+// Sid Gopinath
+
 package model.instructions;
 
 import java.util.List;
@@ -34,15 +37,15 @@ public class TurtleRequestInstruction extends Instruction {
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "XCOORDINATE":
-			return myViewUpdater.getXCor(myEnvironment.getActiveTurtle());
+			return myViewUpdater.getXCor(myEnvironment.myActiveTurtle);
 		case "YCOORDINATE":
-			return myViewUpdater.getYCor(myEnvironment.getActiveTurtle());
+			return myViewUpdater.getYCor(myEnvironment.myActiveTurtle);
 		case "HEADING":
-			return myViewUpdater.getHeading(myEnvironment.getActiveTurtle());
+			return myViewUpdater.getHeading(myEnvironment.myActiveTurtle);
 		case "ISPENDOWN":
-			return myViewUpdater.getPenDown(myEnvironment.getActiveTurtle());
+			return myViewUpdater.getPenDown(myEnvironment.myActiveTurtle);
 		case "ISSHOWING":
-			return myViewUpdater.isShowing(myEnvironment.getActiveTurtle());
+			return myViewUpdater.isShowing(myEnvironment.myActiveTurtle);
 		default: 
 			return 0.0;
 		}

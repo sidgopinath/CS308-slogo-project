@@ -1,3 +1,6 @@
+// This entire file is part of my masterpiece.
+// Sid Gopinath
+
 package model;
 
 import java.lang.reflect.InvocationTargetException;
@@ -13,6 +16,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
+
 import model.instructions.Constant;
 import model.instructions.Instruction;
 import model.instructions.ListInstruction;
@@ -73,7 +77,7 @@ public class Parser implements Observer{
 			try {
 				classType = Class.forName("model.instructions." + type + "$implementers");
 			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
+				mySLogoView.openDialog("Invalid class. Not found through reflection.");
 			}
 			for (Object d : classType.getEnumConstants()) {
 				myCommandMap.put(d.toString(), type);
@@ -85,7 +89,6 @@ public class Parser implements Observer{
 
 	public void parseAndExecute(String input) {
 		try {
-			System.out.println(input);
 			myFurthestDepth = 0;
 			String[] splitCommands = input.split("\\s+");
 			List<Node> nodeList = new ArrayList<Node>();
@@ -94,33 +97,29 @@ public class Parser implements Observer{
 			}
 			for (Node root : nodeList) {
 					try{
-						for(int turtle:myExecutionParameters.getActiveList()){
-							myExecutionParameters.setActiveTurtle(turtle);
+						for(int turtle:myExecutionParameters.myActiveTurtleList){
+							myExecutionParameters.myActiveTurtle = (int) turtle;
+							myExecutionParameters.updateObserver();
 							root.getInstruction().execute();
 						}
 					}
 					catch (ConcurrentModificationException e){
-						
+						mySLogoView.openDialog("Concurrent Modification. Try again.");
 					}
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
 			mySLogoView.openDialog("Invalid input! Try again.");
 		}
 	}
+	
 	private Node makeTree(String[] command) throws ModelException{
-	int myVars = 0;
+		int myVars = 0;
 		int neededVars = -1;
 		Node myNode = null;
 		List<Instruction> futureInstructions = new ArrayList<Instruction>();
 		String match = testMatches(command[myFurthestDepth]).toUpperCase();
-		System.out.println("match " + match);
 		switch (match){
-		//TODO: instead of while loop, find where closing bracket is
-		//run until you hit that
-		//have some way to account for nested loops
 		case "LISTSTART":
-			// count number of strings til you reach a ], thats number of dependencies
 			myFurthestDepth++;
 			myNode = new Node(new ListInstruction(futureInstructions, match,myViewUpdater, myExecutionParameters));
 			Node temp;
@@ -146,14 +145,13 @@ public class Parser implements Observer{
 			return new Node(tempInt);
 		case "COMMAND":
 			myFurthestDepth++;
-			if(myExecutionParameters.getUserCommandMap().containsKey(command[myFurthestDepth-1])&&(myFurthestDepth<2||myFurthestDepth>=2&&testMatches(command[myFurthestDepth-2]).toUpperCase()!="MAKEUSERINSTRUCTION")){
+			if(myExecutionParameters.myUserInstructionMap.containsKey(command[myFurthestDepth-1])&&(myFurthestDepth<2||myFurthestDepth>=2&&testMatches(command[myFurthestDepth-2]).toUpperCase()!="MAKEUSERINSTRUCTION")){
 				myNode = new Node(new UserRunningInstruction(futureInstructions, command[myFurthestDepth-1], myViewUpdater, myExecutionParameters));
-				System.out.println(" Node "+ myNode);
 				neededVars = 1;
 			}
 			else{
-				myExecutionParameters.addCommand(command[myFurthestDepth-1], null);
-				
+				myExecutionParameters.myUserInstructionMap.put(command[myFurthestDepth-1], null);
+				myExecutionParameters.updateObserver();
 				return new Node(new StringInstruction(command[myFurthestDepth-1], myExecutionParameters));
 			}
 			break;
@@ -164,24 +162,32 @@ public class Parser implements Observer{
 		}
 			//this is either a known command or invalid input.  
 			//instantiate the command, if reflection cannot find the file then must be invalid
-		if(myNode==null){
-					Instruction myInt;
-					try {
-					myInt = Class.forName("model.instructions."+myCommandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,ViewUpdater.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,myViewUpdater, myExecutionParameters});
-					myFurthestDepth++;
-					myExecutionParameters.addObserver(myInt);
-					myNode = new Node(myInt);
-					neededVars = myInt.getNumberOfArguments();
-					}
-					catch (InstantiationException | IllegalAccessException
-								| IllegalArgumentException
-								| InvocationTargetException | NoSuchMethodException
-								| SecurityException | ClassNotFoundException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+		if (myNode == null) {
+			Instruction myInt;
+			try {
+				myInt = Class
+						.forName(
+								"model.instructions." + myCommandMap.get(match))
+						.asSubclass(Instruction.class)
+						.getConstructor(
+								new Class[] { List.class, String.class,
+										ViewUpdater.class,
+										ExecutionEnvironment.class })
+						.newInstance(
+								new Object[] { futureInstructions, match,
+										myViewUpdater, myExecutionParameters });
+				myFurthestDepth++;
+				myExecutionParameters.addObserver(myInt);
+				myNode = new Node(myInt);
+				neededVars = myInt.getNumberOfArguments();
+			} catch (InstantiationException | IllegalAccessException
+					| IllegalArgumentException | InvocationTargetException
+					| NoSuchMethodException | SecurityException
+					| ClassNotFoundException e) {
+				mySLogoView.openDialog("Error. Try again.");
+			}
 		}
-		while(myVars<neededVars){
+		while (myVars < neededVars) {
 			Node level = makeTree(command);
 			myNode.addChild(level);
 			myVars++;
@@ -221,5 +227,4 @@ public class Parser implements Observer{
 	public void update(Observable o, Object arg) {
 		myExecutionParameters = (ExecutionEnvironment) o;
 	}
-
 }

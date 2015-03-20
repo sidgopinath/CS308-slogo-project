@@ -1,3 +1,5 @@
+// This entire file is part of my masterpiece.
+// Sid Gopinath
 package model.instructions;
 
 import java.util.List;
@@ -75,7 +77,8 @@ public class ControlInstruction extends Instruction{
 	}
 	public double addToMap(){
 		String commandName = myDependencies.get(0).getName();
-		myEnvironment.addCommand(commandName, this);
+		myEnvironment.myUserInstructionMap.put(commandName, this);
+		myEnvironment.updateObserver();
 		return 1;
 	}
 	public double forLoop(Instruction varHead, Instruction listHead, int startIndex, int endIndex, int increment){
@@ -98,7 +101,8 @@ public class ControlInstruction extends Instruction{
 	}
 	
 	public double makeVariable(Instruction input, Instruction value){
-		myEnvironment.addVariable(input.getName(), value.execute());
+		myEnvironment.myVariableMap.put(input.getName(), value.execute());
+		myEnvironment.updateObserver();
 		return value.execute();
 	}
 	

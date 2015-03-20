@@ -1,7 +1,11 @@
+// This entire file is part of my masterpiece.
+// Sid Gopinath
+
 package view;
 
 import java.text.DecimalFormat;
 import java.util.ResourceBundle;
+
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -181,7 +185,8 @@ public class SideBar extends VBox {
 				if (myEnvironment == null) {
 					System.out.println("lul");
 				}
-				myEnvironment.addVariable(variable.getName(), t.getNewValue());
+				myEnvironment.myVariableMap.put(variable.getName(), t.getNewValue());
+				myEnvironment.updateObserver();
 			}
 		});
 
@@ -203,15 +208,6 @@ public class SideBar extends VBox {
 								.getFocusedItem());
 					}
 				});
-
-		/*
-		 * historyList.getFocusModel().focusedItemProperty().addListener(
-		 * changeListener -> { if (historyList.getFocusModel().getFocusedItem()
-		 * != null) {
-		 * myParser.parseAndExecute(historyList.getFocusModel().getFocusedItem
-		 * ()); } historyList.getFocusModel().focus(-1); });
-		 */
-
 	}
 
 	private void createUserCommandsPane() {

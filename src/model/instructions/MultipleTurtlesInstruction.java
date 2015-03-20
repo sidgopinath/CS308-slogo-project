@@ -1,3 +1,6 @@
+// This entire file is part of my masterpiece.
+// Sid Gopinath
+
 package model.instructions;
 
 import java.util.List;
@@ -38,21 +41,24 @@ public class MultipleTurtlesInstruction extends Instruction{
 		double returnVal = 0; 
 		switch(myInstructionType.toUpperCase()){
 		case "ID":
-			return myEnvironment.getActiveTurtle();
+			return myEnvironment.myActiveTurtle;
 		case "TURTLES":
-			return myEnvironment.getTurtles().size();
+			return myEnvironment.myTurtleList.size();
 		case "TELL":
-			myEnvironment.clearActiveList();
+			myEnvironment.myActiveTurtleList.clear();
+			myEnvironment.updateObserver();
 			for(Instruction i :myDependencies.get(0).myDependencies){
-				myEnvironment.addTurtle(i.execute());
-				myEnvironment.addTurtleToActiveList(i.execute());
+				myEnvironment.myTurtleList.add((int) i.execute());
+				myEnvironment.myActiveTurtleList.add((int) i.execute());
+				myEnvironment.updateObserver();
 				returnVal = i.execute();
 			}
 			return returnVal;
 		case "ASK":
 			for(Instruction i :myDependencies.get(0).myDependencies){
-				myEnvironment.addTurtle(i.execute());
-				myEnvironment.setActiveTurtle(i.execute());
+				myEnvironment.myTurtleList.add((int) i.execute());
+				myEnvironment.myActiveTurtle = (int) i.execute();
+				myEnvironment.updateObserver();
 				for(Instruction j : myDependencies.get(1).myDependencies){
 					returnVal = j.execute();
 				}

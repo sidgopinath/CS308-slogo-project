@@ -22,9 +22,8 @@ public class Node{
 		myChildren = new ArrayList<Node>();
 	}
 	
-	public Node addChild(Node n){
+	public void addChild(Node n){
 		myChildren.add(n);
-		return n;
 	}
 	
 	public List<Node> getChildren(){

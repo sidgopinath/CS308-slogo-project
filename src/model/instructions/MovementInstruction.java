@@ -1,10 +1,13 @@
+// This entire file is part of my masterpiece.
+// Sid Gopinath
+
 package model.instructions;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import model.ExecutionEnvironment;
-import model.Polar;
+import model.PolarCoordinate;
 import model.TurtleCommand;
 import view.ViewUpdater;
 
@@ -20,7 +23,7 @@ import view.ViewUpdater;
 public class MovementInstruction extends Instruction {
 	private TurtleCommand myTurtle;
 	private boolean myJump;
-	private Polar myPolar;
+	private PolarCoordinate myPolar;
 	private double myReturnVal;
 	
 	public enum implementers {
@@ -56,51 +59,51 @@ public class MovementInstruction extends Instruction {
 		switch(myInstructionType.toUpperCase()){
 		case "FORWARD":
 			myReturnVal = myDependencies.get(0).execute();
-			myPolar = new Polar(0, myReturnVal);
+			myPolar = new PolarCoordinate(0, myReturnVal);
 			updateView();
 			return myReturnVal;
 		case "BACKWARD":
 			myReturnVal = myDependencies.get(0).execute();
-			myPolar = new Polar(0, -myReturnVal);
+			myPolar = new PolarCoordinate(0, -myReturnVal);
 			updateView();
 			return myDependencies.get(0).execute();
 		case "LEFT":
 			myReturnVal = myDependencies.get(0).execute();
-			myPolar = new Polar(-myReturnVal, 0);
+			myPolar = new PolarCoordinate(-myReturnVal, 0);
 			updateView();
 			return myDependencies.get(0).execute();
 		case "RIGHT":
 			myReturnVal = myDependencies.get(0).execute();
-			myPolar = new Polar(myReturnVal, 0);
+			myPolar = new PolarCoordinate(myReturnVal, 0);
 			updateView();
 			return myReturnVal;
 		case "SETHEADING":
 			myJump = false;
-			myPolar = new Polar(myDependencies.get(0).execute(), 0);
+			myPolar = new PolarCoordinate(myDependencies.get(0).execute(), 0);
 			updateView();
 			return 0.0;
 		case "SETTOWARDS":
-			return myViewUpdater.towards(myEnvironment.getActiveTurtle(), myDependencies.get(0).execute(), myDependencies.get(1).execute());
+			return myViewUpdater.towards(myEnvironment.myActiveTurtle, myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "SETPOSITION":
 			myJump = true;
 			return myViewUpdater.setXY(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "PENDOWN":
-			myViewUpdater.setPenUp(myEnvironment.getActiveTurtle(), false);
+			myViewUpdater.setPenUp(myEnvironment.myActiveTurtle, false);
 			return 1.0;
 		case "PENUP":
-			myViewUpdater.setPenUp(myEnvironment.getActiveTurtle(), true);
+			myViewUpdater.setPenUp(myEnvironment.myActiveTurtle, true);
 			return 0.0;
 		case "SHOWTURTLE":
-			myViewUpdater.showTurtle(myEnvironment.getActiveTurtle(), true);
+			myViewUpdater.showTurtle(myEnvironment.myActiveTurtle, true);
 			return 1.0;
 		case "HIDETURTLE":
-			myViewUpdater.showTurtle(myEnvironment.getActiveTurtle(), false);
+			myViewUpdater.showTurtle(myEnvironment.myActiveTurtle, false);
 			return 0.0;
 		case "CLEARSCREEN":
-			return myViewUpdater.clearScreen(myEnvironment.getActiveTurtle());
+			return myViewUpdater.clearScreen(myEnvironment.myActiveTurtle);
 		case "HOME":
 			myJump = true;
-			return myViewUpdater.setXY(myEnvironment.getActiveTurtle(),0,0);
+			return myViewUpdater.setXY(myEnvironment.myActiveTurtle,0,0);
 		default: 
 			return 0;
 		}
@@ -108,7 +111,7 @@ public class MovementInstruction extends Instruction {
 
 	private void updateView() {
 		List<TurtleCommand> commandList = new ArrayList<TurtleCommand>();
-		commandList.add(new TurtleCommand(myEnvironment.getActiveTurtle(), myPolar, myJump));
+		commandList.add(new TurtleCommand(myEnvironment.myActiveTurtle, myPolar, myJump));
 		myViewUpdater.updateWorkspace(commandList);
 	}
 

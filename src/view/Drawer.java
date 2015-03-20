@@ -7,7 +7,7 @@ import java.util.Map;
 
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polyline;
-import model.Polar;
+import model.PolarCoordinate;
 import model.TurtleCommand;
 
 /**
@@ -55,7 +55,7 @@ public class Drawer {
 		while (it.hasNext()) {
 			TurtleCommand command = it.next();
 			TurtleView turtle = turtles.get(command.getTurtleId());
-			Polar polar = command.getPolar();
+			PolarCoordinate polar = command.getPolar();
 			
 			if (polar.getDistance() != 0) {
 				double angle = turtle.getRotate();
@@ -151,7 +151,7 @@ public class Drawer {
 //		}
 //		return myLines;
 //	}
-	private void wrapY(int dir, TurtleView turtle, Polar polar,
+	private void wrapY(int dir, TurtleView turtle, PolarCoordinate polar,
 			List<Polyline> lines, int i, double newY, double startX, double moveX,
 			double moveY, double turtleY, double startY) {
 		double endX1 = startX + moveX
@@ -170,7 +170,7 @@ public class Drawer {
 		}
 	}
 
-	private void wrapX(int dir, TurtleView turtle, Polar polar,
+	private void wrapX(int dir, TurtleView turtle, PolarCoordinate polar,
 			List<Polyline> lines, int i, double newX, double startY, double moveY,
 			double moveX, double turtleX, double startX) {
 		double endY1 = startY + moveY

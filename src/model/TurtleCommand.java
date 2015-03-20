@@ -14,10 +14,10 @@ package model;
 public class TurtleCommand {
     
 	private int myTurtleId;
-    private Polar myPolar;
+    private PolarCoordinate myPolar;
     private boolean myIsRelative;
 
-    public TurtleCommand(int turtleId, Polar polar, boolean relative){
+    public TurtleCommand(int turtleId, PolarCoordinate polar, boolean relative){
     	myTurtleId=turtleId;
     	myPolar=polar;
         myIsRelative=relative;
@@ -27,7 +27,7 @@ public class TurtleCommand {
  		myTurtleId = turtleId;
  	}
 
- 	public void setPolar(Polar polar) {
+ 	public void setPolar(PolarCoordinate polar) {
  		myPolar = polar;
  	}
 	
@@ -35,7 +35,7 @@ public class TurtleCommand {
 		return myTurtleId;
 	}
 
-	public Polar getPolar() {
+	public PolarCoordinate getPolar() {
 		return myPolar;
 	}
 

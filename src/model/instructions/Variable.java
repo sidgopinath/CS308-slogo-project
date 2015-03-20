@@ -1,3 +1,6 @@
+// This entire file is part of my masterpiece.
+// Sid Gopinath
+
 package model.instructions;
 
 import model.ExecutionEnvironment;
@@ -18,7 +21,7 @@ public class Variable extends Instruction{
 
 	@Override
 	public double execute(){
-		return myEnvironment.getVariable(myInstructionType);
+		return myEnvironment.myVariableMap.get(myInstructionType);
 	}
 	@Override
 	public int getNumberOfArguments() {

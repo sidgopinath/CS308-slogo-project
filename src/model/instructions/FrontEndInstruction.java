@@ -3,8 +3,6 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
-import model.instructions.BooleanInstruction.implementers;
-import view.SLogoView;
 import view.ViewUpdater;
 /**
  * Class which contains sprint 3's instructions, most of which involve interaction with the view.  Some have not been implemented due to complexities in
@@ -44,7 +42,7 @@ public class FrontEndInstruction extends Instruction{
 		case "SETPENSIZE":
 			return myViewUpdater.setPenSize(myDependencies.get(0).execute());
 		case "SETSHAPE":
-			return myViewUpdater.setShape(myDependencies.get(0).execute(), myEnvironment.getActiveTurtle());
+			return myViewUpdater.setShape(myDependencies.get(0).execute(), myEnvironment.myActiveTurtle);
 		//case "SETPALETTE":
 			//return 0;
 		case "GETPENCOLOR":
@@ -52,9 +50,9 @@ public class FrontEndInstruction extends Instruction{
 		case "GETSHAPE":
 			return 0;
 		case "STAMP":
-			return myViewUpdater.createStamp(myEnvironment.getActiveTurtle());
+			return myViewUpdater.createStamp(myEnvironment.myActiveTurtle);
 		case "CLEARSTAMPS":
-			 return myViewUpdater.clearStamps(myEnvironment.getActiveTurtle());
+			 return myViewUpdater.clearStamps(myEnvironment.myActiveTurtle);
 		default:
 			return -1;
 		}

@@ -1,3 +1,5 @@
+// This entire file is part of my masterpiece.
+// Greg McKeon
 package view;
 
 import java.util.Observable;
@@ -8,9 +10,6 @@ public class ViewUpdateModule extends Observable{
 	private double penSize = 2;
 	private double shape = 0;
 	private double turtle = 1;
-	public ViewUpdateModule(){
-		System.out.println("made");
-	}
 	public double setBackground(double execute) {
 		// TODO Auto-generated method stub
 		background = execute;

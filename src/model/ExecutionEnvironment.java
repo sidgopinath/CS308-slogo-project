@@ -1,3 +1,5 @@
+// This entire file is part of my masterpiece.
+// Greg McKeon
 package model;
 
 import java.util.HashMap;

@@ -3,6 +3,7 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
+import view.ViewUpdateModule;
 import view.ViewUpdater;
 
 
@@ -16,9 +17,9 @@ import view.ViewUpdater;
 public class UserRunningInstruction extends Instruction{
 	// dependencies will be a list of constants for assignment
 	public UserRunningInstruction(List<Instruction> dependencies,
-			String instructionType, ViewUpdater updater,
+			String instructionType, ViewUpdater updater, ViewUpdateModule module,
 			ExecutionEnvironment environment) {
-		super(dependencies, instructionType, updater, environment);
+		super(dependencies, instructionType, updater, module, environment);
 	}
 
 	@Override

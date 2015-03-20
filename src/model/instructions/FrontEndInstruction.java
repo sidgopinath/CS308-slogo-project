@@ -5,6 +5,7 @@ import java.util.List;
 import model.ExecutionEnvironment;
 import model.instructions.BooleanInstruction.implementers;
 import view.SLogoView;
+import view.ViewUpdateModule;
 import view.ViewUpdater;
 /**
  * Class which contains sprint 3's instructions, most of which involve interaction with the view.  Some have not been implemented due to complexities in
@@ -12,9 +13,9 @@ import view.ViewUpdater;
  **/
 public class FrontEndInstruction extends Instruction{
 	public FrontEndInstruction(List<Instruction> dependencies,
-			String instructionType, ViewUpdater updater,
+			String instructionType, ViewUpdater updater, ViewUpdateModule module,
 			ExecutionEnvironment environment) {
-		super(dependencies, instructionType, updater, environment);
+		super(dependencies, instructionType, updater, module, environment);
 	}
 
 	public enum implementers {
@@ -38,13 +39,13 @@ public class FrontEndInstruction extends Instruction{
 	public double execute() {
 		switch(myInstructionType.toUpperCase()){
 		case "SETBACKGROUND":
-			return myViewUpdater.setBackgroundColor(myDependencies.get(0).execute());
+			return myModule.setBackground(myDependencies.get(0).execute());
 		case "SETPENCOLOR":
-			return myViewUpdater.setPenColor(myDependencies.get(0).execute());
+			return myModule.setPenColor(myDependencies.get(0).execute());
 		case "SETPENSIZE":
-			return myViewUpdater.setPenSize(myDependencies.get(0).execute());
+			return myModule.setPenSize(myDependencies.get(0).execute());
 		case "SETSHAPE":
-			return myViewUpdater.setShape(myDependencies.get(0).execute(), myEnvironment.getActiveTurtle());
+			return myModule.setShape(myDependencies.get(0).execute(), myEnvironment.getActiveTurtle());
 		//case "SETPALETTE":
 			//return 0;
 		case "GETPENCOLOR":

@@ -3,6 +3,7 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
+import view.ViewUpdateModule;
 import view.ViewUpdater;
 
 /**
@@ -15,8 +16,8 @@ import view.ViewUpdater;
 
 public class BooleanInstruction extends Instruction {
 
-	public BooleanInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment) {
-		super(dependencies, instructionType, updater, environment);
+	public BooleanInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater,ViewUpdateModule module, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, updater,module, environment);
 	}
 
 	public enum implementers {

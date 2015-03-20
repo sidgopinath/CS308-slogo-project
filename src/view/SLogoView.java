@@ -212,6 +212,8 @@ public class SLogoView {
 	public Drawer getDrawer(){
 		return drawer;
 	}
-
+	public ViewUpdateModule getModule(){
+		return myParser.getModule();
+	}
 
 }

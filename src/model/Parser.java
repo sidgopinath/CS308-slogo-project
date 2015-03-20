@@ -13,6 +13,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.ResourceBundle;
 import java.util.regex.Pattern;
+
 import model.instructions.Constant;
 import model.instructions.Instruction;
 import model.instructions.ListInstruction;
@@ -20,6 +21,7 @@ import model.instructions.StringInstruction;
 import model.instructions.UserRunningInstruction;
 import model.instructions.Variable;
 import view.SLogoView;
+import view.ViewUpdateModule;
 import view.ViewUpdater;
 
 /**
@@ -38,14 +40,16 @@ public class Parser implements Observer{
 	private SLogoView mySLogoView;
 	private ViewUpdater myViewUpdater;
 	private ExecutionEnvironment myExecutionParameters;
-	
+	private ViewUpdateModule myModule;
 	public Parser(SLogoView view){
 		mySLogoView = view;
+		myModule = new ViewUpdateModule();
 		myPatterns = new ArrayList<>();
 		myCommandMap = new HashMap<String, String>();
 		myExecutionParameters = new ExecutionEnvironment();
 		myExecutionParameters.addObserver(this);
 		myViewUpdater = new ViewUpdater(view);
+		myModule.addObserver(myViewUpdater);
 		myExecutionParameters.addObserver(myViewUpdater); //create the viewupdater and store as global and pass to others
 		view.setEnvironment(myExecutionParameters);
 		addAllPatterns("English");
@@ -122,7 +126,7 @@ public class Parser implements Observer{
 		case "LISTSTART":
 			// count number of strings til you reach a ], thats number of dependencies
 			myFurthestDepth++;
-			myNode = new Node(new ListInstruction(futureInstructions, match,myViewUpdater, myExecutionParameters));
+			myNode = new Node(new ListInstruction(futureInstructions, match,myViewUpdater,myModule, myExecutionParameters));
 			Node temp;
 			while (true) {
 				temp = makeTree(command);
@@ -147,7 +151,7 @@ public class Parser implements Observer{
 		case "COMMAND":
 			myFurthestDepth++;
 			if(myExecutionParameters.getUserCommandMap().containsKey(command[myFurthestDepth-1])&&(myFurthestDepth<2||myFurthestDepth>=2&&testMatches(command[myFurthestDepth-2]).toUpperCase()!="MAKEUSERINSTRUCTION")){
-				myNode = new Node(new UserRunningInstruction(futureInstructions, command[myFurthestDepth-1], myViewUpdater, myExecutionParameters));
+				myNode = new Node(new UserRunningInstruction(futureInstructions, command[myFurthestDepth-1], myViewUpdater, myModule, myExecutionParameters));
 				System.out.println(" Node "+ myNode);
 				neededVars = 1;
 			}
@@ -167,7 +171,7 @@ public class Parser implements Observer{
 		if(myNode==null){
 					Instruction myInt;
 					try {
-					myInt = Class.forName("model.instructions."+myCommandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,ViewUpdater.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,myViewUpdater, myExecutionParameters});
+					myInt = Class.forName("model.instructions."+myCommandMap.get(match)).asSubclass(Instruction.class).getConstructor(new Class[]{List.class,String.class,ViewUpdater.class,ViewUpdateModule.class,ExecutionEnvironment.class}).newInstance(new Object[]{futureInstructions, match,myViewUpdater, myModule,myExecutionParameters});
 					myFurthestDepth++;
 					myExecutionParameters.addObserver(myInt);
 					myNode = new Node(myInt);
@@ -220,6 +224,11 @@ public class Parser implements Observer{
 	@Override
 	public void update(Observable o, Object arg) {
 		myExecutionParameters = (ExecutionEnvironment) o;
+	}
+
+	public ViewUpdateModule getModule() {
+		// TODO Auto-generated method stub
+		return myModule;
 	}
 
 }

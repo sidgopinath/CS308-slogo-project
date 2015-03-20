@@ -6,6 +6,7 @@ import java.util.List;
 import model.ExecutionEnvironment;
 import model.Polar;
 import model.TurtleCommand;
+import view.ViewUpdateModule;
 import view.ViewUpdater;
 
 /**
@@ -43,8 +44,8 @@ public class MovementInstruction extends Instruction {
     }
 	}
 	
-	public MovementInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment) {
-		super(dependencies, instructionType, updater, environment);
+	public MovementInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ViewUpdateModule module, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, updater,module, environment);
 		myDependencies = dependencies;
 		myInstructionType = instructionType;
 		myTurtle = null;
@@ -97,7 +98,11 @@ public class MovementInstruction extends Instruction {
 			myViewUpdater.showTurtle(0, false);
 			return 0.0;
 		case "CLEARSCREEN":
-			return myViewUpdater.clearScreen(0);
+			double sum = 0;
+			for(int turtle:myEnvironment.getTurtles()){
+				sum+=myViewUpdater.clearScreen(turtle);
+			}
+			return sum;
 		case "HOME":
 			myJump = true;
 			return myViewUpdater.setXY(0,0,0);

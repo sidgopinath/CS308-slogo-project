@@ -3,6 +3,7 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
+import view.ViewUpdateModule;
 import view.ViewUpdater;
 
 /**
@@ -14,8 +15,8 @@ import view.ViewUpdater;
 
 public class ControlInstruction extends Instruction{
 
-	public ControlInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment) {
-		super(dependencies, instructionType, updater, environment);
+	public ControlInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ViewUpdateModule module, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, updater,module, environment);
 	}
 
 	public enum implementers {

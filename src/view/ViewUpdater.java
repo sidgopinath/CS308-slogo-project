@@ -17,11 +17,13 @@ public class ViewUpdater implements Observer{
 	Workspace myWorkspace;
 	SideBar mySidebar;
 	Drawer myDrawer;
-	
+	ViewUpdateModule myModule;
+	SLogoView myView;
 	public ViewUpdater(SLogoView view){
 		myWorkspace = view.getWorkspace();
 		mySidebar = view.getSidebar();
 		myDrawer = view.getDrawer();
+		myView = view;
 	}
 	
 	public double clearScreen(int id){
@@ -99,6 +101,8 @@ public class ViewUpdater implements Observer{
 	
 	@Override
 	public void update(Observable o, Object arg) {
+		myModule = myView.getModule();
+		if(o.getClass().equals(ExecutionEnvironment.class)){
 		ExecutionEnvironment env = (ExecutionEnvironment) o;
 		mySidebar.updateExecutionEnvironment(env);
 		for (String s : env.getVariableMap().keySet()) {
@@ -107,6 +111,13 @@ public class ViewUpdater implements Observer{
 		}
 		for (String s : env.getUserCommandMap().keySet()) {
 			updateCommand(s);
+		}
+		}
+		else{
+			setBackgroundColor(myModule.getBackground());
+			setPenColor(myModule.getPenColor());
+			setPenSize(myModule.getPenSize());
+			setShape(myModule.getShape(), (int)myModule.getTurtle());
 		}
 	}
 	

@@ -3,6 +3,7 @@ package model.instructions;
 import java.util.List;
 
 import model.ExecutionEnvironment;
+import view.ViewUpdateModule;
 import view.ViewUpdater;
 
 /**
@@ -28,9 +29,9 @@ public class MultipleTurtlesInstruction extends Instruction{
 	}
 }
 	public MultipleTurtlesInstruction(List<Instruction> dependencies,
-			String instructionType, ViewUpdater updater,
+			String instructionType, ViewUpdater updater,  ViewUpdateModule module,
 			ExecutionEnvironment environment) {
-		super(dependencies, instructionType, updater, environment);
+		super(dependencies, instructionType, updater,module, environment);
 	}
 
 	@Override

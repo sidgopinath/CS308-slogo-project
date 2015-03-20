@@ -6,6 +6,7 @@ import java.util.Observer;
 
 import model.ExecutionEnvironment;
 import model.TurtleCommand;
+import view.ViewUpdateModule;
 import view.ViewUpdater;
 
 /**
@@ -21,12 +22,13 @@ public abstract class Instruction implements Observer{
 	protected String myInstructionType;
 	protected ViewUpdater myViewUpdater;
 	protected ExecutionEnvironment myEnvironment;
-	
-	public Instruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment){
+	protected ViewUpdateModule myModule;
+	public Instruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater,ViewUpdateModule module, ExecutionEnvironment environment){
 		myDependencies = dependencies;
 		myInstructionType = instructionType;
 		myViewUpdater = updater;
 		myEnvironment=environment;
+		myModule = module;
 	}
 	
 	public Instruction(String constantInput, ExecutionEnvironment environment){

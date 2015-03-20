@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import model.ExecutionEnvironment;
+import view.ViewUpdateModule;
 import view.ViewUpdater;
 
 /**
@@ -16,8 +17,8 @@ import view.ViewUpdater;
 
 public class MathInstruction extends Instruction{
 	
-	public MathInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ExecutionEnvironment environment) {
-		super(dependencies, instructionType, updater, environment);
+	public MathInstruction(List<Instruction> dependencies, String instructionType, ViewUpdater updater, ViewUpdateModule module, ExecutionEnvironment environment) {
+		super(dependencies, instructionType, updater,module, environment);
 	}
 
 	public enum implementers {

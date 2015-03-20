@@ -1,0 +1,37 @@
+<map id="view.SideTableView.getTable" name="view.SideTableView.getTable">
+<area shape="rect" id="node2" href="$d9/dd3/classview_1_1_variables_view.html#a77a0efc0b8fdb1f12526b9146ce58473" title="view.VariablesView.create\lColumns" alt="" coords="274,348,457,389"/>
+<area shape="rect" id="node3" href="$d9/d3a/classview_1_1_turtle_properties_view.html#af07bce3cf2bed2814a0fb3812d00b69e" title="view.TurtlePropertiesView.update" alt="" coords="251,414,479,440"/>
+<area shape="rect" id="node32" href="$d9/dd3/classview_1_1_variables_view.html#aebedf2b729065ddab04f33f4e217d785" title="view.VariablesView.update" alt="" coords="272,464,459,491"/>
+<area shape="rect" id="node36" href="$d9/dd3/classview_1_1_variables_view.html#a034be7aaf5651ef32a1826d97528cffe" title="view.VariablesView.VariablesView" alt="" coords="251,515,480,542"/>
+<area shape="rect" id="node4" href="$d1/dc7/classview_1_1_side_bar.html#a7d73038dbba05f96990b60664afa2670" title="view.SideBar.updateTurtle\lProperties" alt="" coords="537,284,721,325"/>
+<area shape="rect" id="node5" href="$d4/d64/classview_1_1_view_updater.html#ace7ce28317856b4b454a798d1af23b38" title="view.ViewUpdater.clearScreen" alt="" coords="1353,211,1565,238"/>
+<area shape="rect" id="node7" href="$de/d0a/classview_1_1_drawer.html#a6b9f362b8bc763689630b1fe7b5c1887" title="view.Drawer.draw" alt="" coords="827,266,957,292"/>
+<area shape="rect" id="node10" href="$da/d64/classview_1_1_workspace.html#a16bda9a6a7fe7f8d3d7b09108675f9c4" title="view.Workspace.setActive\lTurtle" alt="" coords="801,469,983,510"/>
+<area shape="rect" id="node22" href="$d4/d64/classview_1_1_view_updater.html#ab8c47e1d6b8bc5c076184e3e0af5e4b2" title="view.ViewUpdater.setHeading" alt="" coords="1074,316,1283,343"/>
+<area shape="rect" id="node24" href="$d6/de7/classview_1_1_s_logo_view.html#ae7ad67f4b629b134cb805842a20f4050" title="view.SLogoView.setHeading" alt="" coords="793,367,991,394"/>
+<area shape="rect" id="node26" href="$d4/d64/classview_1_1_view_updater.html#ad79c00c54aabbeca7b8a0461fea36c29" title="view.ViewUpdater.setPenUp" alt="" coords="1079,22,1278,48"/>
+<area shape="rect" id="node27" href="$d6/de7/classview_1_1_s_logo_view.html#a978a65a0b82bac25044f7e2816a680cc" title="view.SLogoView.setPenUp" alt="" coords="799,418,985,444"/>
+<area shape="rect" id="node28" href="$d4/d64/classview_1_1_view_updater.html#a497cc83cdcb6fdb430bdb78431c5cd20" title="view.ViewUpdater.setXY" alt="" coords="1373,110,1544,136"/>
+<area shape="rect" id="node29" href="$d6/de7/classview_1_1_s_logo_view.html#a0948ea67bfc088f941e2af79727231ad" title="view.SLogoView.setXY" alt="" coords="813,535,971,562"/>
+<area shape="rect" id="node30" href="$d4/d64/classview_1_1_view_updater.html#a9797c2f411ad272a0feb84c26836bfd4" title="view.ViewUpdater.showTurtle" alt="" coords="1077,164,1280,191"/>
+<area shape="rect" id="node31" href="$d6/de7/classview_1_1_s_logo_view.html#a00710838e28dcb10fe6da3c0ec0c4e20" title="view.SLogoView.showTurtle" alt="" coords="797,63,987,90"/>
+<area shape="rect" id="node6" href="$d1/dd3/classmodel_1_1instructions_1_1_movement_instruction.html#a33e802cec8283d190a8daac6e485e3b4" title="model.instructions.Movement\lInstruction.execute" alt="" coords="1614,178,1826,220"/>
+<area shape="rect" id="node8" href="$d4/d64/classview_1_1_view_updater.html#adc0790ceed057768bd5a29a470e626d1" title="view.ViewUpdater.updateWorkspace" alt="" coords="1054,266,1303,292"/>
+<area shape="rect" id="node9" href="$d1/dd3/classmodel_1_1instructions_1_1_movement_instruction.html#a51c776093aeb820937b12e2b89eb2f89" title="model.instructions.Movement\lInstruction.updateView" alt="" coords="1353,262,1565,304"/>
+<area shape="rect" id="node11" href="$da/d64/classview_1_1_workspace.html#abbd85b844575ebab6643ba4ddc5a1612" title="view.Workspace.Workspace" alt="" coords="1624,447,1816,474"/>
+<area shape="rect" id="node12" href="$da/d64/classview_1_1_workspace.html#a9eea72f983d5e7ad5af85056d927e380" title="view.Workspace.configure\lTurtleEventHandler" alt="" coords="1087,498,1270,540"/>
+<area shape="rect" id="node13" href="$da/d64/classview_1_1_workspace.html#a4abde41a3048fa8f64ddfec40c8ffdb7" title="view.Workspace.addTurtle" alt="" coords="1367,506,1550,532"/>
+<area shape="rect" id="node14" href="$d6/de7/classview_1_1_s_logo_view.html#acf432f20e1a7dda7bef97f0619fb0fa5" title="view.SLogoView.configure\lAddTurtlesButton" alt="" coords="1629,498,1811,540"/>
+<area shape="rect" id="node15" href="$d6/de7/classview_1_1_s_logo_view.html#ae0050481c9168dd8eeb434d9aa79b047" title="view.SLogoView.configureUI" alt="" coords="1875,506,2071,532"/>
+<area shape="rect" id="node16" href="$d1/d75/classview_1_1_main_view.html#ade3718ede33fa2086649c8b3cf75d2f9" title="view.MainView.initTabs" alt="" coords="2362,480,2523,507"/>
+<area shape="rect" id="node18" href="$d1/d75/classview_1_1_main_view.html#a39a2b399924a553ccd89dd2a2e6ea208" title="view.MainView.newTab" alt="" coords="2120,531,2280,558"/>
+<area shape="rect" id="node17" href="$d1/d75/classview_1_1_main_view.html#a9e27015c007bed90f32c79fc1187083f" title="view.MainView.MainView" alt="" coords="3163,506,3336,532"/>
+<area shape="rect" id="node19" href="$d1/d75/classview_1_1_main_view.html#a0424800b5057be73f94e16ef2e1e2b33" title="view.MainView.configureFileMenu" alt="" coords="2329,531,2557,558"/>
+<area shape="rect" id="node20" href="$d1/d75/classview_1_1_main_view.html#a200c2c8e08e038e2ea86acc40c17d8d2" title="view.MainView.configureTopMenu" alt="" coords="2605,531,2835,558"/>
+<area shape="rect" id="node21" href="$d1/d75/classview_1_1_main_view.html#aff9e267e9368512a16e425f08d7b3ea0" title="view.MainView.initRowConstraints" alt="" coords="2883,531,3114,558"/>
+<area shape="rect" id="node23" href="$d4/d64/classview_1_1_view_updater.html#ad29dfbb2499161b985c26e01f73ea5ac" title="view.ViewUpdater.towards" alt="" coords="1365,328,1552,355"/>
+<area shape="rect" id="node25" href="$d6/de7/classview_1_1_s_logo_view.html#afa2b659c4d080b5f927978b453633ab2" title="view.SLogoView.towards" alt="" coords="1091,367,1266,394"/>
+<area shape="rect" id="node33" href="$d1/dc7/classview_1_1_side_bar.html#a9ee7c3d1f9e3f461361703420eb09b26" title="view.SideBar.updateVariable" alt="" coords="529,586,730,612"/>
+<area shape="rect" id="node34" href="$d4/d64/classview_1_1_view_updater.html#aa4cfbf2ecad29abda8cd3aaff891539a" title="view.ViewUpdater.update" alt="" coords="801,636,983,663"/>
+<area shape="rect" id="node35" href="$d6/de7/classview_1_1_s_logo_view.html#aba44200de8094d8957a326b999b1168a" title="view.SLogoView.updateVariables" alt="" coords="779,586,1005,612"/>
+</map>

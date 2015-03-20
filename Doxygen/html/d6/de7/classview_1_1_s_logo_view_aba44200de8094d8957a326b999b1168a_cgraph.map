@@ -1,7 +1,0 @@
-<map id="view.SLogoView.updateVariables" name="view.SLogoView.updateVariables">
-<area shape="rect" id="node2" href="$d1/dc7/classview_1_1_side_bar.html#a9ee7c3d1f9e3f461361703420eb09b26" title="view.SideBar.updateVariable" alt="" coords="281,56,482,83"/>
-<area shape="rect" id="node3" href="$d9/dd3/classview_1_1_variables_view.html#aebedf2b729065ddab04f33f4e217d785" title="view.VariablesView.update" alt="" coords="531,56,717,83"/>
-<area shape="rect" id="node4" href="$d5/dea/classview_1_1_side_table_view.html#adbdf2bf0ebf7fc8ab04db2087baea03a" title="view.SideTableView.getTable" alt="" coords="765,5,963,32"/>
-<area shape="rect" id="node5" href="$d6/d58/classview_1_1_property.html#a51a9b0be72a7421596996f752b75ad93" title="view.Property.getName" alt="" coords="780,56,948,83"/>
-<area shape="rect" id="node6" href="$d6/d58/classview_1_1_property.html#ac169f9069f86f72b224cf0b1ccdd1c3c" title="view.Property.getValue" alt="" coords="782,107,946,133"/>
-</map>

@@ -9,8 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.TableColumn.CellEditEvent;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.util.StringConverter;
 
 public class VariablesView extends SideTableView{
 

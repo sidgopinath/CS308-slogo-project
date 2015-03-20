@@ -53,9 +53,9 @@ public class FrontEndInstruction extends Instruction{
 		case "GETSHAPE":
 			return 0;
 		case "STAMP":
-			//return (double)myViewUpdater.createStamp(myEnvironment.getActiveTurtle());
+			return myViewUpdater.createStamp(myEnvironment.getActiveTurtle());
 		case "CLEARSTAMPS":
-			//return (double)myViewUpdater.clearStamp(myEnvironment.getActiveTurtle());
+			 return myViewUpdater.clearStamps(myEnvironment.getActiveTurtle());
 		default:
 			return -1;
 		}

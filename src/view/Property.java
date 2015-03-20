@@ -5,6 +5,11 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
+/**
+ * Display and value properties for an object that can be displayed in a visual TableView.
+ * @author Callie
+ *
+ */
 public class Property {
 
 	private StringProperty myName;

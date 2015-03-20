@@ -14,7 +14,7 @@ import view.ViewUpdater;
  * These methods usually call the updateView method
  * The turtle is directly affected by these methods
  * Observable comes into play also here
- * @author Greg, Sid
+ * @author Greg, Sid, Callie
  *
  */
 
@@ -81,21 +81,21 @@ public class MovementInstruction extends Instruction {
 			updateView();
 			return 0.0;
 		case "SETTOWARDS":
-			return myViewUpdater.towards(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());
+			return myViewUpdater.towards(myEnvironment.getActiveTurtle(), myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "SETPOSITION":
 			myJump = true;
 			return myViewUpdater.setXY(0, myDependencies.get(0).execute(), myDependencies.get(1).execute());
 		case "PENDOWN":
-			myViewUpdater.setPenUp(0, false);
+			myViewUpdater.setPenUp(myEnvironment.getActiveTurtle(), false);
 			return 1.0;
 		case "PENUP":
-			myViewUpdater.setPenUp(0, true);
+			myViewUpdater.setPenUp(myEnvironment.getActiveTurtle(), true);
 			return 0.0;
 		case "SHOWTURTLE":
-			myViewUpdater.showTurtle(0, true);
+			myViewUpdater.showTurtle(myEnvironment.getActiveTurtle(), true);
 			return 1.0;
 		case "HIDETURTLE":
-			myViewUpdater.showTurtle(0, false);
+			myViewUpdater.showTurtle(myEnvironment.getActiveTurtle(), false);
 			return 0.0;
 		case "CLEARSCREEN":
 			double sum = 0;
@@ -105,7 +105,7 @@ public class MovementInstruction extends Instruction {
 			return sum;
 		case "HOME":
 			myJump = true;
-			return myViewUpdater.setXY(0,0,0);
+			return myViewUpdater.setXY(myEnvironment.getActiveTurtle(),0,0);
 		default: 
 			return 0;
 		}

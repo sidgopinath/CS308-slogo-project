@@ -111,6 +111,7 @@ public class ViewUpdater implements Observer{
 		for (String s : env.getUserCommandMap().keySet()) {
 			updateCommand(s);
 		}
+		myDrawer.setWrapType(env.getWindowBehavior());
 	}
 	
 	public void updateWorkspace(List<TurtleCommand> instructionList) {

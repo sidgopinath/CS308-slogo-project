@@ -24,6 +24,7 @@ public class ExecutionEnvironment extends Observable{
 	private Set<Integer> myTurtleList;
 	private Set<Integer> activeTurtleList;
 	private int activeTurtle;
+	private int myWindowBehavior;
 	
 	public ExecutionEnvironment(){
 		clear();
@@ -36,6 +37,14 @@ public class ExecutionEnvironment extends Observable{
 		updateObserver();
 	}
 	
+	public double setWindowBehavior(double d){
+	    myWindowBehavior = (int) d;
+	    updateObserver();
+	    return myWindowBehavior;
+	}
+	public int getWindowBehavior(){
+	    return myWindowBehavior;
+	}
 	public void addTurtle(double d){
 		myTurtleList.add((int) d);
 		updateObserver();

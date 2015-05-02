@@ -2,6 +2,8 @@ package model.instructions;
 
 import java.util.List;
 
+import com.sun.prism.Texture.WrapMode;
+
 import model.ExecutionEnvironment;
 import model.instructions.BooleanInstruction.implementers;
 import view.SLogoView;
@@ -26,7 +28,9 @@ public class FrontEndInstruction extends Instruction{
 		GETPENCOLOR(0),
 		GETSHAPE(0),
 		STAMP(0),
-		CLEARSTAMPS(0);
+		CLEARSTAMPS(0),
+		WRAP(0),
+		WINDOW(0);
 		
     private int numArgs;
 	implementers(int args){
@@ -55,6 +59,12 @@ public class FrontEndInstruction extends Instruction{
 			return myViewUpdater.createStamp(myEnvironment.getActiveTurtle());
 		case "CLEARSTAMPS":
 			 return myViewUpdater.clearStamps(myEnvironment.getActiveTurtle());
+		case "WRAP":
+			myViewUpdater.setWrap(true);
+			return 1.0;
+		case "WINDOW":
+			myViewUpdater.setWrap(false);
+			return 3.0;
 		default:
 			return -1;
 		}

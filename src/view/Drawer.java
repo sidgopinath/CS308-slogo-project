@@ -25,6 +25,7 @@ public class Drawer {
 	private Workspace myWorkspace;
 	private double strokeSize;
 	private int myIndex;
+	private boolean myWrap;
 	
 	public Drawer(Workspace workspace){
 		myWorkspace = workspace;
@@ -38,10 +39,15 @@ public class Drawer {
 		myHalf[0] = 0.5 * (myXBounds[1] - myXBounds[0]);
 		myHalf[1] = 0.5 * (myYBounds[1] - myYBounds[0]);
 		myColor = Color.BLACK;
+		myWrap = true;
 	}
 	
 	public void setStroke(Double size){
 		strokeSize = size;
+	}
+	
+	public void setWrap(boolean wrap){
+		myWrap = wrap;
 	}
 
 	// may have to remove list from turtlecommand
@@ -65,47 +71,33 @@ public class Drawer {
 						* polar.getDistance();
 				double moveY = Math.cos(Math.toRadians(polar.getAngle() + 180 - angle))
 						* polar.getDistance();
-
 				double startX = turtleX + turtle.getTranslateX() + turtle.getFitWidth()
 						/ 2;
 				double startY = turtleY + turtle.getTranslateY() + turtle.getFitHeight()
 						/ 2;
 				double newX = turtleX + moveX + turtle.getTranslateX() + 15;
 				double newY = turtleY + moveY + turtle.getTranslateY() + 15;
-
-
-				if (newY < myYBounds[0]) {
-					wrapY(1, turtle, polar, lines, 0, newY, startX, moveX, moveY,
+				
+				if(myWrap){
+					if (newY < myYBounds[0]) {
+						wrapY(1, turtle, polar, lines, 0, newY, startX, moveX, moveY,
 							turtleY, startY);
-				} else if (newY > myYBounds[1]) {
-					wrapY(1, turtle, polar, lines, 1, newY, startX, moveX, moveY,
+					} else if (newY > myYBounds[1]) {
+						wrapY(1, turtle, polar, lines, 1, newY, startX, moveX, moveY,
 							turtleY, startY);
-				} else if (newX < myXBounds[0]) {
-					wrapX(0, turtle, polar, lines, 0, newX, startY, moveY, moveX,
+					} else if (newX < myXBounds[0]) {
+						wrapX(0, turtle, polar, lines, 0, newX, startY, moveY, moveX,
 							turtleX, startX);
-				} else if (newX > myXBounds[1]) {
-					wrapX(0, turtle, polar, lines, 1, newX, startY, moveY, moveX,
+					} else if (newX > myXBounds[1]) {
+						wrapX(0, turtle, polar, lines, 1, newX, startY, moveY, moveX,
 							turtleX, startX);
-				} else {
-
-					turtle.move(turtle.getTranslateX() + moveX, turtle.getTranslateY()
-							+ moveY);
-					double endX = startX + moveX;
-					double endY = startY + moveY;
-
-					if (!turtle.getPenUp()) {
-						System.out.println("drawing" + turtle.getPenUp());
-						Polyline polyline = new Polyline();
-						polyline.setStroke(myColor);
-						System.out.println(strokeSize);
-						polyline.setStrokeWidth(strokeSize);
-						polyline.getPoints().addAll(
-								new Double[] { startX, startY, endX, endY });
-						//drawLine(startX, startY, endX, endY);
-						lines.add(polyline);
+					}else{
+						moveInWorkspace(lines, turtle, moveX, moveY, startX, startY);
 					}
+				} else {
+					moveInWorkspace(lines, turtle, moveX, moveY, startX, startY);
 				}
-			} 
+			}
 			else {
 				if (command.isRelative()) {
 					turtle.setRelativeHeading(polar.getAngle());
@@ -116,7 +108,28 @@ public class Drawer {
 			}
 			sidebar.updateTurtleProperties(command.getTurtleId(), myWorkspace);
 		}
-		return lines;
+			return lines;
+	}
+
+	private void moveInWorkspace(List<Polyline> lines, TurtleView turtle,
+			double moveX, double moveY, double startX, double startY) {
+		System.out.println("HERE");
+		turtle.move(turtle.getTranslateX() + moveX, turtle.getTranslateY()
+				+ moveY);
+		double endX = startX + moveX;
+		double endY = startY + moveY;
+
+		if (!turtle.getPenUp()) {
+			System.out.println("drawing" + turtle.getPenUp());
+			Polyline polyline = new Polyline();
+			polyline.setStroke(myColor);
+			System.out.println(strokeSize);
+			polyline.setStrokeWidth(strokeSize);
+			polyline.getPoints().addAll(
+					new Double[] { startX, startY, endX, endY });
+			//drawLine(startX, startY, endX, endY);
+			lines.add(polyline);
+		}
 	}
 
 //	
@@ -160,7 +173,6 @@ public class Drawer {
 		System.out.println(Math.pow(-1, i) * myHalf[dir] - myYBounds[i] + newY);
 		turtle.move(turtle.getTranslateX() + moveX, Math.pow(-1, i) * myHalf[dir]
 				- myYBounds[i] + newY);
-		
 		System.out.println("turtle.getPenUp()" + turtle.getPenUp());
 		
 		if (!turtle.getPenUp()) {

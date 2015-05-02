@@ -190,10 +190,7 @@ public class ViewUpdater implements Observer{
 		return (double) turtle.clearStamps(myWorkspace);
 	}
 	
-	
-	
-	
-	
-	
-	
+	public void setWrap(boolean wrap){
+		myDrawer.setWrap(wrap);
+	}
 }

@@ -16,6 +16,7 @@ public class TurtleCommand {
 	private int myTurtleId;
     private Polar myPolar;
     private boolean myIsRelative;
+    private boolean myWrap;
 
     public TurtleCommand(int turtleId, Polar polar, boolean relative){
     	myTurtleId=turtleId;
@@ -41,5 +42,9 @@ public class TurtleCommand {
 
 	public boolean isRelative() {
 		return myIsRelative;
+	}
+	
+	public boolean getWrap(){
+		return myWrap;
 	}
 }

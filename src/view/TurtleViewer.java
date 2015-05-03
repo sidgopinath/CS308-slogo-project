@@ -29,7 +29,7 @@ public class TurtleViewer extends ScrollPane {
 
         for (int key : map.keySet()) {
             HBox turtleBox = new HBox();
-            Text turtleKey = new Text(" Key: " + key);
+            Text turtleKey = new Text(Integer.toString(key));
             TurtleView currentTurtle = map.get(key);
             turtleDisplay.setOnMouseClicked(e -> displayChooser(currentTurtle));
             turtleDisplay.getChildren().add(turtleBox);

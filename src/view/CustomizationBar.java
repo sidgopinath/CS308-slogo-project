@@ -77,7 +77,7 @@ public class CustomizationBar extends HBox {
 		getChildren().add(customizePenBox);
 	}
 
-	private void uploadTurtleFile(TurtleView turtle) {
+	public void uploadTurtleFile(TurtleView turtle) {
 		File file = displayFileChooser();
 		changeTurtleImage(turtle, new Image(file.toURI().toString()));
 	}

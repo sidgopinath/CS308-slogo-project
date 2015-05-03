@@ -51,8 +51,6 @@ public class ViewUpdater implements Observer{
 		return setHeading(id, angle, false);
 	}
 
-
-
 	public double setHeading(int id, double angle, boolean relative) {
 		double heading;
 		if (relative) {

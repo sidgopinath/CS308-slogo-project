@@ -7,7 +7,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
-
 public class TurtleViewer extends ScrollPane {
 
     Workspace myWorkspace;
@@ -57,4 +56,5 @@ public class TurtleViewer extends ScrollPane {
      * }
      * });
      */
+
 }

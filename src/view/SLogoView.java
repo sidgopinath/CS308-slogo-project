@@ -59,7 +59,7 @@ public class SLogoView {
         this.myDimensions = myDimensions;
         mySidebar = new SideBar();
         myWorkspace = new Workspace(myDimensions, mySidebar);
-   //     myTurtleViewer = new TurtleViewer(myWorkspace, myCustomizationBar);
+        // myTurtleViewer = new TurtleViewer(myWorkspace, myCustomizationBar);
 
     }
 
@@ -102,7 +102,6 @@ public class SLogoView {
         viewTurtles.setOnAction(e -> openTurtleViewer());
         turtlesBox.getChildren().addAll(newTurtleButton, viewTurtles);
         GridPane.setHalignment(turtlesBox, HPos.CENTER);
-
         return turtlesBox;
     }
 

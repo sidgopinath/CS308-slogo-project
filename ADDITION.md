@@ -6,7 +6,7 @@ The front-end changes to allow the user to view all turtles at once and edit the
 
 Completing this feature took about 1 hour, which falls in line with my estimation. I did not get it completely right on the first try and had trouble getting the scene to display the turtles initially. Perhaps a better solution would have been to add the display to the right sidebar to allow for easier dynamic updating (otherwise refreshing will be required in some instances). I updated a total of 5 files: the properties file to add the “View Turtles” text, the CustomizationBar to change uploadTurtles to a public method (to avoid duplication as the method is already written), the MainView to display the new scene, SLogoView to setup and open a TurtleViewer, and a new TurtleViewer class to display the turtle additions. 
 
-Note: Pressed the formatter hotkeys out of habit, and it appears that I made over 800 additions in the code. The actual number of additions was much less than this and was predominantly in the TurtleViewer class.
+Note: Pressed the formatter hotkeys out of habit, and it appears that I made over 800 additions in the code (code was not formatted properly with the formatter previously). The actual number of additions was much less than this and was predominantly in the TurtleViewer class.
 
 ###Analysis:
 

@@ -1,21 +1,30 @@
 package view;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.util.ResourceBundle;
 
 import javafx.application.Platform;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Dimension2D;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import javax.imageio.ImageIO;
 
 /**
  * Main view class containing the menupane and tabpane, which do not change regardless of the number of tabs/scenes added
@@ -32,6 +41,8 @@ public class MainView {
     private TabPane myTabPane = new TabPane();
     private SceneSetter mySceneSetter = new SceneSetter();
     private int myTabCount;
+    private SingleSelectionModel<Tab> selectionModel;
+    BufferedImage bufferedImage = new BufferedImage(550, 400, BufferedImage.TYPE_INT_ARGB);
 
 	public MainView(Stage s) {
 		myTabCount = 1;
@@ -43,6 +54,7 @@ public class MainView {
         initTabs(sLogoView);
 	    initRowConstraints(grid);
         mySceneSetter.setupScene(myStage, grid, myDimensions.getWidth(), myDimensions.getHeight(), myResources);
+        selectionModel = myTabPane.getSelectionModel();
 	}
 
 	private void initTabs(SLogoView sLogoView) {
@@ -96,11 +108,27 @@ public class MainView {
 		work.setOnAction(e -> newTab());
 		file.getItems().addAll(work);
 		MenuItem exit = new MenuItem(myResources.getString("Exit"));
+        MenuItem snap = new MenuItem(myResources.getString("Snap"));
 		exit.setOnAction(e -> Platform.exit());
+		snap.setOnAction(e -> saveImage());
 		file.getItems().addAll(exit);
+        file.getItems().addAll(snap);
 		return file;
 	}
-    
+
+    private void saveImage() {
+        GridPane content = (GridPane) myTabPane.getTabs().get(selectionModel.getSelectedIndex()).getContent();
+        WritableImage image = content.snapshot(new SnapshotParameters(), null);
+
+        // TODO: probably use a file chooser here
+        File file = new File("snapshot.png");
+
+        try {
+            ImageIO.write(SwingFXUtils.fromFXImage(image, null), "png", file);
+        } catch (IOException e) {
+            // TODO: handle exception here
+        }
+      }
     private void newTab () {
         SLogoView sLogoView = new SLogoView(myStage,myDimensions);
         myTabCount++;
